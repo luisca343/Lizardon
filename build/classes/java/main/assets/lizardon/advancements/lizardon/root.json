@@ -1,0 +1,15 @@
+{
+  "display": {
+    "icon": { "item": "lizardon:smart_rotom" },
+    "title": { "translate": "advancements.lizardon.root.title" },
+    "description": { "translate": "advancements.lizardon.root.description" },
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "dar_logro": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

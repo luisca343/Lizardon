@@ -1,0 +1,123 @@
+
+//Items
+item.tutorial_item.name=Physical NFT
+item.smart_rotom.name=Smart Rotom
+item.kit_mineria.name=Kit de Minería
+item.mermelada_richard_martinez.name=Richard Martinez Strawberry Jam
+
+
+
+itemGroup.lizardon.name=Lizardon
+itemGroup.lizardon=Lizardon
+
+item.coche.name=Llaves de coche
+
+
+//Mina
+item.piedra_teras.name=Piedra Teras
+item.gema_blanca_peque.name=Gema Blanca Pequeña
+item.gema_blanca_grande.name=Gema Blanca Grande
+item.gema_azul_peque.name=Gema Azul Pequeña
+item.gema_azul_grande.name=Gema Azul Grande
+item.gema_prisma_peque.name=Gema Prisma Pequeña
+item.gema_prisma_grande.name=Gema Prisma Grande
+item.gema_roja_peque.name=Gema Roja Pequeña
+item.gema_roja_grande.name=Gema Roja Grande
+item.gema_verde_peque.name=Gema Verde Pequeña
+item.gema_verde_grande.name=Gema Verde Grande
+item.piedra_espiritu.name=Piedra Espíritu
+
+//Comida
+item.aguisado.name="Aguisado"
+item.chemoso_de_queso.name=Chemouso de Queso
+item.cpizza.name=Ración de Cpizza
+item.dulce_de_lehe.name=Dulce de Lehe
+item.fiifdeua.name=Fiifdeuá
+item.flankuslop.name=FlanKuslop
+item.lucasitos.name=Lucasitos
+item.potimerienda.name=Potimerienda
+item.nachos_neouacamole.name=Nachos con Neouacamole
+item.rarisotto.name=RaRisotto
+item.shurros.name=Shurros
+item.yakitoki.name=Yakitoki
+
+
+
+//Bebida
+item.ay_mi_madre.name=§c¡§e¡§6A§ay, §bm§di §cm§ea§6d§ar§be§d!§c!
+item.flameado_de_moe.name=Flameado de Kamina
+item.garchupito.name=Garchupito
+item.itamilk.name=Itamilk
+item.luiscacola.name=LuiscaCola
+item.neofabirra.name=NeofaBirra
+item.red_tauros.name=Red Tauros
+item.tojenebra.name=Tojenebra
+item.tsukila.name=Tsukila
+item.uriebirra.name=UrieBirra
+item.leyiax.name=Leyiax
+
+
+item.gachacoin.name=GachaCoin
+
+
+//Efectos
+effect.paralisis=Parálisis
+
+//Formas
+lizardon.form.teras=Teras
+lizardon.form.hisui=Hisui
+lizardon.form.primigenio=Primigenio
+
+//Pacomones
+pixelmon.voltorb-hisui.name=Voltorb Hisui
+pixelmon.yinacario.name=Yinacario
+
+
+
+//Plantas "Legales"
+item.semillas_luiscaina.name=Semillas de Luiscaína
+item.hojas_luiscaina.name=Hojas de Luiscaína
+item.luiscaina.name=Luiscaína
+
+item.semillas_neohuana.name=Semillas de Neohuana
+item.hojas_neohuana.name=Hojas de Neohuana
+
+item.semillas_anfekamina.name=Semillas de Anfekamina
+item.cogollo_anfekamina.name=Cogollo de Anfekamina
+
+
+//Bloques
+tile.unown_block_ñ.name=Bloque Unown Ñ
+tile.nieve_pura.name=Nieve Pura
+tile.hierba_lavanda.name=Hierba Lavanda
+tile.arena_palida.name=Arena pálida
+tile.cemento.name=Cemento
+
+//Policía
+item.escudo_anti_leya.name=Escudo Anti Leya
+item.escudo_antidisturbios.name=Escudo Antidisturbios
+item.taser.name=Taser
+item.porra.name=Porra
+
+//Sombrero
+item.caca_de_waifu.name=Caca de waifu
+item.sombrero_paja.name=Sombrero de Paja
+item.gorro_detective.name=Gorro de detective
+
+//Advancements
+advancements.lizardon.root.title=Lizardon
+advancements.lizardon.root.description=Ah, que había logros.
+
+advancements.lizardon.smart_rotom.title=¡La tecnología es increíble!
+advancements.lizardon.smart_rotom.description=Obtén un SmartRotom.
+
+advancements.lizardon.piedra_teras.title=La Piedra Teras
+advancements.lizardon.piedra_teras.description=¿Para qué servirá...?
+
+advancements.lizardon.leyiax.title=Tú estás esclavo del mal.
+advancements.lizardon.leyiax.description=No, en serio. ¿Por qué has bebido eso?
+
+//Muertes
+death.attack.lizardon.leyiax=%1$s ha sido esclavizado.
+death.attack.lizardon.taser=%1$s ha sido electrocutado
+death.attack.lizardon.ay_mi_madre=%1$s ha sufrido exceso de potasio.

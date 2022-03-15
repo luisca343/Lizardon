@@ -1,0 +1,511 @@
+{
+    "pixelmonName": "Voltorb",
+    "pokemon": "Voltorb",
+    "form": 0,
+    "stats": {
+      "HP": 40,
+      "Attack": 30,
+      "Defence": 50,
+      "Speed": 100,
+      "SpecialAttack": 55,
+      "SpecialDefence": 55
+    },
+    "catchRate": 190,
+    "malePercent": -1,
+    "spawnLevel": 10,
+    "spawnLevelRange": 20,
+    "baseExp": 103,
+    "baseFriendship": 70,
+    "types": [
+      "Electric"
+    ],
+    "height": 0.5,
+    "isRideable": false,
+    "canFly": false,
+    "canSurf": false,
+    "preEvolutions": [],
+    "experienceGroup": "MediumFast",
+    "aggression": {
+      "timid": 80,
+      "passive": 0,
+      "aggressive": 20
+    },
+    "spawnLocations": [
+      "Land"
+    ],
+    "evYields": {
+      "Speed": 1
+    },
+    "weight": 10.4,
+    "bounding_box": {
+      "width": 0.5,
+      "height": 0.5,
+      "eye_height": 0.3
+    },
+    "evolutions": [
+      {
+        "level": 30,
+        "to": {
+          "name": "Electrode"
+        },
+        "conditions": [],
+        "evoType": "leveling"
+      }
+    ],
+    "abilities": [
+      "Soundproof",
+      "Static",
+      "Aftermath"
+    ],
+    "eggGroups": [
+      "Mineral"
+    ],
+    "eggCycles": 21,
+    "levelUpMoves": {
+      "0": [
+        "Charge",
+        "Tackle"
+      ],
+      "4": [
+        "Sonic Boom"
+      ],
+      "6": [
+        "Eerie Impulse"
+      ],
+      "9": [
+        "Spark"
+      ],
+      "11": [
+        "Rollout"
+      ],
+      "13": [
+        "Screech"
+      ],
+      "16": [
+        "Charge Beam"
+      ],
+      "20": [
+        "Swift"
+      ],
+      "22": [
+        "Electro Ball"
+      ],
+      "26": [
+        "Self-Destruct"
+      ],
+      "29": [
+        "Light Screen"
+      ],
+      "34": [
+        "Magnet Rise"
+      ],
+      "37": [
+        "Discharge"
+      ],
+      "41": [
+        "Explosion"
+      ],
+      "46": [
+        "Gyro Ball"
+      ],
+      "48": [
+        "Mirror Coat"
+      ]
+    },
+    "tutorMoves": [
+      "Foul Play",
+      "Magic Coat",
+      "Magnet Rise",
+      "Shock Wave",
+      "Signal Beam",
+      "Snore"
+    ],
+    "eggMoves": [],
+    "transferMoves": [
+      "Bide",
+      "Curse",
+      "Endure",
+      "Flash",
+      "Mimic",
+      "Natural Gift",
+      "Rage",
+      "Refresh",
+      "Secret Power",
+      "Sucker Punch",
+      "Take Down",
+      "Zap Cannon"
+    ],
+    "hmMoves": [],
+    "tmMoves7": [
+      "Toxic",
+      "Hidden Power",
+      "Taunt",
+      "Light Screen",
+      "Protect",
+      "Rain Dance",
+      "Frustration",
+      "Thunderbolt",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Torment",
+      "Facade",
+      "Rest",
+      "Thief",
+      "Round",
+      "Charge Beam",
+      "Explosion",
+      "Volt Switch",
+      "Thunder Wave",
+      "Gyro Ball",
+      "Swagger",
+      "Sleep Talk",
+      "Substitute",
+      "Wild Charge",
+      "Confide"
+    ],
+    "tmMoves6": [
+      "Toxic",
+      "Hidden Power",
+      "Taunt",
+      "Light Screen",
+      "Protect",
+      "Rain Dance",
+      "Frustration",
+      "Thunderbolt",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Torment",
+      "Facade",
+      "Rest",
+      "Thief",
+      "Round",
+      "Charge Beam",
+      "Explosion",
+      "Flash",
+      "Volt Switch",
+      "Thunder Wave",
+      "Gyro Ball",
+      "Swagger",
+      "Sleep Talk",
+      "Substitute",
+      "Wild Charge",
+      "Secret Power",
+      "Confide"
+    ],
+    "tmMoves5": [
+      "Toxic",
+      "Hidden Power",
+      "Taunt",
+      "Light Screen",
+      "Protect",
+      "Rain Dance",
+      "Frustration",
+      "Thunderbolt",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Torment",
+      "Facade",
+      "Rest",
+      "Thief",
+      "Round",
+      "Charge Beam",
+      "Explosion",
+      "Flash",
+      "Volt Switch",
+      "Thunder Wave",
+      "Gyro Ball",
+      "Swagger",
+      "Substitute",
+      "Wild Charge"
+    ],
+    "tmMoves4": [
+      "Toxic",
+      "Hidden Power",
+      "Taunt",
+      "Light Screen",
+      "Protect",
+      "Rain Dance",
+      "Frustration",
+      "Thunderbolt",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Shock Wave",
+      "Torment",
+      "Facade",
+      "Secret Power",
+      "Rest",
+      "Thief",
+      "Charge Beam",
+      "Endure",
+      "Explosion",
+      "Flash",
+      "Thunder Wave",
+      "Gyro Ball",
+      "Sleep Talk",
+      "Natural Gift",
+      "Swagger",
+      "Substitute"
+    ],
+    "tmMoves3": [
+      "Toxic",
+      "Hidden Power",
+      "Taunt",
+      "Light Screen",
+      "Protect",
+      "Rain Dance",
+      "Frustration",
+      "Thunderbolt",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Shock Wave",
+      "Torment",
+      "Facade",
+      "Secret Power",
+      "Rest",
+      "Thief"
+    ],
+    "tmMoves2": [
+      "Headbutt",
+      "Curse",
+      "Rollout",
+      "Toxic",
+      "Zap Cannon",
+      "Hidden Power",
+      "Snore",
+      "Protect",
+      "Rain Dance",
+      "Endure",
+      "Frustration",
+      "Thunder",
+      "Return",
+      "Double Team",
+      "Swagger",
+      "Sleep Talk",
+      "Swift",
+      "Rest"
+    ],
+    "tmMoves1": [
+      "Toxic",
+      "Take Down",
+      "Rage",
+      "Thunderbolt",
+      "Thunder",
+      "Teleport",
+      "Mimic",
+      "Double Team",
+      "Reflect",
+      "Bide",
+      "Self-Destruct",
+      "Swift",
+      "Rest",
+      "Thunder Wave",
+      "Explosion",
+      "Substitute"
+    ],
+    "forms": {
+      "126": {
+        "form": 126,
+        "stats": {
+          "HP": 73,
+          "Attack": 67,
+          "Defence": 75,
+          "Speed": 109,
+          "SpecialAttack": 81,
+          "SpecialDefence": 100
+        },
+        "types": [
+          "Electric",
+          "Grass"
+        ],
+        "preEvolutions": [],
+        "evYields": {
+          "Speed": 2
+        },
+        "weight": 3.8,
+        "abilities": [
+          "SnowCloak",
+          null,
+          "SnowWarning"
+        ],
+        "levelUpMoves": {
+          "0": [
+            "Aurora Beam",
+            "Aurora Veil",
+            "Blizzard",
+            "Confuse Ray",
+            "Dazzling Gleam",
+            "Disable",
+            "Extrasensory",
+            "Grudge",
+            "Ice Beam",
+            "Ice Shard",
+            "Icy Wind",
+            "Imprison",
+            "Mist",
+            "Nasty Plot",
+            "Powder Snow",
+            "Sheer Cold",
+            "Spite",
+            "Tail Whip"
+          ]
+        },
+        "tmMoves": [
+          "Psyshock",
+          "Calm Mind",
+          "Roar",
+          "Toxic",
+          "Hail",
+          "Hidden Power",
+          "Ice Beam",
+          "Blizzard",
+          "Hyper Beam",
+          "Protect",
+          "Rain Dance",
+          "Safeguard",
+          "Frustration",
+          "Return",
+          "Double Team",
+          "Facade",
+          "Rest",
+          "Attract",
+          "Round",
+          "Payback",
+          "Giga Impact",
+          "Aurora Veil",
+          "Psych Up",
+          "Frost Breath",
+          "Dream Eater",
+          "Swagger",
+          "Sleep Talk",
+          "Substitute",
+          "Dark Pulse",
+          "Dazzling Gleam",
+          "Confide"
+        ],
+        "tutorMoves": [
+          "Triple Axel"
+        ],
+        "eggMoves": [
+          "Baby-Doll Eyes",
+          "Flail",
+          "Freeze-Dry",
+          "Howl",
+          "Hypnosis",
+          "Moonblast",
+          "Roar"
+        ],
+        "trMoves": [
+          "Body Slam",
+          "Ice Beam",
+          "Blizzard",
+          "Agility",
+          "Substitute",
+          "Psyshock",
+          "Endure",
+          "Sleep Talk",
+          "Encore",
+          "Iron Tail",
+          "Calm Mind",
+          "Dark Pulse",
+          "Nasty Plot",
+          "Zen Headbutt",
+          "Foul Play",
+          "Stored Power",
+          "Dazzling Gleam"
+        ],
+        "tmMoves8": [
+          "Hyper Beam",
+          "Giga Impact",
+          "Solar Beam",
+          "Dig",
+          "Safeguard",
+          "Rest",
+          "Snore",
+          "Protect",
+          "Icy Wind",
+          "Charm",
+          "Attract",
+          "Rain Dance",
+          "Hail",
+          "Facade",
+          "Swift",
+          "Imprison",
+          "Weather Ball",
+          "Fake Tears",
+          "Payback",
+          "Power Swap",
+          "Avalanche",
+          "Wonder Room",
+          "Round",
+          "Hex",
+          "Tail Slap",
+          "Draining Kiss",
+          "Misty Terrain"
+        ],
+        "tmMoves7": [
+          "Psyshock",
+          "Calm Mind",
+          "Roar",
+          "Toxic",
+          "Hail",
+          "Hidden Power",
+          "Ice Beam",
+          "Blizzard",
+          "Hyper Beam",
+          "Protect",
+          "Rain Dance",
+          "Safeguard",
+          "Frustration",
+          "Return",
+          "Double Team",
+          "Facade",
+          "Rest",
+          "Attract",
+          "Round",
+          "Payback",
+          "Giga Impact",
+          "Aurora Veil",
+          "Psych Up",
+          "Frost Breath",
+          "Dream Eater",
+          "Swagger",
+          "Sleep Talk",
+          "Substitute",
+          "Dark Pulse",
+          "Dazzling Gleam",
+          "Confide"
+        ],
+        "transferMoves": [
+          "Aqua Tail",
+          "Captivate",
+          "Celebrate",
+          "Confide",
+          "Covet",
+          "Double Team",
+          "Dream Eater",
+          "Feint Attack",
+          "Frost Breath",
+          "Frustration",
+          "Headbutt",
+          "Heal Bell",
+          "Hidden Power",
+          "Laser Focus",
+          "Pain Split",
+          "Psych Up",
+          "Reflect",
+          "Return",
+          "Role Play",
+          "Secret Power",
+          "Swagger",
+          "Tackle",
+          "Toxic"
+        ]
+      }
+    }
+  }
+  
