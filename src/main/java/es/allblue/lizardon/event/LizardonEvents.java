@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -190,16 +191,4 @@ public class LizardonEvents {
             RestApi.post("updateDinero", actualizarDinero);
         }
     }
-
-
-    /*
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void login(PlayerEvent.PlayerLoggedInEvent event){
-        PlayerData data = new PlayerData(event.player.getUniqueID().toString(),event.player.getName());
-        Gson gson = new Gson();
-        String json = gson.toJson(data);
-        String res = RestApi.post("login",json);
-    }
-    */
-
 }

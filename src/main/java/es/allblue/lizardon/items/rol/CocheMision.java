@@ -27,18 +27,17 @@ public class CocheMision extends ItemBasic {
     public CocheMision(String name) {
         super(name);
     }
-
-
     @Override
     public EnumActionResult onItemUse(EntityPlayer player1, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         WrapperWorld world = WrapperWorld.getWrapperFor(worldIn);
         WrapperPlayer player = WrapperPlayer.getWrapperFor(player1);
 
         IBlockState state = worldIn.getBlockState(pos);
+        /*
         if (!(state.getBlock() instanceof BloqueCemento)) {
             player1.sendMessage(new TextComponentString("No puedes colocar el vehículo ahí."));
             return EnumActionResult.FAIL;
-        }
+        }*/
 
         if (!world.isClient()) {
             WrapperItemStack heldStack = player.getHeldStack();

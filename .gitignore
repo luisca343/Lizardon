@@ -11,6 +11,7 @@
 .mtj.tmp/
 
 src/main/java/net
+<<<<<<< Updated upstream
 .git
 .gradle
 .idea
@@ -19,6 +20,18 @@ build
 gradle
 run
 test
+=======
+.gitignore
+.git/**
+.gradle/**
+.idea/**
+back/**
+build/**
+gradle/**
+run/**
+test/**
+
+>>>>>>> Stashed changes
 
 # Package Files #
 *.jar

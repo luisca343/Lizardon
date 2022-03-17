@@ -1,16 +1,10 @@
 package es.allblue.lizardon;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.client.models.PixelmonModelRegistry;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
-import es.allblue.lizardon.commands.DesbloquearApp;
-import es.allblue.lizardon.commands.Gimnasio;
-import es.allblue.lizardon.commands.GuardarCoche;
-import es.allblue.lizardon.commands.LizardonReload;
+import es.allblue.lizardon.commands.*;
 import es.allblue.lizardon.event.LizardonEvents;
 import es.allblue.lizardon.event.LizardonPixelmonEvents;
 import es.allblue.lizardon.init.BlocksInit;
@@ -49,9 +43,12 @@ import okhttp3.Response;
 import org.apache.logging.log4j.Logger;
 import es.allblue.lizardon.sound.SoundRegisterListener;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.HashMap;
 
@@ -89,6 +86,9 @@ public class Lizardon {
 
     public String homePage;
     private static Configuration cfg;
+    public static File archivoCoches;
+    public static String[] coches;
+
 
     public static String applyBlacklist(String url) {
         return url;
@@ -104,9 +104,11 @@ public class Lizardon {
     public static boolean NAUSEA_STUMBLING = false;
 
     public static void cargarConfig() {
+        Gson gson = new Gson();
 
         cfg = new Configuration(new File("./config/Lizardon/Lizardon.cfg"));
-
+        archivoCoches = new File("./config/Lizardon/coches.json");
+        
         Property duracionTaser = cfg.get("main", "Duración táser (segundos)", 5);
         duracionTaser.setComment("No sé qué hace esto, pero buehno.");
         DURACION_TASER = duracionTaser.getInt();
@@ -241,6 +243,7 @@ public class Lizardon {
         event.registerServerCommand(new LizardonReload());
         event.registerServerCommand(new DesbloquearApp());
         event.registerServerCommand(new GuardarCoche());
+        event.registerServerCommand(new Test());
         server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if (server != null) {
