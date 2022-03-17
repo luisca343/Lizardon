@@ -10,7 +10,6 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-src/main/java/net
 <<<<<<< Updated upstream
 .git
 .gradle
@@ -27,7 +26,8 @@ test
 .idea/**
 back/**
 build/**
-gradle/**
+#src/main/java/net
+#gradle/**
 run/**
 test/**
 

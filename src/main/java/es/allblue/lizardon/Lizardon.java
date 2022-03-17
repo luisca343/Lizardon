@@ -152,7 +152,6 @@ public class Lizardon {
     public void init(FMLInitializationEvent event) {
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(this);
-        //BrewingRecipeRegistry.addRecipe(new BrewingRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM,1), PotionTypes.WATER),new ItemStack(Items.DIAMOND,1,0),new ItemStack(ItemsInit.semillaLuiscaina,1)));
         cargarObjetosTiendas();
 
         MinecraftForge.EVENT_BUS.register(new SoundRegisterListener());

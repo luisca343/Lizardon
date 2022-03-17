@@ -8,6 +8,7 @@ import es.allblue.lizardon.items.armor.SombreroBase;
 import es.allblue.lizardon.items.crops.SemillaAnfekamina;
 import es.allblue.lizardon.items.crops.SemillaLuiscaina;
 import es.allblue.lizardon.items.crops.SemillaNeohuana;
+import es.allblue.lizardon.items.rol.AlbaranEntrega;
 import es.allblue.lizardon.items.rol.CocheMision;
 import es.allblue.lizardon.items.rol.Porra;
 import es.allblue.lizardon.items.rol.Taser;
@@ -39,6 +40,7 @@ public class ItemsInit {
     public static Item hojas_neohuana;
     public static SmartRotom smart_rotom;
     public static PiedraEspiritu piedra_espiritu;
+    public static AlbaranEntrega albaran;
     static ArrayList<Item> items = new ArrayList<>();
     public static LootCollection<RecompensaMina> recompensas;
 
@@ -54,6 +56,7 @@ public class ItemsInit {
         semillaAnfekamina = new SemillaAnfekamina("semillas_anfekamina");
         smart_rotom = new SmartRotom("smart_rotom");
         piedra_espiritu = new PiedraEspiritu("piedra_espiritu");
+        albaran = new AlbaranEntrega("albaran");
         coche = new CocheMision("coche").setMaxStackSize(1);
     }
 
@@ -116,6 +119,7 @@ public class ItemsInit {
 
 
         items.add(coche);
+        items.add(albaran);
         generarRecompensas();
 
 

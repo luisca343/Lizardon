@@ -9,23 +9,17 @@ import es.allblue.lizardon.items.SmartRotom;
 import es.allblue.lizardon.objects.requests.ActualizarDinero;
 import es.allblue.lizardon.objects.requests.PlayerData;
 import es.allblue.lizardon.objects.requests.Transaccion;
-import es.allblue.lizardon.objects.requests.VehiculoJSON;
 import es.allblue.lizardon.util.RestApi;
 import es.allblue.lizardon.util.Util;
-import minecrafttransportsimulator.mcinterface.WrapperItemStack;
-import minecrafttransportsimulator.mcinterface.WrapperPlayer;
-import minecrafttransportsimulator.mcinterface.WrapperWorld;
-import minecrafttransportsimulator.packets.instances.PacketPlayerChatMessage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
@@ -42,8 +36,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.montoyo.wd.WebDisplays;
-
-import java.sql.Wrapper;
 
 @Mod.EventBusSubscriber
 public class LizardonEvents {
@@ -111,7 +103,6 @@ public class LizardonEvents {
             }
         }
     }
-
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void coches(PlayerInteractEvent.EntityInteract event) {
         Entity entity = event.getTarget();
@@ -158,9 +149,34 @@ public class LizardonEvents {
             } else {
                 player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
             }
-        }else if (item.getItem().getRegistryName().equals("lizardon:albaran") && !player.world.isRemote) {
-
         }
+    }
+
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void rightClick(PlayerInteractEvent.RightClickBlock event) {
+        ItemStack item = event.getItemStack();
+        EntityPlayer player = event.getEntityPlayer();
+        if (item.getItem().getRegistryName().toString().equals("lizardon:albaran") && !player.world.isRemote) {
+            clickAlbaran("pos2", item, player, event.getPos());
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void leftClick(PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack item = event.getItemStack();
+        EntityPlayer player = event.getEntityPlayer();
+        if (item.getItem().getRegistryName().toString().equals("lizardon:albaran") && !player.world.isRemote) {
+            clickAlbaran("pos1", item, player, event.getPos());
+        }
+    }
+
+    public static void clickAlbaran(String tipo, ItemStack item, EntityPlayer player, BlockPos pos){
+        if(!item.hasTagCompound()){
+            item.setTagCompound(new NBTTagCompound());
+        }
+        item.getTagCompound().setString(tipo, pos.toString());
+        player.sendMessage(new TextComponentString("La segunda posición ha sido establecida a "+pos.toString()));
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
