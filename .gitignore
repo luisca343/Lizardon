@@ -19,17 +19,7 @@ build
 gradle
 run
 test
-=======
-.gitignore
-.git/**
-.gradle/**
-.idea/**
-back/**
-build/**
-#src/main/java/net
-#gradle/**
-run/**
-test/**
+
 
 >>>>>>> Stashed changes
 
