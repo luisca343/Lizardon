@@ -11,6 +11,14 @@
 .mtj.tmp/
 
 src/main/java/net
+.git
+.gradle
+.idea
+back
+build
+gradle
+run
+test
 
 # Package Files #
 *.jar
