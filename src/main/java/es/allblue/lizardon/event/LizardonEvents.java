@@ -158,6 +158,8 @@ public class LizardonEvents {
             } else {
                 player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
             }
+        }else if (item.getItem().getRegistryName().equals("lizardon:albaran") && !player.world.isRemote) {
+
         }
     }
 
