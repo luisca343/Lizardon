@@ -71,6 +71,11 @@ public class QueryHelper {
             Lizardon.NET_HANDLER.sendToServer(new MsgQuery(query));
         }
 
+        if (browser != null && query.contains("misionCoche")) {
+            browser.loadURL(Lizardon.getProxy().pasarParametros(Lizardon.URL_BASE));
+            Lizardon.NET_HANDLER.sendToServer(new MsgQuery(query));
+        }
+
         return false;
     }
 

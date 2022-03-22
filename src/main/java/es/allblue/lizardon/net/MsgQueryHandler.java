@@ -53,6 +53,9 @@ public class MsgQueryHandler implements IMessageHandler<MsgQuery, IMessage> {
                 } catch (Exception e) {
                     player.sendMessage(new TextComponentString("Parece que el teléfono no funciona..."));
                 }
+            } else if (datos.contains("misionCoche")) {
+                MisionEntrega misionEntrega = gson.fromJson(datos, MisionEntrega.class);
+                misionEntrega.ejecutar(serverPlayer);
             }
         });
         return null;

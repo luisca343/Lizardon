@@ -13,11 +13,14 @@ import es.allblue.lizardon.util.RestApi;
 import es.allblue.lizardon.util.Util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityEgg;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -146,12 +149,79 @@ public class LizardonEvents {
                 } else {
                     player.sendMessage(new TextComponentString("No puedes recoger un coche que no es tuyo."));
                 }
+<<<<<<< Updated upstream
             } else {
                 player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
+=======
+            } else if(item.getItem().getRegistryName().toString().equals("lizardon:albaran")){
+                NBTTagCompound tag = item.getTagCompound();
+
+                String pos1 = tag.getString("pos1");
+                String pos2 = tag.getString("pos2");
+
+                BlockPos bPos1 = getPos(pos1);
+                BlockPos bPos2 = getPos(pos2);
+
+                boolean enArea = playerInPos(player.getPosition(), bPos1, bPos2);
+                if(enArea){
+                    event.getWorld().removeEntity(entity);
+                    String itemId = item.getTagCompound().getString("item");
+                    int cantidad = item.getTagCompound().getInteger("cantidad");
+
+                    String[] partes = itemId.split(":");
+
+                    Item recompensa = Item.REGISTRY.getObject(new ResourceLocation(partes[0], partes[1]));
+                    ItemStack stack = new ItemStack(recompensa, cantidad);
+
+                    player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, stack));
+
+                    player.sendMessage(new TextComponentString("¡Misión cumplida! Obtienes "+cantidad+" "+stack.getDisplayName()));
+
+
+                }else{
+                    player.sendMessage(new TextComponentString("No estás en la zona de entrega."));
+                }
+
+            }else {
+                //player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
+>>>>>>> Stashed changes
             }
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    public static BlockPos getPos(String pos){
+        String[] bPos = pos.split(",");
+        return new BlockPos(Integer.parseInt(bPos[0]),Integer.parseInt(bPos[1]),Integer.parseInt(bPos[2]));
+    }
+
+    public static boolean playerInPos(BlockPos player, BlockPos pos1, BlockPos pos2){
+        int x1, x2;
+        if(pos1.getX() < pos2.getX()){
+            x1 = pos1.getX();
+            x2 = pos2.getX();
+        }else{
+            x1 = pos2.getX();
+            x2 = pos1.getX();
+        }
+
+        int z1, z2;
+        if(pos1.getZ() < pos2.getZ()){
+            z1 = pos1.getZ();
+            z2 = pos2.getZ();
+        }else{
+            z1 = pos2.getZ();
+            z2 = pos1.getZ();
+        }
+
+        if(player.getX() >= x1 && player.getX() <= x2 && player.getZ() >= z1 && player.getZ() <= z2){
+            return true;
+        }
+        return false;
+    }
+
+>>>>>>> Stashed changes
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void rightClick(PlayerInteractEvent.RightClickBlock event) {
@@ -167,16 +237,28 @@ public class LizardonEvents {
         ItemStack item = event.getItemStack();
         EntityPlayer player = event.getEntityPlayer();
         if (item.getItem().getRegistryName().toString().equals("lizardon:albaran") && !player.world.isRemote) {
+            event.setCanceled(true);
             clickAlbaran("pos1", item, player, event.getPos());
         }
     }
 
     public static void clickAlbaran(String tipo, ItemStack item, EntityPlayer player, BlockPos pos){
+<<<<<<< Updated upstream
         if(!item.hasTagCompound()){
             item.setTagCompound(new NBTTagCompound());
         }
         item.getTagCompound().setString(tipo, pos.toString());
         player.sendMessage(new TextComponentString("La segunda posición ha sido establecida a "+pos.toString()));
+=======
+        if(!player.isSneaking()) return;
+        String posicion = pos.equals("pos1")? "primera" : "segunda";
+        if(!item.hasTagCompound()){
+            item.setTagCompound(new NBTTagCompound());
+        }
+        if(item.getTagCompound().hasKey("sellado")) return;
+        item.getTagCompound().setString(tipo, posToString(pos));
+        player.sendMessage(new TextComponentString("La "+posicion+" posición ha sido establecida a "+pos.toString()));
+>>>>>>> Stashed changes
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
