@@ -11,6 +11,7 @@ import es.allblue.lizardon.objects.requests.PlayerData;
 import es.allblue.lizardon.objects.requests.Transaccion;
 import es.allblue.lizardon.util.RestApi;
 import es.allblue.lizardon.util.Util;
+import minecrafttransportsimulator.entities.instances.EntityVehicleF_Physics;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -39,6 +40,8 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.montoyo.wd.WebDisplays;
+
+import java.awt.*;
 
 @Mod.EventBusSubscriber
 public class LizardonEvents {
@@ -124,20 +127,7 @@ public class LizardonEvents {
                 String llaveUUID = item.getTagCompound().getString("ownerUUID");
                 String cocheUUID = nbt.getString("ownerUUID");
 
-                // Cerrar y abrir coche
-                if (event.getEntityPlayer().isSneaking()) {
-                    if (!llaveUUID.equals(cocheUUID)) {
-                        player.sendMessage(new TextComponentString("Este coche no es tuyo."));
-                        return;
-                    }
-                    boolean locked = nbt.getBoolean("locked");
-                    player.sendMessage(new TextComponentString(locked + ""));
-                    nbt.setBoolean("locked", !locked);
-                    entity.readFromNBT(nbt);
-                    String mensaje = "Has " + (locked ? "abierto" : "cerrado") + " el coche";
-                    player.sendMessage(new TextComponentString(mensaje));
-                    return;
-                }
+                if(player.isSneaking()) return;
                 //Recoger coche
                 if (llaveUUID.equals(cocheUUID)) {
                     if (!item.getTagCompound().hasKey("uniqueUUID") || player.isCreative()) {
@@ -149,10 +139,6 @@ public class LizardonEvents {
                 } else {
                     player.sendMessage(new TextComponentString("No puedes recoger un coche que no es tuyo."));
                 }
-<<<<<<< Updated upstream
-            } else {
-                player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
-=======
             } else if(item.getItem().getRegistryName().toString().equals("lizardon:albaran")){
                 NBTTagCompound tag = item.getTagCompound();
 
@@ -184,13 +170,10 @@ public class LizardonEvents {
 
             }else {
                 //player.sendMessage(new TextComponentString("Estás en:" + entity.getPosition().toString()));
->>>>>>> Stashed changes
             }
         }
     }
 
-<<<<<<< Updated upstream
-=======
     public static BlockPos getPos(String pos){
         String[] bPos = pos.split(",");
         return new BlockPos(Integer.parseInt(bPos[0]),Integer.parseInt(bPos[1]),Integer.parseInt(bPos[2]));
@@ -221,7 +204,6 @@ public class LizardonEvents {
         return false;
     }
 
->>>>>>> Stashed changes
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void rightClick(PlayerInteractEvent.RightClickBlock event) {
@@ -243,13 +225,6 @@ public class LizardonEvents {
     }
 
     public static void clickAlbaran(String tipo, ItemStack item, EntityPlayer player, BlockPos pos){
-<<<<<<< Updated upstream
-        if(!item.hasTagCompound()){
-            item.setTagCompound(new NBTTagCompound());
-        }
-        item.getTagCompound().setString(tipo, pos.toString());
-        player.sendMessage(new TextComponentString("La segunda posición ha sido establecida a "+pos.toString()));
-=======
         if(!player.isSneaking()) return;
         String posicion = pos.equals("pos1")? "primera" : "segunda";
         if(!item.hasTagCompound()){
@@ -258,7 +233,10 @@ public class LizardonEvents {
         if(item.getTagCompound().hasKey("sellado")) return;
         item.getTagCompound().setString(tipo, posToString(pos));
         player.sendMessage(new TextComponentString("La "+posicion+" posición ha sido establecida a "+pos.toString()));
->>>>>>> Stashed changes
+    }
+
+    public static String posToString(BlockPos pos){
+        return pos.getX()+","+pos.getY()+","+pos.getZ();
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
