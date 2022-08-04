@@ -68,10 +68,11 @@ effect.paralisis=Parálisis
 lizardon.form.teras=Teras
 lizardon.form.hisui=Hisui
 lizardon.form.primigenio=Primigenio
+lizardon.form.terasnt=¿Teras?
 
 //Pacomones
 pixelmon.voltorb-hisui.name=Voltorb Hisui
-pixelmon.yinacario.name=Yinacario
+pixelmon.agumon.name=Agumon
 
 
 

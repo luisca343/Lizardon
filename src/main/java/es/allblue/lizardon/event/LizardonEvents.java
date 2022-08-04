@@ -154,13 +154,16 @@ public class LizardonEvents {
                     String itemId = item.getTagCompound().getString("item");
                     int cantidad = item.getTagCompound().getInteger("cantidad");
 
+
+
                     String[] partes = itemId.split(":");
 
                     Item recompensa = Item.REGISTRY.getObject(new ResourceLocation(partes[0], partes[1]));
                     ItemStack stack = new ItemStack(recompensa, cantidad);
 
                     player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, stack));
-
+                    item.shrink(1);
+                    
                     player.sendMessage(new TextComponentString("¡Misión cumplida! Obtienes "+cantidad+" "+stack.getDisplayName()));
 
 

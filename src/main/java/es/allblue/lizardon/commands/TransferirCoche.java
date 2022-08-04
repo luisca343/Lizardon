@@ -12,15 +12,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
-public class GuardarCoche extends CommandBase {
+import java.util.UUID;
+
+public class TransferirCoche extends CommandBase {
     @Override
     public String getName() {
-        return "guardarcoche";
+        return "transferircoche";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "command.guardarcoche.usage";
+        return "command.transferircoche.usage";
     }
 
     @Override
@@ -33,8 +35,14 @@ public class GuardarCoche extends CommandBase {
                 if (!player.world.isRemote) {
                     NBTTagCompound nbt = stack.serializeNBT();
                     NBTTagCompound tag = nbt.getCompoundTag("tag");
-                    VehiculoJSON vehiculoJSON = new VehiculoJSON(args[0], tag.toString());
-                    String res = RestApi.post("nuevovehiculo", vehiculoJSON);
+                    if(tag.hasKey("ownerUUID")){
+                        String nombre = args[0];
+                        String uuid = server.getPlayerList().getPlayerByUsername(nombre).getUniqueID().toString();
+                        tag.setString("ownerUUID", uuid);
+                        sender.sendMessage(new TextComponentString("Se ha transferido el vehículo a "+args[0]));
+                    }else{
+                        sender.sendMessage(new TextComponentString("No se han encontrado datos de vehículos."));
+                    }
                 }
             } else {
                 sender.sendMessage(new TextComponentString("No se han encontrado datos de vehículos."));

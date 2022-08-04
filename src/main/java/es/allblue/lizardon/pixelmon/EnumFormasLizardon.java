@@ -11,7 +11,8 @@ public enum EnumFormasLizardon implements IEnumForm {
     NORMAL(0, "normal"),
     TERAS(127, "teras"),
     HISUI(126, "hisui"),
-    KAWAII(125, "kawaii");
+    KAWAII(125, "kawaii"),
+    TERASNT(124, "terasnt");
 
     private final byte form;
 
