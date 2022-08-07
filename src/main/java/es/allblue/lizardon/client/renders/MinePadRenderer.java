@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
+import init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -13,12 +14,17 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.BossInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -47,7 +53,6 @@ public final class MinePadRenderer implements IItemRenderer {
         glEnd();
         glEnable(GL_TEXTURE_2D);
     }
-
 
 
     @Override
@@ -173,5 +178,7 @@ public final class MinePadRenderer implements IItemRenderer {
             playerRenderer.renderLeftHand(stack, buffer, combinedLight, mc.player);
     }
 
+
+ 
 
 }

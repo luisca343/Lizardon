@@ -85,8 +85,6 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         Log.error("Called SharedProxy.displaySetPadURLGui() on es.allblue.lizardon.client side...");
     }
 
-
-
     public void openMinePadGui(int padId) {
         PadData pd = padMap.get(padId);
 
@@ -138,6 +136,19 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                         updatePad(tag.getInt("PadID"), tag, item == heldStack);
                 }
             }
+        }
+    }
+
+    public void updatePad(int id, CompoundNBT tag, boolean isSelected) {
+        PadData pd = padMap.get(id);
+
+        if(pd != null)
+            pd.isInHotbar = true;
+        else if(isSelected && tag.contains("PadURL")) {
+            pd = new PadData(tag.getString("PadURL"), id);
+            padMap.put(id, pd);
+            padList.add(pd);
+
         }
     }
 
