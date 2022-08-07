@@ -57,7 +57,6 @@ public class Lizardon {
     public static final String MODID = "lizardon";
     public static final String NAME = "Lizardon";
     public static final String VERSION = "1.0";
-    public static final String URL_INICIO = "http://lizardon.es/smart_rotom";
     public static final String URL_BASE = "http://lizardon.es/smart_rotom/menu";
 
     @SidedProxy(
@@ -243,6 +242,10 @@ public class Lizardon {
         event.registerServerCommand(new DesbloquearApp());
         event.registerServerCommand(new GuardarCoche());
         event.registerServerCommand(new Test());
+        event.registerServerCommand(new Ampliacion());
+        event.registerServerCommand(new Denuncia());
+        event.registerServerCommand(new TransferirCoche());
+
         server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if (server != null) {

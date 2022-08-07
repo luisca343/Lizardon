@@ -68,8 +68,8 @@ public class CustomPokemon {
 
 
         /* Extras */
-        crearForma(EnumSpecies.Pikachu, EnumFormasLizardon.TERAS, true);         //Tengo miedo
-        crearForma(EnumSpecies.MissingNo, EnumMissingNo.AGUMON, true);          //Luisca (?)
+        crearForma(EnumSpecies.Pikachu, EnumFormasLizardon.TERASNT, true);         //Tengo miedo
+        crearForma(EnumSpecies.Charmander, EnumFormasLizardon.TERASNT, true);      //Luisca (?)
     }
 
     public void insertarPokemon() {
