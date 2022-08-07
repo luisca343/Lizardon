@@ -1,6 +1,0 @@
-{
-    "parent": "block/crop",
-    "textures": {
-        "crop": "lizardon:blocks/crops/luiscaina_stage3"
-    }
-}
