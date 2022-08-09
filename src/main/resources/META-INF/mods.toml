@@ -67,3 +67,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     ordering="BEFORE"
     versionRange="[9,)"
     side="BOTH"
+
+[[dependencies.lizardon]]
+    modId="mcef"
+    mandatory=true
+    ordering="BEFORE"
+    versionRange="[1,)"
+    side="BOTH"

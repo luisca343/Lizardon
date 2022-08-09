@@ -21,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.utilities.Log;
 
@@ -44,13 +45,14 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         private final int id;
         private long lastURLSent;
 
-        private PadData(String url, int id) {
-            view = mcef.createBrowser("http://www.google.es");
-            view.resize((int)  480, (int)  (480 * 59.0 / 30.0));
-            isInHotbar = true;
-            this.id = id;
-        }
+    private PadData(String url, int id) {
+        view = mcef.createBrowser(Lizardon.INSTANCE.SMARTROTOM_HOME);
+        view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
+        //view.resize((int) Lizardon.INSTANCE.padResX, (int)  Lizardon.INSTANCE.padResX);
+        isInHotbar = true;
+        this.id = id;
     }
+}
 
     @SubscribeEvent
     public void onRenderPlayerHand(RenderHandEvent ev) {
@@ -72,10 +74,23 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void preInit() {
         mc = Minecraft.getInstance();
         MinecraftForge.EVENT_BUS.register(this);
+
         mcef = MCEFApi.getAPI();
         if(mcef != null)
-            mcef.registerScheme("wd", null, true, false, false, true, true, false, false);
+            mcef.registerScheme("lizardon", null, true, false, false, true, true, false, false);
     }
+
+    @Override
+    public void init() {
+
+        API api = Lizardon.INSTANCE.getAPI();
+        if(api != null) {
+            //Register this class to handle onAddressChange and onQuery events
+            //api.registerDisplayHandler(this);
+            //api.registerJSQueryHandler(this);
+        }
+    }
+
 
     public PadData getPadByID(int id) {
         return padMap.get(id);
@@ -194,7 +209,9 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     }
 
     @Override
-    public boolean handleQuery(IBrowser iBrowser, long l, String s, boolean b, IJSQueryCallback ijsQueryCallback) {
+    public boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback ijsQueryCallback) {
+        System.out.println("SCRIPT LANZADO2");
+        System.out.println(query);
         return false;
     }
 

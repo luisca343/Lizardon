@@ -70,7 +70,7 @@ public class PantallaSmartRotom extends Screen {
             //Create a browser and resize it to fit the screen
             // browser = api.createBrowser((urlToLoad == null) ? MCEF.HOME_PAGE : urlToLoad, false);
             browser = pad.view;
-            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
+            //browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
             urlToLoad = null;
         }
 
@@ -85,7 +85,7 @@ public class PantallaSmartRotom extends Screen {
         if(url == null) {
             addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
             addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
-            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("forgecef.example.screen.go"), (button -> this.legacyActionPerformed(2)))));
+            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("X"), (button -> this.legacyActionPerformed(2)))));
             addButton(min = (new Button(width - 20, 0, 20, 20, new StringTextComponent("_"), (button -> this.legacyActionPerformed(3)))));
             addButton(vidMode = (new Button(width - 40, 0, 20, 20, new StringTextComponent("YT"), (button -> this.legacyActionPerformed(4)))));
             vidModeState = false;
@@ -127,15 +127,15 @@ public class PantallaSmartRotom extends Screen {
 
     public void loadURL(String url) {
         if(browser == null)
-            urlToLoad = "http://google.es";
+            urlToLoad = Lizardon.SMARTROTOM_HOME;
         else
-            browser.loadURL("http://google.es");
+            urlToLoad = url;
     }
 
     // formerly updateScreen
     public void preRender() {
         if(urlToLoad != null && browser != null) {
-            browser.loadURL("http://google.es");
+            urlToLoad = Lizardon.SMARTROTOM_HOME;
         }
     }
 

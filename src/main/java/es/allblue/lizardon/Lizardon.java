@@ -21,10 +21,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -43,6 +40,11 @@ public class Lizardon implements IDisplayHandler, IJSQueryHandler
 {
 
     // Directly reference a log4j logger.
+    public static final double PAD_RATIO = 59.0 / 30.0;
+    public static final String SMARTROTOM_HOME = "http://www.google.es";
+    public String homePage;
+    public double padResX;
+    public double padResY;
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String BLACKLIST_URL = "http://lizardon.es";
     public static Lizardon INSTANCE = null;
@@ -50,6 +52,7 @@ public class Lizardon implements IDisplayHandler, IJSQueryHandler
     public KeyBinding key = new KeyBinding("Open Browser", GLFW.GLFW_KEY_F10, "key.categories.misc");
     private PantallaSmartRotom backup = null;
     private API api;
+    public static String MOD_ID = "lizardon";
 
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
 
@@ -86,19 +89,18 @@ public class Lizardon implements IDisplayHandler, IJSQueryHandler
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        // end
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::end);
+
+        padResY = 480;
+        padResX = padResY * PAD_RATIO;
 
         //Grab the API and make sure it isn't null.
         api = MCEFApi.getAPI();
         if(api == null)
             return;
 
-        api.registerScheme("mod", ModScheme.class, true, false, false, true, true, false, false);
-
-        if(api != null) {
-            //Register this class to handle onAddressChange and onQuery events
-            //api.registerDisplayHandler(this);
-            //api.registerJSQueryHandler(this);
-        }
+        api.registerScheme("lizardon", ModScheme.class, true, false, false, true, true, false, false);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -110,16 +112,25 @@ public class Lizardon implements IDisplayHandler, IJSQueryHandler
         ItemInit.register(eventBus);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    public void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
         PROXY.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-
         LizardonPacketHandler.init();
         registrarEventos();
     }
+
+    public void end (FMLLoadCompleteEvent event){
+        API api = Lizardon.INSTANCE.getAPI();
+        if(api != null) {
+            //Register this class to handle onAddressChange and onQuery events
+            //api.registerDisplayHandler(this);
+            api.registerJSQueryHandler(this);
+        }
+    }
+
 
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent ev){
@@ -182,7 +193,9 @@ public class Lizardon implements IDisplayHandler, IJSQueryHandler
     }
 
     @Override
-    public boolean handleQuery(IBrowser iBrowser, long l, String s, boolean b, IJSQueryCallback ijsQueryCallback) {
+    public boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback ijsQueryCallback) {
+        System.out.println("SCRIPT LANZADO2");
+        System.out.println(query);
         return false;
     }
 

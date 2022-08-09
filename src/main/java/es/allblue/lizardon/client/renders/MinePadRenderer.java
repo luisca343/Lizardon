@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -35,6 +36,7 @@ public final class MinePadRenderer implements IItemRenderer {
     private static final float PI = (float) Math.PI;
     private final Minecraft mc = Minecraft.getInstance();
     private final ResourceLocation tex = new ResourceLocation("webdisplays", "textures/item/test.png");
+    private final SmartRotomModel smartRotomModel = new SmartRotomModel();
 
     private float sinSqrtSwingProg1;
     private float sinSqrtSwingProg2;
@@ -93,7 +95,7 @@ public final class MinePadRenderer implements IItemRenderer {
 
         //Render model
 
-        Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
+
 
 
         stack.pushPose();
@@ -106,8 +108,10 @@ public final class MinePadRenderer implements IItemRenderer {
         /*
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, tex);
-        */
-        // model.render(1.f / 16.f);
+
+         */
+        Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
+        //smartRotomModel.renderToBuffer(stack,buffer.getBuffer(RenderType.solid()),packedLight,100, 100, 1000, 100 , 100);
         stack.popPose();
 
 
