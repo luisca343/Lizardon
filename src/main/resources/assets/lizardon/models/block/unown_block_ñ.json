@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "lizardon:blocks/unown_block_ñ"
-    }
-}
