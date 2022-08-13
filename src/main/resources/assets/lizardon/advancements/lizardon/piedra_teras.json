@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": { "item": "lizardon:piedra_teras" },
+    "title": { "translate": "advancements.lizardon.piedra_teras.title" },
+    "description": { "translate": "advancements.lizardon.piedra_teras.description" },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "parent": "lizardon:lizardon/smart_rotom",
+  "criteria": {
+    "has_screen": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [ { "item": "lizardon:piedra_teras" } ]
+      }
+    }
+  }
+}

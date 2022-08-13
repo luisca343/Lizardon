@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "item": "lizardon:smart_rotom" },
+    "title": { "translate": "advancements.lizardon.smart_rotom.title" },
+    "description": { "translate": "advancements.lizardon.smart_rotom.description" },
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "lizardon:lizardon/root",
+  "criteria": {
+    "has_screen": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [ { "item": "lizardon:smart_rotom" } ]
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+$body pikachugiratorio.bmd
+$anim idle idle.bmd
+$anim walk idle.bmd
+$scale 3
