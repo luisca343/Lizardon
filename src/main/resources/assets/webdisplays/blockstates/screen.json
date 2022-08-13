@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"normal": { "model": "webdisplays:screen" },
-		"inventory": { "model": "webdisplays:screen_item" }
-	}
-}
