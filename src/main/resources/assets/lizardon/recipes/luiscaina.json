@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+
+  "ingredients":
+  [
+
+    {
+      "item": "lizardon:hojas_luiscaina"
+    }
+  ],
+
+  "result":
+  {
+    "item": "lizardon:luiscaina",
+    "count": 1
+  }
+}
