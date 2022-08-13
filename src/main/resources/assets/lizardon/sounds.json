@@ -1,0 +1,34 @@
+{
+    "pick": {
+      "category": "block",
+      "sounds": [{
+          "name": "lizardon:mining/pick",
+          "stream": false
+          }
+        ]
+    },
+        "hammer": {
+          "category": "block",
+          "sounds": [{
+            "name": "lizardon:mining/hammer",
+            "stream": false
+          }
+          ]
+        },
+        "taser": {
+          "category": "block",
+          "sounds": [{
+            "name": "lizardon:taser",
+            "stream": false
+          }
+          ]
+        },
+      "underground": {
+        "category": "music",
+        "sounds": [{
+          "name": "lizardon:mining/underground",
+          "stream": true
+        }
+        ]
+      }
+  }
