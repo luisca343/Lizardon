@@ -74,3 +74,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mollis lacinia magn
     ordering="BEFORE"
     versionRange="[1,)"
     side="BOTH"
+
+[[dependencies.lizardon]]
+    modId="voicechat"
+    mandatory=false
+    ordering="BEFORE"
+    versionRange="[1.16,)"
+    side="BOTH"

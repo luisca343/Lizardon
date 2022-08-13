@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -23,18 +24,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.api.*;
+import net.montoyo.mcef.example.BrowserScreen;
 import net.montoyo.mcef.utilities.Log;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = "lizardon", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQueryHandler {
     private net.montoyo.mcef.api.API mcef;
     public final HashMap<Integer, PadData> padMap = new HashMap<>();
     public final ArrayList<PadData> padList = new ArrayList<>();
-    private Minecraft mc;
     private MinePadRenderer minePadRenderer = new MinePadRenderer();
+    private PantallaSmartRotom backup = null;
+    private Minecraft mc = Minecraft.getInstance();
 
     private int minePadTickCounter = 0;
 
@@ -91,6 +96,14 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
     }
 
+    public void end (FMLLoadCompleteEvent event){
+        API api = Lizardon.INSTANCE.getAPI();
+        if(api != null) {
+            //Register this class to handle onAddressChange and onQuery events
+            //api.registerDisplayHandler(this);
+            api.registerJSQueryHandler(this);
+        }
+    }
 
     public PadData getPadByID(int id) {
         return padMap.get(id);
@@ -167,7 +180,15 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
     }
 
-    //kllk
+    public void abrirSmartRotom(){
+        mc.setScreen(hasBackup() ? backup : new BrowserScreen());
+        backup = null;
+    }
+
+    public boolean hasBackup() {
+        return (backup != null);
+    }
+
 
     @Override
     public void onAddressChange(IBrowser browser, String url) {
@@ -191,6 +212,13 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                 tes.updateClientSideURL(browser, url);
             */
         }
+
+
+        //Called by MCEF if a browser's URL changes. Forward this event to the screen.
+        if(mc.screen instanceof BrowserScreen)
+            ((BrowserScreen) mc.screen).onUrlChanged(browser, url);
+        else if(hasBackup())
+            backup.onUrlChanged(browser, url);
     }
 
     @Override
@@ -209,9 +237,10 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     }
 
     @Override
-    public boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback ijsQueryCallback) {
-        System.out.println("SCRIPT LANZADO2");
+    public boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
+        System.out.println("SCRIPT LANZADO2 FELICIDADES");
         System.out.println(query);
+        callback.success("Esto ha funcionado :3");
         return false;
     }
 

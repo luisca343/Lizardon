@@ -9,19 +9,17 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.montoyo.mcef.MCEF;
 import net.montoyo.mcef.api.API;
 import net.montoyo.mcef.api.IBrowser;
 import net.montoyo.mcef.api.MCEFApi;
 import net.montoyo.mcef.example.ExampleMod;
 import net.montoyo.mcef.example.ScreenCfg;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
+@OnlyIn(Dist.CLIENT)
 public class PantallaSmartRotom extends Screen {
 
     private ClientProxy.PadData pad;
@@ -85,7 +83,7 @@ public class PantallaSmartRotom extends Screen {
         if(url == null) {
             addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
             addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
-            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("X"), (button -> this.legacyActionPerformed(2)))));
+            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("⟳"), (button -> this.legacyActionPerformed(2)))));
             addButton(min = (new Button(width - 20, 0, 20, 20, new StringTextComponent("_"), (button -> this.legacyActionPerformed(3)))));
             addButton(vidMode = (new Button(width - 40, 0, 20, 20, new StringTextComponent("YT"), (button -> this.legacyActionPerformed(4)))));
             vidModeState = false;
@@ -301,8 +299,7 @@ public class PantallaSmartRotom extends Screen {
         else if(id == 1)
             browser.goForward();
         else if(id == 2) {
-            String fixedURL = ExampleMod.INSTANCE.getAPI().punycode(url.getValue());
-            browser.loadURL(fixedURL);
+            browser.loadURL(browser.getURL());
         } else if(id == 3) {
             Lizardon.INSTANCE.setBackup(this);
             assert minecraft != null;
@@ -325,5 +322,7 @@ public class PantallaSmartRotom extends Screen {
             }
         }
     }
+
+
 
 }

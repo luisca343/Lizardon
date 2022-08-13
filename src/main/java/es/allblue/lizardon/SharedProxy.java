@@ -2,6 +2,7 @@ package es.allblue.lizardon;
 
 import es.allblue.lizardon.client.ClientProxy;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.utilities.Log;
 
 public class SharedProxy {
@@ -27,5 +28,9 @@ public class SharedProxy {
     public ClientProxy.PadData getPadByID(int id) {
         Log.error("Called SharedProxy.getPadByID() on server side...");
         return null;
+    }
+
+    public void end (FMLLoadCompleteEvent event){
+
     }
 }

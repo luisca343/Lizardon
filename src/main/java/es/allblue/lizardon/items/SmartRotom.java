@@ -2,22 +2,12 @@ package es.allblue.lizardon.items;
 
 
 import es.allblue.lizardon.Lizardon;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
 
 public class SmartRotom extends Item {
     public SmartRotom(Properties properties) {

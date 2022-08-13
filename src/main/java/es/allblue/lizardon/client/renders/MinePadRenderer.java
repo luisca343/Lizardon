@@ -95,9 +95,6 @@ public final class MinePadRenderer implements IItemRenderer {
 
         //Render model
 
-
-
-
         stack.pushPose();
         stack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
 
