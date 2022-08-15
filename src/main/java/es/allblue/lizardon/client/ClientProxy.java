@@ -7,6 +7,7 @@ import es.allblue.lizardon.client.renders.MinePadRenderer;
 import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
+import es.allblue.lizardon.util.QueryHelper;
 import init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -80,20 +81,9 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         mc = Minecraft.getInstance();
         MinecraftForge.EVENT_BUS.register(this);
 
-        mcef = MCEFApi.getAPI();
+        mcef = Lizardon.INSTANCE.getAPI();
         if(mcef != null)
             mcef.registerScheme("lizardon", null, true, false, false, true, true, false, false);
-    }
-
-    @Override
-    public void init() {
-
-        API api = Lizardon.INSTANCE.getAPI();
-        if(api != null) {
-            //Register this class to handle onAddressChange and onQuery events
-            //api.registerDisplayHandler(this);
-            //api.registerJSQueryHandler(this);
-        }
     }
 
     public void end (FMLLoadCompleteEvent event){
@@ -101,6 +91,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         if(api != null) {
             //Register this class to handle onAddressChange and onQuery events
             //api.registerDisplayHandler(this);
+            System.out.println("Registering JSQueryHandler...");
             api.registerJSQueryHandler(this);
         }
     }
@@ -238,15 +229,12 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
-        System.out.println("SCRIPT LANZADO2 FELICIDADES");
-        System.out.println(query);
-        callback.success("Esto ha funcionado :3");
-        return false;
+        return QueryHelper.handleQuery(iBrowser, l , query, b, callback);
     }
 
     @Override
     public void cancelQuery(IBrowser iBrowser, long l) {
-
+        System.out.println("SCRIPT CAANCELAD");
     }
 
 

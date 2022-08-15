@@ -94,13 +94,7 @@ public class Lizardon
     }
 
     public void end (FMLLoadCompleteEvent event){
-        API api = Lizardon.INSTANCE.getAPI();
-
-        if(api != null) {
-            //Register this class to handle onAddressChange and onQuery events
-            //api.registerDisplayHandler(this);
-            //api.registerJSQueryHandler(this);
-        }
+        PROXY.end(event);
     }
 
 

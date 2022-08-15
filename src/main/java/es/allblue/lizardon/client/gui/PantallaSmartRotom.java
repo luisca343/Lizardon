@@ -61,7 +61,7 @@ public class PantallaSmartRotom extends Screen {
 
         if(browser == null) {
             //Grab the API and make sure it isn't null.
-            API api = MCEFApi.getAPI();
+            API api = Lizardon.INSTANCE.getAPI();
             if(api == null)
                 return;
 
@@ -140,6 +140,7 @@ public class PantallaSmartRotom extends Screen {
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         //Render the URL box first because it overflows a bit
+
         this.preRender();
         url.render(matrices, mouseX, mouseY, delta);
 
@@ -264,8 +265,6 @@ public class PantallaSmartRotom extends Screen {
 
         if(browser != null) { //Inject events into browser. TODO: Handle mods & leaving.
             int y = scaleY(sy - 20); //Don't forget to flip Y axis.
-
-            System.out.println("Dest coords " + sx + " " + y + " button " + btn + " " + pressed);
 
             if(wheel != 0)
                 browser.injectMouseWheel(sx, y, 0,  wheel, 0);
