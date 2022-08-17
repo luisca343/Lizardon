@@ -1,6 +1,7 @@
 package es.allblue.lizardon.net;
 
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
+import es.allblue.lizardon.net.server.SMessageTest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +24,7 @@ public class Messages {
     @SubscribeEvent
     public static void registryNetworkPackets (FMLCommonSetupEvent event) {
         INSTANCE.registerMessage(index++, SMessagePadCtrl.class, SMessagePadCtrl::encode, SMessagePadCtrl::decode, SMessagePadCtrl::handle);
+        INSTANCE.registerMessage(index++, SMessageTest.class, SMessageTest::encode, SMessageTest::decode, SMessageTest::handle);
         /*
         INSTANCE.registerMessage(index++, CMessageACResult.class, CMessageACResult::encode, CMessageACResult::decode, CMessageACResult::handle);
         INSTANCE.registerMessage(index++, CMessageAddScreen.class, CMessageAddScreen::encode, CMessageAddScreen::decode, CMessageAddScreen::handle);
