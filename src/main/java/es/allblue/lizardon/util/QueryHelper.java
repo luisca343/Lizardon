@@ -47,10 +47,9 @@ public class QueryHelper {
             return true;
         }
         /* Queries JSON */
-        if(query.contains("llamar")){
+        if(query.contains("entrarLlamada")){
+            System.out.println("entrarLlamada");
             Messages.INSTANCE.sendToServer(new SMessageTest(query));
-
-            System.out.println("FIN");
             return true;
         }
         return false;

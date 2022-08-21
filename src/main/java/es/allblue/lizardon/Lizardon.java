@@ -35,7 +35,7 @@ public class Lizardon
 {
     // Directly reference a log4j logger.
     public static final double PAD_RATIO = 59.0 / 30.0;
-    public static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
+    public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public String homePage;
     public double padResX;
     public double padResY;

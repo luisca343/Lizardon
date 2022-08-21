@@ -7,6 +7,7 @@ import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.allblue.lizardon.ExampleVoicechatPlugin;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.objects.DatosLlamada;
 import es.allblue.lizardon.objects.QueryUser;
 import es.allblue.lizardon.objects.UserData;
 import init.ItemInit;
@@ -28,25 +29,21 @@ public class SMessageTest implements Runnable{
     public SMessageTest(String str){
         this.str = str;
     }
-
-
-
+    
     @Override
     public void run() {
         System.out.println("ENTRANDO AL RUN");
         VoicechatServerApi SERVER_API = ExampleVoicechatPlugin.SERVER_API;
-        Group group = SERVER_API.createGroup("Lizardon", null);
-        VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
-        conn.setGroup(group);
 
         Gson gson = new Gson();
         System.out.println(str);
-        QueryUser userData = gson.fromJson(str, QueryUser.class);
+        DatosLlamada datosLlamada = gson.fromJson(str, DatosLlamada.class);
 
-        ServerPlayerEntity player2 = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByName(userData.getNombre());
-        VoicechatConnection conn2 = SERVER_API.getConnectionOf(player2.getUUID());
-        conn2.setGroup(group);
-
+        System.out.println("Creando grupo "+datosLlamada.getIdLlamada());
+        Group group = SERVER_API.createGroup(datosLlamada.getIdLlamada(), null);
+        VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
+        conn.setGroup(group);
+        System.out.println("Uniendo al grupo "+datosLlamada.getIdLlamada());
     }
 
     public static SMessageTest decode(PacketBuffer buf) {

@@ -5,27 +5,19 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
-import init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.BossInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -75,6 +67,7 @@ public final class MinePadRenderer implements IItemRenderer {
         stack.popPose();
 
 
+
         //Prepare minePad transform
         stack.pushPose();
         stack.translate(handSideSign * -0.4f * sinSqrtSwingProg1, 0.2f * sinSqrtSwingProg2, -0.2f * sinSwingProg1);
@@ -95,6 +88,7 @@ public final class MinePadRenderer implements IItemRenderer {
 
         //Render model
 
+
         stack.pushPose();
         stack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
 
@@ -102,12 +96,20 @@ public final class MinePadRenderer implements IItemRenderer {
         RenderSystem.enableDepthTest();
         RenderSystem.enableAlphaTest();
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         /*
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, tex);
-
          */
+
+        /*
+        stack.pushPose();
         Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
+        Item smart = new SmartRotom(new Item.Properties()).getItem();
+        IBakedModel model = mc.getItemRenderer().getItemModelShaper().getItemModel(smart);
+        mc.getItemInHandRenderer().renderItem(mc.player, smart.getDefaultInstance(), ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false, stack, buffer, packedLight);
+        stack.popPose();*/
+
         //smartRotomModel.renderToBuffer(stack,buffer.getBuffer(RenderType.solid()),packedLight,100, 100, 1000, 100 , 100);
         stack.popPose();
 
