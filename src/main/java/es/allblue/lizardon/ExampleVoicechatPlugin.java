@@ -25,8 +25,7 @@ public class ExampleVoicechatPlugin implements VoicechatPlugin {
      */
     @Override
     public void initialize(VoicechatApi api) {
-        //Lizardon.LOGGER.info("Example voice chat plugin initialized!");
-        System.out.println("PATATTAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
     }
 
     /**

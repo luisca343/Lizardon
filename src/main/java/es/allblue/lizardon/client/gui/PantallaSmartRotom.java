@@ -14,7 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.montoyo.mcef.MCEF;
 import net.montoyo.mcef.api.API;
 import net.montoyo.mcef.api.IBrowser;
-import net.montoyo.mcef.api.MCEFApi;
 import net.montoyo.mcef.example.ExampleMod;
 import net.montoyo.mcef.example.ScreenCfg;
 import org.lwjgl.glfw.GLFW;
@@ -90,7 +89,7 @@ public class PantallaSmartRotom extends Screen {
 
             url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
             url.setMaxLength(65535);
-            url.setValue(browser.getURL());
+            url.setValue(Lizardon.applyBlacklist(browser.getURL()));
         } else {
             addButton(fwd);
             addButton(go);
@@ -105,7 +104,7 @@ public class PantallaSmartRotom extends Screen {
             String old = url.getValue();
             url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
             url.setMaxLength(65535);
-            url.setValue(old);
+            url.setValue(Lizardon.applyBlacklist(old));
         }
 
         this.initTime = System.currentTimeMillis();
@@ -203,39 +202,20 @@ public class PantallaSmartRotom extends Screen {
 
         boolean focused = url.isFocused();
 
-
         String keystr = GLFW.glfwGetKeyName(keyCode, scanCode);
-        if(keystr == null ) return false;
-
-        System.out.println("KEY STR " + keystr);
-        //InputConstants.Key iuKey = InputConstants.getKey(keyCode, scanCode);
-        //String keystr = iuKey.getDisplayName().getString();
-        // String keystr = GLFW.glfwGetKeyName(keyCode, scanCode);
-        System.out.println("KEY STR " + keystr);
-        if(keystr.length() == 0){
-            return false;
+        if(keystr == null ) {
+            keystr = "a";
         }
+
         char key = keystr.charAt(keystr.length() - 1);
 
         if(browser != null && !focused) { //Inject events into browser
-            System.out.println("Sent keystroke " + keystr);
             if(pressed)
                 browser.injectKeyPressedByKeyCode(keyCode, key, 0);
             else
                 browser.injectKeyReleasedByKeyCode(keyCode, key, 0);
-
-            switch(keyCode) {
-                case GLFW.GLFW_KEY_BACKSPACE: browser.injectKeyTyped(keyCode, 0);
-            }
-            return true; // Something did happen
         }
-
-        // Legacy Forwarding
-        /*if(!pressed && focused && num == GLFW.GLFW_KEY_ENTER)
-            actionPerformed(go);
-        else if(pressed)
-            url.textboxKeyTyped(key, num);*/
-        return false;
+        return true;
     }
 
     @Override
@@ -255,7 +235,7 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        return this.mouseChanged(mouseX, mouseY, -1, 0,0,0,false) || super.mouseScrolled(mouseX, mouseY, amount);
+        return this.mouseChanged(mouseX, mouseY, -1, 0,0,amount,false) || super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     public boolean mouseChanged(double mouseX, double mouseY,  int btn, double deltaX, double deltaY, double scrollAmount, boolean pressed){
@@ -287,6 +267,7 @@ public class PantallaSmartRotom extends Screen {
             vidModeState = nurl.matches(YT_REGEX1) || nurl.matches(YT_REGEX2) || nurl.matches(YT_REGEX3);
         }
     }
+
 
     //Handle button clicks the old way...
     protected void legacyActionPerformed(int id) {

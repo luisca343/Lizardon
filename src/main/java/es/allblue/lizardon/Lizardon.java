@@ -8,7 +8,9 @@ import init.ItemInit;
 import es.allblue.lizardon.net.LizardonPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -104,6 +106,7 @@ public class Lizardon
                 .with(
                         () ->
                                 (ServerPlayerEntity) ev.getPlayer());
+
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -132,6 +135,7 @@ public class Lizardon
     }
 
 
+
     public void setBackup(PantallaSmartRotom browserScreen) {
     }
 
@@ -148,6 +152,8 @@ public class Lizardon
     /* Pantallas */
 
     public static String applyBlacklist(String url) {
+        if(url.contains("smartrotom"))
+            return "Smart Rotom";
         return url;
     }
 

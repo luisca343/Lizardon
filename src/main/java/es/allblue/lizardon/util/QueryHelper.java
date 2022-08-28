@@ -1,23 +1,17 @@
 package es.allblue.lizardon.util;
 
 import com.google.gson.Gson;
-import de.maxhenkel.voicechat.api.Group;
-import de.maxhenkel.voicechat.api.VoicechatConnection;
-import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.ExampleVoicechatPlugin;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.server.SMessageTest;
+import es.allblue.lizardon.net.server.SMessageFinalizarLlamada;
+import es.allblue.lizardon.net.server.SMessageIniciarLlamada;
 import es.allblue.lizardon.objects.UserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.NetworkPlayerInfo;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.montoyo.mcef.api.IBrowser;
 import net.montoyo.mcef.api.IJSQueryCallback;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class QueryHelper {
 
@@ -49,7 +43,14 @@ public class QueryHelper {
         /* Queries JSON */
         if(query.contains("entrarLlamada")){
             System.out.println("entrarLlamada");
-            Messages.INSTANCE.sendToServer(new SMessageTest(query));
+            Messages.INSTANCE.sendToServer(new SMessageIniciarLlamada(query));
+            callback.success("test");
+            return true;
+        }
+        /* Queries JSON */
+        if(query.contains("colgarLlamada")){
+            Messages.INSTANCE.sendToServer(new SMessageFinalizarLlamada(query));
+            callback.success("test");
             return true;
         }
         return false;
