@@ -67,7 +67,7 @@ public class PantallaSmartRotom extends Screen {
             //Create a browser and resize it to fit the screen
             // browser = api.createBrowser((urlToLoad == null) ? MCEF.HOME_PAGE : urlToLoad, false);
             browser = pad.view;
-            //browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
+            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
             urlToLoad = null;
         }
 
