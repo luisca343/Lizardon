@@ -82,7 +82,7 @@ public class PantallaSmartRotom extends Screen {
         if(url == null) {
             addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
             addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
-            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("⟳"), (button -> this.legacyActionPerformed(2)))));
+            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("F5"), (button -> this.legacyActionPerformed(2)))));
             addButton(min = (new Button(width - 20, 0, 20, 20, new StringTextComponent("_"), (button -> this.legacyActionPerformed(3)))));
             addButton(vidMode = (new Button(width - 40, 0, 20, 20, new StringTextComponent("YT"), (button -> this.legacyActionPerformed(4)))));
             vidModeState = false;
@@ -91,6 +91,7 @@ public class PantallaSmartRotom extends Screen {
             url.setMaxLength(65535);
             url.setValue(Lizardon.applyBlacklist(browser.getURL()));
         } else {
+            addButton(back);
             addButton(fwd);
             addButton(go);
             addButton(min);

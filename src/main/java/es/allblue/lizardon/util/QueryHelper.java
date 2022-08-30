@@ -20,6 +20,7 @@ public class QueryHelper {
         System.out.println(query);
         Gson gson = new Gson();
 
+        /* Requests 'GET' */
         if(query.equals("getUserData")){
             String uuid = Minecraft.getInstance().player.getStringUUID();
             String nombre = Minecraft.getInstance().player.getName().getString();
@@ -40,14 +41,13 @@ public class QueryHelper {
             callback.success(respuesta);
             return true;
         }
-        /* Queries JSON */
+        /* Requests 'POST' */
         if(query.contains("entrarLlamada")){
             System.out.println("entrarLlamada");
             Messages.INSTANCE.sendToServer(new SMessageIniciarLlamada(query));
             callback.success("test");
             return true;
         }
-        /* Queries JSON */
         if(query.contains("colgarLlamada")){
             Messages.INSTANCE.sendToServer(new SMessageFinalizarLlamada(query));
             callback.success("test");
