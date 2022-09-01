@@ -54,7 +54,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private PadData(String url, int id) {
         view = mcef.createBrowser(Lizardon.INSTANCE.SMARTROTOM_HOME);
         view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
-        //view.resize((int) Lizardon.INSTANCE.padResX, (int)  Lizardon.INSTANCE.padResX);
+        view.resize((int) 1920, (int)  1080);
         isInHotbar = true;
         this.id = id;
     }
