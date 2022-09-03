@@ -56,7 +56,6 @@ public class PantallaSmartRotom extends Screen {
     @Override
     public void init() {
         super.init(); // narrator trigger lmao
-        // Lizardon.INSTANCE.hudBrowser = null;
 
         if(browser == null) {
             //Grab the API and make sure it isn't null.
@@ -64,20 +63,10 @@ public class PantallaSmartRotom extends Screen {
             if(api == null)
                 return;
 
-            //Create a browser and resize it to fit the screen
-            // browser = api.createBrowser((urlToLoad == null) ? MCEF.HOME_PAGE : urlToLoad, false);
             browser = pad.view;
             browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
             urlToLoad = null;
         }
-
-        //Resize the browser if window size changed
-
-
-
-        //Create GUI
-        // Keyboard.enableRepeatEvents(true);
-        // buttonList.clear();
 
         if(url == null) {
             addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
@@ -130,7 +119,6 @@ public class PantallaSmartRotom extends Screen {
             urlToLoad = url;
     }
 
-    // formerly updateScreen
     public void preRender() {
         if(urlToLoad != null && browser != null) {
             urlToLoad = Lizardon.SMARTROTOM_HOME;
@@ -139,20 +127,12 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        //Render the URL box first because it overflows a bit
-
         this.preRender();
         url.render(matrices, mouseX, mouseY, delta);
-
-        //Render buttons
         super.render(matrices, mouseX, mouseY, delta);
-
-        //Renders the browser if itsn't null
         if(browser != null) {
             GlStateManager._disableDepthTest();
             GlStateManager._enableTexture();
-            //GlStateManager._clearColor(1.0f,1.0f,1.0f,1.0f);
-            //GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             browser.draw(matrices, .0d, height, width, 20.d); //Don't forget to flip Y axis.
             GlStateManager._enableDepthTest();
         }
@@ -160,11 +140,9 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void onClose() {
-        //Make sure to close the browser when you don't need it anymore.
         if(!ExampleMod.INSTANCE.hasBackup() && browser != null)
             browser.close();
 
-        // Keyboard.enableRepeatEvents(false);
         super.onClose();
     }
 
