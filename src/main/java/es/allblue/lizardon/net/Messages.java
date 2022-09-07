@@ -1,5 +1,6 @@
 package es.allblue.lizardon.net;
 
+import es.allblue.lizardon.net.server.SMessageDarObjetos;
 import es.allblue.lizardon.net.server.SMessageFinalizarLlamada;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
 import es.allblue.lizardon.net.server.SMessageIniciarLlamada;
@@ -27,5 +28,6 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessagePadCtrl.class, SMessagePadCtrl::encode, SMessagePadCtrl::decode, SMessagePadCtrl::handle);
         INSTANCE.registerMessage(index++, SMessageIniciarLlamada.class, SMessageIniciarLlamada::encode, SMessageIniciarLlamada::decode, SMessageIniciarLlamada::handle);
         INSTANCE.registerMessage(index++, SMessageFinalizarLlamada.class, SMessageFinalizarLlamada::encode, SMessageFinalizarLlamada::decode, SMessageFinalizarLlamada::handle);
+        INSTANCE.registerMessage(index++, SMessageDarObjetos.class, SMessageDarObjetos::encode, SMessageDarObjetos::decode, SMessageDarObjetos::handle);
     }
 }
