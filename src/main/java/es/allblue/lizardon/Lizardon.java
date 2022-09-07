@@ -46,6 +46,7 @@ public class Lizardon
     public static Lizardon INSTANCE = null;
     private API api;
     public static String MOD_ID = "lizardon";
+    public static String HEADER_MENSAJE = "§9§l[Lizardon]:§r ";
 
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
 
