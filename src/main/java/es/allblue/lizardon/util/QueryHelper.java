@@ -3,6 +3,7 @@ package es.allblue.lizardon.util;
 import com.google.gson.Gson;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessageDarObjetos;
+import es.allblue.lizardon.net.server.SMessageEncenderPC;
 import es.allblue.lizardon.net.server.SMessageFinalizarLlamada;
 import es.allblue.lizardon.net.server.SMessageIniciarLlamada;
 import es.allblue.lizardon.objects.UserData;
@@ -56,6 +57,11 @@ public class QueryHelper {
         }
         if(query.contains("darObjetos")){
             Messages.INSTANCE.sendToServer(new SMessageDarObjetos(query));
+            callback.success("test");
+            return true;
+        }
+        if(query.contains("abrirPC")){
+            Messages.INSTANCE.sendToServer(new SMessageEncenderPC(query));
             callback.success("test");
             return true;
         }

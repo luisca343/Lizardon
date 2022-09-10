@@ -1,9 +1,6 @@
 package es.allblue.lizardon.net;
 
-import es.allblue.lizardon.net.server.SMessageDarObjetos;
-import es.allblue.lizardon.net.server.SMessageFinalizarLlamada;
-import es.allblue.lizardon.net.server.SMessagePadCtrl;
-import es.allblue.lizardon.net.server.SMessageIniciarLlamada;
+import es.allblue.lizardon.net.server.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,5 +26,6 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessageIniciarLlamada.class, SMessageIniciarLlamada::encode, SMessageIniciarLlamada::decode, SMessageIniciarLlamada::handle);
         INSTANCE.registerMessage(index++, SMessageFinalizarLlamada.class, SMessageFinalizarLlamada::encode, SMessageFinalizarLlamada::decode, SMessageFinalizarLlamada::handle);
         INSTANCE.registerMessage(index++, SMessageDarObjetos.class, SMessageDarObjetos::encode, SMessageDarObjetos::decode, SMessageDarObjetos::handle);
+        INSTANCE.registerMessage(index++, SMessageEncenderPC.class, SMessageEncenderPC::encode, SMessageEncenderPC::decode, SMessageEncenderPC::handle);
     }
 }
