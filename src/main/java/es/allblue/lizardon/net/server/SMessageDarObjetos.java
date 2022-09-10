@@ -18,9 +18,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +53,8 @@ public class SMessageDarObjetos implements Runnable{
                 recompensas.put(nombre, recompensas.get(nombre) + 1);
             }
         }
-        String mensaje = Lizardon.HEADER_MENSAJE + "§lHas obtenido: §r";
+
+        String mensaje = Lizardon.HEADER_MENSAJE + TextFormatting.WHITE + "Has obtenido: ";
         World world = player.level;
         for (Map.Entry me : recompensas.entrySet()) {
             String nombre = (String) me.getKey();
@@ -63,10 +66,10 @@ public class SMessageDarObjetos implements Runnable{
             ItemEntity itemEntity = new ItemEntity(player.level, player.getX(), player.getY(), player.getZ(), stack);
             itemEntity.setPickUpDelay(0);
 
-            mensaje += "§2§l" + stack.getDisplayName().getContents() + "§6x" + cantidad + "§f,";
+            mensaje += TextFormatting.DARK_GREEN + stack.getDisplayName().getString() + TextFormatting.GOLD + " x" + cantidad + TextFormatting.WHITE + ", ";
             world.addFreshEntity(itemEntity);
         }
-        StringTextComponent msg = new StringTextComponent(mensaje.substring(0, mensaje.length() - 1));
+        StringTextComponent msg = new StringTextComponent(mensaje.substring(0, mensaje.length() - 2));
         player.sendMessage(msg, ChatType.SYSTEM, Util.NIL_UUID);
     }
 
