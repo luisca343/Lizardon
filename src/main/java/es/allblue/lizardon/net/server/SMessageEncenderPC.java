@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.api.storage.PixelmonStorageManager;
+import com.pixelmonmod.pixelmon.api.util.helpers.NetworkHelper;
 import com.pixelmonmod.pixelmon.client.storage.ClientStorageManager;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.OpenScreenPacket;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.clientStorage.newStorage.pc.ClientChangeOpenPCPacket;
@@ -40,7 +41,7 @@ public class SMessageEncenderPC implements Runnable{
     @Override
     public void run() {
         PCStorage pcStorage = ClientStorageManager.openPC;
-        // Pixelmon.network.sendToServer(new ClientChangeOpenPCPacket(pcStorage.uuid));
+        NetworkHelper.sendPacket(new ClientChangeOpenPCPacket(pcStorage.uuid), player);
         OpenScreenPacket.open(player, EnumGuiScreen.PC, new int[0]);
     }
 
