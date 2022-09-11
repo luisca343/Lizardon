@@ -1,18 +1,18 @@
 package es.allblue.lizardon;
 
 
+import com.pixelmonmod.pixelmon.api.pokemon.ability.Ability;
+import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.pixelmon.abilities.TestAbility;
 import init.ItemInit;
 import es.allblue.lizardon.net.LizardonPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -87,13 +88,17 @@ public class Lizardon
 
         ItemInit.register(eventBus);
     }
-
     public void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
         //PROXY.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+
+        LOGGER.info(TestAbility.class.getSimpleName());
+        AbilityRegistry.register("es.allblue.lizardon.pixelmon.abilities.TestAbility");
+        Ability ability = AbilityRegistry.getAbility("TestAbility").get();
+        LOGGER.info(ability.getName());
         LizardonPacketHandler.init();
     }
 
@@ -165,6 +170,10 @@ public class Lizardon
 
     public static boolean isSiteBlacklisted(String url) {
         return false;
+    }
+
+    public static Logger getLogger(){
+        return LOGGER;
     }
 
 }
