@@ -3,10 +3,12 @@ package es.allblue.lizardon;
 
 import com.pixelmonmod.pixelmon.api.pokemon.ability.Ability;
 import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
+import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.pixelmon.abilities.TestAbility;
+import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import init.ItemInit;
 import es.allblue.lizardon.net.LizardonPacketHandler;
 import net.minecraft.block.Block;
@@ -94,11 +96,13 @@ public class Lizardon
         //PROXY.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
-
+        /*
         LOGGER.info(TestAbility.class.getSimpleName());
         AbilityRegistry.register("es.allblue.lizardon.pixelmon.abilities.TestAbility");
         Ability ability = AbilityRegistry.getAbility("TestAbility").get();
-        LOGGER.info(ability.getName());
+        LOGGER.info(ability.getName());*/
+
+        EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
         LizardonPacketHandler.init();
     }
 
