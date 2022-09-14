@@ -21,9 +21,10 @@ public class SmartRotom extends Item {
         if(!stack.hasTag()){
             stack.setTag(new CompoundNBT());
             stack.getTag().putString("PadURL", "http://www.google.es");
-            stack.getTag().putInt("PadID", 1);
+            int id = Lizardon.PROXY.getNextPadID();
+            stack.getTag().putInt("PadID", id);
 
-            Lizardon.PROXY.updatePad(1, stack.getTag(), true);
+            Lizardon.PROXY.updatePad(id, stack.getTag(), true);
         }
 
         if(world.isClientSide()){
