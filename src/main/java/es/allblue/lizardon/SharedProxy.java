@@ -33,4 +33,9 @@ public class SharedProxy {
     public void end (FMLLoadCompleteEvent event){
 
     }
+
+    public int getNextPadID(){
+        Log.error("Called SharedProxy.getNextPadID() on server side...");
+        return 0;
+    }
 }

@@ -8,7 +8,7 @@ import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
 import es.allblue.lizardon.util.QueryHelper;
-import init.ItemInit;
+import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -27,7 +27,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.BrowserScreen;
 import net.montoyo.mcef.utilities.Log;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +42,10 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private Minecraft mc = Minecraft.getInstance();
 
     private int minePadTickCounter = 0;
+
+    public int getNextPadID(){
+        return padList.size()+1;
+    }
 
     public class PadData {
 
