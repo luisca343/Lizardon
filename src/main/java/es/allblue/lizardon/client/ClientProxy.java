@@ -3,7 +3,7 @@ package es.allblue.lizardon.client;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.client.renders.IItemRenderer;
-import es.allblue.lizardon.client.renders.MinePadRenderer;
+import es.allblue.lizardon.client.renders.SmartRotomRenderer;
 import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
@@ -37,7 +37,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private net.montoyo.mcef.api.API mcef;
     public final HashMap<Integer, PadData> padMap = new HashMap<>();
     public final ArrayList<PadData> padList = new ArrayList<>();
-    private MinePadRenderer minePadRenderer = new MinePadRenderer();
+    private SmartRotomRenderer smartRotomRenderer = new SmartRotomRenderer();
     private PantallaSmartRotom backup = null;
     private Minecraft mc = Minecraft.getInstance();
 
@@ -70,7 +70,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
         if(ItemInit.SMARTROTOM.isPresent()) {
             if (item == ItemInit.SMARTROTOM.get()){
-                renderer = minePadRenderer;
+                renderer = smartRotomRenderer;
             }
             else
                 return;

@@ -23,7 +23,7 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 @OnlyIn(Dist.CLIENT)
-public final class MinePadRenderer implements IItemRenderer {
+public final class SmartRotomRenderer implements IItemRenderer {
 
     private static final float PI = (float) Math.PI;
     private final Minecraft mc = Minecraft.getInstance();
