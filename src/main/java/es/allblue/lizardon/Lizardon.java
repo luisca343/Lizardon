@@ -1,15 +1,12 @@
 package es.allblue.lizardon;
 
 
-import com.pixelmonmod.pixelmon.api.pokemon.ability.Ability;
-import com.pixelmonmod.pixelmon.api.pokemon.ability.AbilityRegistry;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.pixelmon.abilities.TestAbility;
 import es.allblue.lizardon.pixelmon.attacks.TestAttack;
-import init.ItemInit;
+import es.allblue.lizardon.init.ItemInit;
 import es.allblue.lizardon.net.LizardonPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -32,7 +29,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-import java.util.Optional;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -93,7 +95,7 @@ public class Lizardon
     public void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
-        //PROXY.init();
+        //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         /*
@@ -104,6 +106,23 @@ public class Lizardon
 
         EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
         LizardonPacketHandler.init();
+
+        LOGGER.info("DESCARGANDO MUSICA");
+        try{
+            URLConnection conn = new URL("http://i.lizardon.es/pixelmon/sonido/denden.mp3").openConnection();
+            InputStream is = conn.getInputStream();
+
+            OutputStream outstream = new FileOutputStream(new File("/tmp/file.mp3"));
+            byte[] buffer = new byte[4096];
+            int len;
+            while ((len = is.read(buffer)) > 0) {
+                outstream.write(buffer, 0, len);
+            }
+            outstream.close();
+
+        }catch (Exception e){
+            LOGGER.info(e.getMessage());
+        }
     }
 
     public void end (FMLLoadCompleteEvent event){

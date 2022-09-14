@@ -1,5 +1,6 @@
-package init;
+package es.allblue.lizardon.init;
 
+import es.allblue.lizardon.items.LizardonItemGroup;
 import es.allblue.lizardon.items.SmartRotom;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -14,7 +15,7 @@ public class ItemInit {
             DeferredRegister.create(ForgeRegistries.ITEMS, "lizardon");
 
     public static final RegistryObject<Item> SMARTROTOM = ITEMS.register("smartrotom",
-            () -> new SmartRotom(new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
+            () -> new SmartRotom(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

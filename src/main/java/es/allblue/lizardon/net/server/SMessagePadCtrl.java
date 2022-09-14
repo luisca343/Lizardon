@@ -1,7 +1,7 @@
 package es.allblue.lizardon.net.server;
 
 import es.allblue.lizardon.Lizardon;
-import init.ItemInit;
+import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
