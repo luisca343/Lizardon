@@ -13,4 +13,6 @@ public class TestAbility extends AbstractAbility {
     }
 
     // EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
+    //EnumHeldItems.other
+    //StatusType.None
 }

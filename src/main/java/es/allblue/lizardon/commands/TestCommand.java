@@ -10,29 +10,26 @@ import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 public class TestCommand {
     private static VoicechatServerApi SERVER_API;
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher){
         dispatcher.register(Commands.literal("lizartest")
                 .executes((command) -> {
-            System.out.println("TEST");
-
-            SERVER_API = ExampleVoicechatPlugin.SERVER_API;
-                    Group group = SERVER_API.createGroup("Lizardon", null);
-
-
-            ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByName("Luisca343");
-            VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
-
-
-            conn.setGroup(group);
-            ServerPlayerEntity player2 = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByName("SrKamina");
-            VoicechatConnection conn2 = SERVER_API.getConnectionOf(player2.getUUID());
-            conn2.setGroup(group);
-
-            System.out.println("Añadido a grupo");
-            return 0;
+                    /*
+                    try {
+                        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("Lizardon/musica/denden.mp3"));
+                        Media hit = new Media(new File(bip).toURI().toString());
+                        MediaPlayer mediaPlayer = new MediaPlayer(hit);
+                        mediaPlayer.play();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }*/
+                    return 0;
         }));
     }
 }

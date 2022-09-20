@@ -35,6 +35,8 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -109,17 +111,29 @@ public class Lizardon
 
         LOGGER.info("DESCARGANDO MUSICA");
         try{
-            URLConnection conn = new URL("http://i.lizardon.es/pixelmon/sonido/denden.mp3").openConnection();
-            InputStream is = conn.getInputStream();
-
-            OutputStream outstream = new FileOutputStream(new File("/tmp/file.mp3"));
-            byte[] buffer = new byte[4096];
-            int len;
-            while ((len = is.read(buffer)) > 0) {
-                outstream.write(buffer, 0, len);
+            String url = "http://i.lizardon.es/pixelmon/sonido/denden.mp3";
+            String[] partes = url.split("/");
+            String carpetaMusica = "Lizardon/musica/";
+            File directorio = new File(carpetaMusica);
+            if(!directorio.exists()){
+                Files.createDirectories(Paths.get(carpetaMusica));
             }
-            outstream.close();
 
+            URLConnection connection = new 	URL(url).openConnection();
+
+            connection.addRequestProperty("User-Agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+            InputStream is = connection.getInputStream();
+
+            OutputStream outstream = new FileOutputStream(new File(carpetaMusica + partes[partes.length-1]));
+
+            byte[] buffer = new byte[4096];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                outstream.write(buffer, 0, length);
+            }
+            System.out.println("mp3 download completed.");
+            outstream.close();
         }catch (Exception e){
             LOGGER.info(e.getMessage());
         }

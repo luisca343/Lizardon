@@ -1148,7 +1148,7 @@
  - 28.1.14  Allow modded dimensions to customise World#getSeaLevel
  - 28.1.13  Fix jigsaw blocks not mirroring properly
  - 28.1.12  Fix type bound on GameRegistry.findRegistry being too narrow
- - 28.1.11  Add IExtensibleEnum#init, extend FillerBlockType/PlacementBehaviour
+ - 28.1.11  Add IExtensibleEnum#es.allblue.lizardon.init, extend FillerBlockType/PlacementBehaviour
  - 28.1.10  Tag the deprecation of DeferredWorkQueue. I think this is causing confusion
             as to scope. Its functionality will be tied to the events in future -
             so mods can request the deferred work through methods on the Mod Lifecycle
@@ -1964,7 +1964,7 @@
  - 24.0.113 Add RecipesUpdatedEvent, fired when recipes are downloaded from the server. (#5303)
  - 24.0.112 [1.13] A sweep through deprecations (#5345)
  - 24.0.111 Add a RayTraceResult method to Block that can be can be overridden (#5354)
- - 24.0.110 [1.13] Make Caps, TESR, Entity renderers, and keybinds thread safe to call during parallel init (#5359)
+ - 24.0.110 [1.13] Make Caps, TESR, Entity renderers, and keybinds thread safe to call during parallel es.allblue.lizardon.init (#5359)
  - 24.0.109 [1.13] Check canSustainPlant for valid ground in BlockBush (#5362)
  - 24.0.108 Repatch missed hasTileEntity redirects. And cleanup related patches. Closes #5369
  - 24.0.107 Fixed fence and iron bars block placement (#5372)
@@ -2050,7 +2050,7 @@
             https://github.com/PaperMC/Paper/blob/fd1bd5223a461b6d98280bb8f2d67280a30dd24a/Spigot-Server-Patches/0378-Sync-Player-Position-to-Vehicles.patch
             Co-authored-by: Gabriel Harris-Rouquette <github@gabizou.com>
  - 24.0.68  Fix blockstate id map calculation. (#5279)
- - 24.0.67  Move @EventBusSubscriber application to just after construction instead of pre-init.
+ - 24.0.67  Move @EventBusSubscriber application to just after construction instead of pre-es.allblue.lizardon.init.
  - 24.0.66  Make Block.Builder methods accessible. Closes #5310 (#5313)
  - 24.0.65  Fix exception mismatch for entity types (#5344)
  - 24.0.64  Fix datapack walking not working for mod datapacks. Closes #5334 (#5335)
@@ -2242,7 +2242,7 @@ v8.99
               Cleanup and implement BrewingRecipes
               Delete es.allblue.lizardon.client command related things
               Cleanup some biome stuff.
- - v8.99.2047 Fix vanilla bug with GLFW init error display - actually the error, not the memory address containing the message
+ - v8.99.2047 Fix vanilla bug with GLFW es.allblue.lizardon.init error display - actually the error, not the memory address containing the message
               Load natives from the environment var, not hardcoding.
  - v8.99.2046 Fix launching in dev
  - v8.99.2045 Fix AnvilChunkLoader not having access to chunk cap dispatcher
@@ -2284,7 +2284,7 @@ v8.99
               Removed some patches that didnt get removed in the rebase.
  - v8.99.2037 Add some missing libraries and work on GuiIngameForge. Down 700 errors.
  - v8.99.2036 Tweak
- - v8.99.2035 Network init
+ - v8.99.2035 Network es.allblue.lizardon.init
  - v8.99.2034 Server starts
  - v8.99.2033 Patches deleted
  - v8.99.2032 Zeroth pass on 1.13
@@ -2696,7 +2696,7 @@ v8.99
  - v8.99.1658 Improve generation of normals for vanilla models (#4313)
  - v8.99.1657 Fire RenderGameOverlayEvent for vignette (#4360)
  - v8.99.1656 Fix light sources rendering wrongly with night vision (MC-58177) (#4365)
- - v8.99.1655 Fix CustomModLoadingErrorDisplayScreen not being handled during init or preinit. (#4320)
+ - v8.99.1655 Fix CustomModLoadingErrorDisplayScreen not being handled during es.allblue.lizardon.init or preinit. (#4320)
  - v8.99.1654 Insert FML handler before Vanilla connection handshake completes (#4380)
  - v8.99.1653 Add missing bounds checks to ItemTextureQuadConverter (#4343)
  - v8.99.1652 Allow custom GuiEditArrayEntries without having to recreate the object in several places (#4329)
@@ -3136,8 +3136,8 @@ v8.99
               * add build with stracktrace
               * Fix running test
               * try building with java 6
-              * try using simplified init.gradle
-              * Revert "try using simplified init.gradle"
+              * try using simplified es.allblue.lizardon.init.gradle
+              * Revert "try using simplified es.allblue.lizardon.init.gradle"
               This reverts commit e56041e794e3b8c13453245eb2605118e4ac68ce.
               * Revert "try building with java 6"
               This reverts commit 51795385f453fdd8a0e77c632b5463d8754b1ba4.
@@ -3563,7 +3563,7 @@ v8.99
  - v8.99.987  Add methods to Fluid to allow custom vaporization overrides (#2959)
  - v8.99.986  Fixes #1984.
  - v8.99.985  Modified SimpleModelState to ignore the parts it doesn't know about. Fixes model part hiding always applying to some models when transformations are specified in the blockstate json.
- - v8.99.984  Pass the GL context back from the splash screen during the EntityRenderer init.
+ - v8.99.984  Pass the GL context back from the splash screen during the EntityRenderer es.allblue.lizardon.init.
  - v8.99.983  Fire ChunkWatchEvent.Watch event, closes #2767. Based on @sfPlayer1 patch suggestion. It looks like this logic has shifted relative to 1.8, so there may be differences in event behaviour now.
  - v8.99.982  Fix asynchronous chunk loading (#2946)
               Since the update to Minecraft 1.9.4 chunks were actually never loaded
@@ -4530,7 +4530,7 @@ v8.99
               Initialize sources list
  - v8.99.373  Initialize sources list
               Fixes crash NPE thrown by addFile()
- - v8.99.372  Most requested feature of all time? TileEntity init method called after it's ready to roll. remove all the if (firstTicks)
+ - v8.99.372  Most requested feature of all time? TileEntity es.allblue.lizardon.init method called after it's ready to roll. remove all the if (firstTicks)
  - v8.99.371  Merge branch 'Emberwalker-lang-adapter-fix' into 1.8.8
               Closes #1898
  - v8.99.370  Fix language adapter loading.
@@ -5669,13 +5669,13 @@ v99.99-pre
                    Bulk Chunk Data packets should also check TileEntity.shouldRefresh().
  - v99.99-pre-4017 Fix value passed for Item.getModel useRemaining argument. Closes #1623
  - v99.99-pre-4016 Made Chunk.fillBlock respect TileEntity.shouldRefresh.
- - v99.99-pre-4015 Call World.init from DimensionManager.initDimension Closes #1551
+ - v99.99-pre-4015 Call World.es.allblue.lizardon.init from DimensionManager.initDimension Closes #1551
  - v99.99-pre-4014 Fix potential NPE when loading a single player world where you were saved in a unloaded dimension. Closes #1575
  - v99.99-pre-4013 Bulk Chunk Data packets should also check TileEntity.shouldRefresh().
  - v99.99-pre-4012 Fix versionCheck config option
  - v99.99-pre-4011 Merge pull request #1609 from lumien231/1.8
-                   Fixes #1603: Moving the start of the update thread to the pre init of the forge mod container
- - v99.99-pre-4010 Fixes #1603: Moving the start of the update thread to the pre init of the forge mod container
+                   Fixes #1603: Moving the start of the update thread to the pre es.allblue.lizardon.init of the forge mod container
+ - v99.99-pre-4010 Fixes #1603: Moving the start of the update thread to the pre es.allblue.lizardon.init of the forge mod container
  - v99.99-pre-4009 Allow blocks to render in multiple layers
  - v99.99-pre-4008 Fix recipies for stone variants.
  - v99.99-pre-4007 Merge pull request #1592 from palechip/1.8
@@ -5730,8 +5730,8 @@ v99.99-pre
  - v99.99-pre-3967 Changed ToolMaterial's repair material to ItemStack version to allow metadata sensitive versions.
  - v99.99-pre-3966 Changed ToolMaterial's repair material to ItemStack version to allow metadata sensitive versions. Closes #1355
  - v99.99-pre-3965 Fix invalid argument being passed to Block.isNormalCube from World.updateNeighbors. Closes #1339 and Closes #1346
- - v99.99-pre-3964 Add quartz_ore tool init, more mojang special casing -.- Closes #1333 and Closes #1335
- - v99.99-pre-3963 Add quartz_ore tool init, more mojang special casing -.-
+ - v99.99-pre-3964 Add quartz_ore tool es.allblue.lizardon.init, more mojang special casing -.- Closes #1333 and Closes #1335
+ - v99.99-pre-3963 Add quartz_ore tool es.allblue.lizardon.init, more mojang special casing -.-
  - v99.99-pre-3962 Added PotionBrewEvent.Pre/Post. To allow for modification and cancelation of Brewing. Closes #1248
  - v99.99-pre-3961 Added PotionBrewEvent.Pre/Post. To allow for modification and cancelation of Brewing.
  - v99.99-pre-3960 Add LivingHealEvent called from EntityLivingBase.heal() Closes #1282
@@ -5768,7 +5768,7 @@ v99.99-pre
  - v99.99-pre-3933 Fix BlockPane's connection detection.
  - v99.99-pre-3932 Fixed snow layers not being able to stack more then twice. Closes #1534
  - v99.99-pre-3931 Fixed Entities not being able to climb ladders, Closes #1535
- - v99.99-pre-3930 Fixed Entity extended properties init order. Closes #1532
+ - v99.99-pre-3930 Fixed Entity extended properties es.allblue.lizardon.init order. Closes #1532
  - v99.99-pre-3929 Fix interacting with entities.
  - v99.99-pre-3928 Updated FML:
                    MinecraftForge/FML@36644e97714b46dbbb24416febdde1332a3e753c Finalize modded handshakes in the World tick thread. Prevents potential CMEs when login event takes to long to fire.
@@ -5971,7 +5971,7 @@ v99.99-pre
                    MinecraftForge/FML@eb8c5ab146f2eb3ad3833d40607da97831278ffb Fix nested directory for language resources. Closes MinecraftForge#1264
                    MinecraftForge/FML@7c05e5f70d5387512d0bee33ef99510ee5aac739 Default collections, so that we don't crash if useDependencyInfo is true. Closes #485
                    MinecraftForge/FML@9729fe23326a3d4f6b03e60b5cdaf78a484b3657 Kill net.minecraft.src warning. It hasn't served a purpose in a long time now. Closes #313
-                   MinecraftForge/FML@21e875ef22eef6068ccd6df1bd71cf58cba48eed AllowPlayerLogins only after the server has completed the core init tasks. Closes #372
+                   MinecraftForge/FML@21e875ef22eef6068ccd6df1bd71cf58cba48eed AllowPlayerLogins only after the server has completed the core es.allblue.lizardon.init tasks. Closes #372
                    MinecraftForge/FML@46cfeade80ae60ad2d8cdb40c5fdfdaeeaf16d00 Add a constructor to CustomModLoadingDisplayException. Closes #387
                    MinecraftForge/FML@a6eab2683a15a0cceca7a0ded6095b746cdd017b Update README.txt
                    MinecraftForge/FML@f75838461cf6d9c5010cbfd2d9ef5ceec03268d7 Last part is the itemstack transformer. Itemstacks should now only be loosely coupled with the items within.
@@ -6088,7 +6088,7 @@ v99.99-pre
  - v99.99-pre-3774 Fixed ItemFluidContainer always draining the maximum amount, regardless of the amount remaining.
  - v99.99-pre-3773 Update README.txt
  - v99.99-pre-3772 Add a constructor to CustomModLoadingDisplayException. Closes #387
- - v99.99-pre-3771 AllowPlayerLogins only after the server has completed the core init tasks. Closes #372
+ - v99.99-pre-3771 AllowPlayerLogins only after the server has completed the core es.allblue.lizardon.init tasks. Closes #372
  - v99.99-pre-3770 Kill net.minecraft.src warning. It hasn't served a purpose in a long time now. Closes #313
  - v99.99-pre-3769 Default collections, so that we don't crash if useDependencyInfo is true. Closes #485
  - v99.99-pre-3768 Fix nested directory for language resources. Closes MinecraftForge#1264
@@ -6592,7 +6592,7 @@ v99.99-pre
                    Added dependency examples to the shipped example mod's build.gradle.
  - v99.99-pre-3505 documented dependencies
  - v99.99-pre-3504 Implemented hashCode and equals in ItemStack, Closes #986
- - v99.99-pre-3503 Fix extended entity properties being lost when leaving the end, This introduces the concept of calling IExtendedEntityProperties.init when entites/worlds change. Lets see if mods explode.
+ - v99.99-pre-3503 Fix extended entity properties being lost when leaving the end, This introduces the concept of calling IExtendedEntityProperties.es.allblue.lizardon.init when entites/worlds change. Lets see if mods explode.
  - v99.99-pre-3502 Fine use FMLCommonHandler.
  - v99.99-pre-3501 Merge pull request #1062 from bspkrs/master
                    New GuiScreen events and a new ElementType DEBUG for RenderGameOverlayEvent
@@ -6779,8 +6779,8 @@ v99.99-pre
  - v99.99-pre-3397 Updated FML:
                    MinecraftForge/FML@e8b60441ccca8cccdc130560b4c8bf400aebc605 Reload game settings after mod loading is finished to capture mod keybindings. Closes #378
                    MinecraftForge/FML@399770e572c9177babfb65a27280253023db2d9e Kill the modEventTypes list, register anything that extends FMLEvent, Fixes MissingMappingEvent handler, and any futureevents added.
-                   MinecraftForge/FML@b7ad532ab5eb3e00d77ffde946d25675c9f69cf7 Re-enable post initalize texture pack reloading to allow Icons to be registerd through any init phase.
- - v99.99-pre-3396 Re-enable post initalize texture pack reloading to allow Icons to be registerd through any init phase.
+                   MinecraftForge/FML@b7ad532ab5eb3e00d77ffde946d25675c9f69cf7 Re-enable post initalize texture pack reloading to allow Icons to be registerd through any es.allblue.lizardon.init phase.
+ - v99.99-pre-3396 Re-enable post initalize texture pack reloading to allow Icons to be registerd through any es.allblue.lizardon.init phase.
  - v99.99-pre-3395 Merge pull request #983 from DemoXinMC/master
                    Added Ore Dictionary entries and recipe replacements for Diamond, Emerald, Crops, Redstone, and Glowstone
  - v99.99-pre-3394 Merge pull request #984 from ShetiPhian/item-renderer-fix
@@ -7582,8 +7582,8 @@ v99.99-pre
  - v99.99-pre-2916 Update workspaces for 1.6.4
  - v99.99-pre-2915 Updated FML:
                    MinecraftForge/FML@25981706ef12654b6c2baccc80fa2298bb5afb4a Update for MC 1.6.4
-                   MinecraftForge/FML@0950b9fc8441a2d3b022ed876f17ee5ac0c47b9c Fix up a deep crash in the early server init hanging the es.allblue.lizardon.client
- - v99.99-pre-2914 Fix up a deep crash in the early server init hanging the es.allblue.lizardon.client
+                   MinecraftForge/FML@0950b9fc8441a2d3b022ed876f17ee5ac0c47b9c Fix up a deep crash in the early server es.allblue.lizardon.init hanging the es.allblue.lizardon.client
+ - v99.99-pre-2914 Fix up a deep crash in the early server es.allblue.lizardon.init hanging the es.allblue.lizardon.client
  - v99.99-pre-2913 Update for MC 1.6.4
  - v99.99-pre-2912 Move have handler creation up, to prevent NPE.
  - v99.99-pre-2911 Remove duplicate access transformer
@@ -10137,7 +10137,7 @@ v99.99-pre
                    2cf4917 - Village mating produces added villagers, and the egg should place added villagers too. Closes #97.
                    6394ee8 - Clean up stale references to the Player stored in the NetworkRegistry, closes #100
                    7299e05 - Merge pull request #99 from CovertJaguar/patch-1
-                   c4bd040 - More readable init logs
+                   c4bd040 - More readable es.allblue.lizardon.init logs
  - v99.99-pre-1343 Fixup Item in hand rendering of textures > 16x
  - v99.99-pre-1342 Make the exception print for headless servers if the Downloader cant initalize.
  - v99.99-pre-1341 Remove a bunch of warning about javadoc, not a real fix, but no more warning.
@@ -10150,7 +10150,7 @@ v99.99-pre
                    closes #100
  - v99.99-pre-1335 Merge pull request #99 from CovertJaguar/patch-1
                    More readable state event logs
- - v99.99-pre-1334 More readable init logs
+ - v99.99-pre-1334 More readable es.allblue.lizardon.init logs
  - v99.99-pre-1333 Package all of paulscode/ with the universal jar to help mac users who cant understand how to merge folders -.-
  - v99.99-pre-1332 Bump version to 4.1.2 to mark the end of todays changes.
  - v99.99-pre-1331 Move spawn fuzz to WorldProvider/WorldType, useful for VoidWorld types.
@@ -10158,7 +10158,7 @@ v99.99-pre
  - v99.99-pre-1329 Read/Write config files as UTF-8 instead of ANSII, should fix issue with Turkish people.
  - v99.99-pre-1328 Fix potential issue with custom events where the constructor is not visible from the EventBus class, Should never arise but meh.
  - v99.99-pre-1327 Add ability for Items to create custom Entities for themselves when added to the world, PR: #151
- - v99.99-pre-1326 Move Forge init message to MinecraftForge.initalize
+ - v99.99-pre-1326 Move Forge es.allblue.lizardon.init message to MinecraftForge.initalize
  - v99.99-pre-1325 Make EntityJoinWorldEvent Cancelable properly
  - v99.99-pre-1324 Merge pull request #146 from dries007/Fly
                    Allow flight permissions to be player sensitive
@@ -10624,7 +10624,7 @@ v99.99-pre
  - v99.99-pre-1060 Fix derp with EntityRegistry- bimap is not the right type for the name->container list
  - v99.99-pre-1059 Fix bug where default bonemeal behavior wouldn't trigger. Only return if the event was canceled.
  - v99.99-pre-1058 Add in a sided variant of the packethandlers in the annotation - also, a bit more
-                   explicit warning on when to register blocks - if you do it after pre-init, you'll
+                   explicit warning on when to register blocks - if you do it after pre-es.allblue.lizardon.init, you'll
                    reset the achievements
  - v99.99-pre-1057 Generate channel registration for es.allblue.lizardon.client, also, do it before the login events so you can send packets
  - v99.99-pre-1056 Capture server packet handling errors into the FML log file for diagnostics
@@ -10641,7 +10641,7 @@ v99.99-pre
  - v99.99-pre-1046 Fixed ItemRenderer not grabbing custom texture files properly for block items
  - v99.99-pre-1045 Add in a simple packet dispatcher for sending packets around
  - v99.99-pre-1044 Add in a sided packet registry so that es.allblue.lizardon.client vs server can vary
- - v99.99-pre-1043 Fix double forge init on server
+ - v99.99-pre-1043 Fix double forge es.allblue.lizardon.init on server
  - v99.99-pre-1042 Should fix commands.py patching not working properly first run.
  - v99.99-pre-1041 Merge pull request #50 from Krapht/master
                    Fix for getNextAvailableRenderId() returning ids in use by vanilla - thanks krapht!
@@ -10842,7 +10842,7 @@ v99.99-pre
                    BaseMod versions are loaded too late so will never work as a versioned
                    dependency requirement, but can have versioned deps of others
  - v99.99-pre-884  Fix up coremods with relaunch, add in a sample "coremod"
- - v99.99-pre-883  Add in events for the method pre/init/post annotations so we can add in extra data during the event phase
+ - v99.99-pre-883  Add in events for the method pre/es.allblue.lizardon.init/post annotations so we can add in extra data during the event phase
  - v99.99-pre-882  Fix whitespace issue
  - v99.99-pre-881  Fix window sticking around - it doesn't anymore
  - v99.99-pre-880  Add in "transform excluded" classes that we still need to take loading responsibility for
