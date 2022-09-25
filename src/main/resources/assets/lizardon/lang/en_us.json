@@ -1,5 +1,9 @@
 {
   "itemGroup.lizardonTab": "Lizardon",
 
-  "item.lizardon.smartrotom": "Smart Rotom"
+  "item.lizardon.smartrotom": "Smart Rotom",
+
+
+  "ability.TestAbility": "Potencia Floral",
+  "ability.TestAbility.description": "Duplica el ataque de tu dinosaurio amorfo de mierda."
 }
