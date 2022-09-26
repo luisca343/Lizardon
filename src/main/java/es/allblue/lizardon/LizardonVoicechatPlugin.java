@@ -7,7 +7,7 @@ import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 import net.minecraft.client.Minecraft;
 
 @ForgeVoicechatPlugin
-public class ExampleVoicechatPlugin implements VoicechatPlugin {
+public class LizardonVoicechatPlugin implements VoicechatPlugin {
     public static VoicechatServerApi SERVER_API;
 
     /**

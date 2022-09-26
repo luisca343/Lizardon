@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.ExampleVoicechatPlugin;
+import es.allblue.lizardon.LizardonVoicechatPlugin;
 import es.allblue.lizardon.objects.DatosLlamada;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -23,7 +23,7 @@ public class SMessageIniciarLlamada implements Runnable{
     
     @Override
     public void run() {
-        VoicechatServerApi SERVER_API = ExampleVoicechatPlugin.SERVER_API;
+        VoicechatServerApi SERVER_API = LizardonVoicechatPlugin.SERVER_API;
         Gson gson = new Gson();
         DatosLlamada datosLlamada = gson.fromJson(str, DatosLlamada.class);
         Group group = SERVER_API.createGroup(datosLlamada.getIdLlamada(), null);

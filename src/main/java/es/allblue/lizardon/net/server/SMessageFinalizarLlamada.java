@@ -1,12 +1,9 @@
 package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
-import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.ExampleVoicechatPlugin;
-import es.allblue.lizardon.objects.DatosLlamada;
+import es.allblue.lizardon.LizardonVoicechatPlugin;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -23,7 +20,7 @@ public class SMessageFinalizarLlamada implements Runnable{
     
     @Override
     public void run() {
-        VoicechatServerApi SERVER_API = ExampleVoicechatPlugin.SERVER_API;
+        VoicechatServerApi SERVER_API = LizardonVoicechatPlugin.SERVER_API;
         VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
         conn.setGroup(null);
     }
