@@ -2,13 +2,8 @@ package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.init.registry.ItemRegistration;
-import de.maxhenkel.voicechat.api.VoicechatConnection;
-import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.ExampleVoicechatPlugin;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.DarObjetos;
-import es.allblue.lizardon.objects.DatosLlamada;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -22,7 +17,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;

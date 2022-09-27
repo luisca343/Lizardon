@@ -19,6 +19,7 @@ public class BlockInit {
         RegistryObject<T> object = BLOCKS.register(name, block);
         registerBlockItem(name, object);
         return object;
+
     }
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block){
