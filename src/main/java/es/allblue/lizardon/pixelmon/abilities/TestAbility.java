@@ -11,8 +11,4 @@ public class TestAbility extends AbstractAbility {
         Lizardon.getLogger().info("SE HA ACTIVADO LA PINCHE HABILIDAD, HIJO DE REMIL");
         return stats;
     }
-
-    // EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
-    //EnumHeldItems.other
-    //StatusType.None
 }
