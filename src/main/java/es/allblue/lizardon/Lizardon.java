@@ -1,9 +1,12 @@
 package es.allblue.lizardon;
 
 
+import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
+import es.allblue.lizardon.event.MisionesCaza;
+import es.allblue.lizardon.event.ModEvents;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import es.allblue.lizardon.init.ItemInit;
@@ -12,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +29,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
+import noppes.npcs.api.NpcAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,19 +70,19 @@ public class Lizardon
 
     public Lizardon() {
         INSTANCE = this;
-        // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-        // end
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::end);
 
         padResY = 480;
         padResX = padResY * PAD_RATIO;
+
+
+        NpcAPI npcAPI = NpcAPI.Instance();
+        Lizardon.getLogger().info("TESTES");
+        npcAPI.events().register(ModEvents.class);
 
         //Grab the API and make sure it isn't null.
         api = MCEFApi.getAPI();
@@ -96,6 +101,7 @@ public class Lizardon
     }
     public void setup(final FMLCommonSetupEvent event)
     {
+        Pixelmon.EVENT_BUS.register(new MisionesCaza());
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
