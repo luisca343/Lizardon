@@ -2,7 +2,6 @@ package es.allblue.lizardon;
 
 
 import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.event.MisionesCaza;
@@ -112,7 +111,6 @@ public class Lizardon
         Ability ability = AbilityRegistry.getAbility("TestAbility").get();
         LOGGER.info(ability.getName());*/
 
-        EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
         LizardonPacketHandler.init();
 
         LOGGER.info("DESCARGANDO MUSICA");
