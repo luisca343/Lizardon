@@ -6,15 +6,15 @@ import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.event.MisionesCaza;
 import es.allblue.lizardon.event.ModEvents;
+import es.allblue.lizardon.init.BlockInit;
+import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import es.allblue.lizardon.init.ItemInit;
 import es.allblue.lizardon.net.LizardonPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,9 +35,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -96,6 +93,8 @@ public class Lizardon
         eventBus.addListener(Messages::registryNetworkPackets);
 
         ItemInit.register(eventBus);
+        BlockInit.register(eventBus);
+        TileEntityInit.register(eventBus);
     }
     public void setup(final FMLCommonSetupEvent event)
     {
@@ -158,6 +157,9 @@ public class Lizardon
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the es.allblue.lizardon.client
+        // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
+
+
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
     }
 
