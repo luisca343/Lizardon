@@ -122,10 +122,10 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    implementation files('libs/Pixelmon.jar')
-    implementation files('libs/mcef-1.0.0.jar')
-    implementation files('libs/voicechat-forge-1.16.5-2.3.2.jar')
-    implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
+    implementation files('./libs/Pixelmon.jar')
+    implementation files('./libs/mcef-1.0.0.jar')
+    implementation files('./libs/voicechat-forge-1.16.5-2.3.2.jar')
+    implementation files('./libs/CustomNPCs-1.16.5.20220515.jar')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
