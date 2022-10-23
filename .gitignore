@@ -23,7 +23,6 @@ test
 >>>>>>> Stashed changes
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
