@@ -157,7 +157,7 @@ public class Lizardon
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the es.allblue.lizardon.client
-        // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
+        // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);a
 
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
