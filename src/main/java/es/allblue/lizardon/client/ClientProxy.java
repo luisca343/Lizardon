@@ -40,6 +40,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private SmartRotomRenderer smartRotomRenderer = new SmartRotomRenderer();
     private PantallaSmartRotom backup = null;
     private Minecraft mc = Minecraft.getInstance();
+    public static IJSQueryCallback callbackMisiones;
 
     private int minePadTickCounter = 0;
 
