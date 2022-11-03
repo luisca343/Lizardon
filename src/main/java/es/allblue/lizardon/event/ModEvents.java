@@ -14,6 +14,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.command.ConfigCommand;
 import noppes.npcs.api.event.NpcEvent;
 import noppes.npcs.api.event.QuestEvent;
 
@@ -25,11 +26,14 @@ public class ModEvents {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
         new TestCommand(event.getDispatcher());
+
+        ConfigCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
     public static void test(NpcEvent.InteractEvent event){
         Lizardon.getLogger().info("Se ha interactuado con un NPC");
+
     }
 
     @SubscribeEvent

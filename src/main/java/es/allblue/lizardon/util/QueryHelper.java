@@ -1,11 +1,9 @@
 package es.allblue.lizardon.util;
 
 import com.google.gson.Gson;
+import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.server.SMessageDarObjetos;
-import es.allblue.lizardon.net.server.SMessageEncenderPC;
-import es.allblue.lizardon.net.server.SMessageFinalizarLlamada;
-import es.allblue.lizardon.net.server.SMessageIniciarLlamada;
+import es.allblue.lizardon.net.server.*;
 import es.allblue.lizardon.objects.UserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.NetworkPlayerInfo;
@@ -18,8 +16,6 @@ import java.util.Collection;
 public class QueryHelper {
 
     public static boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
-        System.out.println("ESTO ES UNA PRUEBA");
-        System.out.println(query);
         Gson gson = new Gson();
 
         /* Requests 'GET' */
@@ -63,6 +59,12 @@ public class QueryHelper {
         if(query.contains("abrirPC")){
             Messages.INSTANCE.sendToServer(new SMessageEncenderPC(query));
             callback.success("test");
+            return true;
+        }
+        if(query.contains("getMisiones")){
+            ClientProxy.callbackMisiones = callback;
+            Messages.INSTANCE.sendToServer(new SMessageVerMisiones(query));
+
             return true;
         }
         return false;

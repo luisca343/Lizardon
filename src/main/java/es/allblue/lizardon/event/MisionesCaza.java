@@ -63,6 +63,10 @@ public class MisionesCaza {
     public void avanzarMision(String nombreCategoria, Stats stats, ServerPlayerEntity player){
         IQuestCategory categoria = getCategoria(nombreCategoria);
         PlayerWrapper playerWrapper = new PlayerWrapper(player);
+        if(categoria == null) {
+            playerWrapper.message("Ha petado la cosa esa");
+            return;
+        }
         String nombre = stats.getParentSpecies().getName();
         for(IQuest quest : categoria.quests()){
             for(IQuestObjective objetivo :quest.getObjectives(playerWrapper)){
