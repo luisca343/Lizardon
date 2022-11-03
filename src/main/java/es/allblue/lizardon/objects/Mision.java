@@ -1,19 +1,18 @@
 package es.allblue.lizardon.objects;
-/*
-*               mision.setSiguienteMision(quest.getNextQuest());
-                mision.setTipo(quest.getType());
-                mision.setTextoFinal(quest.getCompleteText());
-                mision.setTextoLog(quest.getLogText());
-*
-* */
 
+import java.util.ArrayList;
 
 public class Mision {
     private String nombre;
+    private String categoria;
     private int siguienteMision;
     private int tipo;
     private String textoCompletar;
     private String textoLog;
+    private String nombreNPC;
+    private boolean repetible;
+    private ArrayList<RecompensaMision> recompensas;
+    private boolean activa;
 
     public String getNombre() {
         return nombre;
@@ -53,5 +52,45 @@ public class Mision {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public String getNombreNPC() {
+        return nombreNPC;
+    }
+
+    public void setNombreNPC(String nombreNPC) {
+        this.nombreNPC = nombreNPC;
+    }
+
+    public boolean isRepetible() {
+        return repetible;
+    }
+
+    public void setRepetible(boolean repetible) {
+        this.repetible = repetible;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public ArrayList<RecompensaMision> getRecompensas() {
+        return recompensas;
+    }
+
+    public void setRecompensas(ArrayList<RecompensaMision> recompensas) {
+        this.recompensas = recompensas;
+    }
+
+    public boolean isActiva() {
+        return activa;
+    }
+
+    public void setActiva(boolean activa) {
+        this.activa = activa;
     }
 }
