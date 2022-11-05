@@ -1,6 +1,5 @@
 package es.allblue.lizardon.client.gui;
 
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import es.allblue.lizardon.Lizardon;
@@ -17,6 +16,7 @@ import net.montoyo.mcef.api.IBrowser;
 import net.montoyo.mcef.example.ExampleMod;
 import net.montoyo.mcef.example.ScreenCfg;
 import org.lwjgl.glfw.GLFW;
+
 
 @OnlyIn(Dist.CLIENT)
 public class PantallaSmartRotom extends Screen {
@@ -166,7 +166,14 @@ public class PantallaSmartRotom extends Screen {
     }
 
     public boolean keyChanged(int keyCode, int scanCode, int modifiers, boolean pressed) {
+        /*
+        switch(keyCode) {
+            case GLFW.GLFW_KEY_BACKSPACE: browser.injectKeyTyped(keyCode, 0);
+        }
+        */
+
         assert minecraft != null;
+
         if(keyCode == GLFW.GLFW_KEY_ESCAPE) {
             minecraft.setScreen(null);
             return true;
@@ -181,12 +188,15 @@ public class PantallaSmartRotom extends Screen {
 
         boolean focused = url.isFocused();
 
+
         String keystr = GLFW.glfwGetKeyName(keyCode, scanCode);
         if(keystr == null ) {
             keystr = "a";
         }
 
         char key = keystr.charAt(keystr.length() - 1);
+
+        System.out.println("key:" + key);
 
         if(browser != null && !focused) { //Inject events into browser
             if(pressed)
