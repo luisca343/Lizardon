@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerMisiones;
+import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.RecompensaMision;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -12,8 +13,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.montoyo.mcef.api.IJSQueryCallback;
+import noppes.npcs.CustomNpcs;
+import noppes.npcs.NPCSpawning;
 import noppes.npcs.api.CustomNPCsException;
 import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.data.IPixelmonPlayerData;
 import noppes.npcs.api.handler.IQuestHandler;
 import noppes.npcs.api.handler.data.IQuest;
@@ -21,7 +25,12 @@ import noppes.npcs.api.handler.data.IQuestCategory;
 import noppes.npcs.api.handler.data.IQuestObjective;
 import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.api.wrapper.PlayerWrapper;
+import noppes.npcs.entity.EntityCustomNpc;
 
+import java.io.File;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,53 +51,41 @@ public class SMessageVerMisiones implements Runnable{
         PlayerWrapper wrapper = new PlayerWrapper(player);
         IQuestHandler questHandler = api.getQuests();
 
-        Map<Integer, Mision> misiones = new HashMap<>();
-        for ( IQuestCategory category : questHandler.categories()) {
-            for ( IQuest quest : category.quests()) {
 
-                System.out.println("======== " + quest.getName() +" ========");
-                Mision mision = new Mision();
-                IQuest siguienteMision = quest.getNextQuest();
-                if(siguienteMision == null) {
-                    mision.setSiguienteMision(-1);
-                } else {
-                    mision.setSiguienteMision(quest.getNextQuest().getId());
-                }
+        IQuest[] mActivas = wrapper.getActiveQuests();
+        IQuest[] mCompletadas = wrapper.getFinishedQuests();
 
+        Map<Integer, Mision> misionesActivas = new HashMap<>();
+        Map<Integer, Mision> misionesCompletas = new HashMap<>();
 
-
-                mision.setCategoria(category.getName());
-                mision.setNombre(quest.getName());
-                mision.setTipo(quest.getType());
-                mision.setTextoCompletar(quest.getCompleteText());
-                mision.setTextoLog(quest.getLogText());
-                mision.setNombreNPC(quest.getNpcName());
-                mision.setRepetible(quest.getIsRepeatable());
-
-
-                for(int i = 0; i < quest.getRewards().getItems().length; i++){
-                    IItemStack recompensa = quest.getRewards().getItems()[i];
-                    ArrayList<RecompensaMision> recompensasMision = new ArrayList<RecompensaMision>();
-                    if(recompensa.getStackSize() != 0){
-                        RecompensaMision recompensaMision = new RecompensaMision();
-                        recompensaMision.setObjeto(recompensa.getName());
-                        recompensaMision.setCantidad(recompensa.getStackSize());
-
-                        recompensasMision.add(recompensaMision);
-                    }
-                    mision.setRecompensas(recompensasMision);
-                }
-
-
-                
-                misiones.put(quest.getId(), mision);
-            }
+        for (IQuest mActiva : mActivas) {
+            guardarMision(misionesActivas, mActiva);
         }
+
+        for (IQuest mCompleta : mCompletadas) {
+            guardarMision(misionesCompletas, mCompleta);
+        }
+
+        Map<String, Map<Integer, Mision>> misiones = new HashMap<>();
+        misiones.put("Activas", misionesActivas);
+        misiones.put("Completas", misionesCompletas);
 
         Gson gson = new Gson();
         String res = gson.toJson(misiones);
-        System.out.println(res);
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
+    }
+
+    public void guardarMision(Map<Integer, Mision> lista, IQuest quest){
+        Mision mision = new Mision();
+        mision.setCategoria(quest.getCategory().getName());
+        mision.setNombre(quest.getName());
+        mision.setTipo(quest.getType());
+        mision.setTextoCompletar(quest.getCompleteText());
+        mision.setTextoLog(quest.getLogText());
+        mision.setNombreNPC(quest.getNpcName());
+        mision.setRepetible(quest.getIsRepeatable());
+        mision.setId(quest.getId());
+        lista.put(quest.getId(), mision);
     }
 
     public static SMessageVerMisiones decode(PacketBuffer buf) {

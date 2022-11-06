@@ -1,5 +1,6 @@
 package es.allblue.lizardon.client;
 
+import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.client.renders.IItemRenderer;
@@ -7,6 +8,7 @@ import es.allblue.lizardon.client.renders.SmartRotomRenderer;
 import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
+import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.client.Minecraft;
@@ -27,9 +29,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.BrowserScreen;
 import net.montoyo.mcef.utilities.Log;
+import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.event.NpcEvent;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = "lizardon", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -241,6 +252,9 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         System.out.println("SCRIPT CAANCELAD");
     }
 
+    @Override
+    public void actualizarNPC(NpcEvent.InteractEvent event) {
 
+    }
 }
 

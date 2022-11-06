@@ -2,6 +2,7 @@ package es.allblue.lizardon.blocks;
 
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.init.TileEntityInit;
+import es.allblue.lizardon.tileentity.FunkoTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -30,11 +31,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-public class Funko extends Block {
-    public Funko(Properties p_i48440_1_) {
-        super(p_i48440_1_);
-        String id = "https://crafatar.com/skins/67d9b543-5ac9-41e1-a8a5-20d7689e24a4";
 
+
+import net.minecraft.block.SkullPlayerBlock;
+
+public class Funko extends Block {
+    public Funko(Properties props) {
+        super(props);
+        String id = "https://crafatar.com/skins/67d9b543-5ac9-41e1-a8a5-20d7689e24a4";
 
         try{
             String url = id;
@@ -69,24 +73,6 @@ public class Funko extends Block {
         super.onPlace(p_220082_1_, p_220082_2_, p_220082_3_, p_220082_4_, p_220082_5_);
     }
 
-    public VoxelShape makeShape(){
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.25, 1.4375, 0.25, 0.75, 1.9375, 0.75), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.25, 0.6875, 0.375, 0.75, 1.4375, 0.625), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.75, 0.6875, 0.375, 1, 1.4375, 0.625), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0, 0.6875, 0.375, 0.25, 1.4375, 0.625), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.5, -0.0625, 0.375, 0.75, 0.6875, 0.625), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.25, -0.0625, 0.375, 0.5, 0.6875, 0.625), IBooleanFunction.OR);
-        shape = VoxelShapes.join(shape, VoxelShapes.box(0.24375000000000002, 1.43125, 0.24375, 0.75625, 1.9437499999999999, 0.75625), IBooleanFunction.OR);
-
-        return shape;
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
-        return makeShape();
-    }
-
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
@@ -103,8 +89,10 @@ public class Funko extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        FunkoTE te = TileEntityInit.FUNKO_TE.get().create();
         return TileEntityInit.FUNKO_TE.get().create();
     }
+
 
 
 }

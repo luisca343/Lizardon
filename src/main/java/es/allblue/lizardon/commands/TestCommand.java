@@ -29,19 +29,7 @@ public class TestCommand {
     public int testCommand(CommandSource source) throws CommandSyntaxException {
         System.out.println("EL COMANDO");
         ServerPlayerEntity player = source.getPlayerOrException();
-        System.out.println(player.getStringUUID());
-        NpcAPI api = NpcAPI.Instance();
-        PlayerWrapper wrapper = new PlayerWrapper(player);
-        IQuestObjective obyectivo = api.getQuests().get(3).getObjectives(wrapper)[0];
-        obyectivo.setProgress(obyectivo.getProgress()+1);
-        IQuestHandler questHandler = api.getQuests();
-
-        for ( IQuestCategory category : questHandler.categories()) {
-            Lizardon.getLogger().info(category.getName());
-            for ( IQuest quest : category.quests()) {
-                Lizardon.getLogger().info(quest.getName());
-            }
-        }
+        
 
         return 1;
     }

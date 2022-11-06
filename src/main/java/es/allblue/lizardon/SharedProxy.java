@@ -4,6 +4,7 @@ import es.allblue.lizardon.client.ClientProxy;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.utilities.Log;
+import noppes.npcs.api.event.NpcEvent;
 
 public class SharedProxy {
     public void updatePad(int id, CompoundNBT tag, boolean isSelected) {}
@@ -37,5 +38,9 @@ public class SharedProxy {
     public int getNextPadID(){
         Log.error("Called SharedProxy.getNextPadID() on server side...");
         return 0;
+    }
+
+    public void actualizarNPC(NpcEvent.InteractEvent event) {
+        Log.info("Esto no tira en server");
     }
 }

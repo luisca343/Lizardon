@@ -3,6 +3,7 @@ package es.allblue.lizardon.objects;
 import java.util.ArrayList;
 
 public class Mision {
+    private Integer id;
     private String nombre;
     private String categoria;
     private int siguienteMision;
@@ -13,6 +14,7 @@ public class Mision {
     private boolean repetible;
     private ArrayList<RecompensaMision> recompensas;
     private boolean activa;
+    private String skin;
 
     public String getNombre() {
         return nombre;
@@ -92,5 +94,21 @@ public class Mision {
 
     public void setActiva(boolean activa) {
         this.activa = activa;
+    }
+
+    public String getSkin() {
+        return skin;
+    }
+
+    public void setSkin(String skin) {
+        this.skin = skin;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

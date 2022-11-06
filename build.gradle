@@ -16,9 +16,9 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '2.0.0'
+version = '2.0.0-BETA1'
 group = 'es.allblue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'lizardon-INDEV'
+archivesBaseName = 'Lizardon-1.16.5'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 
@@ -121,11 +121,12 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    implementation files('./libs/Pixelmon.jar')
-    implementation files('./libs/mcef-1.0.0.jar')
-    implementation files('./libs/voicechat-forge-1.16.5-2.3.2.jar')
-    implementation files('./libs/CustomNPCs-1.16.5.20220515.jar')
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
+    implementation files('libs/Pixelmon.jar')
+    implementation files('libs/mcef-1.1.0.jar')
+    implementation files('libs/voicechat-forge-1.16.5-2.3.2.jar')
+    implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
+    implementation files('libs/Vault.jar')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
