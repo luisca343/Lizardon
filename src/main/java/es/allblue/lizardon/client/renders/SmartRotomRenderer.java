@@ -5,19 +5,25 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
+import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.ModelTransformComposition;
 import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -85,35 +91,12 @@ public final class SmartRotomRenderer implements IItemRenderer {
             stack.translate(-0.475f, -0.1f, 0.0f);
             stack.mulPose(Vector3f.ZP.rotationDegrees(1.0f));
         }
-
-        //Render model
-
-
-        stack.pushPose();
-        stack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
-
-        RenderSystem.depthMask(true);
-        RenderSystem.enableDepthTest();
-        RenderSystem.enableAlphaTest();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
         /*
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, tex);
-         */
-
-        /*
-        stack.pushPose();
-        Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
-        Item smart = new SmartRotom(new Item.Properties()).getItem();
-        IBakedModel model = mc.getItemRenderer().getItemModelShaper().getItemModel(smart);
-        mc.getItemInHandRenderer().renderItem(mc.player, smart.getDefaultInstance(), ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, false, stack, buffer, packedLight);
-        stack.popPose();*/
-
-        //smartRotomModel.renderToBuffer(stack,buffer.getBuffer(RenderType.solid()),packedLight,100, 100, 1000, 100 , 100);
-        stack.popPose();
-
-
+        if(handSideSign >= 0.0f)
+            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND);
+        else
+            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND);
+        */
         //Render web view
         boolean existePad = true;
         if(is.getTag() != null && is.getTag().contains("PadID")) {
@@ -134,7 +117,6 @@ public final class SmartRotomRenderer implements IItemRenderer {
         }else{
             existePad = false;
         }
-
         if(!existePad){
             /* Pantalla falsa placeholder  */
             Matrix4f positionMatrix = stack.last().pose();
@@ -152,9 +134,24 @@ public final class SmartRotomRenderer implements IItemRenderer {
             t.end();
         }
 
+
+
+
         stack.popPose();
 //        glDisable(GL_RESCALE_NORMAL);
         RenderSystem.enableCull();
+
+
+
+    }
+
+    private void renderModel(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight, ItemCameraTransforms.TransformType transform) {
+        stack.clear();
+        Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
+        Item smart = ItemInit.SMARTROTOM.get();
+        mc.getItemInHandRenderer().renderItem(mc.player, smart.getDefaultInstance(), transform , false, stack, buffer, packedLight);
+        stack.pushPose();
+        stack.popPose();
     }
 
     private void renderArmFirstPerson(MatrixStack stack , int combinedLight, float equipProgress, IRenderTypeBuffer buffer, float handSideSign) {

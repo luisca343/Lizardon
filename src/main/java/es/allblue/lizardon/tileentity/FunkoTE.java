@@ -1,5 +1,6 @@
 package es.allblue.lizardon.tileentity;
 
+import com.mojang.authlib.GameProfile;
 import es.allblue.lizardon.init.TileEntityInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -63,5 +64,9 @@ public class FunkoTE extends TileEntity {
         }
 
         return super.getCapability(cap,side);
+    }
+
+    public GameProfile getOwnerProfile() {
+        return null;
     }
 }
