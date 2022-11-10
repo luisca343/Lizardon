@@ -15,6 +15,7 @@ public class Mision {
     private ArrayList<RecompensaMision> recompensas;
     private boolean activa;
     private String skin;
+    private ArrayList<ObjetivoMision> objetivos;
 
     public String getNombre() {
         return nombre;
@@ -110,5 +111,13 @@ public class Mision {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ArrayList<ObjetivoMision> getObjetivos() {
+        return objetivos;
+    }
+
+    public void setObjetivos(ArrayList<ObjetivoMision> objetivos) {
+        this.objetivos = objetivos;
     }
 }

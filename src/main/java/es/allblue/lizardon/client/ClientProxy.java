@@ -37,6 +37,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -255,6 +256,33 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     @Override
     public void actualizarNPC(NpcEvent.InteractEvent event) {
 
+    }
+
+    @Override
+    public void crearArchivo(String nombre) {
+        System.out.println("Creando carpeta "+nombre);
+        Path basePath = Minecraft.getInstance().gameDirectory.toPath().toAbsolutePath().toAbsolutePath();
+        Path path = Paths.get(basePath.toString(),"Lizardon");
+        File carpetaBase = new File(path.toString());
+        if(!carpetaBase.exists()) {
+            carpetaBase.mkdirs();
+        }
+    }
+
+    @Override
+    public Path getRuta(String ruta) {
+        Path basePath = Minecraft.getInstance().gameDirectory.toPath().toAbsolutePath();
+        Path path = Paths.get(basePath.toString(),"Lizardon/"+ ruta);
+        File fileDatos = new File(path.toString());
+        if(!fileDatos.exists()) {
+            System.out.println("Creando archivo inexistente "+ruta);
+            try {
+                fileDatos.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return path;
     }
 }
 

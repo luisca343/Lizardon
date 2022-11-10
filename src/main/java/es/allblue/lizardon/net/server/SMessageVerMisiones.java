@@ -2,35 +2,22 @@ package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerMisiones;
-import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
-import es.allblue.lizardon.objects.RecompensaMision;
+import es.allblue.lizardon.objects.ObjetivoMision;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.montoyo.mcef.api.IJSQueryCallback;
-import noppes.npcs.CustomNpcs;
-import noppes.npcs.NPCSpawning;
-import noppes.npcs.api.CustomNPCsException;
 import noppes.npcs.api.NpcAPI;
-import noppes.npcs.api.entity.IEntity;
-import noppes.npcs.api.entity.data.IPixelmonPlayerData;
 import noppes.npcs.api.handler.IQuestHandler;
 import noppes.npcs.api.handler.data.IQuest;
-import noppes.npcs.api.handler.data.IQuestCategory;
 import noppes.npcs.api.handler.data.IQuestObjective;
-import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.api.wrapper.PlayerWrapper;
-import noppes.npcs.entity.EntityCustomNpc;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.File;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,21 +36,20 @@ public class SMessageVerMisiones implements Runnable{
     public void run() {
         NpcAPI api = NpcAPI.Instance();
         PlayerWrapper wrapper = new PlayerWrapper(player);
-        IQuestHandler questHandler = api.getQuests();
-
 
         IQuest[] mActivas = wrapper.getActiveQuests();
         IQuest[] mCompletadas = wrapper.getFinishedQuests();
+
 
         Map<Integer, Mision> misionesActivas = new HashMap<>();
         Map<Integer, Mision> misionesCompletas = new HashMap<>();
 
         for (IQuest mActiva : mActivas) {
-            guardarMision(misionesActivas, mActiva);
+            guardarMision(misionesActivas, mActiva, wrapper);
         }
 
         for (IQuest mCompleta : mCompletadas) {
-            guardarMision(misionesCompletas, mCompleta);
+            guardarMision(misionesCompletas, mCompleta, wrapper);
         }
 
         Map<String, Map<Integer, Mision>> misiones = new HashMap<>();
@@ -75,7 +61,7 @@ public class SMessageVerMisiones implements Runnable{
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
     }
 
-    public void guardarMision(Map<Integer, Mision> lista, IQuest quest){
+    public void guardarMision(Map<Integer, Mision> lista, IQuest quest, PlayerWrapper wrapper){
         Mision mision = new Mision();
         mision.setCategoria(quest.getCategory().getName());
         mision.setNombre(quest.getName());
@@ -85,6 +71,28 @@ public class SMessageVerMisiones implements Runnable{
         mision.setNombreNPC(quest.getNpcName());
         mision.setRepetible(quest.getIsRepeatable());
         mision.setId(quest.getId());
+
+        IQuest[] mActivas = wrapper.getActiveQuests();
+        ArrayList<Integer> idActivas = new ArrayList<>();
+        for (IQuest mActiva : mActivas) {
+            idActivas.add(mActiva.getId());
+        }
+
+        if(idActivas.contains(quest.getId())){
+            IQuestObjective[] objetivos = quest.getObjectives(wrapper);
+            ArrayList<ObjetivoMision> objetivosMision = new ArrayList<>();
+            if (objetivos.length > 0 ){
+                for (IQuestObjective objetivo : objetivos) {
+                    ObjetivoMision objetivoMision = new ObjetivoMision();
+                    objetivoMision.setNombre(objetivo.getText());
+                    objetivoMision.setProgreso(objetivo.getProgress());
+                    objetivoMision.setTotal(objetivo.getMaxProgress());
+                    objetivosMision.add(objetivoMision);
+                }
+            }
+            mision.setObjetivos(objetivosMision);
+        }
+
         lista.put(quest.getId(), mision);
     }
 

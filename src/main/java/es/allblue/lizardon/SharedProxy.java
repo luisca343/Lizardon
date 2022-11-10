@@ -6,6 +6,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
+import java.nio.file.Path;
+
 public class SharedProxy {
     public void updatePad(int id, CompoundNBT tag, boolean isSelected) {}
 
@@ -42,5 +44,12 @@ public class SharedProxy {
 
     public void actualizarNPC(NpcEvent.InteractEvent event) {
         Log.info("Esto no tira en server");
+    }
+
+    public void crearArchivo(String s) {
+    }
+
+    public Path getRuta(String carpeta) {
+        return null;
     }
 }

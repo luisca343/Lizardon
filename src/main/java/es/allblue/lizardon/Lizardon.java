@@ -36,8 +36,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -104,6 +102,8 @@ public class Lizardon
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+        Lizardon.PROXY.crearArchivo("config.json");
+
         /*
         LOGGER.info(TestAbility.class.getSimpleName());
         AbilityRegistry.register("es.allblue.lizardon.pixelmon.abilities.TestAbility");
@@ -119,7 +119,7 @@ public class Lizardon
             String carpetaMusica = "Lizardon/musica/";
             File directorio = new File(carpetaMusica);
             if(!directorio.exists()){
-                Files.createDirectories(Paths.get(carpetaMusica));
+                // Files.createDirectories(Util.getRuta(carpetaMusica));
             }
 
             URLConnection connection = new 	URL(url).openConnection();
