@@ -5,17 +5,12 @@ import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.tileentity.FunkoTE;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -28,12 +23,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
-
-
-
-import net.minecraft.block.SkullPlayerBlock;
 
 public class Funko extends Block {
     public Funko(Properties props) {
@@ -46,7 +36,7 @@ public class Funko extends Block {
             String carpeta = "Lizardon/skins/";
             File directorio = new File(carpeta);
             if(!directorio.exists()){
-                Files.createDirectories(Paths.get(carpeta));
+                Files.createDirectories(Lizardon.PROXY.getRuta(carpeta));
             }
 
             URLConnection connection = new URL(url).openConnection();
