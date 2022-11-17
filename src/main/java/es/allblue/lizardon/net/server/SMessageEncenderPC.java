@@ -42,8 +42,8 @@ public class SMessageEncenderPC implements Runnable{
     @Override
     public void run() {
         try{
-            PCStorage pcStorage = ClientStorageManager.openPC;
-            NetworkHelper.sendPacket(new ClientChangeOpenPCPacket(pcStorage.uuid), player);
+            UUID uuid = UUID.fromString(str);
+            NetworkHelper.sendPacket(new ClientChangeOpenPCPacket(uuid), player);
             OpenScreenPacket.open(player, EnumGuiScreen.PC, new int[0]);
         }catch(Exception e){
             player.sendMessage(new StringTextComponent("Ha ocurrido un error"), UUID.randomUUID());
