@@ -53,6 +53,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private PantallaSmartRotom backup = null;
     private Minecraft mc = Minecraft.getInstance();
     public static IJSQueryCallback callbackMisiones;
+    public String idServidor;
 
     private int minePadTickCounter = 0;
 
@@ -284,5 +285,12 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
         return path;
     }
+
+    @Override
+    public void setIdServidor(String idServidor) {
+        this.idServidor = idServidor;
+    }
+
+
 }
 

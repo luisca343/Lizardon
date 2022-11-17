@@ -1,8 +1,11 @@
 package es.allblue.lizardon.objects;
 
+import es.allblue.lizardon.Lizardon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 public class UserData {
@@ -13,8 +16,13 @@ public class UserData {
     public UserData(String uuid, String nombre) {
         this.uuid = uuid;
         this.nombre = nombre;
-        ServerData server = Minecraft.getInstance().getCurrentServer();
-        this.mundo = server == null ? "local" : server.ip;
+        mundo = Lizardon.PROXY.idServidor;
+    }
+
+    public UserData(String uuid, String nombre, String idServer) {
+        this.uuid = uuid;
+        this.nombre = nombre;
+        this.mundo = idServer;
     }
 
     public String getUuid() {

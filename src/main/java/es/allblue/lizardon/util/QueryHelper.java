@@ -1,6 +1,8 @@
 package es.allblue.lizardon.util;
 
 import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.api.storage.PCStorage;
+import com.pixelmonmod.pixelmon.client.storage.ClientStorageManager;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.*;
@@ -20,12 +22,8 @@ public class QueryHelper {
 
         /* Requests 'GET' */
         if(query.equals("getUserData")){
-            String uuid = Minecraft.getInstance().player.getStringUUID();
-            String nombre = Minecraft.getInstance().player.getName().getString();
-            UserData data = new UserData(uuid, nombre);
-
-            String respuesta = gson.toJson(data);
-            callback.success(respuesta);
+            Messages.INSTANCE.sendToServer(new SMessageDatosServer("query"));
+            ClientProxy.callbackMisiones = callback;
             return true;
         }
         if(query.equals("getPlayers")){
@@ -57,7 +55,9 @@ public class QueryHelper {
             return true;
         }
         if(query.contains("abrirPC")){
-            Messages.INSTANCE.sendToServer(new SMessageEncenderPC(query));
+            PCStorage pcStorage = ClientStorageManager.openPC;
+
+            Messages.INSTANCE.sendToServer(new SMessageEncenderPC(pcStorage.uuid.toString()));
             callback.success("test");
             return true;
         }

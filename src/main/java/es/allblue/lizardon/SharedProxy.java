@@ -9,6 +9,8 @@ import noppes.npcs.api.event.NpcEvent;
 import java.nio.file.Path;
 
 public class SharedProxy {
+    public String idServidor;
+
     public void updatePad(int id, CompoundNBT tag, boolean isSelected) {}
 
     public void preInit() {
@@ -52,4 +54,8 @@ public class SharedProxy {
     public Path getRuta(String carpeta) {
         return null;
     }
+
+    public void setIdServidor(String idServidor){
+        idServidor = "test";
+    };
 }
