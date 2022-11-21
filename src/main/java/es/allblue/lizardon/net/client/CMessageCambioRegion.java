@@ -2,6 +2,7 @@ package es.allblue.lizardon.net.client;
 
 
 import com.google.common.base.Charsets;
+import es.allblue.lizardon.event.RegionEventsClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -19,6 +20,7 @@ public class CMessageCambioRegion implements Runnable{
     public void run() {
         System.out.println("CAMBIANDO REGION");
         System.out.println(str);
+        RegionEventsClient.renderizarCartel("tulipan", 3);
 
     }
 
@@ -36,4 +38,5 @@ public class CMessageCambioRegion implements Runnable{
         contextSupplier.get().enqueueWork((Runnable) this);
         contextSupplier.get().setPacketHandled(true);
     }
+
 }
