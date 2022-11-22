@@ -34,11 +34,11 @@ public class RegionEventsClient {
         Date currentDate = new Date();
         long tiempoActual = currentDate.getTime();
         long tiempoPasado = tiempoActual - tiempoInicio;
-        if (tiempoPasado < 1000) {
-            posY = tiempoPasado
+        if (tiempoPasado < 500) {
+            posY = tiempoPasado / 5 - 100;
         }
-        if (tiempoActual > tiempoInicio + tiempoCartel - 1000 ) {
-            posY = 100 - tiempoActual - tiempoInicio;
+        if (tiempoPasado > (tiempoCartel - 500) ) {
+            posY = (tiempoCartel - tiempoPasado) / 5 - 100;
         }
         if ((tiempoActual - tiempoInicio) >= tiempoCartel) return;
         RenderSystem.disableDepthTest();
