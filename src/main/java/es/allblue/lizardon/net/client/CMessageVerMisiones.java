@@ -52,23 +52,6 @@ public class CMessageVerMisiones implements Runnable{
 
             actualizar(activas, activasOrdenadas);
             actualizar(completas,completasOrdenadas);
-            /*
-            for(Map.Entry<Integer, Mision> entrada: activas.entrySet()){
-                Mision mision = entrada.getValue();
-                if(datosNpc.containsKey(mision.getNombreNPC())){
-                    mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
-                }
-                activas.replace(entrada.getKey(), mision);
-            }
-
-            for(Map.Entry<Integer, Mision> entrada: completas.entrySet()){
-                Mision mision = entrada.getValue();
-                if(datosNpc.containsKey(mision.getNombreNPC())){
-                    mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
-                }
-                completas.replace(entrada.getKey(), mision);
-            }*/
-
 
             Map<String, Map<String, Map<Integer, Mision>>> misionesOrdenadas = new HashMap<>();
 
