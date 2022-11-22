@@ -29,15 +29,23 @@ public class RegionEventsClient {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void renderGameOverlay(RenderGameOverlayEvent.Post event)
     {
+        long posY = 0;
         if(event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
         Date currentDate = new Date();
         long tiempoActual = currentDate.getTime();
+        long tiempoPasado = tiempoActual - tiempoInicio;
+        if (tiempoPasado < 1000) {
+            posY = tiempoPasado
+        }
+        if (tiempoActual > tiempoInicio + tiempoCartel - 1000 ) {
+            posY = 100 - tiempoActual - tiempoInicio;
+        }
         if ((tiempoActual - tiempoInicio) >= tiempoCartel) return;
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         Minecraft.getInstance().getTextureManager().bind(new ResourceLocation(Lizardon.MOD_ID, "textures/"+ cartelActivo +".png"));
-        Minecraft.getInstance().gui.blit(event.getMatrixStack(), 0, 0, 0, 0, 256, 256);
+        Minecraft.getInstance().gui.blit(event.getMatrixStack(), 0, (int) posY, 0, 0, 256, 256);
 
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
