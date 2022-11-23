@@ -18,9 +18,7 @@ public class CMessageCambioRegion implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("CAMBIANDO REGION");
-        System.out.println(str);
-        RegionEventsClient.renderizarCartel("tulipan", 3);
+        RegionEventsClient.renderizarCartel(str, 2);
 
     }
 
