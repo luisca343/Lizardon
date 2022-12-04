@@ -5,7 +5,8 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.event.MisionesCaza;
-import es.allblue.lizardon.event.ModEvents;
+import es.allblue.lizardon.event.CustomNPCsEvents;
+import es.allblue.lizardon.event.PixelmonEvents;
 import es.allblue.lizardon.init.BlockInit;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
@@ -36,6 +37,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -44,7 +47,7 @@ public class Lizardon
 {
     // Directly reference a log4j logger.
     public static final double PAD_RATIO = 59.0 / 30.0;
-    public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
+    public static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
     public String homePage;
     public double padResX;
     public double padResY;
@@ -76,7 +79,7 @@ public class Lizardon
 
         NpcAPI npcAPI = NpcAPI.Instance();
         Lizardon.getLogger().info("TESTES");
-        npcAPI.events().register(ModEvents.class);
+        npcAPI.events().register(CustomNPCsEvents.class);
 
         //Grab the API and make sure it isn't null.
         api = MCEFApi.getAPI();
@@ -91,6 +94,7 @@ public class Lizardon
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(Messages::registryNetworkPackets);
 
+
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
         TileEntityInit.register(eventBus);
@@ -98,19 +102,13 @@ public class Lizardon
     public void setup(final FMLCommonSetupEvent event)
     {
         Pixelmon.EVENT_BUS.register(new MisionesCaza());
+        Pixelmon.EVENT_BUS.register(new PixelmonEvents());
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         Lizardon.PROXY.crearArchivo("config.json");
 
-        /*
-        LOGGER.info(TestAbility.class.getSimpleName());
-        AbilityRegistry.register("es.allblue.lizardon.pixelmon.abilities.TestAbility");
-        Ability ability = AbilityRegistry.getAbility("TestAbility").get();
-        LOGGER.info(ability.getName());*/
-
-        // LizardonPacketHandler.init();
 
         LOGGER.info("DESCARGANDO MUSICA");
         try{
@@ -182,8 +180,17 @@ public class Lizardon
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
         LOGGER.info("HELLO from server starting");
-    }
+        String carpetaMusica = "Lizardon";
+        File directorio = new File(carpetaMusica);
+        if(!directorio.exists()){
+            try {
+                Files.createDirectories(Paths.get("/Lizardon"));
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public void setBackup(PantallaSmartRotom browserScreen) {

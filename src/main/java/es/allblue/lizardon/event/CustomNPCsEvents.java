@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = "lizardon")
-public class ModEvents {
+public class CustomNPCsEvents {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
         new TestCommand(event.getDispatcher());
