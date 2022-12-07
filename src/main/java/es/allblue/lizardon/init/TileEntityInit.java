@@ -12,11 +12,11 @@ public class TileEntityInit {
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES
             = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Lizardon.MOD_ID);
 
-
+/*
     public static RegistryObject<TileEntityType<FunkoTE>> FUNKO_TE =
             TILE_ENTITIES.register("funko_tile", () -> TileEntityType.Builder.of(FunkoTE::new, BlockInit.FUNKO.get()).build(null));
 
-
+*/
     public static void register(IEventBus eventBus){
         TILE_ENTITIES.register(eventBus);
     }

@@ -46,8 +46,8 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = "lizardon", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQueryHandler {
-    private net.montoyo.mcef.api.API mcef;
-    public final HashMap<Integer, PadData> padMap = new HashMap<>();
+    private API mcef;
+    public HashMap<Integer, PadData> padMap;
     public final ArrayList<PadData> padList = new ArrayList<>();
     private SmartRotomRenderer smartRotomRenderer = new SmartRotomRenderer();
     private PantallaSmartRotom backup = null;
@@ -77,6 +77,12 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     }
 }
 
+
+    public void iniciarPadMap(){
+        System.out.println("Iniciando PAD MAP");
+        padMap = new HashMap<>();
+    }
+
     @SubscribeEvent
     public void onRenderPlayerHand(RenderHandEvent ev) {
         Item item = ev.getItemStack().getItem();
@@ -95,10 +101,11 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void preInit() {
+        System.out.println("PRE INIT");
         mc = Minecraft.getInstance();
-        MinecraftForge.EVENT_BUS.register(this);
-
         mcef = Lizardon.INSTANCE.getAPI();
+        MinecraftForge.EVENT_BUS.register(this);
+        iniciarPadMap();
         if(mcef != null)
             mcef.registerScheme("lizardon", null, true, false, false, true, true, false, false);
     }

@@ -18,10 +18,10 @@ public class ItemInit {
     public static final RegistryObject<Item> SMARTROTOM = ITEMS.register("smartrotom",
             () -> new SmartRotom(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
 
-    /*
+
     public static final RegistryObject<Item> TEST = ITEMS.register("test",
             () -> new Item(new Item.Properties().stacksTo(6).tab(LizardonItemGroup.LIZARDON_GROUP)));
-*/
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

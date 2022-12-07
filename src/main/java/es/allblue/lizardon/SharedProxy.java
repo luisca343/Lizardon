@@ -7,6 +7,7 @@ import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
 import java.nio.file.Path;
+import java.util.HashMap;
 
 public class SharedProxy {
     public String idServidor;
@@ -58,4 +59,5 @@ public class SharedProxy {
     public void setIdServidor(String idServidor){
         idServidor = "test";
     };
+
 }

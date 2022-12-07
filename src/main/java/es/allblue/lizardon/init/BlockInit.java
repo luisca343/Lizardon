@@ -23,8 +23,9 @@ public class BlockInit {
     public static final DeferredRegister<Block> BLOCKS
             = DeferredRegister.create(ForgeRegistries.BLOCKS, Lizardon.MOD_ID);
 
+    /*
     public static final RegistryObject<Block> FUNKO = registerBlock("funko", () -> new Funko(AbstractBlock.Properties.of(Material.STONE)));
-
+*/
 
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();

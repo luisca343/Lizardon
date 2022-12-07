@@ -63,7 +63,7 @@ Lizardon
     modId="mcef"
     mandatory=true
     ordering="BEFORE"
-    versionRange="[1,)"
+    versionRange="[1.16,)"
     side="BOTH"
 
 [[dependencies.lizardon]]

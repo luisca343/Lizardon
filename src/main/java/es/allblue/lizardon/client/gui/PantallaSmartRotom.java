@@ -17,6 +17,9 @@ import net.montoyo.mcef.example.ExampleMod;
 import net.montoyo.mcef.example.ScreenCfg;
 import org.lwjgl.glfw.GLFW;
 
+import java.awt.*;
+import java.awt.event.MouseEvent;
+
 
 @OnlyIn(Dist.CLIENT)
 public class PantallaSmartRotom extends Screen {
@@ -38,6 +41,7 @@ public class PantallaSmartRotom extends Screen {
     private static final String YT_REGEX2 = "^https?://(?:www\\.)?youtu\\.be/([a-zA-Z0-9_\\-]+)$";
     private static final String YT_REGEX3 = "^https?://(?:www\\.)?youtube\\.com/embed/([a-zA-Z0-9_\\-]+)(\\?.+)?$";
 
+    private int lastWidth = -1, lastHeight = -1;
     public PantallaSmartRotom() {
         super(new StringTextComponent("forgecef.example.screen.title"));
         urlToLoad = MCEF.HOME_PAGE;
@@ -100,6 +104,34 @@ public class PantallaSmartRotom extends Screen {
         this.initTime = System.currentTimeMillis();
     }
 
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (urlToLoad != null && browser != null) {
+            browser.loadURL(urlToLoad);
+            urlToLoad = null;
+        }
+
+        if (url != null) {
+            if (url.isFocused()) {
+                url.tick();
+            } else {
+                url.setCursorPosition(0);
+            }
+        }
+
+        if (minecraft != null && browser != null && browser.isActivate()) {
+            int curWidth = minecraft.getWindow().getWidth();
+            int curHeight = minecraft.getWindow().getHeight() - scaleY(20);
+            if (curHeight > 0 && curWidth > 0 && (lastWidth != curWidth || lastHeight != curHeight)) {
+                browser.resize(curWidth, curHeight);
+            }
+        }
+
+    }
+
     public int scaleY(int y) {
         assert minecraft != null;
         double sy = ((double) y) / ((double) height) * ((double) minecraft.getWindow().getHeight());
@@ -140,121 +172,157 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void onClose() {
+        /*
         if(!ExampleMod.INSTANCE.hasBackup() && browser != null)
             browser.close();
 
-        super.onClose();
-    }
+        super.onClose();*/
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return this.keyChanged(keyCode, scanCode, modifiers, true) || super.keyPressed(keyCode, scanCode, modifiers);
-    }
-    @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return this.keyChanged(keyCode, scanCode, modifiers, false) || super.keyReleased(keyCode, scanCode, modifiers);
-    }
-
-    @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        if(browser != null && !url.isFocused()) {
-            browser.injectKeyTyped((int) codePoint, modifiers);
-            return true;
-        }else{
-            return super.charTyped(codePoint, modifiers);
-        }
-    }
-
-    public boolean keyChanged(int keyCode, int scanCode, int modifiers, boolean pressed) {
-        /*
-        switch(keyCode) {
-            case GLFW.GLFW_KEY_BACKSPACE: browser.injectKeyTyped(keyCode, 0);
-        }
-        */
-
+        Lizardon.INSTANCE.setBackup(this);
         assert minecraft != null;
+        minecraft.setScreen(null);
+    }
 
-        if(keyCode == GLFW.GLFW_KEY_ESCAPE) {
-            minecraft.setScreen(null);
+    @Override
+    public boolean charTyped(char key, int mod) {
+        boolean consume = super.charTyped(key, mod);
+        if (browser != null && !consume) {
+            browser.injectKeyTyped(key, key, getMask());
             return true;
         }
-        if(keyCode == GLFW.GLFW_KEY_F10){
-            System.out.println("Early term F10");
-            if(pressed && System.currentTimeMillis() - this.initTime > 1000L) {
-                url.setFocus(!url.isFocused());
-            }
+
+        return consume;
+    }
+
+    @Override
+    public boolean mouseDragged(double ox, double oy, int btn, double nx, double ny) {
+        boolean consume = super.mouseDragged(ox, oy, btn, nx, ny);
+        if (browser != null && !consume) {
+            int sx = (int) (ox / (float) width * minecraft.getWindow().getWidth());
+            int sy = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            int ex = (int) (ox / (float) width * minecraft.getWindow().getWidth());
+            int ey = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            browser.injectMouseDrag(sx, sy, remapBtn(btn), ex, ey);
+        }
+
+        return consume;
+    }
+
+    @Override
+    public void mouseMoved(double x, double y) {
+        super.mouseMoved(x, y);
+        if (browser != null && minecraft != null && activateBtn == -1) {
+            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
+            int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            browser.injectMouseMove(sx, sy, getMask(), y < 0);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double x, double y, int btn) {
+        activateBtn = btn;
+        if(btn == 1) return false;
+        boolean consume = super.mouseClicked(x, y, btn);
+        if (!consume && browser != null && minecraft != null) {
+            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
+            int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), true, 1);
             return true;
         }
 
-        boolean focused = url.isFocused();
+        return consume;
+    }
 
 
-        String keystr = GLFW.glfwGetKeyName(keyCode, scanCode);
-        if(keystr == null ) {
-            keystr = "a";
+    private int activateBtn = -1;
+
+    @Override
+    public boolean mouseReleased(double x, double y, int btn) {
+        activateBtn = activateBtn == btn ? -1 : activateBtn;
+        boolean consume = super.mouseReleased(x, y, btn);
+        if (!consume && browser != null && minecraft != null) {
+            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
+            int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), false, 1);
+            return true;
         }
 
-        char key = keystr.charAt(keystr.length() - 1);
-
-        System.out.println("key:" + key);
-
-        if(browser != null && !focused) { //Inject events into browser
-            if(pressed)
-                browser.injectKeyPressedByKeyCode(keyCode, key, 0);
-            else
-                browser.injectKeyReleasedByKeyCode(keyCode, key, 0);
-        }
-        return true;
+        return consume;
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return this.mouseChanged(mouseX, mouseY, button, 0,0,0,true) || super.mouseClicked(mouseX,mouseY,button);
+    public boolean mouseScrolled(double x, double y, double wheel) {
+        boolean consume = super.mouseScrolled(x, y, wheel);
+        if (!consume && browser != null && minecraft != null) {
+            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
+            int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            browser.injectMouseWheel(sx, sy, getMask(), 1, ((int) wheel * 100));
+            return true;
+        }
+        return consume;
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        return this.mouseChanged(mouseX, mouseY, button, 0,0,0,false) || super.mouseReleased(mouseX,mouseY,button);
-    }
+    public boolean keyPressed(int keycode, int p_231046_2_, int p_231046_3_) {
+        boolean consume = super.keyPressed(keycode, p_231046_2_, p_231046_3_);
+        if (minecraft == null) return true;
 
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return this.mouseChanged(mouseX, mouseY, button, deltaX,deltaY,0,true) || super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
+        char c = (char) keycode;
 
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        return this.mouseChanged(mouseX, mouseY, -1, 0,0,amount,false) || super.mouseScrolled(mouseX, mouseY, amount);
-    }
-
-    public boolean mouseChanged(double mouseX, double mouseY,  int btn, double deltaX, double deltaY, double scrollAmount, boolean pressed){
-        int sx = scaleX((int) mouseX);
-        int sy = (int) mouseY;
-        int wheel = (int) scrollAmount;
-
-        if(browser != null) { //Inject events into browser. TODO: Handle mods & leaving.
-            int y = scaleY(sy - 20); //Don't forget to flip Y axis.
-
-            if(wheel != 0)
-                browser.injectMouseWheel(sx, y, 0,  wheel, 0);
-            else if(btn == -1)
-                browser.injectMouseMove(sx, y, 0, y < 0);
-            else
-                browser.injectMouseButton(sx, y, 0, btn + 1, pressed, 1);
+        if (!consume && browser != null) {
+            browser.injectKeyPressedByKeyCode(keycode, c, getMask());
+            return true;
         }
 
-        if(mouseY <= 20) { //Forward events to GUI.
-            return false;
+        return consume;
+    }
+
+    @Override
+    public boolean keyReleased(int key, int p_223281_2_, int p_223281_3_) {
+        boolean consume = super.keyReleased(key, p_223281_2_, p_223281_3_);
+        char c = (char) key;
+        if (browser != null && !consume) {
+            browser.injectKeyReleasedByKeyCode(key, c, getMask());
+            return true;
         }
-        return true;
+        return consume;
     }
 
     //Called by ExampleMod when the current browser's URL changes.
     public void onUrlChanged(IBrowser b, String nurl) {
-        if(b == browser && url != null) {
+        if (b == browser && url != null) {
             url.setValue(nurl);
-            vidModeState = nurl.matches(YT_REGEX1) || nurl.matches(YT_REGEX2) || nurl.matches(YT_REGEX3);
         }
+    }
+
+    //remap from GLFW to AWT's button ids
+    private int remapBtn(int btn) {
+        if (btn == 0) {
+            btn = MouseEvent.BUTTON1;
+        } else if (btn == 1) {
+            btn = MouseEvent.BUTTON3;
+        } else {
+            btn = MouseEvent.BUTTON2;
+        }
+        return btn;
+    }
+
+    private static int getMask() {
+        return (hasShiftDown() ? MouseEvent.SHIFT_DOWN_MASK : 0) |
+                (hasAltDown() ? MouseEvent.ALT_DOWN_MASK : 0) |
+                (hasControlDown() ? MouseEvent.CTRL_DOWN_MASK : 0);
+    }
+
+
+    //never used
+    private final Point point = new Point();
+
+    private Point transform2BrowserSize(double x, double y) {
+        int sx = (int) (x / (float) width * minecraft.getWindow().getHeight());
+        // 20 is the top search box's height
+        int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+        point.setLocation(sx, sy);
+        return point;
     }
 
 
@@ -287,11 +355,9 @@ public class PantallaSmartRotom extends Screen {
 
             if(vId != null || redo) {
                 Lizardon.INSTANCE.setBackup(this);
-                minecraft.setScreen(new ScreenCfg(browser, vId));
+                // minecraft.setScreen(new ScreenCfg(browser, vId));
             }
         }
     }
-
-
 
 }

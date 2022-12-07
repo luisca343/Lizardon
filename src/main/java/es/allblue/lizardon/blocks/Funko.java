@@ -79,9 +79,12 @@ public class Funko extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        FunkoTE te = TileEntityInit.FUNKO_TE.get().create();
-        return TileEntityInit.FUNKO_TE.get().create();
+        /*FunkoTE te = TileEntityInit.FUNKO_TE.get().create();
+        return TileEntityInit.FUNKO_TE.get().create();*/
+
+        return null;
     }
+
 
 
 
