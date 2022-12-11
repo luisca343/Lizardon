@@ -18,6 +18,7 @@ import net.montoyo.mcef.example.ScreenCfg;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 
@@ -184,17 +185,6 @@ public class PantallaSmartRotom extends Screen {
     }
 
     @Override
-    public boolean charTyped(char key, int mod) {
-        boolean consume = super.charTyped(key, mod);
-        if (browser != null && !consume) {
-            browser.injectKeyTyped(key, key, getMask());
-            return true;
-        }
-
-        return consume;
-    }
-
-    @Override
     public boolean mouseDragged(double ox, double oy, int btn, double nx, double ny) {
         boolean consume = super.mouseDragged(ox, oy, btn, nx, ny);
         if (browser != null && !consume) {
@@ -263,29 +253,39 @@ public class PantallaSmartRotom extends Screen {
     }
 
     @Override
+    public boolean charTyped(char key, int mod) {
+        boolean consume = super.charTyped(key, mod); // 257 335
+        if (browser != null) {
+            browser.injectKeyTyped(key, key, getMask());
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean keyPressed(int keycode, int p_231046_2_, int p_231046_3_) {
         boolean consume = super.keyPressed(keycode, p_231046_2_, p_231046_3_);
         if (minecraft == null) return true;
 
         char c = (char) keycode;
 
-        if (!consume && browser != null) {
+        if (browser != null) {
             browser.injectKeyPressedByKeyCode(keycode, c, getMask());
             return true;
         }
-
-        return consume;
+        return false;
     }
 
     @Override
     public boolean keyReleased(int key, int p_223281_2_, int p_223281_3_) {
-        boolean consume = super.keyReleased(key, p_223281_2_, p_223281_3_);
+        // consume = super.keyReleased(key, p_223281_2_, p_223281_3_);
         char c = (char) key;
-        if (browser != null && !consume) {
+        if (browser != null) {
             browser.injectKeyReleasedByKeyCode(key, c, getMask());
             return true;
         }
-        return consume;
+        return false;
     }
 
     //Called by ExampleMod when the current browser's URL changes.
