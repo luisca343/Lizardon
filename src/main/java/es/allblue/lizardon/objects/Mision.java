@@ -16,6 +16,7 @@ public class Mision {
     private boolean activa;
     private String skin;
     private ArrayList<ObjetivoMision> objetivos;
+    private String estado;
 
     public String getNombre() {
         return nombre;
@@ -120,4 +121,13 @@ public class Mision {
     public void setObjetivos(ArrayList<ObjetivoMision> objetivos) {
         this.objetivos = objetivos;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
 }

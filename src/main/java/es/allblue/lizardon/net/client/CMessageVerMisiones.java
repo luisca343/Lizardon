@@ -16,9 +16,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import static java.util.Comparator.comparing;
 
 public class CMessageVerMisiones implements Runnable{
     private String str;
@@ -42,28 +46,17 @@ public class CMessageVerMisiones implements Runnable{
             Reader reader = Files.newBufferedReader(Lizardon.PROXY.getRuta(nombreArchivo));
             datosNpc = gson.fromJson(reader, new TypeToken<Map<String, DatosNPC>>(){}.getType());
 
-            Map<String, Map<Integer, Mision>> misiones = gson.fromJson(str, new TypeToken<Map<String, Map<Integer,Mision>>>(){}.getType());
-            Map<Integer, Mision> activas = misiones.get("Activas");
-            Map<Integer, Mision> completas = misiones.get("Completas");
+            ArrayList<Mision> misiones = gson.fromJson(str, new TypeToken<ArrayList<Mision>>(){}.getType());
 
+            ArrayList<Mision> misionesNuevas = new ArrayList<>();
+            actualizar(misiones, misionesNuevas);
 
-            Map<String, Map<Integer, Mision>> activasOrdenadas = new HashMap<>();
-            Map<String, Map<Integer, Mision>> completasOrdenadas = new HashMap<>();
-
-            actualizar(activas, activasOrdenadas);
-            actualizar(completas,completasOrdenadas);
-
-            Map<String, Map<String, Map<Integer, Mision>>> misionesOrdenadas = new HashMap<>();
-
-            misionesOrdenadas.put("Activas", activasOrdenadas);
-            misionesOrdenadas.put("Completas", completasOrdenadas);
-
-            String res = gson.toJson(misionesOrdenadas);
+            Collections.sort(misionesNuevas, comparing(Mision::getId));
+            String res = gson.toJson(misionesNuevas);
             ClientProxy.callbackMisiones.success(res);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static CMessageVerMisiones decode(PacketBuffer buf) {
@@ -71,18 +64,12 @@ public class CMessageVerMisiones implements Runnable{
         return message;
     }
 
-    public void actualizar(Map<Integer, Mision> listaAnterior, Map<String, Map<Integer, Mision>> lista){
-        for(Map.Entry<Integer, Mision> entrada: listaAnterior.entrySet()){
-            Mision mision = entrada.getValue();
+    public void actualizar(ArrayList<Mision> listaAnterior, ArrayList<Mision> lista){
+        for (Mision mision : listaAnterior) {
             if(datosNpc.containsKey(mision.getNombreNPC())){
                 mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
             }
-            String categoria = mision.getCategoria();
-            if(!lista.containsKey(categoria)){
-                lista.put(categoria, new HashMap<>());
-            }
-
-            lista.get(categoria).put(entrada.getKey(), mision);
+            lista.add(mision);
         }
     }
 

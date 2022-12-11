@@ -40,28 +40,27 @@ public class SMessageVerMisiones implements Runnable{
         IQuest[] mActivas = wrapper.getActiveQuests();
         IQuest[] mCompletadas = wrapper.getFinishedQuests();
 
+        ArrayList<Integer> idActivas = new ArrayList<>();
+        for (IQuest mActiva : mActivas) {
+            idActivas.add(mActiva.getId());
+        }
 
-        Map<Integer, Mision> misionesActivas = new HashMap<>();
-        Map<Integer, Mision> misionesCompletas = new HashMap<>();
+        ArrayList<Mision> misiones = new ArrayList<>();
 
         for (IQuest mActiva : mActivas) {
-            guardarMision(misionesActivas, mActiva, wrapper);
+            guardarMision(misiones, mActiva, wrapper, idActivas);
         }
 
         for (IQuest mCompleta : mCompletadas) {
-            guardarMision(misionesCompletas, mCompleta, wrapper);
+            guardarMision(misiones, mCompleta, wrapper, idActivas);
         }
-
-        Map<String, Map<Integer, Mision>> misiones = new HashMap<>();
-        misiones.put("Activas", misionesActivas);
-        misiones.put("Completas", misionesCompletas);
 
         Gson gson = new Gson();
         String res = gson.toJson(misiones);
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
     }
 
-    public void guardarMision(Map<Integer, Mision> lista, IQuest quest, PlayerWrapper wrapper){
+    public void guardarMision(ArrayList<Mision> lista, IQuest quest, PlayerWrapper wrapper, ArrayList<Integer> idActivas){
         Mision mision = new Mision();
         mision.setCategoria(quest.getCategory().getName());
         mision.setNombre(quest.getName());
@@ -72,13 +71,9 @@ public class SMessageVerMisiones implements Runnable{
         mision.setRepetible(quest.getIsRepeatable());
         mision.setId(quest.getId());
 
-        IQuest[] mActivas = wrapper.getActiveQuests();
-        ArrayList<Integer> idActivas = new ArrayList<>();
-        for (IQuest mActiva : mActivas) {
-            idActivas.add(mActiva.getId());
-        }
 
         if(idActivas.contains(quest.getId())){
+            mision.setEstado("Activa");
             IQuestObjective[] objetivos = quest.getObjectives(wrapper);
             ArrayList<ObjetivoMision> objetivosMision = new ArrayList<>();
             if (objetivos.length > 0 ){
@@ -91,9 +86,10 @@ public class SMessageVerMisiones implements Runnable{
                 }
             }
             mision.setObjetivos(objetivosMision);
+        }else {
+            mision.setEstado("Completa");
         }
-
-        lista.put(quest.getId(), mision);
+        lista.add(mision);
     }
 
     public static SMessageVerMisiones decode(PacketBuffer buf) {
