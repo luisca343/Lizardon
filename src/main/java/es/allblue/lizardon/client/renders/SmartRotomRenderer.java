@@ -34,7 +34,6 @@ public final class SmartRotomRenderer implements IItemRenderer {
     private static final float PI = (float) Math.PI;
     private final Minecraft mc = Minecraft.getInstance();
     private final ResourceLocation tex = new ResourceLocation("webdisplays", "textures/item/test.png");
-    private final SmartRotomModel smartRotomModel = new SmartRotomModel();
 
     private float sinSqrtSwingProg1;
     private float sinSqrtSwingProg2;
@@ -73,11 +72,19 @@ public final class SmartRotomRenderer implements IItemRenderer {
         stack.popPose();
 
 
-
-        //Prepare minePad transform
         stack.pushPose();
         stack.translate(handSideSign * -0.4f * sinSqrtSwingProg1, 0.2f * sinSqrtSwingProg2, -0.2f * sinSwingProg1);
         stack.translate(handSideSign * 0.56f, -0.52f - equipProgress * 0.6f, -0.72f);
+
+        if(handSideSign >= 0.0f)
+            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND);
+        else
+            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND);
+
+
+
+
+        //Prepare minePad transform
         stack.mulPose(Vector3f.YP.rotationDegrees(handSideSign * (45.0f - sinSwingProg2 * 20.0f)));
         stack.mulPose(Vector3f.ZP.rotationDegrees(handSideSign * sinSqrtSwingProg1 * -20.0f));
         stack.mulPose(Vector3f.XP.rotationDegrees(sinSqrtSwingProg1 * -80.0f));
@@ -91,12 +98,7 @@ public final class SmartRotomRenderer implements IItemRenderer {
             stack.translate(-0.475f, -0.1f, 0.0f);
             stack.mulPose(Vector3f.ZP.rotationDegrees(1.0f));
         }
-        /*
-        if(handSideSign >= 0.0f)
-            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND);
-        else
-            renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND);
-        */
+
         //Render web view
         boolean existePad = true;
         if(is.getTag() != null && is.getTag().contains("PadID")) {
@@ -149,7 +151,11 @@ public final class SmartRotomRenderer implements IItemRenderer {
         stack.clear();
         Minecraft.getInstance().getTextureManager().bind(new ResourceLocation("lizardon:textures/item/smartrotom.png"));
         Item smart = ItemInit.SMARTROTOM.get();
+
         mc.getItemInHandRenderer().renderItem(mc.player, smart.getDefaultInstance(), transform , false, stack, buffer, packedLight);
+
+
+
         stack.pushPose();
         stack.popPose();
     }
