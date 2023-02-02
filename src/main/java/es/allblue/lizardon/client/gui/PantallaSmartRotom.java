@@ -254,8 +254,8 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public boolean charTyped(char key, int mod) {
-        boolean consume = super.charTyped(key, mod); // 257 335
-        if (browser != null) {
+        boolean consume = enviarInterfaz(key) ? super.charTyped(key, mod) : false; // 257 335
+        if (browser != null && (!consume || key == 256)) {
             browser.injectKeyTyped(key, key, getMask());
             return true;
         }
@@ -264,14 +264,15 @@ public class PantallaSmartRotom extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keycode, int p_231046_2_, int p_231046_3_) {
-        boolean consume = super.keyPressed(keycode, p_231046_2_, p_231046_3_);
+    public boolean keyPressed(int key, int p_231046_2_, int p_231046_3_) {
+        System.out.println(key);
+        boolean consume = enviarInterfaz(key) ? super.keyPressed(key, p_231046_2_, p_231046_3_) : false;
         if (minecraft == null) return true;
 
-        char c = (char) keycode;
+        char c = (char) key;
 
-        if (browser != null) {
-            browser.injectKeyPressedByKeyCode(keycode, c, getMask());
+        if (browser != null && (!consume || key == 256)) {
+            browser.injectKeyPressedByKeyCode(key, c, getMask());
             return true;
         }
         return false;
@@ -279,9 +280,9 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public boolean keyReleased(int key, int p_223281_2_, int p_223281_3_) {
-        // consume = super.keyReleased(key, p_223281_2_, p_223281_3_);
+        boolean consume = enviarInterfaz(key) ? super.keyReleased(key, p_223281_2_, p_223281_3_) : false;
         char c = (char) key;
-        if (browser != null) {
+        if (browser != null && (!consume || key == 256)) {
             browser.injectKeyReleasedByKeyCode(key, c, getMask());
             return true;
         }
@@ -325,6 +326,13 @@ public class PantallaSmartRotom extends Screen {
         return point;
     }
 
+    private boolean enviarInterfaz(int key) {
+        switch (key){
+            case 256: return true;
+            default: return false;
+        }
+    }
+
 
     //Handle button clicks the old way...
     protected void legacyActionPerformed(int id) {
@@ -341,6 +349,8 @@ public class PantallaSmartRotom extends Screen {
             Lizardon.INSTANCE.setBackup(this);
             assert minecraft != null;
             minecraft.setScreen(null);
+            browser.injectKeyPressedByKeyCode(256, (char)256, getMask());
+            browser.injectKeyReleasedByKeyCode(256, (char)256, getMask());
         } else if(id == 4) {
             String loc = browser.getURL();
             String vId = null;
