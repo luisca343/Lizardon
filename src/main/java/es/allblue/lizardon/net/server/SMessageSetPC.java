@@ -2,62 +2,60 @@ package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.api.storage.PCStorage;
+import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
+import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.client.CMessageVerMisiones;
+import es.allblue.lizardon.net.client.CMessageGetPC;
+import es.allblue.lizardon.net.client.CMessageReturn;
+import es.allblue.lizardon.objects.DatosLlamada;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.ObjetivoMision;
+import es.allblue.lizardon.objects.SetPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.montoyo.mcef.api.IJSQueryCallback;
-import noppes.npcs.api.NpcAPI;
-import noppes.npcs.api.handler.IQuestHandler;
 import noppes.npcs.api.handler.data.IQuest;
 import noppes.npcs.api.handler.data.IQuestObjective;
+import noppes.npcs.api.wrapper.NBTWrapper;
 import noppes.npcs.api.wrapper.PlayerWrapper;
-import org.apache.commons.lang3.ArrayUtils;
+import noppes.npcs.util.NBTJsonUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
-public class SMessageVerMisiones implements Runnable{
+public class SMessageSetPC implements Runnable{
     private String str;
     private ServerPlayerEntity player;
     private IJSQueryCallback callback;
 
-    public SMessageVerMisiones(String str){
+    public SMessageSetPC(String str){
         this.str = str;
     }
 
     @Override
     public void run() {
-        NpcAPI api = NpcAPI.Instance();
-        PlayerWrapper wrapper = new PlayerWrapper(player);
-
-        IQuest[] mActivas = wrapper.getActiveQuests();
-        IQuest[] mCompletadas = wrapper.getFinishedQuests();
-
-        ArrayList<Integer> idActivas = new ArrayList<>();
-        for (IQuest mActiva : mActivas) {
-            idActivas.add(mActiva.getId());
-        }
-
-        ArrayList<Mision> misiones = new ArrayList<>();
-
-        for (IQuest mActiva : mActivas) {
-            guardarMision(misiones, mActiva, wrapper, idActivas);
-        }
-
-        for (IQuest mCompleta : mCompletadas) {
-            guardarMision(misiones, mCompleta, wrapper, idActivas);
-        }
-
         Gson gson = new Gson();
-        String res = gson.toJson(misiones);
-        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
+        SetPC setPC = gson.fromJson(str, SetPC.class);
+        String datos = setPC.getDatos();
+
+        PlayerPartyStorage storage = StorageProxy.getParty(player);
+        PCStorage pc = StorageProxy.getPCForPlayer(player);
+
+        try{
+            System.out.println("EL POKEMON ES: " + pc.get(0,0).getSpecies().getName());
+            CompoundNBT nbt = NBTJsonUtil.Convert(datos);
+            PCStorage pc2 = pc.readFromNBT(nbt);
+            System.out.println("EL POKEMON ES: " + pc2.get(0,0).getSpecies().getName());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageReturn(""));
     }
 
     public void guardarMision(ArrayList<Mision> lista, IQuest quest, PlayerWrapper wrapper, ArrayList<Integer> idActivas){
@@ -93,8 +91,8 @@ public class SMessageVerMisiones implements Runnable{
         lista.add(mision);
     }
 
-    public static SMessageVerMisiones decode(PacketBuffer buf) {
-        SMessageVerMisiones message = new SMessageVerMisiones(buf.toString(Charsets.UTF_8));
+    public static SMessageSetPC decode(PacketBuffer buf) {
+        SMessageSetPC message = new SMessageSetPC(buf.toString(Charsets.UTF_8));
         return message;
     }
 

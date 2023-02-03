@@ -64,7 +64,16 @@ public class QueryHelper {
         if(query.contains("getMisiones")){
             ClientProxy.callbackMisiones = callback;
             Messages.INSTANCE.sendToServer(new SMessageVerMisiones(query));
-
+            return true;
+        }
+        if(query.contains("getPC")){
+            ClientProxy.callbackMCEF = callback;
+            Messages.INSTANCE.sendToServer(new SMessageGetPC(query));
+            return true;
+        }
+        if(query.contains("setPC")){
+            ClientProxy.callbackMCEF = callback;
+            Messages.INSTANCE.sendToServer(new SMessageSetPC(query));
             return true;
         }
         return false;

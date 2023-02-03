@@ -64,7 +64,7 @@ public class MisionesCaza {
         IQuestCategory categoria = getCategoria(nombreCategoria);
         PlayerWrapper playerWrapper = new PlayerWrapper(player);
         if(categoria == null) {
-            playerWrapper.message("Ha petado la cosa esa");
+            playerWrapper.message("No existe la categoría de misiones "+nombreCategoria);
             return;
         }
         String nombre = stats.getParentSpecies().getName();

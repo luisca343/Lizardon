@@ -1,19 +1,15 @@
 package es.allblue.lizardon.event;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@Mod.EventBusSubscriber
 public class LizardonEvents {
     @SubscribeEvent
-    public static void onRightClickBlock(final PlayerInteractEvent.RightClickBlock e) {
+    public static void onChat(ClientChatEvent event) {
         {
-
         }
     }
 }

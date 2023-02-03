@@ -44,6 +44,7 @@ public class CustomNPCsEvents {
             ICustomNpc npc = event.npc;
             datos.setNombre(npc.getName());
             String rutaSkin = npc.getEntityNbt().getString("Texture");
+
             String[] partes = rutaSkin.split("/");
             datos.setSkin(partes[partes.length-1]);
 
