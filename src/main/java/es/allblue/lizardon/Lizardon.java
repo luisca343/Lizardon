@@ -8,6 +8,7 @@ import es.allblue.lizardon.event.MisionesCaza;
 import es.allblue.lizardon.event.CustomNPCsEvents;
 import es.allblue.lizardon.event.PixelmonEvents;
 import es.allblue.lizardon.init.BlockInit;
+import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.init.ItemInit;
@@ -47,7 +48,7 @@ public class Lizardon
 {
     // Directly reference a log4j logger.
     public static final double PAD_RATIO = 59.0 / 30.0;
-    // public static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
+    //  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
     public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public String homePage;
     public double padResX;
@@ -90,6 +91,7 @@ public class Lizardon
 
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
+        ModBiomes.register(eventBus);
         TileEntityInit.register(eventBus);
     }
     public void setup(final FMLCommonSetupEvent event)
@@ -103,6 +105,7 @@ public class Lizardon
         Lizardon.PROXY.crearArchivo("config.json");
 
 
+        ModBiomes.generateBiomes();
         //Grab the API and make sure it isn't null.
         api = MCEFApi.getAPI();
 

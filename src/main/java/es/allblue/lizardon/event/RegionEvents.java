@@ -17,8 +17,8 @@ public class RegionEvents {
     }
 
     public static  void onExit(UUID uuid, String str){
-        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
-        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageCambioRegion(str));
+        // ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
+        // Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageCambioRegion(str));
     }
 
 

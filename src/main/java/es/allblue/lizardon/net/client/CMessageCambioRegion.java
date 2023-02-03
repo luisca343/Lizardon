@@ -6,6 +6,8 @@ import es.allblue.lizardon.event.RegionEventsClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
+import java.util.Locale;
 import java.util.function.Supplier;
 
 public class CMessageCambioRegion implements Runnable{
@@ -18,8 +20,13 @@ public class CMessageCambioRegion implements Runnable{
 
     @Override
     public void run() {
+        String[] partes = str.split("_");
+        String ultima = partes[partes.length-1];
+        /*
+        if(ultima.toLowerCase(Locale.ROOT).equals("ct")){
+            RegionEventsClient.renderizarCartel(str, 2);
+        }*/
         RegionEventsClient.renderizarCartel(str, 2);
-
     }
 
     public static CMessageCambioRegion decode(PacketBuffer buf) {
