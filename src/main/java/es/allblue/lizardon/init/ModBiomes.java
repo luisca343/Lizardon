@@ -23,9 +23,16 @@ import java.util.function.Supplier;
 
 public class ModBiomes {
 
+
+
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Lizardon.MOD_ID);
 
-    public static final RegistryObject<Biome> ARRECIFE_WINGULL = crearPuebloBasico("arrecife_wingull", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> ARRECIFE_WINGULL = getPueblo("arrecife_wingull", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+                                .fogColor(0xEEEEEE)
+                                .skyColor(0x78A7FF)
+                                .waterColor(0x43D5EE)
+                                .waterFogColor(0x41F33)
+                                .build());
     public static final RegistryObject<Biome> PUEBLO_TULIPAN = crearPuebloBasico("pueblo_tulipan", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_SHIROI = crearPuebloBasico("pueblo_shiroi", Biome.RainType.SNOW);
     public static final RegistryObject<Biome> PUEBLO_HAGANE = crearPuebloBasico("pueblo_hagane", Biome.RainType.RAIN);
@@ -53,6 +60,8 @@ public class ModBiomes {
 
     public static void generateBiomes() {
         setupBiome(ARRECIFE_WINGULL.get(), BiomeManager.BiomeType.WARM, 0);
+
+
         setupBiome(PUEBLO_TULIPAN.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_SHIROI.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_HAGANE.get(), BiomeManager.BiomeType.WARM, 0);
@@ -102,9 +111,14 @@ public class ModBiomes {
     }
 
 
-    public static RegistryObject<Biome> getPueblo(String nombre, Biome.Builder builder){
+    public static RegistryObject<Biome> getPueblo(String nombre, Biome.RainType precipitaciones, BiomeAmbience specialEffects){
         return BIOMES.register(nombre, () ->
-                builder
+                new Biome.Builder()
+                        .biomeCategory(Biome.Category.NONE)
+                        .temperature(0.95f)
+                        .downfall(.4f)
+                        .precipitation(precipitaciones)
+                        .specialEffects(specialEffects)
                         .scale(0.01f)
                         .depth(0.01f)
                         .mobSpawnSettings(new MobSpawnInfo.Builder().build())
