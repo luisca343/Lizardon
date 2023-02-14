@@ -6,7 +6,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class SharedProxy {
@@ -53,11 +56,15 @@ public class SharedProxy {
     }
 
     public Path getRuta(String carpeta) {
-        return null;
+        System.out.println("Llamando getRuta en servidor");
+        return Paths.get("");
     }
 
     public void setIdServidor(String idServidor){
         idServidor = "test";
     };
+
+    public void closeSmartRotom(){
+    }
 
 }

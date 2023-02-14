@@ -1,4 +1,4 @@
-package es.allblue.lizardon.event;
+package es.allblue.lizardon.event.wungill;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;

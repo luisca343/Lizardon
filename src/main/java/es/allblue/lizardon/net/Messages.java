@@ -37,6 +37,7 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageGetPC.class, CMessageGetPC::encode, CMessageGetPC::decode, CMessageGetPC::handle);
         INSTANCE.registerMessage(index++, SMessageSetPC.class, SMessageSetPC::encode, SMessageSetPC::decode, SMessageSetPC::handle);
         INSTANCE.registerMessage(index++, CMessageReturn.class, CMessageReturn::encode, CMessageReturn::decode, CMessageReturn::handle);
+        INSTANCE.registerMessage(index++, CMessageCambioPosicion.class, CMessageCambioPosicion::encode, CMessageCambioPosicion::decode, CMessageCambioPosicion::handle);
 
     }
 }
