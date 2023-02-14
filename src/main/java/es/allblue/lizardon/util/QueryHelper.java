@@ -3,6 +3,7 @@ package es.allblue.lizardon.util;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.client.storage.ClientStorageManager;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.*;
@@ -19,7 +20,7 @@ public class QueryHelper {
 
     public static boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
         Gson gson = new Gson();
-
+        System.out.println("Query recibida: "+query);
         /* Requests 'GET' */
         if(query.equals("getUserData")){
             Messages.INSTANCE.sendToServer(new SMessageDatosServer("query"));
@@ -35,6 +36,11 @@ public class QueryHelper {
             }
             String respuesta = gson.toJson(usuarios);
             callback.success(respuesta);
+            return true;
+        }
+        if(query.contains("cerrarRotom")){
+            Lizardon.PROXY.closeSmartRotom();
+            callback.success("");
             return true;
         }
         /* Requests 'POST' */
@@ -64,6 +70,11 @@ public class QueryHelper {
         if(query.contains("getMisiones")){
             ClientProxy.callbackMisiones = callback;
             Messages.INSTANCE.sendToServer(new SMessageVerMisiones(query));
+            return true;
+        }
+        if(query.contains("entrarCarrera")){
+            ClientProxy.callbackMisiones = callback;
+            Messages.INSTANCE.sendToServer(new SMessageEntrarCarrera(query));
             return true;
         }
         if(query.contains("getPC")){
