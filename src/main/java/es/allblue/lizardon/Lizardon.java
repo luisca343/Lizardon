@@ -48,13 +48,13 @@ public class Lizardon
 {
     // Directly reference a log4j logger.
     public static final double PAD_RATIO = 59.0 / 30.0;
-    //  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
+    //public  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
     public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public String homePage;
     public double padResX;
     public double padResY;
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final String BLACKLIST_URL = "http://lizardon.es";
+    public static final String BLACKLIST_URL = "http://lizardon.es/smartrotom";
     public static Lizardon INSTANCE = null;
     private API api;
     public static String MOD_ID = "lizardon";

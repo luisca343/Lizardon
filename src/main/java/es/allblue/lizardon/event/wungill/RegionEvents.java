@@ -1,4 +1,4 @@
-package es.allblue.lizardon.event;
+package es.allblue.lizardon.event.wungill;
 
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageCambioRegion;
