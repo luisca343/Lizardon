@@ -38,6 +38,8 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessageSetPC.class, SMessageSetPC::encode, SMessageSetPC::decode, SMessageSetPC::handle);
         INSTANCE.registerMessage(index++, CMessageReturn.class, CMessageReturn::encode, CMessageReturn::decode, CMessageReturn::handle);
         INSTANCE.registerMessage(index++, CMessageCambioPosicion.class, CMessageCambioPosicion::encode, CMessageCambioPosicion::decode, CMessageCambioPosicion::handle);
+        INSTANCE.registerMessage(index++, CMessageVerVideo.class, CMessageVerVideo::encode, CMessageVerVideo::decode, CMessageVerVideo::handle);
+        INSTANCE.registerMessage(index++, CMessagePrepararNavegador.class, CMessagePrepararNavegador::encode, CMessagePrepararNavegador::decode, CMessagePrepararNavegador::handle);
 
     }
 }

@@ -67,4 +67,10 @@ public class SharedProxy {
     public void closeSmartRotom(){
     }
 
+    public void verVideo(String str) {
+    }
+
+    public void prepararNavegador() {
+        System.out.println("Esto en servidor no hace nada");
+    }
 }

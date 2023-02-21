@@ -3,6 +3,7 @@ package es.allblue.lizardon.client;
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
+import es.allblue.lizardon.client.gui.PantallaVideo;
 import es.allblue.lizardon.client.renders.IItemRenderer;
 import es.allblue.lizardon.client.renders.SmartRotomRenderer;
 import es.allblue.lizardon.SharedProxy;
@@ -106,6 +107,8 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         mc = Minecraft.getInstance();
         mcef = Lizardon.INSTANCE.getAPI();
         MinecraftForge.EVENT_BUS.register(this);
+
+
         iniciarPadMap();
         if(mcef != null)
             mcef.registerScheme("lizardon", null, true, false, false, true, true, false, false);
@@ -137,6 +140,23 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
     }
 
+    public void closeSmartRotom(){
+        mc.setScreen(null);
+    }
+
+
+    @Override
+    public void prepararNavegador() {
+
+        System.out.println("CREANDO PAD Y TAL");
+        mcef.createBrowser("about:blank", false);
+        System.out.println("EL COSO SE HA CREADO");
+    }
+
+    @Override
+    public void verVideo(String url) {
+        mc.setScreen(new PantallaVideo(url));
+    }
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent ev) {

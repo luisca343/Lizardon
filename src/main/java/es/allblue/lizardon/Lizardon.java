@@ -3,7 +3,6 @@ package es.allblue.lizardon;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
 import es.allblue.lizardon.client.ClientProxy;
-import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.event.MisionesCaza;
 import es.allblue.lizardon.event.CustomNPCsEvents;
 import es.allblue.lizardon.event.PixelmonEvents;
@@ -12,7 +11,6 @@ import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.init.ItemInit;
-import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -23,7 +21,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -154,15 +151,6 @@ public class Lizardon
     }
 
 
-    @SubscribeEvent
-    public void onLogin(PlayerEvent.PlayerLoggedInEvent ev){
-        PacketDistributor.PacketTarget packetDistrutor = PacketDistributor.PLAYER
-                .with(
-                        () ->
-                                (ServerPlayerEntity) ev.getPlayer());
-
-    }
-
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the es.allblue.lizardon.client
         // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
@@ -202,7 +190,7 @@ public class Lizardon
     }
 
 
-    public void setBackup(PantallaSmartRotom browserScreen) {
+    public void setBackup() {
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
