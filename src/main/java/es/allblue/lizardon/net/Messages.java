@@ -40,6 +40,7 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageCambioPosicion.class, CMessageCambioPosicion::encode, CMessageCambioPosicion::decode, CMessageCambioPosicion::handle);
         INSTANCE.registerMessage(index++, CMessageVerVideo.class, CMessageVerVideo::encode, CMessageVerVideo::decode, CMessageVerVideo::handle);
         INSTANCE.registerMessage(index++, CMessagePrepararNavegador.class, CMessagePrepararNavegador::encode, CMessagePrepararNavegador::decode, CMessagePrepararNavegador::handle);
+        INSTANCE.registerMessage(index++, SMessageDarCaja.class, SMessageDarCaja::encode, SMessageDarCaja::decode, SMessageDarCaja::handle);
 
     }
 }

@@ -60,6 +60,11 @@ public class QueryHelper {
             callback.success("test");
             return true;
         }
+        if(query.contains("darCaja")){
+            Messages.INSTANCE.sendToServer(new SMessageDarCaja(query));
+            callback.success("test");
+            return true;
+        }
         if(query.contains("abrirPC")){
             PCStorage pcStorage = ClientStorageManager.openPC;
 
