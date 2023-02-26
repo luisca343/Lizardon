@@ -27,6 +27,7 @@ public class PantallaSmartRotom extends Screen {
 
     private ClientProxy.PadData pad;
     IBrowser browser = null;
+    /*
     private Button back = null;
     private Button fwd = null;
     private Button go = null;
@@ -34,7 +35,7 @@ public class PantallaSmartRotom extends Screen {
     private Button vidMode = null;
     private boolean vidModeState = false;
     private TextFieldWidget url = null;
-    private String urlToLoad = null;
+    private String urlToLoad = null;*/
 
     private long initTime = System.currentTimeMillis();
 
@@ -45,12 +46,12 @@ public class PantallaSmartRotom extends Screen {
     private int lastWidth = -1, lastHeight = -1;
     public PantallaSmartRotom() {
         super(new StringTextComponent("forgecef.example.screen.title"));
-        urlToLoad = MCEF.HOME_PAGE;
+       // urlToLoad = MCEF.HOME_PAGE;
     }
 
     public PantallaSmartRotom(String url) {
         super(new StringTextComponent("forgecef.example.screen.title"));
-        urlToLoad = (url == null) ? MCEF.HOME_PAGE : url;
+       // urlToLoad = (url == null) ? MCEF.HOME_PAGE : url;
     }
 
     public PantallaSmartRotom(ClientProxy.PadData pd) {
@@ -69,10 +70,11 @@ public class PantallaSmartRotom extends Screen {
                 return;
 
             browser = pad.view;
-            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
-            urlToLoad = null;
+           //browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
+            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
+            //urlToLoad = null;
         }
-
+/*
         if(url == null) {
             addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
             addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
@@ -100,7 +102,7 @@ public class PantallaSmartRotom extends Screen {
             url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
             url.setMaxLength(65535);
             url.setValue(Lizardon.applyBlacklist(old));
-        }
+        }*/
 
         this.initTime = System.currentTimeMillis();
     }
@@ -109,7 +111,7 @@ public class PantallaSmartRotom extends Screen {
     @Override
     public void tick() {
         super.tick();
-
+/*
         if (urlToLoad != null && browser != null) {
             browser.loadURL(urlToLoad);
             urlToLoad = null;
@@ -121,11 +123,12 @@ public class PantallaSmartRotom extends Screen {
             } else {
                 url.setCursorPosition(0);
             }
-        }
+        }*/
 
         if (minecraft != null && browser != null && browser.isActivate()) {
             int curWidth = minecraft.getWindow().getWidth();
-            int curHeight = minecraft.getWindow().getHeight() - scaleY(20);
+            //int curHeight = minecraft.getWindow().getHeight() - scaleY(20);
+            int curHeight = minecraft.getWindow().getHeight();
             if (curHeight > 0 && curWidth > 0 && (lastWidth != curWidth || lastHeight != curHeight)) {
                 browser.resize(curWidth, curHeight);
             }
@@ -146,27 +149,27 @@ public class PantallaSmartRotom extends Screen {
     }
 
     public void loadURL(String url) {
-        if(browser == null)
+        /*if(browser == null)
             urlToLoad = Lizardon.SMARTROTOM_HOME;
         else
-            urlToLoad = url;
+            urlToLoad = url;*/
     }
 
     public void preRender() {
-        if(urlToLoad != null && browser != null) {
+        /*if(urlToLoad != null && browser != null) {
             urlToLoad = Lizardon.SMARTROTOM_HOME;
-        }
+        }*/
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.preRender();
-        url.render(matrices, mouseX, mouseY, delta);
+        //url.render(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
         if(browser != null) {
             GlStateManager._disableDepthTest();
             GlStateManager._enableTexture();
-            browser.draw(matrices, .0d, height, width, 20.d); //Don't forget to flip Y axis.
+            browser.draw(matrices, .0d, height, width, 0); //Don't forget to flip Y axis.
             GlStateManager._enableDepthTest();
         }
     }
@@ -179,7 +182,7 @@ public class PantallaSmartRotom extends Screen {
 
         super.onClose();*/
 
-        Lizardon.INSTANCE.setBackup(this);
+        //Lizardon.INSTANCE.setBackup(this);
         assert minecraft != null;
         minecraft.setScreen(null);
     }
@@ -189,9 +192,11 @@ public class PantallaSmartRotom extends Screen {
         boolean consume = super.mouseDragged(ox, oy, btn, nx, ny);
         if (browser != null && !consume) {
             int sx = (int) (ox / (float) width * minecraft.getWindow().getWidth());
-            int sy = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            //int sy = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            int sy = (int) (oy / (float) height * minecraft.getWindow().getHeight());
             int ex = (int) (ox / (float) width * minecraft.getWindow().getWidth());
-            int ey = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            //int ey = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
+            int ey = (int) (oy / (float) height * minecraft.getWindow().getHeight());
             browser.injectMouseDrag(sx, sy, remapBtn(btn), ex, ey);
         }
 
@@ -203,7 +208,8 @@ public class PantallaSmartRotom extends Screen {
         super.mouseMoved(x, y);
         if (browser != null && minecraft != null && activateBtn == -1) {
             int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
             browser.injectMouseMove(sx, sy, getMask(), y < 0);
         }
     }
@@ -215,7 +221,8 @@ public class PantallaSmartRotom extends Screen {
         boolean consume = super.mouseClicked(x, y, btn);
         if (!consume && browser != null && minecraft != null) {
             int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+            int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
             browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), true, 1);
             return true;
         }
@@ -232,7 +239,8 @@ public class PantallaSmartRotom extends Screen {
         boolean consume = super.mouseReleased(x, y, btn);
         if (!consume && browser != null && minecraft != null) {
             int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            //int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            int sy = (int) ((y / (float) height) * minecraft.getWindow().getHeight());
             browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), false, 1);
             return true;
         }
@@ -245,7 +253,8 @@ public class PantallaSmartRotom extends Screen {
         boolean consume = super.mouseScrolled(x, y, wheel);
         if (!consume && browser != null && minecraft != null) {
             int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            //int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
+            int sy = (int) ((y / (float) height) * minecraft.getWindow().getHeight());
             browser.injectMouseWheel(sx, sy, getMask(), 1, ((int) wheel * 100));
             return true;
         }
@@ -291,9 +300,9 @@ public class PantallaSmartRotom extends Screen {
 
     //Called by ExampleMod when the current browser's URL changes.
     public void onUrlChanged(IBrowser b, String nurl) {
-        if (b == browser && url != null) {
+        /*if (b == browser && url != null) {
             url.setValue(nurl);
-        }
+        }*/
     }
 
     //remap from GLFW to AWT's button ids
@@ -321,7 +330,8 @@ public class PantallaSmartRotom extends Screen {
     private Point transform2BrowserSize(double x, double y) {
         int sx = (int) (x / (float) width * minecraft.getWindow().getHeight());
         // 20 is the top search box's height
-        int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+        //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
+        int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
         point.setLocation(sx, sy);
         return point;
     }
@@ -346,7 +356,7 @@ public class PantallaSmartRotom extends Screen {
         else if(id == 2) {
             browser.loadURL(browser.getURL());
         } else if(id == 3) {
-            Lizardon.INSTANCE.setBackup(this);
+            //Lizardon.INSTANCE.setBackup(this);
             assert minecraft != null;
             minecraft.setScreen(null);
             browser.injectKeyPressedByKeyCode(256, (char)256, getMask());
@@ -364,7 +374,7 @@ public class PantallaSmartRotom extends Screen {
                 redo = true;
 
             if(vId != null || redo) {
-                Lizardon.INSTANCE.setBackup(this);
+                //Lizardon.INSTANCE.setBackup(this);
                 // minecraft.setScreen(new ScreenCfg(browser, vId));
             }
         }
