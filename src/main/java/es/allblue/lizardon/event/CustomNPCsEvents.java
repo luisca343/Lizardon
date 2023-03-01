@@ -6,6 +6,8 @@ import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.objects.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +33,7 @@ public class CustomNPCsEvents {
         ConfigCommand.register(event.getDispatcher());
     }
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void test(NpcEvent.InteractEvent event){
         Lizardon.getLogger().info("Se ha interactuado con un NPC");
@@ -47,7 +50,6 @@ public class CustomNPCsEvents {
 
             String[] partes = rutaSkin.split("/");
             datos.setSkin(partes[partes.length-1]);
-
 
             datosNpc.put(npc.getName(), datos);
             FileWriter writer = new FileWriter(Lizardon.PROXY.getRuta(nombreArchivo).toString());
