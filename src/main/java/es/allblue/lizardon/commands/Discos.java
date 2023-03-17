@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mrcrayfish.vehicle.VehicleMod;
@@ -55,24 +56,43 @@ public class Discos {
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000F, 16, 1, 2, 48000F, false);
 
     public Discos(CommandDispatcher<CommandSource> dispatcher){
-        dispatcher.register(Commands.literal("discotest")
-                .then(Commands.argument("url", StringArgumentType.string())
-                .then(Commands.argument("nombre", StringArgumentType.string())
-            .executes((command) -> {
-                String url = command.getArgument("url", String.class);
-                String nombre = command.getArgument("nombre", String.class);
+        LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("sonido")
+                .requires((commandSource -> commandSource.hasPermission(3)));
 
-                AudioManager manager = new AudioManager();
-                try {
-                    AudioManager.guardar(url, nombre, command.getSource().getLevel());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //manager.play(command.getSource().getLevel());
+        literalBuilder.then(Commands.literal("descargar")
+                        .then(Commands.argument("url", StringArgumentType.string())
+                        .then(Commands.argument("nombre", StringArgumentType.string())
+                                .executes((command) -> {
+                            String url = command.getArgument("url", String.class);
+                            String nombre = command.getArgument("nombre", String.class);
 
-              return 1;
-            })
+                            AudioManager manager = new AudioManager();
+                            try {
+                                AudioManager.guardar(url, nombre, command.getSource().getLevel());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            //manager.play(command.getSource().getLevel());
+
+                            return 1;
+                        })
         )));
+
+        literalBuilder.then(Commands.literal("jugador")
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes((command) -> {
+                                    ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
+
+                                    AudioManager manager = new AudioManager();
+                                    manager.reproducirJugador(player, "Dolor en el pecho.wav");
+                                    //manager.play(command.getSource().getLevel());
+
+                                    return 1;
+                                })
+                        ));
+
+
+        dispatcher.register(literalBuilder);
     }
 
     public int testCommand(CommandContext ctx) {
