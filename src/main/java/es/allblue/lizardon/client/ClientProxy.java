@@ -119,6 +119,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         if(api != null) {
             //Register this class to handle onAddressChange and onQuery events
             //api.registerDisplayHandler(this);
+            //prepararNavegador(api);
             System.out.println("Registering JSQueryHandler...");
             api.registerJSQueryHandler(this);
         }
@@ -146,15 +147,17 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
 
     @Override
-    public void prepararNavegador() {
-
-        System.out.println("CREANDO PAD Y TAL");
-        mcef.createBrowser("about:blank", false);
+    public void prepararNavegador(API api) {
+        System.out.println("Creando cargador de cosas de carga de cosas");
+        IBrowser browser = api.createBrowser("about:blank", false);
+        browser.loadURL("about:blank");
         System.out.println("EL COSO SE HA CREADO");
     }
 
     @Override
     public void verVideo(String url) {
+        System.out.println("verVideo");
+        System.out.println("VERVIDEO: "+ url );
         mc.setScreen(new PantallaVideo(url));
     }
 
