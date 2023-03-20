@@ -13,6 +13,7 @@ import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -222,6 +223,11 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void abrirSmartRotom(){
         mc.setScreen(hasBackup() ? backup : new BrowserScreen());
         backup = null;
+    }
+
+    @Override
+    public void abrirPantalla(Screen pantalla) {
+        Minecraft.getInstance().setScreen(pantalla);
     }
 
     public boolean hasBackup() {
