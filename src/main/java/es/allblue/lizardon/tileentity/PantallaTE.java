@@ -4,23 +4,28 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.init.TileEntityInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.montoyo.mcef.api.IBrowser;
 
 public class PantallaTE extends TileEntity {
-    PantallaCine pantallaCine;
+    public IBrowser browser;
+    public Direction facing;
 
     public PantallaTE() {
         super(TileEntityInit.TEST_PANTALLA.get());
-        pantallaCine = new PantallaCine("http://google.com");
+    }
+
+    public PantallaTE(Direction facing) {
+        super(TileEntityInit.TEST_PANTALLA.get());
+        this.facing = facing;
+
     }
 
 
     public PantallaCine getPantallaCine() {
-        return pantallaCine;
+        return new PantallaCine(browser);
     }
 
-    public void setPantallaCine(PantallaCine pantallaCine) {
-        this.pantallaCine = pantallaCine;
-    }
 }

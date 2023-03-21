@@ -38,6 +38,8 @@ public class PantallaCine extends Screen {
     private static final String YT_REGEX3 = "^https?://(?:www\\.)?youtube\\.com/embed/([a-zA-Z0-9_\\-]+)(\\?.+)?$";
 
     private int lastWidth = -1, lastHeight = -1;
+    private boolean started = false;
+
     public PantallaCine() {
         super(new StringTextComponent("forgecef.example.screen.title"));
        // urlToLoad = MCEF.HOME_PAGE;
@@ -54,71 +56,24 @@ public class PantallaCine extends Screen {
         this.pad = pd;
     }
 
+    public PantallaCine(IBrowser browser) {
+        super(new StringTextComponent("forgecef.example.screen.title"));
+        this.browser = browser;
+
+    }
+
     @Override
     public void init() {
         super.init(); // narrator trigger lmao
-
-        if(browser == null) {
-            //Grab the API and make sure it isn't null.
-            API api = Lizardon.INSTANCE.getAPI();
-            if(api == null)
-                return;
-
-            browser = api.createBrowser(url, false);
-            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
-            //urlToLoad = null;
-        }
-/*
-        if(url == null) {
-            addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
-            addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
-            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("F5"), (button -> this.legacyActionPerformed(2)))));
-            addButton(min = (new Button(width - 20, 0, 20, 20, new StringTextComponent("_"), (button -> this.legacyActionPerformed(3)))));
-            addButton(vidMode = (new Button(width - 40, 0, 20, 20, new StringTextComponent("YT"), (button -> this.legacyActionPerformed(4)))));
-            vidModeState = false;
-
-            url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
-            url.setMaxLength(65535);
-            url.setValue(Lizardon.applyBlacklist(browser.getURL()));
-        } else {
-            addButton(back);
-            addButton(fwd);
-            addButton(go);
-            addButton(min);
-            addButton(vidMode);
-
-            //Handle resizing
-            vidMode.x = width - 40;
-            go.x = width - 60;
-            min.x = width - 20;
-
-            String old = url.getValue();
-            url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
-            url.setMaxLength(65535);
-            url.setValue(Lizardon.applyBlacklist(old));
-        }*/
-
         this.initTime = System.currentTimeMillis();
+
     }
 
 
     @Override
     public void tick() {
         super.tick();
-/*
-        if (urlToLoad != null && browser != null) {
-            browser.loadURL(urlToLoad);
-            urlToLoad = null;
-        }
-
-        if (url != null) {
-            if (url.isFocused()) {
-                url.tick();
-            } else {
-                url.setCursorPosition(0);
-            }
-        }*/
-
+        // send a message to the player
         if (minecraft != null && browser != null && browser.isActivate()) {
             int curWidth = minecraft.getWindow().getWidth();
             //int curHeight = minecraft.getWindow().getHeight() - scaleY(20);
@@ -375,5 +330,12 @@ public class PantallaCine extends Screen {
     }
 
 
+    public boolean isStarted() {
+        return started;
+    }
+
+    private void setStarted(boolean b) {
+        started = b;
+    }
 
 }

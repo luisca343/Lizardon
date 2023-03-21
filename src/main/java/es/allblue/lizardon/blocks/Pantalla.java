@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -34,7 +35,8 @@ public class Pantalla extends HorizontalBlock {
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new PantallaTE();
+        // get the facing value from the block
+        return new PantallaTE(state.getValue(FACING));
     }
 
 
@@ -45,11 +47,15 @@ public class Pantalla extends HorizontalBlock {
             PantallaTE te = (PantallaTE) worldIn.getBlockEntity(pos);
             Lizardon.PROXY.abrirPantalla(te.getPantallaCine());
         }
-       
-
-
         return ActionResultType.SUCCESS;
     }
+
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
 
 
 }
