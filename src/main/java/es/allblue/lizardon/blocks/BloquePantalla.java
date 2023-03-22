@@ -1,5 +1,6 @@
 package es.allblue.lizardon.blocks;
 
+import com.pixelmonmod.pixelmon.blocks.MultiBlock;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.tileentity.PantallaTE;
 import net.minecraft.block.Block;
@@ -17,8 +18,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 
-public class Pantalla extends HorizontalBlock {
-    public Pantalla(Properties properties) {
+public class BloquePantalla extends HorizontalBlock {
+    public BloquePantalla(Properties properties) {
         super(properties);
     }
 
@@ -56,6 +57,12 @@ public class Pantalla extends HorizontalBlock {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
-
-
+    @Override
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+        if (block != this && world.isClientSide) {
+            System.out.println("Neighbor changed");
+        }
+        System.out.println("I'm a neighbor");
+    }
 }
