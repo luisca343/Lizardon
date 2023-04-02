@@ -6,34 +6,26 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.blocks.Funko;
-import net.minecraft.block.AbstractSkullBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SkullBlock;
 import net.minecraft.block.WallSkullBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.GenericHeadModel;
-import net.minecraft.client.renderer.entity.model.HumanoidHeadModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.tileentity.model.DragonHeadModel;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.SkullTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ModelLoader;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.UUID;
 
 // TileEntityRendererDispatcher
 @OnlyIn(Dist.CLIENT)
@@ -57,6 +49,7 @@ public class FunkoTERenderer extends TileEntityRenderer<FunkoTE> {
         ResourceLocation modeloRes = new ResourceLocation("lizardon:block/funko");
         IUnbakedModel test = ModelLoader.instance().getModelOrMissing(modeloRes);
 
+        Minecraft.getInstance().player.sendMessage(new StringTextComponent(test.toString()), UUID.randomUUID());
 
         stack.popPose();
     }
@@ -64,6 +57,8 @@ public class FunkoTERenderer extends TileEntityRenderer<FunkoTE> {
     public static void renderCosa(){
 
     }
+
+
 
     /*
     public static void renderSkull(@Nullable Direction p_228879_0_, float p_228879_1_, SkullBlock.ISkullType p_228879_2_, @Nullable GameProfile p_228879_3_, float p_228879_4_, MatrixStack p_228879_5_, IRenderTypeBuffer p_228879_6_, int p_228879_7_) {

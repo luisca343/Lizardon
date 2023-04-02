@@ -12,6 +12,8 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.montoyo.mcef.api.IJSQueryCallback;
 import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.data.IData;
+import noppes.npcs.api.entity.data.IPixelmonPlayerData;
 import noppes.npcs.api.handler.IQuestHandler;
 import noppes.npcs.api.handler.data.IQuest;
 import noppes.npcs.api.handler.data.IQuestObjective;
@@ -35,7 +37,9 @@ public class SMessageVerMisiones implements Runnable{
     @Override
     public void run() {
         NpcAPI api = NpcAPI.Instance();
+
         PlayerWrapper wrapper = new PlayerWrapper(player);
+        
 
         IQuest[] mActivas = wrapper.getActiveQuests();
         IQuest[] mCompletadas = wrapper.getFinishedQuests();

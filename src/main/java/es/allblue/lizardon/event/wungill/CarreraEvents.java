@@ -3,13 +3,14 @@ import com.mrcrayfish.vehicle.entity.EngineTier;
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.entity.vehicle.GoKartEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
-import net.minecraft.client.Minecraft;
+import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.client.CMessageCambioPosicion;
+import es.allblue.lizardon.net.client.CMessageCambioRegion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.UUID;
@@ -42,6 +43,33 @@ public class CarreraEvents {
             PoweredVehicleEntity powered = (PoweredVehicleEntity) vehicle;
             powered.setEngine(mover);
         }
+    }
+
+    public static void setPosicion(UUID uuid, int posicion){
+        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageCambioPosicion(posicion+""));
+    }
+
+    public static void golpearCoche(UUID uuid){
+        System.out.println("GOLPEANDO COCHE");
+        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
+        PoweredVehicleEntity vehicleEntity = (PoweredVehicleEntity) player.getVehicle();
+        int tiempo = 2000;
+        new Thread(() -> {
+            vehicleEntity.setEngine(false);
+            for(int i = 0; i < 8; i++){
+                float f = MathHelper.wrapDegrees(vehicleEntity.yRot);
+                float f2 = MathHelper.wrapDegrees(player.yRot);
+                vehicleEntity.moveTo(vehicleEntity.getX(), vehicleEntity.getY(), vehicleEntity.getZ(), f+ 45f , vehicleEntity.xRot);
+
+                try {
+                    Thread.sleep(tiempo / 8);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            vehicleEntity.setEngine(true);
+        }).start();
     }
 
 

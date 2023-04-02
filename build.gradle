@@ -16,7 +16,7 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '2.0.0-BETA3'
+version = '2.0.0-BETA6'
 group = 'es.allblue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Lizardon-1.16.5'
 
@@ -122,11 +122,12 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-    implementation files('libs/Pixelmon.jar')
-    implementation files('libs/mcef-1.16.5-2.0.jar')
+    implementation files('libs/Pixelmon-1.16.5-9.0.11-universal.jar')
+    implementation files('libs/mcef-1.16.5-2.1.jar')
     implementation files('libs/voicechat-forge-1.16.5-2.3.2.jar')
     implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
     implementation files('libs/Vault.jar')
+    implementation files('libs/vehicle-mod-0.45.2-1.16.3.jar')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

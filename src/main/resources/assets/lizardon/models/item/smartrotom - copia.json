@@ -582,7 +582,7 @@
 		},
 		"firstperson_lefthand": {
 			"rotation": [-5, -162, -3],
-			"translation": [-1.25, 12.1, -5.35],
+			"translation": [-1.2, 12.1, -5.3],
 			"scale": [1.63, 1.43, 0.99]
 		},
 		"ground": {

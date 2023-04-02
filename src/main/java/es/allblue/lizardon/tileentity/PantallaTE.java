@@ -13,6 +13,12 @@ public class PantallaTE extends TileEntity {
     public IBrowser browser;
     public Direction facing;
 
+
+
+    public class PantallaFake{
+
+    }
+
     public PantallaTE() {
         super(TileEntityInit.TEST_PANTALLA.get());
     }
@@ -21,7 +27,9 @@ public class PantallaTE extends TileEntity {
         super(TileEntityInit.TEST_PANTALLA.get());
         this.facing = facing;
 
+
     }
+
 
 
     public PantallaCine getPantallaCine() {

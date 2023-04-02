@@ -49,7 +49,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
         if (browser == null) {
             Minecraft.getInstance().player.sendMessage(new StringTextComponent("Browser is null"), UUID.randomUUID());
-            te.browser = Lizardon.INSTANCE.getAPI().createBrowser("https://www.google.com", false);
+            te.browser = Lizardon.INSTANCE.getAPI().createBrowser("https://sync-tube.de/room/I3Rvz3D6", false);
             return;
         }
 
@@ -79,7 +79,6 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         RenderSystem.disableBlend();
 
         //enviar mensaje al jugador con la orientación de la pantalla
-        Minecraft.getInstance().player.sendMessage(new StringTextComponent("Facing: " + te.facing), UUID.randomUUID());
         /**/
         BlockSide lado;
         switch (te.facing){

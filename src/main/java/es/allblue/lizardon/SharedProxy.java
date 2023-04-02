@@ -1,8 +1,11 @@
 package es.allblue.lizardon;
 
 import es.allblue.lizardon.client.ClientProxy;
+import es.allblue.lizardon.client.gui.PantallaCine;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.montoyo.mcef.api.API;
 import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
@@ -70,7 +73,11 @@ public class SharedProxy {
     public void verVideo(String str) {
     }
 
-    public void prepararNavegador() {
+    public void prepararNavegador(API api) {
+        System.out.println("Esto en servidor no hace nada");
+    }
+
+    public void abrirPantalla(Screen pantallaCine) {
         System.out.println("Esto en servidor no hace nada");
     }
 }

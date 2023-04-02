@@ -23,20 +23,22 @@ public class RegionEventsClient {
     static int tiempoCartel = 0;
     static int tiempoTransicion = 500;
     private static ResourceLocation cartelActual;
+    private static boolean mostrarCartel = false;
 
     public static void renderizarCartel(String cartel, int tiempo){
         ResourceLocation imagen = new ResourceLocation(Lizardon.MOD_ID, "textures/carteles/" + cartel + ".png");
         try {
             Minecraft.getInstance().getResourceManager().getResource(imagen);
-        } catch (IOException e) {
-            imagen = new ResourceLocation(Lizardon.MOD_ID, "textures/carteles/null.png");
-        }
-        cartelActual = imagen;
-        cartelActivo = cartel;
-        tiempoCartel = tiempo * 1000 + tiempoTransicion * 2;
+            mostrarCartel = true;
+            cartelActual = imagen;
+            cartelActivo = cartel;
+            tiempoCartel = tiempo * 1000 + tiempoTransicion * 2;
 
-        Date currentDate = new Date();
-        tiempoInicio = currentDate.getTime();
+            Date currentDate = new Date();
+            tiempoInicio = currentDate.getTime();
+        } catch (IOException e) {
+            //imagen = new ResourceLocation(Lizardon.MOD_ID, "textures/carteles/null.png");
+        }
     }
 
     public static void renderizarCartel(String cartel, int tiempo, int trans){
@@ -47,6 +49,7 @@ public class RegionEventsClient {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void renderGameOverlay(RenderGameOverlayEvent.Post event)
     {
+        if(!mostrarCartel) return;
         if(event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
         long tiempoActual = new Date().getTime();
         if ((tiempoActual - tiempoInicio) >= tiempoCartel) return;

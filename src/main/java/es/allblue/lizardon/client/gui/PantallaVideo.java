@@ -21,6 +21,7 @@ public class PantallaVideo extends Screen {
     private ClientProxy.PadData pad;
     IBrowser browser = null;
     String url;
+    String urlVideo;
 
     private long initTime = System.currentTimeMillis();
 
@@ -36,14 +37,19 @@ public class PantallaVideo extends Screen {
 
     public PantallaVideo(String url) {
         super(new StringTextComponent("forgecef.example.screen.title"));
+        System.out.println("Constructor: " + url);
         this.url = url;
+        this.urlVideo = url;
        // urlToLoad = (url == null) ? MCEF.HOME_PAGE : url;
     }
 
     @Override
     public void init() {
         super.init(); // narrator trigger lmao
-
+        System.out.println("Cargando pantalla...");
+        System.out.println("http://localhost:3000/video?url="+url);
+        System.out.println("TEST...");
+        System.out.println("http://localhost:3000/video?url="+urlVideo);
         if(browser == null) {
             //Grab the API and make sure it isn't null.
             API api = Lizardon.INSTANCE.getAPI();
@@ -53,6 +59,8 @@ public class PantallaVideo extends Screen {
             browser = api.createBrowser("http://localhost:3000/video?url="+url, false);
             browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
 
+        }else{
+            browser.loadURL("http://localhost:3000/video?url="+url);
         }
 /*
         if(url == null) {
@@ -240,6 +248,7 @@ public class PantallaVideo extends Screen {
         boolean consume = enviarInterfaz(key) ? super.charTyped(key, mod) : false; // 257 335
         if (browser != null && (!consume || key == 256)) {
             browser.injectKeyTyped(key, key, getMask());
+            browser.close();
             return true;
         }
 

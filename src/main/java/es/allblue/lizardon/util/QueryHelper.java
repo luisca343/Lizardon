@@ -82,6 +82,13 @@ public class QueryHelper {
             Messages.INSTANCE.sendToServer(new SMessageEntrarCarrera(query));
             return true;
         }
+        if(query.contains("taxi")){
+            ClientProxy.callbackMCEF = callback;
+            Messages.INSTANCE.sendToServer(new SMessageTaxi(query));
+            Lizardon.PROXY.closeSmartRotom();
+            return true;
+        }
+        /*
         if(query.contains("getPC")){
             ClientProxy.callbackMCEF = callback;
             Messages.INSTANCE.sendToServer(new SMessageGetPC(query));
@@ -91,7 +98,7 @@ public class QueryHelper {
             ClientProxy.callbackMCEF = callback;
             Messages.INSTANCE.sendToServer(new SMessageSetPC(query));
             return true;
-        }
+        }*/
         return false;
     }
 

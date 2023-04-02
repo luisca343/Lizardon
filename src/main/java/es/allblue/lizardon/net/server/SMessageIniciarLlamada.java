@@ -23,11 +23,17 @@ public class SMessageIniciarLlamada implements Runnable{
     
     @Override
     public void run() {
-        VoicechatServerApi SERVER_API = LizardonVoicechatPlugin.SERVER_API;
+        VoicechatServerApi api = LizardonVoicechatPlugin.SERVER_API;
         Gson gson = new Gson();
         DatosLlamada datosLlamada = gson.fromJson(str, DatosLlamada.class);
-        Group group = SERVER_API.createGroup(datosLlamada.getIdLlamada(), null);
-        VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
+        Group group = api.createGroup(datosLlamada.getIdLlamada(), null);
+
+
+
+
+        VoicechatConnection conn = api.getConnectionOf(player.getUUID());
+
+
         conn.setGroup(group);
     }
 

@@ -7,27 +7,27 @@ import es.allblue.lizardon.objects.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.Map;
 import java.util.function.Supplier;
 
 
-public class CMessageVerVideo implements Runnable{
+public class CMessagePrepararNavegador implements Runnable{
     private String str;
     private ServerPlayerEntity player;
     Map<String, DatosNPC> datosNpc;
 
-    public CMessageVerVideo(String str){
+    public CMessagePrepararNavegador(String str){
         this.str = str;
     }
 
     @Override
     public void run() {
-        System.out.println("CMESSAGE: "+ str );
-        Lizardon.PROXY.verVideo(str);
+        //Lizardon.PROXY.prepararNavegador();
     }
 
-    public static CMessageVerVideo decode(PacketBuffer buf) {
-        CMessageVerVideo message = new CMessageVerVideo(buf.toString(Charsets.UTF_8));
+    public static CMessagePrepararNavegador decode(PacketBuffer buf) {
+        CMessagePrepararNavegador message = new CMessagePrepararNavegador(buf.toString(Charsets.UTF_8));
         return message;
     }
 

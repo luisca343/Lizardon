@@ -56,7 +56,6 @@ public class AudioManager {
         VoicechatServerApi api = LizardonVoicechatPlugin.SERVER_API;
         UUID channelID = UUID.randomUUID();
         VoicechatConnection con = api.getConnectionOf(player.getUUID());
-
         EntityAudioChannel channel = api.createEntityAudioChannel(channelID, api.fromServerPlayer(player));
         StaticAudioChannel chan = api.createStaticAudioChannel(UUID.randomUUID(), api.fromServerLevel(player.level), con);
 

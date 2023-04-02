@@ -1,0 +1,36 @@
+{
+  "type": "drinkbeer:brewing",
+  "ingredients": [
+    [
+      {
+        "item": "xlfoodmod:rice"
+      },
+      {
+        "tag": "forge:crops/rice"
+      }
+    ],
+    [
+      {
+        "item": "xlfoodmod:rice"
+      },
+      {
+        "tag": "forge:crops/rice"
+      }
+    ],
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    }
+  ],
+  "cup": {
+    "item": "drinkbeer:empty_beer_mug",
+    "count": 1
+  },
+  "brewing_time": 12000,
+  "result": {
+    "item": "lizardon:sake",
+    "count": 4
+  }
+}

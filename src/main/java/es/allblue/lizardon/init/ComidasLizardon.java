@@ -15,6 +15,7 @@ public class ComidasLizardon {
 
     private static void initObjetos() {
         objetos.add(nuevaComida("caca_de_waifu", 2,2,true, Block.box(3, 0, 4, 12, 4.25, 13)));
+        objetos.add(nuevaBebida("sake", 1,0,true, Block.box(7, 0, 7, 9, 1, 9)));
     }
 
     public static ArrayList<ObjColocable> getComidas(){

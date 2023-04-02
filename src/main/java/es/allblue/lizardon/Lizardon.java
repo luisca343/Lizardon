@@ -11,6 +11,8 @@ import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.init.ItemInit;
+import es.allblue.lizardon.tileentity.FunkoTERenderer;
+import es.allblue.lizardon.tileentity.PantallaRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -21,6 +23,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -88,8 +91,8 @@ public class Lizardon
 
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
-        ModBiomes.register(eventBus);
         TileEntityInit.register(eventBus);
+        ModBiomes.register(eventBus);
     }
     public void setup(final FMLCommonSetupEvent event)
     {
@@ -116,6 +119,8 @@ public class Lizardon
         api.registerScheme("lizardon", ModScheme.class, true, false, false, true, true, false, false);
 
         PROXY.preInit();
+
+        /*
         LOGGER.info("DESCARGANDO MUSICA");
         try{
             String url = "http://i.lizardon.es/pixelmon/sonido/denden.mp3";
@@ -143,7 +148,7 @@ public class Lizardon
             outstream.close();
         }catch (Exception e){
             LOGGER.info(e.getMessage());
-        }
+        }*/
     }
 
     public void end (FMLLoadCompleteEvent event){
@@ -154,7 +159,9 @@ public class Lizardon
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the es.allblue.lizardon.client
         // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
-        // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
+
+        ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
+        //ClientRegistry.bindTileEntityRenderer(TileEntityInit.TEST_PANTALLA.get(), PantallaRenderer::new);
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
     }

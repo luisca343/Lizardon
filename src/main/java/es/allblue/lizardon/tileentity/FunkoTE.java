@@ -22,8 +22,7 @@ public class FunkoTE extends TileEntity {
         private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     public FunkoTE() {
-        //super(TileEntityInit.FUNKO_TE.get());
-        super(null);
+        super(TileEntityInit.FUNKO_TE.get());
     }
     public FunkoTE(TileEntityType<?> tileEntityType) {
         super(tileEntityType);

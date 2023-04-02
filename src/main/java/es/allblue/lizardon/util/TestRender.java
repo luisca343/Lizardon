@@ -18,6 +18,7 @@ public class TestRender
     @SubscribeEvent
     public static void worldRender(RenderWorldLastEvent event)
     {
+        /*
         IRenderTypeBuffer.Impl buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         IVertexBuilder builder = buffer.getBuffer(RenderType.LINES); //SpellRender.QUADS is a personal RenderType, of VertexFormat POSITION_COLOR.
 
@@ -37,6 +38,6 @@ public class TestRender
 
         stack.popPose();
 
-        buffer.endBatch(RenderType.LINES);
+        buffer.endBatch(RenderType.LINES);*/
     }
 }

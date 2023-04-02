@@ -2,6 +2,7 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.commands.Discos;
 import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.objects.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -29,6 +30,7 @@ public class CustomNPCsEvents {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
         new TestCommand(event.getDispatcher());
+        new Discos(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
