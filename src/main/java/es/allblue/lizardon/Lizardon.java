@@ -3,6 +3,7 @@ package es.allblue.lizardon;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
 import es.allblue.lizardon.client.ClientProxy;
+import es.allblue.lizardon.event.LizardonBattleEvent;
 import es.allblue.lizardon.event.MisionesCaza;
 import es.allblue.lizardon.event.CustomNPCsEvents;
 import es.allblue.lizardon.event.PixelmonEvents;
@@ -98,6 +99,7 @@ public class Lizardon
     {
         Pixelmon.EVENT_BUS.register(new MisionesCaza());
         Pixelmon.EVENT_BUS.register(new PixelmonEvents());
+        Pixelmon.EVENT_BUS.register(new LizardonBattleEvent());
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
