@@ -6,6 +6,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.export.PokemonConverterFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.export.exception.PokemonImportException;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +59,28 @@ public class PokePasteReader {
         return null;
     }
 
+    public static PokePasteReader fromLizardon(String paste) {
+        URL url = null;
+        try {
+            url = new URL("http://i.lizardon.es/pixelmon/equipos/"+paste+".txt");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        if(url == null) {
+            return null;
+        }
+
+        InputStream inputStream = getConnectionStream(url);
+
+        if(inputStream == null) {
+            return null;
+        }
+
+        return new PokePasteReader(new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
+    }
+
+
     public static PokePasteReader from(String paste) {
         URL url = getPokePasteURL(paste);
 
@@ -90,7 +113,10 @@ public class PokePasteReader {
 
     private static InputStream getConnectionStream(URL url) {
         try {
-            return url.openStream();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.addRequestProperty("User-Agent", "Mozilla/4.0");
+
+            return con.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
