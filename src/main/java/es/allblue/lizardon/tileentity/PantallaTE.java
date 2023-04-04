@@ -20,12 +20,15 @@ public class PantallaTE extends TileEntity {
     }
 
     public PantallaTE() {
-        super(TileEntityInit.TEST_PANTALLA.get());
+        super(null);
+        //super(TileEntityInit.TEST_PANTALLA.get());
     }
 
     public PantallaTE(Direction facing) {
-        super(TileEntityInit.TEST_PANTALLA.get());
-        this.facing = facing;
+        super(null);
+
+        /*super(TileEntityInit.TEST_PANTALLA.get());
+        this.facing = facing;*/
 
 
     }

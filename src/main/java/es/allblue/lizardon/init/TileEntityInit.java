@@ -17,9 +17,9 @@ public class TileEntityInit {
     public static RegistryObject<TileEntityType<FunkoTE>> FUNKO_TE =
             TILE_ENTITIES.register("funko_tile", () -> TileEntityType.Builder.of(FunkoTE::new, BlockInit.FUNKO.get()).build(null));
 
-    public static RegistryObject<TileEntityType<PantallaTE>> TEST_PANTALLA =
+    /*public static RegistryObject<TileEntityType<PantallaTE>> TEST_PANTALLA =
             TILE_ENTITIES.register("pantalla_te", () -> TileEntityType.Builder.of(PantallaTE::new, BlockInit.PANTALLA.get()).build(null));
-
+*/
 
     public static void register(IEventBus eventBus){
         TILE_ENTITIES.register(eventBus);
