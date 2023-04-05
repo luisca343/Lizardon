@@ -28,10 +28,8 @@ public class Scoreboard {
 
         ScoreObjective objetivo = scoreboard.getObjective(tag);
 
-        System.out.println("El objetivo es " + objetivo);
-        System.out.println("El objetivo es " + scoreboard.hasObjective(tag));
 
-        if(!scoreboard.hasObjective(tag)){
+        if(objetivo == null){
             objetivo = scoreboard.addObjective(tag, ScoreCriteria.DUMMY, new StringTextComponent(tag), ScoreCriteria.RenderType.INTEGER);
         }
 
