@@ -1,5 +1,8 @@
 package es.allblue.lizardon.util;
 
+import com.google.gson.Gson;
+import es.allblue.lizardon.objects.Entrenador;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +28,8 @@ public class Reader {
     }
 
 
-    public static String getDatosNPC(String npc) {
+    public static Entrenador getDatosNPC(String npc) {
+        Gson gson = new Gson();
         URL url = null;
         try {
             url = new URL("http://i.lizardon.es/pixelmon/equipos/"+npc+".json");
@@ -38,6 +42,7 @@ public class Reader {
             return null;
         }
 
-        return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.joining());
+        String str = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.joining());
+        return gson.fromJson(str, Entrenador.class);
     }
 }
