@@ -47,6 +47,7 @@ public class CarreraEvents {
 
     public static void setPosicion(UUID uuid, int posicion){
         ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
+        if(player == null) return;
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageCambioPosicion(posicion+""));
     }
 
@@ -54,14 +55,21 @@ public class CarreraEvents {
         System.out.println("GOLPEANDO COCHE");
         ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
         PoweredVehicleEntity vehicleEntity = (PoweredVehicleEntity) player.getVehicle();
+
+
         int tiempo = 2000;
         new Thread(() -> {
             vehicleEntity.setEngine(false);
+
             for(int i = 0; i < 8; i++){
                 float f = MathHelper.wrapDegrees(vehicleEntity.yRot);
                 float f2 = MathHelper.wrapDegrees(player.yRot);
-                vehicleEntity.moveTo(vehicleEntity.getX(), vehicleEntity.getY(), vehicleEntity.getZ(), f+ 45f , vehicleEntity.xRot);
 
+                vehicleEntity.yRot = f+ 45f ;
+                vehicleEntity.yRotO = f+ 45f ;
+                player.yRot = f2+45f;
+
+                System.out.println(vehicleEntity.yRot);
                 try {
                     Thread.sleep(tiempo / 8);
                 } catch (InterruptedException e) {
