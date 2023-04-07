@@ -1,14 +1,27 @@
 package es.allblue.lizardon.objects;
 
+import com.pixelmonmod.pixelmon.api.battles.BattleAIMode;
+import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
+import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
+import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.allblue.lizardon.Lizardon;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Entrenador {
-    int dinero;
-    ArrayList<Recompensa> recompensas;
+    private int dinero;
+    private boolean curar;
+    private boolean preview;
+    private String tipo;
+    private String frecuencia;
+    private String IA;
+    private String nivel;
+
+    private ArrayList<Recompensa> recompensas;
+    private ArrayList<String> normas;
 
     public Entrenador(int dinero, ArrayList<Recompensa> recompensas) {
         this.dinero = dinero;
@@ -33,5 +46,95 @@ public class Entrenador {
 
     public void recibirRecompensas(UUID uuid){
         Lizardon.PROXY.darObjetos(recompensas, uuid);
+    }
+
+    public boolean curar() {
+        return curar;
+    }
+
+    public void setCurar(boolean curar) {
+        this.curar = curar;
+    }
+
+    public boolean hasPreview() {
+        return preview;
+    }
+
+    public void setPreview(boolean preview) {
+        this.preview = preview;
+    }
+
+    public int[] getTipo() {
+        if(tipo == null) return new int[]{6, 6};
+        tipo.replace("v", "vs");
+        String[] partes = tipo.split("vs");
+        int[] numeros = new int[partes.length];
+        for(int i = 0; i < partes.length; i++){
+            numeros[i] = Integer.parseInt(partes[i]);
+        }
+
+        return numeros;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getFrecuencia() {
+        return frecuencia == null ? "DIARIA" : frecuencia;
+    }
+
+    public void setFrecuencia(String frecuencia) {
+        this.frecuencia = frecuencia;
+    }
+
+    public BattleAIMode getIA() {
+        switch (IA.toUpperCase(Locale.ROOT)){
+            case "AGGRESSIVE":
+            case "AGRESIVA":
+                return BattleAIMode.AGGRESSIVE;
+            case "ADVANCED":
+            case "AVANZADA":
+                return BattleAIMode.ADVANCED;
+            case "TACTICAL":
+            case "TACTICA":
+                return BattleAIMode.TACTICAL;
+            default:
+                return BattleAIMode.DEFAULT;
+        }
+    }
+
+    public void setIA(String IA) {
+        this.IA = IA;
+    }
+
+    public String getNivel() {
+        if(nivel == null) return BossTiers.NOT_BOSS;
+        if(nivel.contains("+")) return nivel.split("\\+")[1];
+        switch (nivel){
+            case "0":
+            case "=":
+            case "IGUALADO":
+                return BossTiers.EQUAL;
+            default:
+                return BossTiers.NOT_BOSS;
+        }
+
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+
+    public List<BattleClause> getNormas() {
+        List<BattleClause> clauses = new ArrayList<>();
+        for (String norma : normas) {
+            clauses.add(BattleClauseRegistry.getClause(norma.toLowerCase(Locale.ROOT)));
+        }
+        return clauses;
+    }
+
+    public void setNormas(ArrayList<String> normas) {
+        this.normas = normas;
     }
 }
