@@ -23,4 +23,9 @@ public class Checkpoint {
     public void setFin(Punto fin) {
         this.fin = fin;
     }
+
+    @Override
+    public String toString() {
+        return "["+inicio.toString()+" "+fin.toString()+"]";
+    }
 }
