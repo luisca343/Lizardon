@@ -26,14 +26,20 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.wrapper.NPCWrapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Combate {
+public class CombateCommand {
     private static VoicechatServerApi SERVER_API;
+    public static HashMap<UUID, ICustomNpc> combatesActivos = new HashMap<UUID, ICustomNpc>();
 
-    public Combate(CommandDispatcher<CommandSource> dispatcher){
+    public CombateCommand(CommandDispatcher<CommandSource> dispatcher){
         dispatcher.register(Commands.literal("combate")
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("url", StringArgumentType.string())
@@ -80,8 +86,17 @@ public class Combate {
             npc.setName("Paco");
             npc.greeting = url;
 
-
             Entrenador entrenador = Reader.getDatosNPC(url);
+
+
+            try{
+                ICustomNpc inpc = (ICustomNpc) NpcAPI.Instance().getIEntity(source.getEntity());
+                combatesActivos.put(player.getUUID(), inpc);
+            }catch (ClassCastException e){
+                e.printStackTrace();
+            }
+
+
 
             if(entrenador.curar()){
                 party.heal();
@@ -128,23 +143,12 @@ public class Combate {
 
 
             br.setNewClauses(entrenador.getNormas());
-
-
-
-
-
-            /*
-            for (Pokemon pkm : pokemon) {
-                player.sendMessage(new StringTextComponent("Pokemon " + i + ": " + pkm.getSpecies().getName()), player.getUUID());
-                pixelmons[i] = pkm.getOrCreatePixelmon(player);
-                i++;
-            }*/
-
             PlayerParticipant partJugador = new PlayerParticipant(player, pokemon, 1);
 
 
             Scoreboard.init(player, url);
             BattleController battle = BattleRegistry.startBattle(new BattleParticipant[]{partJugador}, new BattleParticipant[]{part2}, br);
+
 
 
         }catch(Exception e){
