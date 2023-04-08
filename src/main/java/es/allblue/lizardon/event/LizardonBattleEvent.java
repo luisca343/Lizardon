@@ -1,6 +1,5 @@
 package es.allblue.lizardon.event;
 
-import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.battles.BattleEndCause;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
@@ -8,6 +7,7 @@ import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
+import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.objects.Entrenador;
 import es.allblue.lizardon.util.Reader;
 import es.allblue.lizardon.util.Scoreboard;
@@ -43,10 +43,12 @@ public class LizardonBattleEvent {
                     return;
                 }
                 TrainerParticipant npc = (TrainerParticipant) participant2;
-                String nombreNPC = npc.trainer.greeting;
-                Gson gson = new Gson();
-                Entrenador e = gson.fromJson(Reader.getDatosNPC(nombreNPC), Entrenador.class);
+
+                Entrenador e = Reader.getDatosNPC(npc.trainer.greeting);
                 e.recibirRecompensas(player.getUUID());
+
+                CombateCommand.combatesActivos.get(player.getUUID()).say("HASS GANDAO FELICIDADES LUISCA");
+                CombateCommand.combatesActivos.remove(player.getUUID());
 
                 Scoreboard.set(player, npc.trainer.greeting, 1);
             }

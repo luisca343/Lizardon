@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.allblue.lizardon.Lizardon;
+import net.minecraft.command.CommandSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,14 @@ public class Entrenador {
     private String IA;
     private String nivel;
 
+
     private ArrayList<Recompensa> recompensas;
     private ArrayList<String> normas;
 
     public Entrenador(int dinero, ArrayList<Recompensa> recompensas) {
         this.dinero = dinero;
         this.recompensas = recompensas;
+
     }
 
     public int getDinero() {
@@ -137,4 +140,5 @@ public class Entrenador {
     public void setNormas(ArrayList<String> normas) {
         this.normas = normas;
     }
+
 }
