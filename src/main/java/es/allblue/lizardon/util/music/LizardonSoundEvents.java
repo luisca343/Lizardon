@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util;
+package es.allblue.lizardon.util.music;
 
 import es.allblue.lizardon.Lizardon;
 import net.minecraft.util.ResourceLocation;

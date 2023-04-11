@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util;
+package es.allblue.lizardon.util.music;
 
 import de.maxhenkel.voicechat.api.*;
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class AudioManagerOld {
+public class AudioManager {
 
     private static final byte[][] MP3_MAGIC_BYTES = new byte[][]{
             {(byte) 0xFF, (byte) 0xFB},
@@ -116,19 +116,18 @@ public class AudioManagerOld {
 
     public final Map<UUID, AudioPlayer> players;
 
-    public AudioManagerOld(){
+    public AudioManager(){
         players = new ConcurrentHashMap<>();
     }
 
     public static short[] readSound(Path file) throws UnsupportedAudioFileException, IOException {
 
-        Path test = Paths.get("musica");
-        Path str = test.resolve("dolor.wav");
-        
 
+        System.out.println("Reproduciendo archivo: " + file.toString());
         AudioInputStream in = AudioSystem.getAudioInputStream(file.toFile());
+        System.out.println("Reproduciendo archivo 2: " + file.toString());
         AudioInputStream converted = AudioSystem.getAudioInputStream(FORMAT, in);
-
+        System.out.println("Reproduciendo archivo 3: " + file.toString());
 
 
         return LizardonVoicechatPlugin.SERVER_API.getAudioConverter().bytesToShorts(IOUtils.toByteArray(converted));
@@ -143,7 +142,8 @@ public class AudioManagerOld {
 
         try {
             player.sendMessage(new StringTextComponent("Reproduciendo solo para ti..."), UUID.randomUUID());
-            AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), AudioManagerOld.readSound(getFile(file)));
+            AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), AudioManager.readSound(getFile(file, "wav")));
+
             players.put(channelID, audioPlayer);
             audioPlayer.startPlaying();
 
@@ -171,7 +171,7 @@ public class AudioManagerOld {
         });
 
         try {
-            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), AudioManagerOld.readSound(file));
+            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), AudioManager.readSound(file));
             players.put(channelID, player);
             player.startPlaying();
         } catch (UnsupportedAudioFileException e) {
@@ -181,7 +181,7 @@ public class AudioManagerOld {
         }
     }
 
-    private static Path getFile(String nombre, String extension){
+    public static Path getFile(String nombre, String extension){
         Path base = Paths.get("musica");
         if(!base.toFile().exists()){
             base.toFile().mkdir();
@@ -192,7 +192,7 @@ public class AudioManagerOld {
     }
 
 
-    private static Path getFile(String nombre){
+    public static Path getFile(String nombre){
         Path base = Paths.get("musica");
         if(!base.toFile().exists()){
             base.toFile().mkdir();
@@ -215,13 +215,13 @@ public class AudioManagerOld {
             checkExtensionAllowed(type);
 
             Path file = getFile(nombre, "wav");
-            /*
-
-
-            OutputStream outputStream = Files.newOutputStream(file);*/
+            
+            /*OutputStream outputStream = Files.newOutputStream(file);*/
             Files.createDirectories(file.getParent());
 
             data = baos.toByteArray();
+
+            
 
             AudioSystem.write(AudioSystem.getAudioInputStream(new ByteArrayInputStream(data)), AudioFileFormat.Type.WAVE, Files.newOutputStream(file, StandardOpenOption.CREATE_NEW));
 

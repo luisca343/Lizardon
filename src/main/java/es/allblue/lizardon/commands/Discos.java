@@ -5,7 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.util.AudioManagerOld;
+import es.allblue.lizardon.util.music.AudioManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -38,7 +38,7 @@ public class Discos {
                                     new Thread(() -> {
                                         try {
                                             source.sendSuccess(new StringTextComponent("Descargando, por favor espera..."), false);
-                                            AudioManagerOld.guardar(url, nombre, command.getSource().getLevel());
+                                            AudioManager.guardar(url, nombre, command.getSource().getLevel());
                                             source.sendSuccess(new StringTextComponent("¡Archivo descargado!"), false);
 
                                         } catch (IOException e) {
@@ -59,14 +59,42 @@ public class Discos {
 
 
         literalBuilder.then(Commands.literal("jugador")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.argument("nombre", StringArgumentType.string())
+                .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("nombre", StringArgumentType.string())
                                 .executes((command) -> {
                                     ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
 
                                     String nombre = command.getArgument("nombre", String.class);
-                                    AudioManagerOld manager = new AudioManagerOld();
+                                    AudioManager manager = new AudioManager();
                                     manager.reproducirJugador(player, nombre);
+                                    //manager.play(command.getSource().getLevel());
+
+                                    return 1;
+                                })
+                        )));
+
+
+        dispatcher.register(literalBuilder);
+
+        literalBuilder.then(Commands.literal("test")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("nombre", StringArgumentType.string())
+                                .executes((command) -> {
+                                    ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
+
+                                    String nombre = command.getArgument("nombre", String.class);
+                                    AudioManager manager = new AudioManager();
+
+                                    try {
+                                        AudioManager.AudioType tipo = AudioManager.getAudioType(AudioManager.getFile(nombre));
+                                        command.getSource().sendSuccess(new StringTextComponent("Tipo: " + tipo), false);
+                                    } catch (UnsupportedAudioFileException e) {
+                                        command.getSource().sendFailure(new StringTextComponent("Error. Formato no soportado: " + e.getMessage()));
+                                    } catch (IOException e) {
+                                        command.getSource().sendFailure(new StringTextComponent("Error descargando el archivo: " + e.getMessage()));
+                                    }
+                                    manager.reproducirJugador(player, nombre);
+
                                     //manager.play(command.getSource().getLevel());
 
                                     return 1;
