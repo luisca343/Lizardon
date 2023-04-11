@@ -28,15 +28,27 @@ public class ModBiomes {
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Lizardon.MOD_ID);
 
     public static final RegistryObject<Biome> ARRECIFE_WINGULL = getPueblo("arrecife_wingull", Biome.RainType.RAIN, new BiomeAmbience.Builder()
-                                .fogColor(0xEEEEEE)
-                                .skyColor(0x78A7FF)
-                                .waterColor(0x43D5EE)
-                                .waterFogColor(0x41F33)
+                                .fogColor(15658734)
+                                .skyColor(7907327)
+                                .waterColor(4445678)
+                                .waterFogColor(4445678)
                                 .build());
+
+
+
+
+    //
     public static final RegistryObject<Biome> PUEBLO_TULIPAN = crearPuebloBasico("pueblo_tulipan", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_SHIROI = crearPuebloBasico("pueblo_shiroi", Biome.RainType.SNOW);
     public static final RegistryObject<Biome> PUEBLO_HAGANE = crearPuebloBasico("pueblo_hagane", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_YUME = crearPuebloBasico("pueblo_yume", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_YUME = getPueblo("pueblo_yume", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(0x3e4a7a)
+            .waterFogColor(329011)
+            .grassColorOverride(0x415e36)
+            .foliageColorOverride(0x587a4b)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_DENTO = crearPuebloBasico("pueblo_dento", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_IWA = crearPuebloBasico("pueblo_iwa", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_TSUCHI = crearPuebloBasico("pueblo_tsuchi", Biome.RainType.NONE);
@@ -92,14 +104,14 @@ public class ModBiomes {
         return BIOMES.register(nombre, () ->
                 new Biome.Builder()
                         .biomeCategory(Biome.Category.NONE)
-                        .temperature(0.95f)
+                        .temperature(0.8f)
                         .downfall(.4f)
                         .precipitation(precipitaciones)
                         .specialEffects(new BiomeAmbience.Builder()
-                                .fogColor(0xEEEEEE)
-                                .skyColor(0x78A7FF)
-                                .waterColor(0x8fc2db)
-                                .waterFogColor(0x8fc2db)
+                                .fogColor(15658734)
+                                .skyColor(7907327)
+                                .waterColor(9421531)
+                                .waterFogColor(9421531)
                                 .build()
                         )
                         .scale(0.01f)
