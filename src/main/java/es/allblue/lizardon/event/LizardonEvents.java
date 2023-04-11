@@ -1,12 +1,11 @@
 package es.allblue.lizardon.event;
 
-import es.allblue.lizardon.commands.CarreraCommand;
+import es.allblue.lizardon.commands.TochiKartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
 import es.allblue.lizardon.commands.TestCommand;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,7 +22,7 @@ public class LizardonEvents {
         new CombateCommand(event.getDispatcher());
 
         if(event.getEnvironment().compareTo(Commands.EnvironmentType.DEDICATED) == 0){
-            new CarreraCommand(event.getDispatcher());
+            new TochiKartsCommand(event.getDispatcher());
         }
 
         ConfigCommand.register(event.getDispatcher());
