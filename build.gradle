@@ -16,7 +16,7 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '2.0.0-BETA6'
+version = '2.0.0-BETA8'
 group = 'es.allblue' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Lizardon-1.16.5'
 
@@ -128,6 +128,8 @@ dependencies {
     implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
     implementation files('libs/Vault.jar')
     implementation files('libs/vehicle-mod-0.45.2-1.16.3.jar')
+    implementation files('libs/worldedit-mod-7.2.5-dist.jar')
+
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
