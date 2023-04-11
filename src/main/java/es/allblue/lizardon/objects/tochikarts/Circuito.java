@@ -11,8 +11,6 @@ public class Circuito {
     ArrayList<Checkpoint> checkpoints;
     LinkedList<Punto> inicios;
 
-    public Circuito() {}
-
     public Circuito(String nombre) {
         this.nombre = nombre;
         this.checkpoints = new ArrayList<>();
@@ -29,6 +27,13 @@ public class Circuito {
 
     public ArrayList<Checkpoint> getCheckpoints() {
         return checkpoints;
+    }
+
+    public Checkpoint getCheckpoint(int i) {
+        if(i < checkpoints.size()){
+            return checkpoints.get(i);
+        }
+        return null;
     }
 
 
@@ -57,5 +62,9 @@ public class Circuito {
         for (Checkpoint checkpoint : checkpoints) {
             source.sendSuccess(new StringTextComponent("#"+ ++i + " " + checkpoint.toString()), false);
         }
+    }
+
+    public void guardar() {
+        CarreraManager.circuitos.put(nombre, this);
     }
 }

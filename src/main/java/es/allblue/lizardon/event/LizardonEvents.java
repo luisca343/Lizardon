@@ -4,7 +4,9 @@ import es.allblue.lizardon.commands.CarreraCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
 import es.allblue.lizardon.commands.TestCommand;
+import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +21,10 @@ public class LizardonEvents {
         new TestCommand(event.getDispatcher());
         new Discos(event.getDispatcher());
         new CombateCommand(event.getDispatcher());
-        new CarreraCommand(event.getDispatcher());
+
+        if(event.getEnvironment().compareTo(Commands.EnvironmentType.DEDICATED) == 0){
+            new CarreraCommand(event.getDispatcher());
+        }
 
         ConfigCommand.register(event.getDispatcher());
     }
