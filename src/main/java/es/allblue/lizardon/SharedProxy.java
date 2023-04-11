@@ -81,9 +81,9 @@ public class SharedProxy {
         return Paths.get("");
     }
 
-    public void setIdServidor(String idServidor){
-        idServidor = "test";
-    };
+    public void setIdServidor(String idServidor) {
+        this.idServidor = idServidor;
+    }
 
     public void closeSmartRotom(){
     }
