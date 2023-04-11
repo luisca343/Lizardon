@@ -2,8 +2,6 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.commands.Discos;
-import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.objects.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
@@ -14,6 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.event.DialogEvent;
 import noppes.npcs.api.event.NpcEvent;
 import noppes.npcs.api.event.QuestEvent;
 
@@ -27,12 +26,12 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = "lizardon")
 public class CustomNPCsEvents {
-    @SubscribeEvent
-    public static void onCommandsRegister(RegisterCommandsEvent event){
-        new TestCommand(event.getDispatcher());
-        new Discos(event.getDispatcher());
 
-        ConfigCommand.register(event.getDispatcher());
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onReadDialogue(DialogEvent.OpenEvent event){
+
+        Lizardon.getLogger().info("Se ha leido el dialogo");
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -41,6 +40,7 @@ public class CustomNPCsEvents {
         Lizardon.getLogger().info("Se ha interactuado con un NPC");
         Gson gson = new Gson();
         String nombreArchivo = "npcs.json";
+
         try{
             Reader reader = Files.newBufferedReader(Lizardon.PROXY.getRuta(nombreArchivo));
             Map<String, DatosNPC> datosNpc = gson.fromJson(reader, Map.class);
@@ -61,6 +61,8 @@ public class CustomNPCsEvents {
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

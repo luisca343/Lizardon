@@ -28,11 +28,14 @@ import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleProperty;
+import com.pixelmonmod.pixelmon.battles.api.rules.BattleRuleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRules;
+import com.pixelmonmod.pixelmon.battles.api.rules.PropertyValue;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.property.BattleTypeProperty;
 import com.pixelmonmod.pixelmon.battles.api.rules.property.TeamPreviewProperty;
+import com.pixelmonmod.pixelmon.battles.api.rules.value.BooleanValue;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -41,13 +44,14 @@ import com.pixelmonmod.pixelmon.command.impl.Battle2;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.TrainerData;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import de.maxhenkel.voicechat.api.Player;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.allblue.lizardon.api.PokePasteReader;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageDatosServer;
 import es.allblue.lizardon.net.client.CMessageVerVideo;
+import es.allblue.lizardon.objects.Entrenador;
 import es.allblue.lizardon.objects.pixelmon.PokemonData;
+import es.allblue.lizardon.util.Reader;
 import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -75,7 +79,7 @@ public class TestCommand {
         LiteralArgumentBuilder<CommandSource> testBuilder = Commands.literal("test")
                 .requires((commandSource -> commandSource.hasPermission(3)))
                 .executes((command) -> {
-                    command.getSource().getEntity().sendMessage(new StringTextComponent("Comando de Test 1"), UUID.randomUUID());
+                    command.getSource().getEntity().sendMessage(new StringTextComponent("Comando de Test 2"), UUID.randomUUID());
                     return 1;
                 });
         dispatcher.register(testBuilder);
@@ -97,53 +101,6 @@ public class TestCommand {
             String url = (String) ctx.getArgument("url", String.class);
             ServerPlayerEntity player = EntityArgument.getPlayer(ctx, "player");
 
-            // Get the player team
-            PlayerPartyStorage party = StorageProxy.getParty(player);
-            List<Pokemon> pokemon = party.findAll(Pokemon::canBattle);
-            PixelmonEntity[] pixelmons = new PixelmonEntity[6];
-
-            int i = 0;
-            for (Pokemon pkm : pokemon) {
-                player.sendMessage(new StringTextComponent("Pokemon " + i + ": " + pkm.getSpecies().getName()), player.getUUID());
-                pixelmons[i] = pkm.getOrCreatePixelmon(player);
-                i++;
-            }
-
-            PlayerParticipant part = new PlayerParticipant(player, pokemon, 1);
-
-            // Get the trainer team
-            NPCTrainer npc = new NPCTrainer(player.level);
-            npc.setBossTier(BossTierRegistry.getBossTierOrNotBoss(BossTiers.EQUAL));
-
-            npc.setName("Paco");
-            npc.greeting = url;
-
-            List<Pokemon> team = PokePasteReader.fromLizardon(url).build();
-
-            i = 0;
-            for (Pokemon pkm : team) {
-                npc.getPokemonStorage().set(i, pkm);
-                i++;
-                if (i == 6) break;
-            }
-
-            TrainerParticipant part2 = new TrainerParticipant(npc, 1);
-
-
-            player.sendMessage(new StringTextComponent("INICIANDO BATALLA"), player.getUUID());
-            BattleRules br = new BattleRules();
-
-
-            List<BattleClause> clauses = new ArrayList<>();
-            clauses.add(BattleClauseRegistry.BAG_CLAUSE);
-            br.setNewClauses(clauses);
-
-            br.set(new TeamPreviewProperty(),true);
-
-
-
-            Scoreboard.init(player, url);
-            BattleController battle = BattleRegistry.startBattle(new BattleParticipant[]{part}, new BattleParticipant[]{part2}, br);
 
 
         }catch(Exception e){
