@@ -40,7 +40,7 @@ public class MisionesCaza {
         PixelmonEntity pokemon = event.getPokemon();
         String nombre = pokemon.getSpecies().getName();
         Stats stats = pokemon.getForm();
-        avanzarMision("CAPTURA", stats, event.player);
+        avanzarMision("CAPTURA", stats, event.getPlayer());
     }
 
     @SubscribeEvent
@@ -57,7 +57,7 @@ public class MisionesCaza {
         Pokemon pokemon = event.getRaidPokemon();
         String nombre = pokemon.getSpecies().getName();
         Stats stats = event.getRaid().getForm();
-        avanzarMision("CAPTURA", stats, event.player);
+        avanzarMision("CAPTURA", stats, event.getPlayer());
     }
 
 
