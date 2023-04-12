@@ -34,7 +34,7 @@ jobs:
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
       - name: Upload build reports
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: Package
           path: build/libs
