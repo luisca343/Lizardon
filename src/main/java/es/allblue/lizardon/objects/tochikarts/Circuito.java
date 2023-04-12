@@ -1,5 +1,6 @@
 package es.allblue.lizardon.objects.tochikarts;
 
+import com.google.gson.Gson;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -64,7 +65,20 @@ public class Circuito {
         }
     }
 
+    public void printInicios(CommandSource source) {
+        int i = 0;
+        for (Punto inicio : inicios) {
+            source.sendSuccess(new StringTextComponent("#"+ ++i + " " + inicio.toString()), false);
+        }
+    }
+
     public void guardar() {
         CarreraManager.circuitos.put(nombre, this);
+        // Transform into JSON with Gson
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+
+
+
     }
 }
