@@ -1,9 +1,9 @@
 package es.allblue.lizardon.event;
 
+import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.commands.TochiKartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
-import es.allblue.lizardon.commands.TestCommand;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;

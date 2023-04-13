@@ -43,5 +43,7 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessageDarCaja.class, SMessageDarCaja::encode, SMessageDarCaja::decode, SMessageDarCaja::handle);
         INSTANCE.registerMessage(index++, SMessageTaxi.class, SMessageTaxi::encode, SMessageTaxi::decode, SMessageTaxi::handle);
 
+        INSTANCE.registerMessage(index++, CMessageWaypoints.class, CMessageWaypoints::encode, CMessageWaypoints::decode, CMessageWaypoints::handle);
+
     }
 }
