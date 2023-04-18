@@ -137,6 +137,7 @@ dependencies {
     implementation fg.deobf('curse.maven:voicechat-416089:4153823')
     implementation fg.deobf('curse.maven:vechiclemod-286660:3103940')
     implementation fg.deobf('curse.maven:worldedit-225608:3283693')
+    implementation fg.deobf('curse.maven:journeymap-32274:4012858')
 
     implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
 
