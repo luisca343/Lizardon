@@ -2,6 +2,7 @@ package es.allblue.lizardon.client;
 
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.client.gui.PantallaVideo;
 import es.allblue.lizardon.client.renders.IItemRenderer;
@@ -10,6 +11,7 @@ import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
 import es.allblue.lizardon.objects.DatosNPC;
+import es.allblue.lizardon.tileentity.PantallaTE;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.client.Minecraft;
@@ -328,6 +330,15 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         this.idServidor = idServidor;
     }
 
-
+    @Override
+    public void abrirPantallaCine(PantallaTE te) {
+        IBrowser browser = te.browser;
+        if(browser == null){
+            browser = Lizardon.INSTANCE.getAPI().createBrowser("http://google.es", false);
+            browser.loadURL("http://google.es");
+            te.browser = browser;
+        }
+        Minecraft.getInstance().setScreen(new PantallaCine(browser));
+    }
 }
 

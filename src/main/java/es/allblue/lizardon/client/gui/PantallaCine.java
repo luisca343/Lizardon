@@ -145,7 +145,7 @@ public class PantallaCine extends Screen {
             int sy = (int) (oy / (float) height * minecraft.getWindow().getHeight());
             int ex = (int) (ox / (float) width * minecraft.getWindow().getWidth());
             //int ey = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
-            int ey = (int) (oy / (float) height * minecraft.getWindow().getHeight());
+            int ey = (int) (oy / (float) height * minecraft .getWindow().getHeight());
             browser.injectMouseDrag(sx, sy, remapBtn(btn), ex, ey);
         }
 

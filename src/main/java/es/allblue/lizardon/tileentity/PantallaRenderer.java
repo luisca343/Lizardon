@@ -49,7 +49,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
         if (browser == null) {
             Minecraft.getInstance().player.sendMessage(new StringTextComponent("Browser is null"), UUID.randomUUID());
-            te.browser = Lizardon.INSTANCE.getAPI().createBrowser("https://sync-tube.de/room/I3Rvz3D6", false);
+            te.browser = Lizardon.INSTANCE.getAPI().createBrowser("http://google.es", false);
             return;
         }
 
@@ -70,6 +70,8 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         int sizeY = 1;
         float sw = ((float) sizeX) * 0.6f - 2.f / 16.f;
         float sh = ((float) sizeY) * 0.6f - 2.f / 16.f;
+
+
         matrixStack.pushPose();
 
         Tessellator t = Tessellator.getInstance();
