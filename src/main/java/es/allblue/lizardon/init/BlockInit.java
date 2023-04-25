@@ -2,6 +2,7 @@ package es.allblue.lizardon.init;
 
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.BloqueLizardon;
+import es.allblue.lizardon.blocks.BloquePantalla;
 import es.allblue.lizardon.blocks.Funko;
 import es.allblue.lizardon.blocks.ObjetoColocable;
 import es.allblue.lizardon.items.LizardonItemGroup;
@@ -27,7 +28,7 @@ public class BlockInit {
     public static final RegistryObject<Block> FUNKO = registerBlock("funko", () -> new Funko(AbstractBlock.Properties.of(Material.STONE)));
 
 
-   /* public static final RegistryObject<Block> PANTALLA = registerBlock("pantalla", () -> new BloquePantalla(AbstractBlock.Properties.of(Material.STONE)));*/
+   public static final RegistryObject<Block> PANTALLA = registerBlock("pantalla", () -> new BloquePantalla(AbstractBlock.Properties.of(Material.STONE)));
 
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();
