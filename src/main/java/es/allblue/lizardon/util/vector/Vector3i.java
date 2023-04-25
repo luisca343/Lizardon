@@ -210,6 +210,10 @@ public final class Vector3i {
         return new BlockPos(x, y, z);
     }
 
+    public void toBlock(BlockPos.Mutable bp) {
+        bp.set(x, y, z);
+    }
+
     /*
     public void toBlock(BlockPos.MutableBlockPos bp) {
         bp.set(x, y, z);

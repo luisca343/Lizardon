@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.objects.Recompensa;
+import es.allblue.lizardon.tileentity.PantallaTE;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -139,5 +140,9 @@ public class SharedProxy {
 
         StringTextComponent msg = new StringTextComponent(mensaje.substring(0, mensaje.length() - 2));
         player.sendMessage(msg, ChatType.SYSTEM, Util.NIL_UUID);
+    }
+
+    public void abrirPantallaCine(PantallaTE te) {
+        System.out.println("Esto en servidor no hace nada");
     }
 }
