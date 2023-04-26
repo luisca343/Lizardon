@@ -12,6 +12,7 @@ import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.init.ItemInit;
+import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import es.allblue.lizardon.tileentity.PantallaRenderer;
 import net.minecraft.block.Block;
@@ -24,8 +25,10 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -62,6 +65,7 @@ public class Lizardon
 
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
 
+    public static CarreraManager carreraManager;
 
     public API getAPI() {
         return api;
@@ -103,6 +107,8 @@ public class Lizardon
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         Lizardon.PROXY.crearArchivo("config.json");
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, LizardonConfig.SPEC, "lizardon.toml");
 
 
         ModBiomes.generateBiomes();
@@ -161,7 +167,7 @@ public class Lizardon
         // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
-        //ClientRegistry.bindTileEntityRenderer(TileEntityInit.TEST_PANTALLA.get(), PantallaRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityInit.TEST_PANTALLA.get(), PantallaRenderer::new);
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
     }
@@ -208,6 +214,7 @@ public class Lizardon
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
             LOGGER.info("HELLO from Register Block");
+
         }
     }
     /* Pantallas */
