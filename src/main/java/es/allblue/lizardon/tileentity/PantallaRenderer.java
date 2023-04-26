@@ -54,7 +54,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         }
 
         if (browser.getTextureID() == 0) {
-            Minecraft.getInstance().player.sendMessage(new StringTextComponent("Texture is null"), UUID.randomUUID());
+            //Minecraft.getInstance().player.sendMessage(new StringTextComponent("Texture is null"), UUID.randomUUID());
             return;
         }
 
@@ -66,10 +66,15 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         RenderSystem.enableDepthTest();
         //with forge 1.16.5 bind texture to RenderSystem
 
-        int sizeX = 1;
-        int sizeY = 1;
+        int sizeX = te.ancho;
+        int sizeY = te.alto;
+        /*
         float sw = ((float) sizeX) * 0.6f - 2.f / 16.f;
-        float sh = ((float) sizeY) * 0.6f - 2.f / 16.f;
+        float sh = ((float) sizeY) * 0.6f - 2.f / 16.f;*/
+
+
+        float sw = ((float) sizeX) * 0.5f - 2.f / 16.f;
+        float sh = ((float) sizeY) * 0.5f - 2.f / 16.f;
 
 
         matrixStack.pushPose();
