@@ -1,6 +1,8 @@
 package es.allblue.lizardon.objects.tochikarts;
 
 import com.google.gson.Gson;
+import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -73,10 +75,12 @@ public class Circuito {
     }
 
     public void guardar() {
-        CarreraManager.circuitos.put(nombre, this);
+        Lizardon.carreraManager.circuitos.put(nombre, this);
         // Transform into JSON with Gson
         Gson gson = new Gson();
         String json = gson.toJson(this);
+
+        WingullAPI.wingullPOST("http://83.37.185.124:34301/circuito", json);
 
 
 
