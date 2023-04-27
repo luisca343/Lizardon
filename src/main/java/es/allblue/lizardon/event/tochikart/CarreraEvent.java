@@ -1,5 +1,6 @@
 package es.allblue.lizardon.event.tochikart;
 
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -17,7 +18,7 @@ public class CarreraEvent {
         if (event.phase == TickEvent.Phase.START) {
             if(!event.player.level.isClientSide()){
                 ServerPlayerEntity player = (ServerPlayerEntity) event.player;
-                CarreraManager.playerTick(player);
+                Lizardon.carreraManager.playerTick(player);
             }
         }
     }
