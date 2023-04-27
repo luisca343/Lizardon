@@ -10,6 +10,8 @@ public class Participante {
     private int vuelta;
     private long tiempoFin;
 
+    private boolean terminada;
+
     private Punto coords;
 
     public Participante(ServerPlayerEntity jugador, Carrera carrera) {
@@ -18,6 +20,7 @@ public class Participante {
         this.tiempoFin = 0;
         this.vuelta = 1;
         this.carrera = carrera;
+        this.terminada = false;
     }
 
     public int getSiguienteCheck() {
@@ -90,6 +93,10 @@ public class Participante {
         setSiguienteCheck(0);
         setVuelta(0);
         setTiempoFin(System.currentTimeMillis());
+        terminada = true;
+
+        jugador.getVehicle().remove();
+
         jugador.sendMessage(new StringTextComponent("Has terminado la carrera en " + getTiempoFin()), jugador.getUUID());
     }
 
@@ -101,7 +108,7 @@ public class Participante {
 
 
     public void tick() {
-        if(carrera == null) return;
+        if(carrera == null || terminada) return;
         if(carrera.getEstado().equals(EstadoCarrera.EN_CURSO)){
             Punto nuevaPosicion = new Punto(jugador.getX(), jugador.getY(), jugador.getZ());
             if(nuevaPosicion.equals(coords)) return;
