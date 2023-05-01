@@ -16,22 +16,34 @@ import java.util.Enumeration;
 public class LizardonVoicechatPlugin implements VoicechatPlugin {
     public static VoicechatServerApi SERVER_API;
     public static String MUSIC_DISC_CATEGORY = "music_discs";
+    public static String MUSIC_CATEGORY = "lizardon_music";
 
     @Nullable
     public static VolumeCategory musicDiscs;
 
+    @Nullable
+    public static VolumeCategory lizardonMusic;
+
     private void onServerStarted(VoicechatServerStartedEvent event) {
-        System.out.println("REGISTRANDO CHAT DE VOZ");
         SERVER_API = event.getVoicechat();
+
         musicDiscs = SERVER_API.volumeCategoryBuilder()
                 .setId(MUSIC_DISC_CATEGORY)
-                .setName("Lizardon Cosas")
+                .setName("Discos")
                 .setDescription("El volumen de los discos de música")
                 .setIcon(getIcon("category_music_discs.png"))
                 .build();
 
+        lizardonMusic = SERVER_API.volumeCategoryBuilder()
+                .setId(MUSIC_CATEGORY)
+                .setName("Música")
+                .setDescription("El volumen de la música")
+                .setIcon(getIcon("category_music.png"))
+                .build();
+
 
         SERVER_API.registerVolumeCategory(musicDiscs);
+        SERVER_API.registerVolumeCategory(lizardonMusic);
     }
 
 
