@@ -62,7 +62,7 @@ public class AudioManager {
         });
 
         try {
-            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), AudioManagerBak.readSound(file));
+            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), readSound(file));
             players.put(channelID, player);
             return player;
         } catch (UnsupportedAudioFileException e) {
@@ -90,7 +90,7 @@ public class AudioManager {
         });
 
         try {
-            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), AudioManagerBak.readSound(file));
+            AudioPlayer player = api.createAudioPlayer(channel, api.createEncoder(), readSound(file));
             players.put(channelID, player);
             player.startPlaying();
         } catch (UnsupportedAudioFileException e) {
@@ -115,7 +115,7 @@ public class AudioManager {
         chan.setCategory(LizardonVoicechatPlugin.MUSIC_CATEGORY);
         try {
             player.sendMessage(new StringTextComponent("Reproduciendo solo para ti..."), UUID.randomUUID());
-            AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), AudioManagerBak.readSound(getFile(file, "wav")));
+            AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), readSound(getFile(file, "wav")));
 
             players.put(channelID, audioPlayer);
             audioPlayer.startPlaying();
@@ -133,7 +133,7 @@ public class AudioManager {
         StaticAudioChannel chan = api.createStaticAudioChannel(UUID.randomUUID(), api.fromServerLevel(player.level), con);
 
 
-        AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), AudioManagerBak.readSound(getFile(file, "wav")));
+        AudioPlayer audioPlayer = api.createAudioPlayer(chan, api.createEncoder(), readSound(getFile(file, "wav")));
 
     }
 
