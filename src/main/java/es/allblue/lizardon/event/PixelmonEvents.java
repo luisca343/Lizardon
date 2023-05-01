@@ -1,7 +1,9 @@
 package es.allblue.lizardon.event;
 
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
+import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.blocks.machines.VendingMachineShop;
+import com.pixelmonmod.pixelmon.blocks.tileentity.PokeStopTileEntity;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopkeeperData;
@@ -16,7 +18,6 @@ import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
-
 
     @SubscribeEvent
     public void compraVenta(ShopkeeperEvent event){
