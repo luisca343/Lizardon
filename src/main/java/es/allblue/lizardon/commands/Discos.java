@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
+import es.allblue.lizardon.util.music.AudioConverter;
 import es.allblue.lizardon.util.music.AudioManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -36,9 +37,9 @@ public class Discos {
                             String nombre = command.getArgument("nombre", String.class);
 
                                     new Thread(() -> {
-                                        try {
+                                        /*try {
                                             source.sendSuccess(new StringTextComponent("Descargando, por favor espera..."), false);
-                                            AudioManager.guardar(url, nombre, command.getSource().getLevel());
+                                            //zAudioManager.guardar(url, nombre, command.getSource().getLevel());
                                             source.sendSuccess(new StringTextComponent("¡Archivo descargado!"), false);
 
                                         } catch (IOException e) {
@@ -47,7 +48,7 @@ public class Discos {
                                         } catch (UnsupportedAudioFileException e) {
                                             source.sendFailure(new StringTextComponent("Error. Formato no soportado: " + e.getMessage()));
                                             e.printStackTrace();
-                                        }
+                                        }*/
                                     }).start();
 
 
@@ -86,7 +87,8 @@ public class Discos {
                                     AudioManager manager = new AudioManager();
 
                                     try {
-                                        AudioManager.AudioType tipo = AudioManager.getAudioType(AudioManager.getFile(nombre));
+
+                                        AudioConverter.AudioType tipo = AudioConverter.getAudioType(AudioManager.getFile(nombre));
                                         command.getSource().sendSuccess(new StringTextComponent("Tipo: " + tipo), false);
                                     } catch (UnsupportedAudioFileException e) {
                                         command.getSource().sendFailure(new StringTextComponent("Error. Formato no soportado: " + e.getMessage()));
