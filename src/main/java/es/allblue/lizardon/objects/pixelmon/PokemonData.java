@@ -7,6 +7,11 @@ public class PokemonData {
     Species species;
     Stats form;
 
+    public PokemonData(Species species, Stats form) {
+        this.species = species;
+        this.form = form;
+    }
+
     public Species getSpecies() {
         return species;
     }

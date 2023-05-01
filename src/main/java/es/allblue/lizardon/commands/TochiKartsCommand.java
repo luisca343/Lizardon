@@ -5,6 +5,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.pixelmonmod.pixelmon.support.JourneyMapIntegration;
+import com.pixelmonmod.pixelmon.world.structure.type.WayPointStructure;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.forge.ForgeAdapter;
@@ -12,15 +14,23 @@ import com.sk89q.worldedit.forge.ForgePlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionManager;
+import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.client.CMessageReturn;
+import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import es.allblue.lizardon.objects.tochikarts.Circuito;
 import es.allblue.lizardon.objects.tochikarts.Punto;
 import es.allblue.lizardon.util.WingullAPI;
+import journeymap.client.waypoint.Waypoint;
+import journeymap.client.waypoint.WaypointStore;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.UUID;
 
@@ -39,21 +49,23 @@ public class TochiKartsCommand {
                         .then(entrarCarrera())
                         .then(salirCarrera())
                         .then(iniciarCarrera())
-                        .then(testC())
-
-
+                        .then(cuentaAtras())
                 );
 
         dispatcher.register(literalBuilder);
 
     }
 
-    private ArgumentBuilder<CommandSource,?> testC() {
-        return Commands.literal("test")
-                .executes((command) -> {
-                    command.getSource().getEntity().sendMessage(new StringTextComponent(WingullAPI.wingullGET("")), UUID.randomUUID());
-                    return 1;
-                });
+    private ArgumentBuilder<CommandSource,?> cuentaAtras() {
+        return Commands.literal("cuentaAtras")
+                .then(Commands.argument("nombre", StringArgumentType.string())
+                        .executes((command) -> {
+                            String nombre = StringArgumentType.getString(command, "nombre");
+
+                            Lizardon.carreraManager.iniciarCuentaAtras(nombre);
+                            return 1;
+                        })
+                );
     }
 
     private ArgumentBuilder<CommandSource,?> iniciarCarrera() {
@@ -62,8 +74,7 @@ public class TochiKartsCommand {
                         .executes((command) -> {
                             String nombre = StringArgumentType.getString(command, "nombre");
                             // Usar el CarreraManager para crear la carrera
-                            CarreraManager.iniciarCarrera(nombre);
-
+                            Lizardon.carreraManager.iniciarCarrera(nombre);
                             return 1;
                         })
                 );
@@ -75,11 +86,13 @@ public class TochiKartsCommand {
                         .executes((command) -> {
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
                             // Usar el CarreraManager para crear la carrera
-                            CarreraManager.salirCarrera(player);
+                            Lizardon.carreraManager.salirCarrera(player);
 
                             return 1;
                         })
                 );
+
+
     }
 
     private ArgumentBuilder<CommandSource,?> entrarCarrera() {
@@ -90,7 +103,7 @@ public class TochiKartsCommand {
                             String nombre = StringArgumentType.getString(command, "nombre");
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
                             // Usar el CarreraManager para crear la carrera
-                            CarreraManager.entrarCarrera(nombre, player);
+                            Lizardon.carreraManager.entrarCarrera(nombre, player);
 
 
                             return 1;
