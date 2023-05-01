@@ -45,6 +45,10 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
     @Override
     public void render(PantallaTE te, float p_225616_2_, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
 
+        if(!te.isLoaded()){
+            return;
+        }
+
         IBrowser browser = te.browser;
 
         if (browser == null) {

@@ -51,11 +51,19 @@ import java.util.stream.Collectors;
 public class Lizardon
 {
     // Directly reference a log4j logger.
+
+    // SmartRotom START
     public static final double PAD_RATIO = 59.0 / 30.0;
     //public  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
     public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public double padResX;
     public double padResY;
+
+    public double avDist100 = 10.0;
+    public double avDist0 = 30.0;
+    public float ytVolume = 100.0f;
+
+    // SmartRotom END
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String BLACKLIST_URL = "http://lizardon.es/smartrotom";
     public static Lizardon INSTANCE = null;

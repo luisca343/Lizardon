@@ -145,4 +145,8 @@ public class SharedProxy {
     public void abrirPantallaCine(PantallaTE te) {
         System.out.println("Esto en servidor no hace nada");
     }
+
+    public void trackScreen(PantallaTE tes, boolean track){
+        System.out.println("Esto en servidor no hace nada");
+    }
 }

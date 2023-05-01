@@ -4,6 +4,7 @@ package es.allblue.lizardon.util;
 import es.allblue.lizardon.init.BlockInit;
 import es.allblue.lizardon.util.vector.Vector2i;
 import es.allblue.lizardon.util.vector.Vector3i;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -60,6 +61,30 @@ public abstract class Multiblock {
         } while(override.apply(pos, world.getBlockState(bp).getBlock() == BlockInit.PANTALLA.get()));
 
         pos.add(side.up);
+    }
+
+    public static void findEnd(World world, Vector3i pos, BlockSide side, BlockOverride override)
+    {
+        if(override == null)
+            override = NULL_OVERRIDE;
+
+        BlockPos.Mutable bp = new BlockPos.Mutable();
+
+        //Go right
+        do {
+            pos.add(side.right);
+            pos.toBlock(bp);
+        } while(override.apply(pos, world.getBlockState(bp).getBlock() == BlockInit.PANTALLA.get()));
+
+        pos.add(side.left);
+
+        //Go up
+        do {
+            pos.add(side.up);
+            pos.toBlock(bp);
+        } while(override.apply(pos, world.getBlockState(bp).getBlock() == BlockInit.PANTALLA.get()));
+
+        pos.add(side.down);
     }
 
     //Origin stays constant
@@ -172,6 +197,18 @@ public abstract class Multiblock {
 
         //All good.
         return null;
+    }
+
+    public static AxisAlignedBB getAABB(BlockPos inicio, BlockPos fin){
+        int x = Math.min(inicio.getX(), fin.getX());
+        int y = Math.min(inicio.getY(), fin.getY());
+        int z = Math.min(inicio.getZ(), fin.getZ());
+
+        int x2 = Math.max(inicio.getX(), fin.getX());
+        int y2 = Math.max(inicio.getY(), fin.getY());
+        int z2 = Math.max(inicio.getZ(), fin.getZ());
+
+        return new AxisAlignedBB(x, y, z, x2 + 1, y2 + 1 , z2 + 1);
     }
 
 }

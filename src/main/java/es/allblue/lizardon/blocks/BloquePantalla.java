@@ -97,6 +97,12 @@ public class BloquePantalla extends HorizontalBlock {
             BlockPos bp = pos.toBlock();
             te =  new PantallaTE(state.getValue(FACING));
             world.setBlockEntity(bp, te);
+
+            Vector3i pos2 = new Vector3i(position);
+            Multiblock.findEnd(world, pos2, side, null);
+            te.updateAABB(pos2.toBlock());
+
+
             created = true;
         }else{
             MessageUtil.enviarMensaje(player, "Ya existe un TE");

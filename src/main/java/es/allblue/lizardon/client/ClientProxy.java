@@ -1,6 +1,5 @@
 package es.allblue.lizardon.client;
 
-import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
@@ -10,7 +9,6 @@ import es.allblue.lizardon.client.renders.SmartRotomRenderer;
 import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
-import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.tileentity.PantallaTE;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
@@ -33,19 +31,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.BrowserScreen;
 import net.montoyo.mcef.utilities.Log;
-import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.event.NpcEvent;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = "lizardon", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -60,6 +53,9 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public static IJSQueryCallback callbackMCEF;
     public String idServidor;
 
+    private final ArrayList<PantallaTE> screenTracking = new ArrayList<>();
+
+    private int lastTracked = 0;
     private int minePadTickCounter = 0;
 
     public int getNextPadID(){
@@ -191,6 +187,34 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                     padMap.remove(pd.id);
                 }
             }
+
+            if(mc.player != null && !screenTracking.isEmpty()) {
+                int id = lastTracked % screenTracking.size();
+                lastTracked++;
+                System.out.println("LOG: Checking screen " + id);
+
+                PantallaTE tes = screenTracking.get(id);
+                double dist2 = mc.player.distanceToSqr(tes.getBlockPos().getX(), tes.getBlockPos().getY(), tes.getBlockPos().getZ());
+
+                /*
+                if(tes.isLoaded()) {
+                    if(dist2 >  50){
+                        System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
+
+                        tes.unload();
+                    }
+                    tes.updateTrackDistance(dist2, 80); //ToDo find master volume
+                } else if(dist2 <= 50){
+                    tes.load();
+                    System.out.println("LOG: Loading screen " + id + " at " + tes.getBlockPos() + " because it's close enough");
+                }*/
+
+
+
+
+            }
+
+
         }
     }
 
@@ -340,5 +364,24 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
         Minecraft.getInstance().setScreen(new PantallaCine(browser));
     }
+
+    @Override
+    public void trackScreen(PantallaTE tes, boolean track) {
+        int idx = -1;
+        for(int i = 0; i < screenTracking.size(); i++) {
+            if(screenTracking.get(i) == tes) {
+                idx = i;
+                break;
+            }
+        }
+
+        if(track) {
+            if(idx < 0)
+                screenTracking.add(tes);
+        } else if(idx >= 0)
+            screenTracking.remove(idx);
+    }
+
+
 }
 
