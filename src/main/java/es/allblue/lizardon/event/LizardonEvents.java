@@ -1,23 +1,28 @@
 package es.allblue.lizardon.event;
 
+import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.LizardonConfig;
 import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.commands.TochiKartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
+import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.client.CMessageCambioRegion;
+import es.allblue.lizardon.net.client.CMessageConfigServer;
+import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.UUID;
+import java.io.BufferedReader;
+import java.io.File;
 
 
 @Mod.EventBusSubscriber
@@ -55,8 +60,30 @@ public class LizardonEvents {
         System.out.println(inicio);
 
 
-        ((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
-        System.out.println("CONFIGURACION CARGADA: "+ LizardonConfig.test.get());
+        //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
+
+
+
+        Gson gson = new Gson();
+        File file = new File("config/lizardon.json");
+        LizardonConfig config;
+        try{
+            BufferedReader br = new BufferedReader(new java.io.FileReader(file));
+            config = gson.fromJson(br, LizardonConfig.class);
+
+            String data = gson.toJson(config);
+            System.out.println("DATOS CONFIG ENVIADOS: " + data);
+            Lizardon.config = config;
+            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageConfigServer(data));
+
+
+        }catch(Exception e){
+            System.out.println("ERROR AL LEER EL ARCHIVO");
+            System.out.println(e);
+        }
+
+
+
         /*
         if(!inicio){
             Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageVerVideo("http://localhost:3000/video"));

@@ -12,6 +12,7 @@ import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.init.ItemInit;
+import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import es.allblue.lizardon.tileentity.PantallaRenderer;
@@ -55,7 +56,7 @@ public class Lizardon
     // SmartRotom START
     public static final double PAD_RATIO = 59.0 / 30.0;
     //public  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
-    public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
+    // public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public double padResX;
     public double padResY;
 
@@ -65,7 +66,7 @@ public class Lizardon
 
     // SmartRotom END
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final String BLACKLIST_URL = "http://lizardon.es/smartrotom";
+    //public static final String BLACKLIST_URL = "http://lizardon.es/smartrotom";
     public static Lizardon INSTANCE = null;
     private API api;
     public static String MOD_ID = "lizardon";
@@ -74,6 +75,8 @@ public class Lizardon
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
 
     public static CarreraManager carreraManager;
+
+    public static LizardonConfig config;
 
     public API getAPI() {
         return api;
@@ -100,6 +103,8 @@ public class Lizardon
         eventBus.addListener(Messages::registryNetworkPackets);
 
 
+
+
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
         TileEntityInit.register(eventBus);
@@ -115,8 +120,6 @@ public class Lizardon
         LOGGER.info("HELLO FROM PREINIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         Lizardon.PROXY.crearArchivo("config.json");
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, LizardonConfig.SPEC, "lizardon.toml");
 
 
         ModBiomes.generateBiomes();

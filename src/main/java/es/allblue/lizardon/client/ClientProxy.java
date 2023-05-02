@@ -70,7 +70,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         private long lastURLSent;
 
     private PadData(String url, int id) {
-        view = mcef.createBrowser(Lizardon.INSTANCE.SMARTROTOM_HOME);
+        view = mcef.createBrowser(Lizardon.config.getHome());
         view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
         view.resize((int) 1920, (int)  1080);
         isInHotbar = true;
@@ -269,7 +269,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
             for(PadData pd: padList) {
                 if(pd.view == browser && t - pd.lastURLSent >= 1000) {
                     if(Lizardon.isSiteBlacklisted(url))
-                        pd.view.loadURL(Lizardon.BLACKLIST_URL);
+                        pd.view.loadURL(Lizardon.config.getHome());
                     else {
                         pd.lastURLSent = t; //Avoid spamming the server with porn URLs
                         Messages.INSTANCE.sendToServer(new SMessagePadCtrl(pd.id, url));
@@ -324,7 +324,6 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void crearArchivo(String nombre) {
-        System.out.println("Creando carpeta "+nombre);
         Path basePath = Minecraft.getInstance().gameDirectory.toPath().toAbsolutePath().toAbsolutePath();
         Path path = Paths.get(basePath.toString(),"Lizardon");
         File carpetaBase = new File(path.toString());
