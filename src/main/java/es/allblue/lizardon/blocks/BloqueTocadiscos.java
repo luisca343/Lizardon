@@ -50,6 +50,16 @@ public class BloqueTocadiscos extends HorizontalBlock {
     @Override
     public ActionResultType use(BlockState state, World world, BlockPos position, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         TocadiscosTE te = (TocadiscosTE) world.getBlockEntity(position);
+
+        /*
+        World level = player.level;
+        if(level.isClientSide()){
+            System.out.println("Client Side:" + LizardonConfig.test.get());
+        }
+        else{
+            System.out.println("Server Side:" + LizardonConfig.test.get());
+        }*/
+
         if (te == null) {
             MessageUtil.enviarMensaje(player, "No hay tile entity");
             return ActionResultType.FAIL;
