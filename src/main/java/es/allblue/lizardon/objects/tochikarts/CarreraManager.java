@@ -3,11 +3,13 @@ package es.allblue.lizardon.objects.tochikarts;
 import com.mrcrayfish.vehicle.entity.EngineTier;
 import com.mrcrayfish.vehicle.entity.vehicle.GoKartEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
+import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -21,6 +23,14 @@ public class CarreraManager {
         circuitos = new HashMap<>();
         carreras = new HashMap<>();
         participantes = new HashMap<>();
+
+        cargarCircuitos();
+    }
+
+    public void cargarCircuitos(){
+       circuitos = (HashMap<String, Circuito>) FileHelper.readFile("config/lizardon/circuitos.json", HashMap.class);
+       System.out.println("CIRCUITOS CARGADOS:");
+       System.out.println(circuitos);
     }
 
 
@@ -103,5 +113,10 @@ public class CarreraManager {
 
         Carrera carrera = carreras.get(nombre);
         carrera.iniciar();
+    }
+
+    public void guardarCircuito(Circuito circuito) {
+        circuitos.put(circuito.getNombre(), circuito);
+        FileHelper.writeFile("config/lizardon/circuitos.json", circuitos);
     }
 }
