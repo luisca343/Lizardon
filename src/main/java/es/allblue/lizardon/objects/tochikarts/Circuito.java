@@ -79,10 +79,6 @@ public class Circuito {
         Lizardon.carreraManager.circuitos.put(nombre, this);
         // Transform into JSON with Gson
         Lizardon.carreraManager.guardarCircuito(this);
-        // FileHelper.writeFile("config/lizardon/circuitos/" + nombre + ".json", this);
-
-
-        //WingullAPI.wingullPOST("circuito", json);
 
 
 

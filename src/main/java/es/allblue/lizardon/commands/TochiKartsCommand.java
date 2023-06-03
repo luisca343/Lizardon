@@ -207,7 +207,7 @@ public class TochiKartsCommand {
                         circuito.nuevoInicio(punto);
                         source.sendSuccess(new StringTextComponent("Inicio añadido"), false);
 
-                        circuito.printCheckpoints(source);
+                        circuito.printInicios(source);
 
 
                     } catch (IncompleteRegionException e) {
