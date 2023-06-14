@@ -16,6 +16,7 @@ import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import es.allblue.lizardon.tileentity.PantallaRenderer;
+import es.allblue.lizardon.util.music.LizardonSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -109,6 +110,7 @@ public class Lizardon
         BlockInit.register(eventBus);
         TileEntityInit.register(eventBus);
         ModBiomes.register(eventBus);
+        LizardonSoundEvents.register(eventBus);
     }
     public void setup(final FMLCommonSetupEvent event)
     {

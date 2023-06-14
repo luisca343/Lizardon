@@ -18,6 +18,7 @@ public class LizardonSoundEvents {
     }
 
     public static final RegistryObject<SoundEvent> SMALL_EXLPOSION = registerSoundEvent("test");
+    public static final RegistryObject<SoundEvent> LATIGO_NUMERIL = registerSoundEvent("latigo_numeril");
 
     public static void register(IEventBus eventBus) {SOUND_EVENTS.register(eventBus);}
 

@@ -1,6 +1,7 @@
 package es.allblue.lizardon.init;
 
 import com.pixelmonmod.pixelmon.items.BadgeItem;
+import es.allblue.lizardon.items.LatigoNumeril;
 import es.allblue.lizardon.items.LizardonItemGroup;
 import es.allblue.lizardon.items.SmartRotom;
 import net.minecraft.item.Item;
@@ -28,6 +29,10 @@ public class ItemInit {
 
     public static final RegistryObject<Item> TEST = ITEMS.register("test",
             () -> new Item(new Item.Properties().stacksTo(6).tab(LizardonItemGroup.LIZARDON_GROUP)));
+
+
+    public static final RegistryObject<Item> LATIGO_NUMERIL = ITEMS.register("latigo_numeril",
+            () -> new LatigoNumeril(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
 
 
     public static void register(IEventBus eventBus) {
