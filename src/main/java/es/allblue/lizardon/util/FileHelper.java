@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -45,6 +46,28 @@ public class FileHelper {
     }
 
 
+    public static Object readFile(String ruta, Type token) {
+        return readFile(new File(ruta), token);
+    }
+
+    private static Object readFile(File file, Type token) {
+        Gson gson = new Gson();
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+                Object o = token.getClass().newInstance();
+                writeFile(file, o);
+                return o;
+            } else{
+                BufferedReader reader = Files.newBufferedReader(Paths.get(file.getPath()));
+                return gson.fromJson(reader, token);
+            }
+        } catch (IOException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static Object readFile(String ruta, Class<?> clazz) {
         return readFile(new File(ruta), clazz);
     }
@@ -66,4 +89,5 @@ public class FileHelper {
             return null;
         }
     }
+
 }

@@ -3,14 +3,13 @@ package es.allblue.lizardon.event;
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.commands.TestCommand;
-import es.allblue.lizardon.commands.TochiKartsCommand;
+import es.allblue.lizardon.commands.KartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.client.CMessageCambioRegion;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.objects.LizardonConfig;
-import es.allblue.lizardon.objects.tochikarts.CarreraManager;
+import es.allblue.lizardon.objects.karts.CarreraManager;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -33,15 +32,19 @@ public class LizardonEvents {
         Lizardon.carreraManager = new CarreraManager();
     }
 
+
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
         new TestCommand(event.getDispatcher());
         new Discos(event.getDispatcher());
         new CombateCommand(event.getDispatcher());
 
+        new KartsCommand(event.getDispatcher());
+
+        /*
         if(event.getEnvironment().compareTo(Commands.EnvironmentType.DEDICATED) == 0){
-            new TochiKartsCommand(event.getDispatcher());
-        }
+            new KartsCommand(event.getDispatcher());
+        }*/
 
         ConfigCommand.register(event.getDispatcher());
     }
@@ -54,15 +57,7 @@ public class LizardonEvents {
 
         boolean inicio = serverPlayer.getPersistentData().getBoolean("inicio");
 
-
-
-        System.out.println("LA VARIABLE INICIO ES");
-        System.out.println(inicio);
-
-
         //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
-
-
 
         Gson gson = new Gson();
         File file = new File("config/lizardon.json");
@@ -81,15 +76,7 @@ public class LizardonEvents {
             System.out.println("ERROR AL LEER EL ARCHIVO");
             System.out.println(e);
         }
-
-
-
-        /*
-        if(!inicio){
-            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageVerVideo("http://localhost:3000/video"));
-            serverPlayer.getPersistentData().putBoolean("inicio", true);
-        }*/
-
     }
+
 
 }
