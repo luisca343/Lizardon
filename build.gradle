@@ -132,16 +132,15 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
-    implementation fg.deobf("curse.maven:pixelmon-389487:4395992")
     implementation fg.deobf('curse.maven:mcef-577541:4413983')
+    implementation fg.deobf("curse.maven:pixelmon-389487:4395992")
     implementation fg.deobf('curse.maven:voicechat-416089:4153823')
-    implementation fg.deobf('curse.maven:vechiclemod-286660:3103940')
     implementation fg.deobf('curse.maven:worldedit-225608:3283693')
     implementation fg.deobf('curse.maven:journeymap-32274:4012858')
+    implementation fg.deobf('curse.maven:vechiclemod-286660:3103940')
 
     implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
-
-
+    
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
