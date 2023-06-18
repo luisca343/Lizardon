@@ -1,5 +1,6 @@
-package es.allblue.lizardon.objects.tochikarts;
+package es.allblue.lizardon.objects.karts;
 
+import es.allblue.lizardon.util.MessageUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -96,8 +97,10 @@ public class Participante {
         terminada = true;
 
         jugador.getVehicle().remove();
+        jugador.sendMessage(new StringTextComponent("Has terminado la carrera en " + MessageUtil.formatearTiempo(getTiempoFin())), jugador.getUUID());
 
-        jugador.sendMessage(new StringTextComponent("Has terminado la carrera en " + getTiempoFin()), jugador.getUUID());
+        carrera.añadirTerminado(jugador.getUUID());
+
     }
 
     public void reset(){

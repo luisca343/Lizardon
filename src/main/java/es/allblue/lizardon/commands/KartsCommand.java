@@ -5,8 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.pixelmonmod.pixelmon.support.JourneyMapIntegration;
-import com.pixelmonmod.pixelmon.world.structure.type.WayPointStructure;
+import com.mojang.brigadier.context.CommandContext;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.forge.ForgeAdapter;
@@ -15,51 +14,85 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionManager;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.client.CMessageReturn;
-import es.allblue.lizardon.net.client.CMessageWaypoints;
-import es.allblue.lizardon.objects.tochikarts.CarreraManager;
-import es.allblue.lizardon.objects.tochikarts.Circuito;
-import es.allblue.lizardon.objects.tochikarts.Punto;
-import es.allblue.lizardon.util.WingullAPI;
-import journeymap.client.waypoint.Waypoint;
-import journeymap.client.waypoint.WaypointStore;
+import es.allblue.lizardon.objects.karts.Circuito;
+import es.allblue.lizardon.objects.karts.Punto;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.UUID;
 
-public class TochiKartsCommand {
+public class KartsCommand {
     private Circuito circuito;
 
-    public TochiKartsCommand(CommandDispatcher<CommandSource> dispatcher){
-        LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("tochikarts")
-                .requires((commandSource -> commandSource.hasPermission(3))
-                    ).then(Commands.literal("circuito")
-                        .then(crearCircuito())
-                        .then(nuevoCheckpoint())
-                        .then(guardarCircuito())
-                        .then(nuevoInicio())
-                    ).then(Commands.literal("carrera")
+    public KartsCommand(CommandDispatcher<CommandSource> dispatcher){
+        LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("karts")
+                .then(votarCircuito())
+                .then(Commands.literal("carrera")
                         .then(entrarCarrera())
                         .then(salirCarrera())
-                        .then(iniciarCarrera())
                         .then(cuentaAtras())
-                );
+                        .then(iniciarCarrera())
+                )
+                .then(Commands.literal("circuito")
+                        .requires((commandSource -> commandSource.hasPermission(3)))
+                        .then(crearCircuito())
+                        .then(nuevoInicio())
+                        .then(nuevoCheckpoint())
+                        .then(guardarCircuito())
+                        .then(listaCircuitos())
+                )
+                ;
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    public boolean esJugador(CommandContext<CommandSource> command) {
+        Entity entity = command.getSource().getEntity();
+        if (entity instanceof ServerPlayerEntity) {
+            entity.sendMessage(new StringTextComponent("Solo los NPC de TokiKarts pueden ejecutar ese comando."), UUID.randomUUID());
+            return true;
+        }
+        return false;
+    }
+
+    private ArgumentBuilder<CommandSource,?> listaCircuitos() {
+        return Commands.literal("listar")
+                .executes((command) -> {
+                    Entity entity = command.getSource().getEntity();
+                    if (entity instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) entity;
+                        player.sendMessage(new StringTextComponent("Listando circuitos..."), UUID.randomUUID());
+                        Lizardon.carreraManager.listarCircuitos(player);
+                        return 1;
+                    }
+                    return 0;
+                });
+    }
+
+    private ArgumentBuilder<CommandSource,?> votarCircuito() {
+        return Commands.literal("votar")
+                .executes((command) -> {
+                    Entity entity = command.getSource().getEntity();
+                    if (entity instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) entity;
+                        player.sendMessage(new StringTextComponent("Votando..." + player.getUUID()), UUID.randomUUID());
+                        Lizardon.carreraManager.votarCircuito(player);
+                        return 1;
+                    }
+                    return 0;
+                });
     }
 
     private ArgumentBuilder<CommandSource,?> cuentaAtras() {
         return Commands.literal("cuentaAtras")
                 .then(Commands.argument("nombre", StringArgumentType.string())
                         .executes((command) -> {
+                            if(esJugador(command)) return 0;
                             String nombre = StringArgumentType.getString(command, "nombre");
 
                             Lizardon.carreraManager.iniciarCuentaAtras(nombre);
@@ -72,6 +105,7 @@ public class TochiKartsCommand {
         return Commands.literal("iniciar")
                 .then(Commands.argument("nombre", StringArgumentType.string())
                         .executes((command) -> {
+                            if(esJugador(command)) return 0;
                             String nombre = StringArgumentType.getString(command, "nombre");
                             // Usar el CarreraManager para crear la carrera
                             Lizardon.carreraManager.iniciarCarrera(nombre);
@@ -84,10 +118,8 @@ public class TochiKartsCommand {
         return Commands.literal("salir")
                 .then(Commands.argument("jugador", EntityArgument.player())
                         .executes((command) -> {
-                            ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
-                            // Usar el CarreraManager para crear la carrera
+                            ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
                             Lizardon.carreraManager.salirCarrera(player);
-
                             return 1;
                         })
                 );
@@ -100,8 +132,13 @@ public class TochiKartsCommand {
                 .then(Commands.argument("nombre", StringArgumentType.string())
                         .then(Commands.argument("jugador", EntityArgument.player())
                         .executes((command) -> {
+                            if(esJugador(command)) return 0;
                             String nombre = StringArgumentType.getString(command, "nombre");
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
+
+                            System.out.println(nombre);
+                            System.out.println(player.getUUID());
+
                             // Usar el CarreraManager para crear la carrera
                             Lizardon.carreraManager.entrarCarrera(nombre, player);
 
@@ -117,7 +154,7 @@ public class TochiKartsCommand {
                 .executes((command) -> {
                     CommandSource source = command.getSource();
                     if (circuito == null) {
-                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /tochikarts circuito crear <nombre>"));
+                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /karts circuito crear <nombre>"));
                         return 0;
                     }
 
@@ -153,7 +190,7 @@ public class TochiKartsCommand {
                 .executes((command) -> {
                     CommandSource source = command.getSource();
                     if (circuito == null) {
-                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /tochikarts circuito crear <nombre>"));
+                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /karts circuito crear <nombre>"));
                         return 0;
                     }
                     ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
@@ -174,7 +211,6 @@ public class TochiKartsCommand {
 
                         circuito.printCheckpoints(source);
 
-
                     } catch (IncompleteRegionException e) {
                         source.sendFailure(new StringTextComponent("Selecciona una región primero"));
                         e.printStackTrace();
@@ -189,7 +225,7 @@ public class TochiKartsCommand {
                 .executes((command) -> {
                     CommandSource source = command.getSource();
                     if (circuito == null) {
-                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /tochikarts circuito crear <nombre>"));
+                        source.sendFailure(new StringTextComponent("Crea un circuito primero con /karts circuito crear <nombre>"));
                         return 0;
                     }
                     ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();

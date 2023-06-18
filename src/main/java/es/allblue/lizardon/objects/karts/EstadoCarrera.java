@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects.tochikarts;
+package es.allblue.lizardon.objects.karts;
 
 public enum EstadoCarrera {
     BUSCANDO("BUSCANDO", 1),

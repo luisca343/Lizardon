@@ -1,9 +1,6 @@
-package es.allblue.lizardon.objects.tochikarts;
+package es.allblue.lizardon.objects.karts;
 
-import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.text.StringTextComponent;
 

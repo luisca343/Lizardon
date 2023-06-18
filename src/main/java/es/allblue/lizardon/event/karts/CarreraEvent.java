@@ -1,7 +1,6 @@
-package es.allblue.lizardon.event.tochikart;
+package es.allblue.lizardon.event.karts;
 
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.tochikarts.CarreraManager;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
