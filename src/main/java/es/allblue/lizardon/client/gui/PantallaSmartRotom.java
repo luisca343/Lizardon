@@ -176,6 +176,7 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void onClose() {
+        this.pad.view.resize(1280, 720);
         /*
         if(!ExampleMod.INSTANCE.hasBackup() && browser != null)
             browser.close();

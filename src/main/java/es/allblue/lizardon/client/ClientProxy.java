@@ -72,7 +72,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     private PadData(String url, int id) {
         view = mcef.createBrowser(Lizardon.config.getHome());
         view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
-        view.resize((int) 1920, (int)  1080);
+        view.resize((int) 1280, (int)  720);
         isInHotbar = true;
         this.id = id;
     }
@@ -137,6 +137,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
         if(pd != null && pd.view != null){
             mc.setScreen(new PantallaSmartRotom(pd));
+            pd.view.resize(1920, 1080);
         }
     }
 
