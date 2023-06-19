@@ -58,14 +58,6 @@ public class CombateCommand {
                 });
         dispatcher.register(testBuilder);
 
-        LiteralArgumentBuilder<CommandSource> test2Builder = Commands.literal("test2")
-                .requires((commandSource -> commandSource.hasPermission(3)))
-                .executes((command) -> {
-                    command.getSource().getEntity().sendMessage(new StringTextComponent("Comando de Test 2"), UUID.randomUUID());
-                    return 1;
-                });
-        dispatcher.register(test2Builder);
-
     }
 
     public int testCommand(CommandContext ctx) {

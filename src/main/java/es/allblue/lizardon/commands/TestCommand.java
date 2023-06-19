@@ -7,31 +7,18 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.forge.ForgeAdapter;
-import com.sk89q.worldedit.forge.ForgePlayer;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.session.SessionManager;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.objects.WayPoint;
-import es.allblue.lizardon.objects.tochikarts.CarreraManager;
-import es.allblue.lizardon.objects.tochikarts.Circuito;
-import es.allblue.lizardon.objects.tochikarts.Punto;
+import es.allblue.lizardon.objects.karts.Circuito;
 import es.allblue.lizardon.util.music.AudioManager;
-import journeymap.client.waypoint.Waypoint;
-import journeymap.client.waypoint.WaypointStore;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-import java.awt.*;
 import java.util.UUID;
 
 public class TestCommand {
@@ -42,10 +29,21 @@ public class TestCommand {
                 .requires((commandSource -> commandSource.hasPermission(3))
                 ).then(crearWaypoint())
                 .then(reproducirSonido())
+                .then(testset())
                 ;
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource,?> testset() {
+        return Commands.literal("testset")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes((command) -> {
+
+                            return 1;
+                        }
+                ));
     }
 
     private ArgumentBuilder<CommandSource,?> reproducirSonido() {
