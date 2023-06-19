@@ -2,6 +2,7 @@ package es.allblue.lizardon.objects.karts;
 
 import es.allblue.lizardon.util.MessageUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 
 public class Participante {
@@ -72,6 +73,7 @@ public class Participante {
 
         setSiguienteCheck(1);
         setVuelta(getVuelta() + 1);
+        MessageUtil.enviarTitulo(jugador, "Vuelta " + getVuelta() +" / "+carrera.getVueltas());
     }
 
     public void nuevoCheck(Punto pos){
@@ -84,7 +86,7 @@ public class Participante {
         Checkpoint check = carrera.getCheckpoints().get(getSiguienteCheck());
         if(enCheckPoint(pos, check.getPos1(), check.getPos2())){
             setSiguienteCheck(getSiguienteCheck() + 1);
-            jugador.sendMessage(new StringTextComponent("Has pasado el checkpoint " + siguienteCheck), jugador.getUUID());
+            //MessageUtil.enviarMensaje(jugador, "Has pasado el checkpoint " + getSiguienteCheck());
         }
 
     }
@@ -97,11 +99,11 @@ public class Participante {
         terminada = true;
 
         jugador.getVehicle().remove();
-        jugador.sendMessage(new StringTextComponent("Has terminado la carrera en " + MessageUtil.formatearTiempo(getTiempoFin())), jugador.getUUID());
-
+        MessageUtil.enviarMensaje(jugador, "Has terminado la carrera en " + MessageUtil.formatearTiempo(getTiempoFin() - carrera.getTiempoInicio()));
         carrera.añadirTerminado(jugador.getUUID());
 
     }
+
 
     public void reset(){
         setSiguienteCheck(0);
@@ -118,6 +120,11 @@ public class Participante {
             coords = nuevaPosicion;
             nuevoCheck(nuevaPosicion);
         }
+    }
+
+    public double getDistanciaSiguienteCheck(){
+        Checkpoint check = carrera.getCircuito().getCheckpoints().get(siguienteCheck);
+        return jugador.position().distanceTo(new Vector3d(check.getPos1().getX(), check.getPos1().getY(), check.getPos1().getZ()));
     }
 
     public boolean enCheckPoint(Punto loc, Punto l1, Punto l2){

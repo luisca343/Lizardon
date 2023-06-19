@@ -1,20 +1,27 @@
 package es.allblue.lizardon.objects.karts;
 
+import com.google.gson.Gson;
 import com.mrcrayfish.vehicle.entity.EngineTier;
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.entity.vehicle.GoKartEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.client.CMessageCambioPosicion;
 import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.UUID;
 
 public class Carrera {
@@ -26,6 +33,10 @@ public class Carrera {
 
     private ArrayList<UUID> participantesTerminados;
 
+    private ArrayList<Participante> posiciones;
+
+    private long tiempoInicio;
+
     public Carrera(Circuito circuito, int numeroVueltas) {
         this.circuito = circuito;
         this.vueltas = numeroVueltas;
@@ -33,6 +44,16 @@ public class Carrera {
         this.estado = EstadoCarrera.BUSCANDO;
         this.votos = new ArrayList<>();
         this.participantesTerminados = new ArrayList<>();
+        this.posiciones = new ArrayList<>();
+
+    }
+
+    public void cerrarCarrera(){
+        this.participantes = new ArrayList<>();
+        this.estado = EstadoCarrera.FINALIZADA;
+        this.votos = new ArrayList<>();
+        this.participantesTerminados = new ArrayList<>();
+        this.posiciones = new ArrayList<>();
     }
 
     public Circuito getCircuito() {
@@ -110,7 +131,6 @@ public class Carrera {
                         sonido(participante.getJugador(), 0.3f);
                         // Send title to player
                         MessageUtil.enviarTitulo(participante.getJugador(), j + "");
-                        participante.getJugador().sendMessage(new StringTextComponent(j + "t"), UUID.randomUUID());
                     }
                     Thread.sleep(1000);
                 }
@@ -156,7 +176,30 @@ public class Carrera {
 
     public void iniciar() {
         this.estado = EstadoCarrera.EN_CURSO;
+        this.tiempoInicio = System.currentTimeMillis();
+        posiciones = (ArrayList<Participante>) getParticipantes().clone();
+        calcularPosiciones();
+    }
 
+    private void calcularPosiciones() {
+        new Thread(() -> {
+            try {
+                while (estado == EstadoCarrera.EN_CURSO){
+                    Collections.sort(posiciones,
+                            Comparator.comparing(Participante::getVuelta)
+                                    .thenComparing(Participante::getSiguienteCheck).reversed()
+                                    .thenComparing(Participante::getDistanciaSiguienteCheck)
+
+                    );
+                    for (Participante participante : participantes) {
+                        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> participante.getJugador()), new CMessageCambioPosicion(posiciones.indexOf(participante) + 1+""));
+                    }
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     public void añadirTerminado(UUID uuid) {
@@ -167,16 +210,41 @@ public class Carrera {
     }
 
     private void finalizar() {
-        this.estado = EstadoCarrera.FINALIZADA;
+        estado = EstadoCarrera.FINALIZADA;
+        long tiempoFinal = System.currentTimeMillis();
+        String idCarrera = circuito.getNombre()+"-"+tiempoFinal;
+        Gson gson = new Gson();
+        ArrayList<ResultadoCarrera> resultados = new ArrayList<>();
+
+
         for (Participante participante : participantes) {
-            MessageUtil.enviarTitulo(participante.getJugador(), "¡FINALIZADA!");
+            ResultadoCarrera resultadoCarrera = new ResultadoCarrera();
+            resultadoCarrera.setId(idCarrera);
+            resultadoCarrera.setUuid(participante.getJugador().getStringUUID());
+            resultadoCarrera.setNombre(participante.getJugador().getName().getString());
+            resultadoCarrera.setPosicion(posiciones.indexOf(participante) + 1);
+
+            if(participante.getTiempoFin() == 0) {
+                resultadoCarrera.setTiempo(tiempoFinal - tiempoInicio);
+            } else{
+                resultadoCarrera.setTiempo(participante.getTiempoFin() - tiempoInicio);
+            }
+
+            resultados.add(resultadoCarrera);
+
+            MessageUtil.enviarTitulo(participante.getJugador(), "¡FIN!");
             sonido(participante.getJugador(), 0.8f);
-            participante.getJugador().sendMessage(new StringTextComponent("¡FINALIZADA!"), UUID.randomUUID());
 
             Lizardon.carreraManager.participantes.remove(participante.getJugador().getUUID());
             printResultados(participante.getJugador());
+            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> participante.getJugador()), new CMessageCambioPosicion(0+""));
         }
 
+
+        String json = gson.toJson(resultados);
+        WingullAPI.wingullPOST("rotom/carrera", json);
+
+        cerrarCarrera();
         Lizardon.carreraManager.carreras.remove(circuito.nombre);
         Lizardon.carreraManager.listarCarreras();
     }
@@ -184,10 +252,14 @@ public class Carrera {
     public void printResultados(ServerPlayerEntity jugador){
         String resultados = "";
         for (Participante participante : participantes) {
-            resultados += participante.getJugador().getName() + ": " +MessageUtil.formatearTiempo(participante.getTiempoFin());
+            resultados += participante.getJugador().getScoreboardName() + ": " +MessageUtil.formatearTiempo(participante.getTiempoFin() - getTiempoInicio());
         }
 
         MessageUtil.enviarMensaje(jugador, resultados);
 
+    }
+
+    public long getTiempoInicio() {
+        return tiempoInicio;
     }
 }

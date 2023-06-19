@@ -2,6 +2,7 @@ package es.allblue.lizardon.commands;
 
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -30,7 +31,9 @@ public class KartsCommand {
 
     public KartsCommand(CommandDispatcher<CommandSource> dispatcher){
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("karts")
-                .then(votarCircuito())
+                .then(votarCarrera())
+                .then(desvotarCarrera())
+                .then(salir())
                 .then(Commands.literal("carrera")
                         .then(entrarCarrera())
                         .then(salirCarrera())
@@ -50,6 +53,8 @@ public class KartsCommand {
         dispatcher.register(literalBuilder);
 
     }
+
+
 
     public boolean esJugador(CommandContext<CommandSource> command) {
         Entity entity = command.getSource().getEntity();
@@ -74,7 +79,7 @@ public class KartsCommand {
                 });
     }
 
-    private ArgumentBuilder<CommandSource,?> votarCircuito() {
+    private ArgumentBuilder<CommandSource,?> votarCarrera() {
         return Commands.literal("votar")
                 .executes((command) -> {
                     Entity entity = command.getSource().getEntity();
@@ -82,6 +87,36 @@ public class KartsCommand {
                         ServerPlayerEntity player = (ServerPlayerEntity) entity;
                         player.sendMessage(new StringTextComponent("Votando..." + player.getUUID()), UUID.randomUUID());
                         Lizardon.carreraManager.votarCircuito(player);
+                        return 1;
+                    }
+                    return 0;
+                });
+    }
+
+
+    private ArgumentBuilder<CommandSource,?> desvotarCarrera() {
+        return Commands.literal("cancelarvoto")
+                .executes((command) -> {
+                    Entity entity = command.getSource().getEntity();
+                    if (entity instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) entity;
+                        player.sendMessage(new StringTextComponent("Desvotando..." + player.getUUID()), UUID.randomUUID());
+                        Lizardon.carreraManager.desvotarCircuito(player);
+                        return 1;
+                    }
+                    return 0;
+                });
+    }
+
+
+    private ArgumentBuilder<CommandSource,?> salir() {
+        return Commands.literal("salir")
+                .executes((command) -> {
+                    Entity entity = command.getSource().getEntity();
+                    if (entity instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) entity;
+                        player.sendMessage(new StringTextComponent("Saliendo..." + player.getUUID()), UUID.randomUUID());
+                        Lizardon.carreraManager.salirCarrera(player);
                         return 1;
                     }
                     return 0;
@@ -130,9 +165,11 @@ public class KartsCommand {
     private ArgumentBuilder<CommandSource,?> entrarCarrera() {
         return Commands.literal("entrar")
                 .then(Commands.argument("nombre", StringArgumentType.string())
+                        .then(Commands.argument("vueltas", IntegerArgumentType.integer())
                         .then(Commands.argument("jugador", EntityArgument.player())
                         .executes((command) -> {
                             if(esJugador(command)) return 0;
+                            int vueltas = IntegerArgumentType.getInteger(command, "vueltas");
                             String nombre = StringArgumentType.getString(command, "nombre");
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
 
@@ -140,12 +177,12 @@ public class KartsCommand {
                             System.out.println(player.getUUID());
 
                             // Usar el CarreraManager para crear la carrera
-                            Lizardon.carreraManager.entrarCarrera(nombre, player);
+                            Lizardon.carreraManager.entrarCarrera(nombre, vueltas, player);
 
 
                             return 1;
                         })
-                ));
+                )));
     }
 
 
