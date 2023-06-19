@@ -29,7 +29,11 @@ public class LizardonEvents {
     @SubscribeEvent
     public static void onServerStarted(FMLServerStartedEvent event){
         System.out.println("CREAR CARRERA MANAGER");
-        Lizardon.carreraManager = new CarreraManager();
+        try {
+            Lizardon.carreraManager = new CarreraManager();
+        }catch (NullPointerException e){
+            System.out.println("ERROR AL CREAR EL CARRERA MANAGER");
+        }
     }
 
 
