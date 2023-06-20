@@ -1,18 +1,26 @@
 package es.allblue.lizardon.event;
 
+import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.battles.BattleEndCause;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
+import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
+import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
+import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.objects.Entrenador;
+import es.allblue.lizardon.objects.dex.ActualizarDex;
 import es.allblue.lizardon.util.Reader;
 import es.allblue.lizardon.util.Scoreboard;
+import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,6 +29,20 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class LizardonBattleEvent {
+
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SubscribeEvent
+    public void guardarDex(PokedexEvent.Post event){
+        String uuid = event.getPlayer().getStringUUID();
+        int idPokemon = event.getPokemon().getSpecies().getDex();
+        int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
+
+        ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado);
+        Gson gson = new Gson();
+
+        WingullAPI.wingullPOST("rotom/dex", gson.toJson(dex));
+    }
+
     @SubscribeEvent
     public void onBattleEnd(BattleEndEvent event){
         if(event.getCause().equals(BattleEndCause.FORCE)) return;
