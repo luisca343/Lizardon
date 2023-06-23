@@ -28,7 +28,7 @@ import java.io.File;
 public class LizardonEvents {
     @SubscribeEvent
     public static void onServerStarted(FMLServerStartedEvent event){
-        System.out.println("CREAR CARRERA MANAGER");
+
         try {
             Lizardon.carreraManager = new CarreraManager();
         }catch (NullPointerException e){
@@ -56,7 +56,6 @@ public class LizardonEvents {
 
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent ev){
-        System.out.println("EN EL LOGIN Y TAL");
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 
         boolean inicio = serverPlayer.getPersistentData().getBoolean("inicio");

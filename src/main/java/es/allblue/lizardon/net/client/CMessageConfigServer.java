@@ -24,7 +24,7 @@ public class CMessageConfigServer implements Runnable{
     public void run() {
         System.out.println("DATOS CONFIG RECIBIDOS: " + datos);
         Gson gson = new Gson();
-        LizardonConfig conf = gson.fromJson(datos,LizardonConfig.class);
+        LizardonConfig conf = gson.fromJson(datos, LizardonConfig.class);
         System.out.println("URL: " +  conf.getHome());
         Lizardon.config = conf;
     }

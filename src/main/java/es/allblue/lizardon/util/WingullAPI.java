@@ -1,12 +1,14 @@
 package es.allblue.lizardon.util;
 
+import es.allblue.lizardon.Lizardon;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class WingullAPI {
-    private String LABOON_URL = "http://79.116.61.79:34301/laboon/";
-    private static String WINGULL_URL = "http://79.116.61.79:34301/";
+    private String LABOON_URL = "http://79.116.9.120:34301/laboon/";
+    // private static String WINGULL_URL = "http://79.116.9.120:34301/";
     public static String wingullGET(String str) {
         try {
             URL url = new URL(str);
@@ -49,12 +51,14 @@ public class WingullAPI {
 
 
     public static void wingullPOST( String str, String json) {
-        post(WINGULL_URL + str, json);
+        post(Lizardon.config.getAPI_URL() + str, json);
     }
 
 
     // SSend post request
     public static void post(String str, String json) {
+
+        System.out.println("WingullAPI: " + str + " " + json);
         new Thread(() -> {
             try {
                 URL url = new URL(str);
