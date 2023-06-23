@@ -212,25 +212,28 @@ public class Carrera {
     private void finalizar() {
         estado = EstadoCarrera.FINALIZADA;
         long tiempoFinal = System.currentTimeMillis();
-        String idCarrera = circuito.getNombre()+"-"+tiempoFinal;
         Gson gson = new Gson();
-        ArrayList<ResultadoCarrera> resultados = new ArrayList<>();
+        ArrayList<ParticipanteCarrera> participantesCarrera = new ArrayList<>();
 
+        ResultadoCarrera resultado = new ResultadoCarrera();
+
+        resultado.setFecha(tiempoInicio);
+        resultado.setCircuito(circuito.getNombre());
 
         for (Participante participante : participantes) {
-            ResultadoCarrera resultadoCarrera = new ResultadoCarrera();
-            resultadoCarrera.setId(idCarrera);
-            resultadoCarrera.setUuid(participante.getJugador().getStringUUID());
-            resultadoCarrera.setNombre(participante.getJugador().getName().getString());
-            resultadoCarrera.setPosicion(posiciones.indexOf(participante) + 1);
+            ParticipanteCarrera participanteCarrera = new ParticipanteCarrera();
+
+            participanteCarrera.setUuid(participante.getJugador().getStringUUID());
+            participanteCarrera.setNombre(participante.getJugador().getName().getString());
+            participanteCarrera.setPosicion(posiciones.indexOf(participante) + 1);
 
             if(participante.getTiempoFin() == 0) {
-                resultadoCarrera.setTiempo(tiempoFinal - tiempoInicio);
+                participanteCarrera.setTiempo(tiempoFinal - tiempoInicio);
             } else{
-                resultadoCarrera.setTiempo(participante.getTiempoFin() - tiempoInicio);
+                participanteCarrera.setTiempo(participante.getTiempoFin() - tiempoInicio);
             }
 
-            resultados.add(resultadoCarrera);
+            participantesCarrera.add(participanteCarrera);
 
             MessageUtil.enviarTitulo(participante.getJugador(), "¡FIN!");
             sonido(participante.getJugador(), 0.8f);
@@ -240,9 +243,10 @@ public class Carrera {
             Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> participante.getJugador()), new CMessageCambioPosicion(0+""));
         }
 
+        resultado.setParticipantes(participantesCarrera);
+        String json = gson.toJson(resultado);
 
-        String json = gson.toJson(resultados);
-        WingullAPI.wingullPOST("rotom/carrera", json);
+        WingullAPI.wingullPOST("rotom/karts/carrera", json);
 
         cerrarCarrera();
         Lizardon.carreraManager.carreras.remove(circuito.nombre);

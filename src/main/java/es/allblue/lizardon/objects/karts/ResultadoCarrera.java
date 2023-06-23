@@ -1,50 +1,34 @@
 package es.allblue.lizardon.objects.karts;
 
+import java.util.ArrayList;
+
 public class ResultadoCarrera {
-    private String id;
-    private String uuid;
-    private String nombre;
+    private String circuito;
+    private long fecha;
 
-    private int posicion;
-    private long tiempo;
+    private ArrayList<ParticipanteCarrera> participantes;
 
-    public String getId() {
-        return id;
+    public String getCircuito() {
+        return circuito;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCircuito(String circuito) {
+        this.circuito = circuito;
     }
 
-    public String getUuid() {
-        return uuid;
+    public long getFecha() {
+        return fecha;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setFecha(long fecha) {
+        this.fecha = fecha;
     }
 
-    public String getNombre() {
-        return nombre;
+    public ArrayList<ParticipanteCarrera> getParticipantes() {
+        return participantes;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getPosicion() {
-        return posicion;
-    }
-
-    public void setPosicion(int posicion) {
-        this.posicion = posicion;
-    }
-
-    public long getTiempo() {
-        return tiempo;
-    }
-
-    public void setTiempo(long tiempo) {
-        this.tiempo = tiempo;
+    public void setParticipantes(ArrayList<ParticipanteCarrera> participantes) {
+        this.participantes = participantes;
     }
 }
