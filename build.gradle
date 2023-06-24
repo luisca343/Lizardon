@@ -133,7 +133,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
     implementation fg.deobf('curse.maven:mcef-577541:4413983')
-    implementation fg.deobf("curse.maven:pixelmon-389487:4395992")
+    implementation fg.deobf("curse.maven:pixelmon-389487:4564388")
     implementation fg.deobf('curse.maven:voicechat-416089:4153823')
     implementation fg.deobf('curse.maven:worldedit-225608:3283693')
     implementation fg.deobf('curse.maven:journeymap-32274:4012858')
