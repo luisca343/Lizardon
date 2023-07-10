@@ -20,11 +20,6 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import nick1st.fancyvideo.api.MediaPlayer;
-import nick1st.fancyvideo.FancyVideoAPI;
-import nick1st.fancyvideo.api.MediaPlayers;
-import uk.co.caprica.vlcj.player.base.VideoApi;
-import uk.co.caprica.vlcj.player.embedded.videosurface.videoengine.VideoEngine;
 
 import java.util.UUID;
 

@@ -139,7 +139,8 @@ dependencies {
     implementation fg.deobf('curse.maven:journeymap-32274:4012858')
     implementation fg.deobf('curse.maven:vechiclemod-286660:3103940')
 
-    implementation fg.deobf('curse.maven:videoapi-591686:3684076')
+    //implementation fg.deobf('curse.maven:videoapi-591686:3684076')
+    implementation files('libs/FancyVideo-API-1.16.5-2.2.0.3.jar')
 
     implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
     
