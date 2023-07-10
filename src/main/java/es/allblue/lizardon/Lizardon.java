@@ -7,11 +7,8 @@ import es.allblue.lizardon.event.LizardonBattleEvent;
 import es.allblue.lizardon.event.MisionesCaza;
 import es.allblue.lizardon.event.CustomNPCsEvents;
 import es.allblue.lizardon.event.PixelmonEvents;
-import es.allblue.lizardon.init.BlockInit;
-import es.allblue.lizardon.init.ModBiomes;
-import es.allblue.lizardon.init.TileEntityInit;
+import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.init.ItemInit;
 import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
@@ -19,6 +16,8 @@ import es.allblue.lizardon.tileentity.PantallaRenderer;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,6 +31,13 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
+import nick1st.fancyvideo.FancyVideoEvents;
+import nick1st.fancyvideo.api.DynamicResourceLocation;
+import nick1st.fancyvideo.api.eventbus.EventException;
+import nick1st.fancyvideo.api.eventbus.FancyVideoEvent;
+import nick1st.fancyvideo.api.eventbus.FancyVideoEventBus;
+import nick1st.fancyvideo.api.eventbus.event.PlayerRegistryEvent;
+import nick1st.fancyvideo.api.mediaPlayer.SimpleMediaPlayer;
 import noppes.npcs.api.NpcAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,6 +77,7 @@ public class Lizardon
     public static CarreraManager carreraManager;
 
     public static LizardonConfig config;
+    private static DynamicResourceLocation resourceLocation;
 
     public API getAPI() {
         return api;
@@ -101,6 +108,8 @@ public class Lizardon
 
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
+        FluidInit.register(eventBus);
+
         TileEntityInit.register(eventBus);
         ModBiomes.register(eventBus);
         LizardonSoundEvents.register(eventBus);
@@ -110,6 +119,11 @@ public class Lizardon
         Pixelmon.EVENT_BUS.register(new MisionesCaza());
         Pixelmon.EVENT_BUS.register(new PixelmonEvents());
         Pixelmon.EVENT_BUS.register(new LizardonBattleEvent());
+        try{
+            FancyVideoEventBus.getInstance().registerEvent(this);
+        } catch (EventException.UnauthorizedRegistryException | EventException.EventRegistryException e) {
+            LOGGER.warn("FancyVideoEventBus.getInstance().registerEvent(this);");
+        }
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
@@ -174,6 +188,11 @@ public class Lizardon
 
         ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityInit.TEST_PANTALLA.get(), PantallaRenderer::new);
+
+        RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_SOURCE.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_FLOWING.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_BLOCK.get(), RenderType.translucent());
+
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
     }
@@ -241,6 +260,23 @@ public class Lizardon
 
     public static Logger getLogger(){
         return LOGGER;
+    }
+
+    @FancyVideoEvent
+    @SuppressWarnings("unused")
+    public void init(PlayerRegistryEvent.AddPlayerEvent event) {
+        LOGGER.info("REGISTERING EVENT FANCYVIDEO-API");
+        resourceLocation = new DynamicResourceLocation(Lizardon.MOD_ID, "video");
+        event.handler().registerPlayerOnFreeResLoc(resourceLocation, SimpleMediaPlayer.class);
+        if (event.handler().getMediaPlayer(resourceLocation).providesAPI()) {
+            LOGGER.info("Correctly setup");
+        } else {
+            LOGGER.warn("Running in NO_LIBRARY_MODE");
+        }
+    }
+
+    public static DynamicResourceLocation getResourceLocation() {
+        return resourceLocation;
     }
 
 }

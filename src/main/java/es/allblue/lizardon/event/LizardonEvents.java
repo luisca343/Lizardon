@@ -6,13 +6,22 @@ import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.commands.KartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.commands.Discos;
+import es.allblue.lizardon.init.FluidInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import net.minecraft.block.BlockState;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,10 +31,23 @@ import net.minecraftforge.server.command.ConfigCommand;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.UUID;
 
 
 @Mod.EventBusSubscriber
 public class LizardonEvents {
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onClientTickEvent(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            BlockState bloque = event.player.level.getBlockState(event.player.blockPosition());
+            if(bloque.getBlock() == FluidInit.AGUAS_TERMALES_BLOCK.get() && !event.player.hasEffect(Effects.REGENERATION)){
+                event.player.addEffect(new net.minecraft.potion.EffectInstance(Effects.REGENERATION, 100, 1));
+                }
+            }
+        }
+
     @SubscribeEvent
     public static void onServerStarted(FMLServerStartedEvent event){
 

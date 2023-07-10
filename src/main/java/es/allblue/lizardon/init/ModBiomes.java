@@ -73,7 +73,6 @@ public class ModBiomes {
     public static void generateBiomes() {
         setupBiome(ARRECIFE_WINGULL.get(), BiomeManager.BiomeType.WARM, 0);
 
-
         setupBiome(PUEBLO_TULIPAN.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_SHIROI.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_HAGANE.get(), BiomeManager.BiomeType.WARM, 0);
