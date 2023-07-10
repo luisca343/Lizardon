@@ -4,6 +4,7 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.client.gui.PantallaVideo;
+import es.allblue.lizardon.client.gui.VideoScreen;
 import es.allblue.lizardon.client.renders.IItemRenderer;
 import es.allblue.lizardon.client.renders.SmartRotomRenderer;
 import es.allblue.lizardon.SharedProxy;
@@ -158,7 +159,8 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void verVideo(String url) {
         System.out.println("verVideo");
         System.out.println("VERVIDEO: "+ url );
-        mc.setScreen(new PantallaVideo(url));
+        mc.setScreen(new VideoScreen(url));
+
     }
 
     @SubscribeEvent

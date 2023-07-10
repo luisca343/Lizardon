@@ -7,7 +7,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mrcrayfish.vehicle.network.PacketHandler;
 import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.client.CMessageVerVideo;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.objects.WayPoint;
 import es.allblue.lizardon.objects.karts.Circuito;
@@ -18,6 +20,11 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import nick1st.fancyvideo.api.MediaPlayer;
+import nick1st.fancyvideo.FancyVideoAPI;
+import nick1st.fancyvideo.api.MediaPlayers;
+import uk.co.caprica.vlcj.player.base.VideoApi;
+import uk.co.caprica.vlcj.player.embedded.videosurface.videoengine.VideoEngine;
 
 import java.util.UUID;
 
@@ -26,6 +33,7 @@ public class TestCommand {
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(playVideo())
                 .requires((commandSource -> commandSource.hasPermission(3))
                 ).then(crearWaypoint())
                 .then(reproducirSonido())
@@ -34,6 +42,19 @@ public class TestCommand {
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource,?> playVideo() {
+        return Commands.literal("playvideo")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .then(Commands.argument("url", StringArgumentType.string())
+                        .executes((command) -> {
+                            ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                            String url = StringArgumentType.getString(command, "url");
+                            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerVideo(url));
+                            return 1;
+                        }
+                )));
     }
 
     private ArgumentBuilder<CommandSource,?> testset() {
