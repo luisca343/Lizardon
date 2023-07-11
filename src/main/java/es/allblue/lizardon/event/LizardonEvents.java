@@ -40,12 +40,13 @@ public class LizardonEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientTickEvent(TickEvent.PlayerTickEvent event) {
+        /*
         if (event.phase == TickEvent.Phase.START) {
             BlockState bloque = event.player.level.getBlockState(event.player.blockPosition());
             if(bloque.getBlock() == FluidInit.AGUAS_TERMALES_BLOCK.get() && !event.player.hasEffect(Effects.REGENERATION)){
                 event.player.addEffect(new net.minecraft.potion.EffectInstance(Effects.REGENERATION, 100, 1));
                 }
-            }
+            }*/
         }
 
     @SubscribeEvent

@@ -1,9 +1,9 @@
 package es.allblue.lizardon.init;
 
 import es.allblue.lizardon.Lizardon;
-import net.minecraft.block.AbstractBlock;
+import es.allblue.lizardon.blocks.BloqueAguasTermales;
+import es.allblue.lizardon.fluids.AguasTermalesFluid;
 import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
@@ -23,17 +23,19 @@ public class FluidInit {
             = DeferredRegister.create(ForgeRegistries.FLUIDS, Lizardon.MOD_ID);
 
     public static final RegistryObject<FlowingFluid> AGUAS_TERMALES_SOURCE
-            = FLUIDS.register("aguas_termales_fluid", () -> new ForgeFlowingFluid.Source(FluidInit.AGUAS_TERMALES_PROPERTIES));
+            = FLUIDS.register("aguas_termales_fluid", () -> new AguasTermalesFluid.Source(FluidInit.AGUAS_TERMALES_PROPERTIES));
     public static final RegistryObject<FlowingFluid> AGUAS_TERMALES_FLOWING
-            = FLUIDS.register("aguas_termales_flowing", () -> new ForgeFlowingFluid.Flowing(FluidInit.AGUAS_TERMALES_PROPERTIES));
+            = FLUIDS.register("aguas_termales_flowing", () -> new AguasTermalesFluid.Flowing(FluidInit.AGUAS_TERMALES_PROPERTIES));
 
-    public static final RegistryObject<FlowingFluidBlock> AGUAS_TERMALES_BLOCK = BlockInit.BLOCKS.register("aguas_termales",
-            () -> new FlowingFluidBlock(() -> FluidInit.AGUAS_TERMALES_SOURCE.get(), AbstractBlock.Properties.of(Material.WATER)));
-
-    private static final ForgeFlowingFluid.Properties AGUAS_TERMALES_PROPERTIES = new ForgeFlowingFluid.Properties(
+    private static final AguasTermalesFluid.Properties AGUAS_TERMALES_PROPERTIES = new AguasTermalesFluid.Properties(
             () -> AGUAS_TERMALES_SOURCE.get(), () -> AGUAS_TERMALES_FLOWING.get(),
             FluidAttributes.builder(WATER_STILL, WATER_FLOW).overlay(WATER_OVERLAY).color(0xFF40d9f7))
-            .block(() -> FluidInit.AGUAS_TERMALES_BLOCK.get()).bucket(() -> ItemInit.CUBO_AGUAS_TERMALES.get());
+            .block(() -> FluidInit.AGUAS_TERMALES_BLOCK.get()).bucket(() -> ItemInit.CUBO_AGUAS_TERMALES.get()).canMultiply();
+
+    public static final RegistryObject<BloqueAguasTermales> AGUAS_TERMALES_BLOCK = BlockInit.BLOCKS.register("aguas_termales",
+            () -> new BloqueAguasTermales());
+
+
 
 
 
