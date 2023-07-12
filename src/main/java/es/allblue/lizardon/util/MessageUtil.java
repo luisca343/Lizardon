@@ -25,7 +25,6 @@ public class MessageUtil {
         enviarTitulo(player, titulo, 0, 20, 0);
     }
 
-
     public static String formatearTiempo(long tiempo){
         return new SimpleDateFormat("mm:ss:SSS").format(new Date(tiempo));
     }

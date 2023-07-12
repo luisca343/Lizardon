@@ -1,9 +1,7 @@
 package es.allblue.lizardon.init;
 
 import com.pixelmonmod.pixelmon.items.BadgeItem;
-import es.allblue.lizardon.items.LatigoNumeril;
-import es.allblue.lizardon.items.LizardonItemGroup;
-import es.allblue.lizardon.items.SmartRotom;
+import es.allblue.lizardon.items.*;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -34,6 +32,11 @@ public class ItemInit {
 
     public static final RegistryObject<Item> LATIGO_NUMERIL = ITEMS.register("latigo_numeril",
             () -> new LatigoNumeril(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
+    public static final RegistryObject<Item> TASER = ITEMS.register("taser",
+            () -> new Taser(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
+
+    public static final RegistryObject<Item> CHAPA_OXIDADA = ITEMS.register("chapa_oxidada",
+            () -> new ChapaOxidada());
 
     public static final RegistryObject<Item> CUBO_AGUAS_TERMALES = ITEMS.register("cubo_aguas_termales",
             () -> new BucketItem(() -> FluidInit.AGUAS_TERMALES_SOURCE.get(), new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));

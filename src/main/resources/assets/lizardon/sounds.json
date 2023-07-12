@@ -5,5 +5,12 @@
     "sounds": [
       "lizardon:latigo_numeril"
     ]
+  },
+  "taser": {
+    "category": "blocks",
+    "subtitle": "lizardon.taser",
+    "sounds": [
+      "lizardon:taser"
+    ]
   }
 }
