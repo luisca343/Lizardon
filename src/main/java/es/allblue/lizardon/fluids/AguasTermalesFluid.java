@@ -5,7 +5,9 @@ import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
@@ -22,18 +24,38 @@ public abstract class AguasTermalesFluid extends ForgeFlowingFluid {
 
 
     @Override
-    protected void animateTick(World world, BlockPos pos, FluidState state, Random random) {
-        System.out.println("animateTick");
+    protected boolean isRandomlyTicking() {
+        return true;
+    }
 
-        BlockPos arriba = pos.above();
+    public static class Source extends ForgeFlowingFluid.Source {
+        public Source(Properties properties) {
+            super(properties);
+        }
 
-            world.addParticle(ParticleTypes.SMOKE, arriba.getX() + 0.1F + random.nextFloat() * 0.8F,
-                    arriba.getY() + 0.5F, arriba.getZ() + 0.1F + random.nextFloat() * 0.8F, 0.0D, 0.025 + random.nextFloat() / 250.0F, 0.0D);
+        @Override
+        public boolean isRandomlyTicking() {
+            return true;
+        }
 
+        @Override
+        protected void animateTick(World world, BlockPos pos, FluidState state, Random random) {
+            BlockPos abovePos = pos.above();
+            // Add steam above source blocks
+            if (world.isEmptyBlock(abovePos)) {
+                if (random.nextInt(20) == 0) {
+                    world.addParticle(ParticleTypes.CLOUD, (double) pos.getX() + random.nextDouble(), (double) pos.getY() + 0.8D, (double) pos.getZ()  + random.nextDouble(), 0.0D, 0.05D, 0.0D);
+                }
+            }
+        }
     }
 
 
 
-
+    public static class Flowing extends ForgeFlowingFluid.Flowing {
+        public Flowing(Properties properties) {
+            super(properties);
+        }
+    }
 
 }

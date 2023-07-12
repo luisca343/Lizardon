@@ -22,18 +22,21 @@ public class FluidInit {
     public static final DeferredRegister<Fluid> FLUIDS
             = DeferredRegister.create(ForgeRegistries.FLUIDS, Lizardon.MOD_ID);
 
+    public static final RegistryObject<BloqueAguasTermales> AGUAS_TERMALES_BLOCK = BlockInit.BLOCKS.register("aguas_termales",
+            () -> new BloqueAguasTermales());
+
+
     public static final RegistryObject<FlowingFluid> AGUAS_TERMALES_SOURCE
-            = FLUIDS.register("aguas_termales_fluid", () -> new AguasTermalesFluid.Source(FluidInit.AGUAS_TERMALES_PROPERTIES));
+            = FLUIDS.register("aguas_termales", () -> new AguasTermalesFluid.Source(FluidInit.AGUAS_TERMALES_PROPERTIES));
     public static final RegistryObject<FlowingFluid> AGUAS_TERMALES_FLOWING
             = FLUIDS.register("aguas_termales_flowing", () -> new AguasTermalesFluid.Flowing(FluidInit.AGUAS_TERMALES_PROPERTIES));
 
-    private static final AguasTermalesFluid.Properties AGUAS_TERMALES_PROPERTIES = new AguasTermalesFluid.Properties(
+    private static final ForgeFlowingFluid.Properties AGUAS_TERMALES_PROPERTIES = new ForgeFlowingFluid.Properties(
             () -> AGUAS_TERMALES_SOURCE.get(), () -> AGUAS_TERMALES_FLOWING.get(),
             FluidAttributes.builder(WATER_STILL, WATER_FLOW).overlay(WATER_OVERLAY).color(0xFF40d9f7))
-            .block(() -> FluidInit.AGUAS_TERMALES_BLOCK.get()).bucket(() -> ItemInit.CUBO_AGUAS_TERMALES.get()).canMultiply();
+            .block(() -> FluidInit.AGUAS_TERMALES_BLOCK.get()).bucket(() -> ItemInit.CUBO_AGUAS_TERMALES.get());
 
-    public static final RegistryObject<BloqueAguasTermales> AGUAS_TERMALES_BLOCK = BlockInit.BLOCKS.register("aguas_termales",
-            () -> new BloqueAguasTermales());
+
 
 
 
