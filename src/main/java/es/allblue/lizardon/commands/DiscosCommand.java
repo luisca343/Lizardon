@@ -3,22 +3,63 @@ package es.allblue.lizardon.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import es.allblue.lizardon.util.music.AudioConverter;
+import es.allblue.lizardon.init.ItemInit;
+import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.util.music.AudioManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.storage.FolderName;
+import net.minecraftforge.fml.network.PacketDistributor;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class Discos {
+public class DiscosCommand {
+    public DiscosCommand(CommandDispatcher<CommandSource> dispatcher) {
+        LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("disco")
+                .then(crear());
+
+
+        dispatcher.register(literalBuilder);
+
+    }
+
+    private ArgumentBuilder<CommandSource,?> crear() {
+        return Commands.literal("crear")
+                .then(Commands.argument("nombre", StringArgumentType.string())
+                        .executes((command) -> {
+                            String nombre = StringArgumentType.getString(command, "nombre");
+                            ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+
+                            ItemStack disco = player.getItemInHand(Hand.MAIN_HAND);
+
+                            Path patata = AudioManager.getFile(nombre, "wav");
+
+                            if(!Files.exists(patata)){
+                                player.sendMessage(new StringTextComponent("No se ha encontrado el disco"), player.getUUID());
+                                return 0;
+                            }
+
+
+                            if (disco.getItem() == ItemInit.DISCO.get()) {
+                                CompoundNBT tags = new CompoundNBT();
+                                tags.putString("disco", nombre);
+                                disco.setTag(tags);
+                            }
+                            return 1;
+                        }
+                ));
+    }
+
+
+
+    /*
     private static VoicechatServerApi SERVER_API;
     public  static FolderName DISCOS = new FolderName("discos");
     public static AudioFormat FORMAT = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 48000F, 16, 1, 2, 48000F, false);
@@ -37,7 +78,7 @@ public class Discos {
                             String nombre = command.getArgument("nombre", String.class);
 
                                     new Thread(() -> {
-                                        /*try {
+                                        try {
                                             source.sendSuccess(new StringTextComponent("Descargando, por favor espera..."), false);
                                             //zAudioManager.guardar(url, nombre, command.getSource().getLevel());
                                             source.sendSuccess(new StringTextComponent("¡Archivo descargado!"), false);
@@ -48,7 +89,7 @@ public class Discos {
                                         } catch (UnsupportedAudioFileException e) {
                                             source.sendFailure(new StringTextComponent("Error. Formato no soportado: " + e.getMessage()));
                                             e.printStackTrace();
-                                        }*/
+                                        }
                                     }).start();
 
 
@@ -105,5 +146,5 @@ public class Discos {
 
 
         dispatcher.register(literalBuilder);
-    }
+    }*/
 }

@@ -74,7 +74,7 @@ public class BloqueTocadiscos extends HorizontalBlock {
         }
 
         if(item.getItem() != ItemInit.DISCO.get()) {
-            MessageUtil.enviarMensaje(player, "No tieness un disco en la mano");
+            MessageUtil.enviarMensaje(player, "No tienes un disco en la mano");
             return ActionResultType.FAIL;
         }
 
@@ -100,6 +100,7 @@ public class BloqueTocadiscos extends HorizontalBlock {
     public void quitarDisco(PlayerEntity player, TocadiscosTE te){
         if(!te.hasDisco()){
             MessageUtil.enviarMensaje(player, "No hay disco");
+            return;
         }
 
         String nombre = te.getDisco();
