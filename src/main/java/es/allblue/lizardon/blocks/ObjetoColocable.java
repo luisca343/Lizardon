@@ -20,7 +20,7 @@ public class ObjetoColocable extends BlockItem {
 
     @Override
     public UseAction getUseAnimation(ItemStack stack) {
-        return stack.getItem().isEdible() ? UseAction.EAT : UseAction.NONE;
+        return stack.getItem().isEdible() ? objColocable.getAction() : UseAction.NONE;
     }
 
     @Override

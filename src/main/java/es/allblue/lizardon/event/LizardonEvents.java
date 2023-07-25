@@ -2,10 +2,10 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.commands.DiscosCommand;
 import es.allblue.lizardon.commands.TestCommand;
 import es.allblue.lizardon.commands.KartsCommand;
 import es.allblue.lizardon.commands.CombateCommand;
-import es.allblue.lizardon.commands.Discos;
 import es.allblue.lizardon.init.FluidInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
@@ -63,7 +63,7 @@ public class LizardonEvents {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
         new TestCommand(event.getDispatcher());
-        new Discos(event.getDispatcher());
+        new DiscosCommand(event.getDispatcher());
         new CombateCommand(event.getDispatcher());
 
         new KartsCommand(event.getDispatcher());

@@ -24,7 +24,7 @@ public class ItemInit {
 
 
     public static final RegistryObject<Item> DISCO = ITEMS.register("disco",
-            () -> new Item(new Item.Properties().stacksTo(16).tab(LizardonItemGroup.LIZARDON_GROUP)));
+            () -> new Disco());
 
     public static final RegistryObject<Item> TEST = ITEMS.register("test",
             () -> new Item(new Item.Properties().stacksTo(6).tab(LizardonItemGroup.LIZARDON_GROUP)));

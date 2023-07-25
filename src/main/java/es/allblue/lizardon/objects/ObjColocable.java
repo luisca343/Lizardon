@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.math.shapes.VoxelShape;
 
-public class ObjColocable {
+public class ObjColocable extends Item{
     private String nombre;
     private Item.Properties properties;
     private VoxelShape hitbox;
@@ -15,6 +15,8 @@ public class ObjColocable {
     }
 
     public ObjColocable(String nombre, Item.Properties properties, VoxelShape hitbox, UseAction action) {
+        super(properties);
+
         this.nombre = nombre;
         this.properties = properties;
         this.hitbox = hitbox;

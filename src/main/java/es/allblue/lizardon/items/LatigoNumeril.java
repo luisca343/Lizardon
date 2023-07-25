@@ -1,5 +1,6 @@
 package es.allblue.lizardon.items;
 
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.util.LizardonDamageSource;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +35,7 @@ public class LatigoNumeril extends Item {
         AxisAlignedBB boundingBox = player.getBoundingBox().expandTowards(lookVec).inflate(1, 1, 1);
         EntityRayTraceResult entityRayTraceResult = rayTraceEntities(player, startVec, endVec, boundingBox, s -> s instanceof LivingEntity, range * range);
 
-        if (entityRayTraceResult != null) {
+        if (entityRayTraceResult != null && !(entityRayTraceResult.getEntity() instanceof PixelmonEntity)) {
             LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
             entity.hurt(LizardonDamageSource.LATIGO_NUMERIL, 1.0F);
             entity.animateHurt();

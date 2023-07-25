@@ -16,6 +16,7 @@ public class ComidasLizardon {
     private static void initObjetos() {
         objetos.add(nuevaComida("caca_de_waifu", 2,2,true, Block.box(3, 0, 4, 12, 4.25, 13)));
         objetos.add(nuevaBebida("sake", 1,0,true, Block.box(7, 0, 7, 9, 1, 9)));
+        objetos.add(nuevaBebida("itamilk", 1,0,true, Block.box(5, 0, 5, 11, 12, 10)));
     }
 
     public static ArrayList<ObjColocable> getComidas(){
@@ -36,6 +37,7 @@ public class ComidasLizardon {
                 .nutrition(nutricion)
                 .saturationMod(saturacion);
         if(rapido) builder.fast();
+
         return new Item.Properties().tab(LizardonItemGroup.LIZARDON_GROUP).food(builder.build());
     }
 }
