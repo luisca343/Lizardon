@@ -6,6 +6,7 @@ import es.allblue.lizardon.util.MessageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 
@@ -87,14 +89,26 @@ public class BloqueTocadiscos extends HorizontalBlock {
             return ActionResultType.FAIL;
         }
 
+
+
         quitarDisco(player, te);
-        MessageUtil.enviarMensaje(player, "Has puesto el disco");
         te.setDisco(tags.getString("disco"));
+        MessageUtil.enviarMensaje(player, "Has puesto el disco");
         item.shrink(1);
 
 
         return ActionResultType.SUCCESS;
 
+    }
+
+    @Override
+    public void onRemove(BlockState prevState, World world, BlockPos pos, BlockState newState, boolean p_196243_5_) {
+        TocadiscosTE te = (TocadiscosTE) world.getBlockEntity(pos);
+        if(te == null) return;
+        te.stopDisco();
+        te.setRemoved();
+
+        super.onRemove(prevState, world, pos, newState, p_196243_5_);
     }
 
     public void quitarDisco(PlayerEntity player, TocadiscosTE te){
@@ -110,7 +124,8 @@ public class BloqueTocadiscos extends HorizontalBlock {
         tags.putString("disco", nombre);
         disco.setTag(tags);
 
-        player.addItem(disco);
+        //player.addItem(disco);
+        player.level.addFreshEntity(new ItemEntity(player.level, te.getBlockPos().getX(), te.getBlockPos().getY() + 1, te.getBlockPos().getZ(), disco));
         te.stopDisco();
         te.setDisco(null);
     }

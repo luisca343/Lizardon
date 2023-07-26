@@ -23,6 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AudioManager {
     public final Map<UUID, AudioPlayer> players = new ConcurrentHashMap<>();
 
+    public static boolean exists(String nombre){
+        return getFile(nombre, "wav").toFile().exists();
+    }
+
     public static Path getFile(String nombre, String extension){
         Path base = Paths.get("musica");
         if(!base.toFile().exists()){
