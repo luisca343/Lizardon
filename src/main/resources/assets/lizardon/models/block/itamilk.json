@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"texture": "lizardon:block/bebida/itamilk"
+		"texture": "lizardon:block/bebida/itamilk",
+		"particle": "lizardon:block/bebida/itamilk"
 	},
 	"elements": [
 		{

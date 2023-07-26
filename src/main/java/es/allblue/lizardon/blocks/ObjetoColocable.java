@@ -28,4 +28,6 @@ public class ObjetoColocable extends BlockItem {
         if(!ctx.getPlayer().isShiftKeyDown() || ctx.getClickedFace() != Direction.UP) return false;
         return super.placeBlock(ctx, state);
     }
+
+
 }
