@@ -15,6 +15,7 @@ import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.allblue.lizardon.api.PokePasteReader;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class CombateCommand {
-    private static VoicechatServerApi SERVER_API;
     public static HashMap<UUID, ICustomNpc> combatesActivos = new HashMap<UUID, ICustomNpc>();
 
     public CombateCommand(CommandDispatcher<CommandSource> dispatcher){
@@ -75,7 +75,7 @@ public class CombateCommand {
             /* Preparar equipo rival */
 
             NPCTrainer npc = new NPCTrainer(player.level);
-            npc.setName("Paco");
+            npc.setName("Entrenador");
             npc.greeting = url;
 
             Entrenador entrenador = Reader.getDatosNPC(url);
@@ -88,12 +88,12 @@ public class CombateCommand {
                 e.printStackTrace();
             }
 
-
-
+            // Curar el equipo del jugador si es necesario
             if(entrenador.curar()){
                 party.heal();
             }
 
+            // Setear el nivel del entrenador
             String nivel = entrenador.getNivel();
             int maxLVL = 0;
             int lvl = 0;
@@ -106,19 +106,15 @@ public class CombateCommand {
             npc.setBossTier(BossTierRegistry.getBossTierOrNotBoss(nivel));
             npc.setBattleAIMode(entrenador.getIA());
 
-
-
-
             List<Pokemon> team = PokePasteReader.fromLizardon(url).build();
             int i = 0;
             for (Pokemon pkm : team) {
                 pkm.getPokemonLevelContainer().setLevel(maxLVL + lvl);
-
                 npc.getPokemonStorage().set(i, pkm);
+
                 i++;
                 if (i == 6) break;
             }
-
 
 
             TrainerParticipant part2 = new TrainerParticipant(npc, 1);
@@ -140,8 +136,6 @@ public class CombateCommand {
 
             Scoreboard.init(player, url);
             BattleController battle = BattleRegistry.startBattle(new BattleParticipant[]{partJugador}, new BattleParticipant[]{part2}, br);
-
-
 
         }catch(Exception e){
             e.printStackTrace();

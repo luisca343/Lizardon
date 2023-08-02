@@ -32,6 +32,9 @@ public class ItemInit {
 
     public static final RegistryObject<Item> LATIGO_NUMERIL = ITEMS.register("latigo_numeril",
             () -> new LatigoNumeril(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
+    public static final RegistryObject<Item> PORRA = ITEMS.register("porra",
+            () -> new Porra(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
+
     public static final RegistryObject<Item> TASER = ITEMS.register("taser",
             () -> new Taser(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
 

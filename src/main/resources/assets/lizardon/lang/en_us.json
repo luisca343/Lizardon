@@ -1,11 +1,17 @@
 {
   "itemGroup.lizardonTab": "Lizardon",
 
+  "block.lizardon.itamilk": "Itamilk",
+
+  "block.lizardon.tocadiscos": "Tocadiscos",
+
   "item.lizardon.smartrotom": "Smart Rotom",
   "item.lizardon.cubo_aguas_termales": "Cubo de aguas termales",
 
   "item.lizardon.latigo_numeril": "Latigo Numeril",
-  "item.lizardon.taser": "Taser",
+  "item.lizardon.taser": "Táser",
+  "item.lizardon.disco": "Disco",
+  "item.lizardon.porra": "Porra",
 
   "biome.lizardon.arrecife_wingull": "Arrecife de los Wingull",
   "biome.lizardon.pueblo_tulipan": "Pueblo Tulipán",
@@ -34,8 +40,9 @@
   "death.attack.lizardon.latigo_numeril": "%1$s ha sido domado por %2$s",
   "death.attack.lizardon.taser": "%2$s ha infartado %1$s",
 
-  "lizardon.latigo_numeril": "Latizazo",
+  "lizardon.latigo_numeril": "Latigazo",
   "lizardon.taser": "Taser",
+  "lizardon.bonk": "¡BONK!",
 
   "ability.TestAbility": "Potencia Floral",
   "ability.TestAbility.description": "Duplica el ataque de tu dinosaurio amorfo de mierda."

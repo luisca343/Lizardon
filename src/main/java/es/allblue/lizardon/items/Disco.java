@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +23,7 @@ public class Disco extends Item {
         super.appendHoverText(stack, p_77624_2_, p_77624_3_, p_77624_4_);
         CompoundNBT nbt = stack.getOrCreateTag();
         if (nbt.contains("disco")) {
-            p_77624_3_.add(new StringTextComponent("Disco: " + nbt.getString("disco")));
+            p_77624_3_.add(new StringTextComponent(TextFormatting.LIGHT_PURPLE + nbt.getString("disco")));
         }else{
             p_77624_3_.add(new StringTextComponent("Disco sin grabar"));
         }

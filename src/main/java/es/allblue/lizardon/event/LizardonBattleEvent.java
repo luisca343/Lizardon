@@ -7,6 +7,7 @@ import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
+import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -44,8 +45,41 @@ public class LizardonBattleEvent {
     }
 
     @SubscribeEvent
+    public void onBattleStart(BattleStartedEvent event){
+        BattleController bc = event.bc;
+        List<BattleParticipant> participants = event.bc.participants;
+
+
+        if(participants.size() == 2){
+            BattleParticipant participant1 = participants.get(0);
+            BattleParticipant participant2 = participants.get(1);
+
+            ServerPlayerEntity player = null;
+            if(participant1 instanceof PlayerParticipant){
+                player = ((PlayerParticipant) participant1).player;
+            }
+
+
+            if(participant2 instanceof TrainerParticipant){
+                TrainerParticipant npc = (TrainerParticipant) participant2;
+                Entrenador e = Reader.getDatosNPC(npc.trainer.greeting);
+                if(e == null) return;
+
+                if(e.curar()){
+                    StorageProxy.getParty(player).heal();
+                }
+
+
+                player.sendMessage(new StringTextComponent("Iniciando combate contra " + npc.trainer.greeting), UUID.randomUUID());
+            }
+        }
+
+    }
+
+    @SubscribeEvent
     public void onBattleEnd(BattleEndEvent event){
         if(event.getCause().equals(BattleEndCause.FORCE)) return;
+
         BattleController bc = event.getBattleController();
         List<BattleParticipant> participants = event.getBattleController().participants;
         if(participants.size() == 2){

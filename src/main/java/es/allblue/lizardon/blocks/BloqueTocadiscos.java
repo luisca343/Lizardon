@@ -53,17 +53,7 @@ public class BloqueTocadiscos extends HorizontalBlock {
     public ActionResultType use(BlockState state, World world, BlockPos position, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         TocadiscosTE te = (TocadiscosTE) world.getBlockEntity(position);
 
-        /*
-        World level = player.level;
-        if(level.isClientSide()){
-            System.out.println("Client Side:" + LizardonConfig.test.get());
-        }
-        else{
-            System.out.println("Server Side:" + LizardonConfig.test.get());
-        }*/
-
         if (te == null) {
-            MessageUtil.enviarMensaje(player, "No hay tile entity");
             return ActionResultType.FAIL;
         }
 
@@ -76,7 +66,6 @@ public class BloqueTocadiscos extends HorizontalBlock {
         }
 
         if(item.getItem() != ItemInit.DISCO.get()) {
-            MessageUtil.enviarMensaje(player, "No tienes un disco en la mano");
             return ActionResultType.FAIL;
         }
 
@@ -85,7 +74,7 @@ public class BloqueTocadiscos extends HorizontalBlock {
         CompoundNBT tags = item.getOrCreateTag();
 
         if (tags.isEmpty()) {
-            MessageUtil.enviarMensaje(player, "Este disco está vacío mijo");
+            MessageUtil.enviarMensaje(player, "Ese disco está vacío");
             return ActionResultType.FAIL;
         }
 
@@ -93,7 +82,6 @@ public class BloqueTocadiscos extends HorizontalBlock {
 
         quitarDisco(player, te);
         te.setDisco(tags.getString("disco"));
-        MessageUtil.enviarMensaje(player, "Has puesto el disco");
         item.shrink(1);
 
 
@@ -113,12 +101,10 @@ public class BloqueTocadiscos extends HorizontalBlock {
 
     public void quitarDisco(PlayerEntity player, TocadiscosTE te){
         if(!te.hasDisco()){
-            MessageUtil.enviarMensaje(player, "No hay disco");
             return;
         }
 
         String nombre = te.getDisco();
-        MessageUtil.enviarMensaje(player, "Has quitado el disco");
         ItemStack disco = new ItemStack(ItemInit.DISCO.get());
         CompoundNBT tags = new CompoundNBT();
         tags.putString("disco", nombre);
