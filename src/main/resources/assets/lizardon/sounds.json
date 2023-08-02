@@ -12,5 +12,12 @@
     "sounds": [
       "lizardon:taser"
     ]
+  },
+  "bonk": {
+    "category": "blocks",
+    "subtitle": "lizardon.bonk",
+    "sounds": [
+      "lizardon:bonk"
+    ]
   }
 }
