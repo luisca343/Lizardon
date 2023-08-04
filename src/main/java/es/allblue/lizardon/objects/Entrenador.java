@@ -14,13 +14,12 @@ import java.util.UUID;
 
 public class Entrenador {
     private int dinero;
+    private String nivel;
+    private String tipo;
+    private String IA;
     private boolean curar;
     private boolean preview;
-    private String tipo;
     private String frecuencia;
-    private String IA;
-    private String nivel;
-
 
     private ArrayList<Recompensa> recompensas;
     private ArrayList<String> normas;
@@ -114,6 +113,8 @@ public class Entrenador {
     public String getNivel() {
         if(nivel == null) return BossTiers.NOT_BOSS;
         if(nivel.contains("+")) return nivel.split("\\+")[1];
+        if(nivel.contains("-")) return nivel;
+
         switch (nivel){
             case "0":
             case "=":
