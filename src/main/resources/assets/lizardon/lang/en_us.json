@@ -45,5 +45,8 @@
   "lizardon.bonk": "¡BONK!",
 
   "ability.TestAbility": "Potencia Floral",
-  "ability.TestAbility.description": "Duplica el ataque de tu dinosaurio amorfo de mierda."
+  "ability.TestAbility.description": "Duplica el ataque de tu dinosaurio amorfo de mierda.",
+
+  "attack.test_attack": "Ataque de prueba",
+  "attack.test_attack.description": "Ataque de prueba"
 }

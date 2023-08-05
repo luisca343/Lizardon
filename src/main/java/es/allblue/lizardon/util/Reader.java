@@ -32,7 +32,7 @@ public class Reader {
         Gson gson = new Gson();
         URL url = null;
         try {
-            url = new URL("http://i.lizardon.es/pixelmon/equipos/"+npc+".json");
+            url = new URL("http://i.lizardon.es/pixelmon/combates/entrenadores/"+npc+".json");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -62,7 +62,6 @@ public class LatigoNumeril extends Item {
 
         if (entityRayTraceResult != null && !(entityRayTraceResult.getEntity() instanceof PixelmonEntity)) {
             LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
-            entity.hurt(LizardonDamageSource.LATIGO_NUMERIL, 1.0F);
 
             // Pull entity towards player
             Vector3d playerPos = player.position();
@@ -71,7 +70,7 @@ public class LatigoNumeril extends Item {
             entity.setDeltaMovement(pullVec);
 
 
-            entity.animateHurt();
+
         }
 
         return super.use(world, player, hand);

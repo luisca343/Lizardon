@@ -1,5 +1,6 @@
 package es.allblue.lizardon.event;
 
+import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.blocks.machines.VendingMachineShop;
@@ -18,6 +19,11 @@ import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
+
+    @SubscribeEvent
+    public void pokedex(PokedexEvent event){
+        event.getOldStatus();
+    }
 
     @SubscribeEvent
     public void compraVenta(ShopkeeperEvent event){

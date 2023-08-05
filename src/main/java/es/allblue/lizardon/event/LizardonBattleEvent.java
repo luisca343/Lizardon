@@ -103,13 +103,12 @@ public class LizardonBattleEvent {
                 Entrenador e = Reader.getDatosNPC(npc.trainer.greeting);
                 e.recibirRecompensas(player.getUUID());
 
-                CombateCommand.combatesActivos.get(player.getUUID()).say("HASS GANDAO FELICIDADES LUISCA");
+                CombateCommand.combatesActivos.get(player.getUUID()).getNpc().say("HASS GANDAO FELICIDADES LUISCA");
                 CombateCommand.combatesActivos.remove(player.getUUID());
 
                 Scoreboard.set(player, npc.trainer.greeting, 1);
             }
         }
         System.out.println("Battle ended");
-
     }
 }

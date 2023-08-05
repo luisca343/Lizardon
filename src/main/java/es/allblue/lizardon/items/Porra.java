@@ -26,6 +26,7 @@ public class Porra extends Item {
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 
     public Porra(Properties properties) {
+
         super(properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 1.0D, AttributeModifier.Operation.ADDITION));

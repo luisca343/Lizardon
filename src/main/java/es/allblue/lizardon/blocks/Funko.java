@@ -30,6 +30,8 @@ public class Funko extends Block {
         super(props);
         String id = "https://crafatar.com/skins/67d9b543-5ac9-41e1-a8a5-20d7689e24a4";
 
+        
+
         try{
             String url = id;
             String[] partes = url.split("/");

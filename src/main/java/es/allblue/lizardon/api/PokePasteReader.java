@@ -62,7 +62,7 @@ public class PokePasteReader {
     public static PokePasteReader fromLizardon(String paste) {
         URL url = null;
         try {
-            url = new URL("http://i.lizardon.es/pixelmon/equipos/"+paste+".txt");
+            url = new URL("http://i.lizardon.es/pixelmon/combates/"+paste+".txt");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

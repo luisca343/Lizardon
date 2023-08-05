@@ -3,7 +3,6 @@ package es.allblue.lizardon.objects;
 public class LizardonConfig {
     private String id;
     private String home;
-
     private String API_URL;
 
 

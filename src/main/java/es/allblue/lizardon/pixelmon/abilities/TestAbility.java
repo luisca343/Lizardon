@@ -11,4 +11,6 @@ public class TestAbility extends AbstractAbility {
         stats[BattleStatsType.ATTACK.getStatIndex()] = stats[BattleStatsType.ATTACK.getStatIndex()] * 2;
         return stats;
     }
+
+
 }

@@ -6,6 +6,7 @@ import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.allblue.lizardon.Lizardon;
 import net.minecraft.command.CommandSource;
+import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,10 @@ public class Entrenador {
     private boolean curar;
     private boolean preview;
     private String frecuencia;
-
     private ArrayList<Recompensa> recompensas;
     private ArrayList<String> normas;
+
+    private ICustomNpc npc;
 
     public Entrenador(int dinero, ArrayList<Recompensa> recompensas) {
         this.dinero = dinero;
@@ -140,6 +142,14 @@ public class Entrenador {
 
     public void setNormas(ArrayList<String> normas) {
         this.normas = normas;
+    }
+
+    public void setNpc(ICustomNpc npc){
+        this.npc = npc;
+    }
+
+    public ICustomNpc getNpc(){
+        return npc;
     }
 
 }

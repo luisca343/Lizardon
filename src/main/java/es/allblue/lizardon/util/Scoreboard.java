@@ -1,5 +1,6 @@
 package es.allblue.lizardon.util;
 
+import lekavar.lma.drinkbeer.DrinkBeer;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreCriteria;
@@ -21,13 +22,10 @@ public class Scoreboard {
     }
 
     public static void set(ServerPlayerEntity player, String objective, int value){
+
         String tag = objective.replace("/","_");
-        player.sendMessage(new StringTextComponent("El tag es " + tag), UUID.randomUUID());
-
         ServerScoreboard scoreboard = player.server.getScoreboard();
-
         ScoreObjective objetivo = scoreboard.getObjective(tag);
-
 
         if(objetivo == null){
             objetivo = scoreboard.addObjective(tag, ScoreCriteria.DUMMY, new StringTextComponent(tag), ScoreCriteria.RenderType.INTEGER);

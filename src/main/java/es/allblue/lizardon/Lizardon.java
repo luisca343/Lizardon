@@ -2,6 +2,8 @@ package es.allblue.lizardon;
 
 
 import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
+import com.pixelmonmod.pixelmon.battles.controller.ai.AdvancedAI;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.event.LizardonBattleEvent;
 import es.allblue.lizardon.event.MisionesCaza;
@@ -11,6 +13,7 @@ import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import es.allblue.lizardon.tileentity.PantallaRenderer;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
@@ -175,6 +178,8 @@ public class Lizardon
         }catch (Exception e){
             LOGGER.info(e.getMessage());
         }*/
+
+        EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
     }
 
     public void end (FMLLoadCompleteEvent event){

@@ -40,7 +40,7 @@ public class InteractionChapaOxidada implements IInteraction {
             ChatHandler.sendChat((Entity)player, "pixelmon.interaction.bottlecap.full", new Object[] { pixelmon.getNickname() });
             return true;
         }
-        BottlecapItem bottleCap = (BottlecapItem)itemstack.getItem();
+        ChapaOxidada bottleCap = (ChapaOxidada)itemstack.getItem();
         if (Pixelmon.EVENT_BUS.post((Event)new BottleCapEvent(pixelmon, player, bottleCap.type, itemstack)))
             return false;
         if (bottleCap.type == EnumBottleCap.GOLD) {
@@ -63,9 +63,11 @@ public class InteractionChapaOxidada implements IInteraction {
     private static int getHTValue(BattleStatsType type, Pokemon pokemon) {
         IVStore store = pokemon.getIVs();
         boolean isHT = store.isHyperTrained(type);
-        store.setHyperTrained(type, true);
+        //store.setHyperTrained(type, true);
+        store.setStat(type, 0);
         int stat = pokemon.getStats().calculateStat(type, pokemon.getNature(), pokemon.getForm(), pokemon.getPokemonLevel());
-        store.setHyperTrained(type, isHT);
+        //store.setHyperTrained(type, isHT);
+        store.setHyperTrained(type, false);
         return stat;
     }
 }

@@ -12,7 +12,9 @@ import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.api.rules.BattleRuleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRules;
+import com.pixelmonmod.pixelmon.battles.api.rules.value.BooleanValue;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -43,7 +45,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class CombateCommand {
-    public static HashMap<UUID, ICustomNpc> combatesActivos = new HashMap<UUID, ICustomNpc>();
+    public static HashMap<UUID, Entrenador> combatesActivos = new HashMap<UUID, Entrenador>();
     public static HashMap<UUID, String> encuentrosActivos = new HashMap<UUID, String>();
 
     public CombateCommand(CommandDispatcher<CommandSource> dispatcher){
@@ -51,7 +53,7 @@ public class CombateCommand {
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("url", StringArgumentType.string())
                                 .executes((command) -> {
-                                    return testCommand(command);
+                                    return iniciarCombate(command);
 
                                 })
                         )));
@@ -60,24 +62,21 @@ public class CombateCommand {
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("url", StringArgumentType.string())
                                 .executes((command) -> {
-                                    return testEncounter(command);
+                                    return iniciarEncuentro(command);
                                 })
                         )));
 
 
     }
 
-    private int testEncounter(CommandContext<CommandSource> command) {
+    private int iniciarEncuentro(CommandContext<CommandSource> command) {
         try{
             CommandSource source = (CommandSource) command.getSource();
-
 
             ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
             String url = StringArgumentType.getString(command, "url");
 
-            url = "eventos/" + url;
-
-            List<Pokemon> team = PokePasteReader.fromLizardon(url).build();
+            List<Pokemon> team = PokePasteReader.fromLizardon("eventos/"+url).build();
             Pokemon pkm = team.get(0);
             System.out.println(pkm.getDisplayName());
 
@@ -97,13 +96,13 @@ public class CombateCommand {
             encuentrosActivos.put(player.getUUID(), url);
             MessageUtil.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Un " + pkm.getDisplayName() + TextFormatting.LIGHT_PURPLE + " salvaje ha aparecido!");
 
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
         return 1;
     }
 
-    public int testCommand(CommandContext ctx) {
+    public int iniciarCombate(CommandContext ctx) {
         try{
             CommandSource source = (CommandSource) ctx.getSource();
 
@@ -123,17 +122,12 @@ public class CombateCommand {
 
             Entrenador entrenador = Reader.getDatosNPC(url);
 
-
             try{
                 ICustomNpc inpc = (ICustomNpc) NpcAPI.Instance().getIEntity(source.getEntity());
-                combatesActivos.put(player.getUUID(), inpc);
+                entrenador.setNpc(inpc);
+                combatesActivos.put(player.getUUID(), entrenador);
             }catch (ClassCastException e){
                 e.printStackTrace();
-            }
-
-            // Curar el equipo del jugador si es necesario
-            if(entrenador.curar()){
-                party.heal();
             }
 
             // Setear el nivel del entrenador
@@ -149,7 +143,7 @@ public class CombateCommand {
             npc.setBossTier(BossTierRegistry.getBossTierOrNotBoss(nivel));
             npc.setBattleAIMode(entrenador.getIA());
 
-            List<Pokemon> team = PokePasteReader.fromLizardon(url).build();
+            List<Pokemon> team = PokePasteReader.fromLizardon("entrenadores/"+url).build();
             int i = 0;
             for (Pokemon pkm : team) {
                 pkm.getPokemonLevelContainer().setLevel(maxLVL + lvl);
@@ -160,9 +154,10 @@ public class CombateCommand {
             }
 
 
-            TrainerParticipant part2 = new TrainerParticipant(npc, 1);
+            PlayerParticipant partJugador = new PlayerParticipant(player, pokemon, 1);
+            TrainerParticipant partNPC = new TrainerParticipant(npc, 1);
 
-            player.sendMessage(new StringTextComponent("INICIANDO BATALLA"), player.getUUID());
+            // Definimos las normas de combate
             BattleRules br = new BattleRules();
 
             /*
@@ -172,13 +167,17 @@ public class CombateCommand {
             br.set(BattleRuleRegistry.TEAM_PREVIEW, teamPreview);
             */
 
-
             br.setNewClauses(entrenador.getNormas());
-            PlayerParticipant partJugador = new PlayerParticipant(player, pokemon, 1);
+            br = br.set(BattleRuleRegistry.TEAM_PREVIEW, new BooleanValue(true));
 
 
+            // Curar el equipo del jugador si es necesario
+            if(entrenador.curar()){
+                party.heal();
+            }
             Scoreboard.init(player, url);
-            BattleController battle = BattleRegistry.startBattle(new BattleParticipant[]{partJugador}, new BattleParticipant[]{part2}, br);
+            BattleController battle = BattleRegistry.startBattle(new BattleParticipant[]{partJugador}, new BattleParticipant[]{partNPC}, br);
+
 
         }catch(Exception e){
             e.printStackTrace();

@@ -147,7 +147,7 @@ dependencies {
     implementation files('libs/FancyVideo-API-1.16.5-2.2.0.3.jar')
 
     implementation fg.deobf('curse.maven:CustomNPCs-221826:3791072')
-    //implementation files('libs/CustomNPCs-1.16.5.20220515.jar')
+    //implementation files('libs/CustomNPCs-1.16.5.20220728snapshot.jar')
     
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
