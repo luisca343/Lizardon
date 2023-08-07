@@ -11,6 +11,7 @@ import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -86,22 +87,11 @@ public class LizardonEvents {
         //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
 
         Gson gson = new Gson();
-        File file = new File("config/lizardon.json");
-        LizardonConfig config;
-        try{
-            BufferedReader br = new BufferedReader(new java.io.FileReader(file));
-            config = gson.fromJson(br, LizardonConfig.class);
+        LizardonConfig lizardonConfig = FileHelper.getConfig();
+        String data = gson.toJson(lizardonConfig);
+        System.out.println("DATOS CONFIG ENVIADOS A : " + serverPlayer.getScoreboardName() + ":" + data);
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageConfigServer(data));
 
-            String data = gson.toJson(config);
-            System.out.println("DATOS CONFIG ENVIADOS: " + data);
-            Lizardon.config = config;
-            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageConfigServer(data));
-
-
-        }catch(Exception e){
-            System.out.println("ERROR AL LEER EL ARCHIVO");
-            System.out.println(e);
-        }
     }
 
 

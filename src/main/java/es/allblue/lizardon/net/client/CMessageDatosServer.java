@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.objects.DatosNPC;
+import es.allblue.lizardon.objects.GetUserData;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.UserData;
 import net.minecraft.client.Minecraft;
@@ -38,8 +39,20 @@ public class CMessageDatosServer implements Runnable{
         String nombre = Minecraft.getInstance().player.getName().getString();
 
         UserData data = new UserData(uuid, nombre, idServer);
-        String respuesta = gson.toJson(data);
+
+
+        GetUserData userData = new GetUserData();
+        userData.setMundo(idServer);
+        userData.setUuid(uuid);
+        userData.setNombre(nombre);
+
+        String respuesta = gson.toJson(userData);
+        System.out.println("RECIBIDA RESPUESTA: " + respuesta);
+
         ClientProxy.callbackMisiones.success(respuesta);
+
+        // Hacer el sistema de necesitar medallas para hacer misiones
+        // Y el sistema de misiones que se activen en días concretos
     }
 
     public static CMessageDatosServer decode(PacketBuffer buf) {

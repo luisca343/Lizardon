@@ -23,6 +23,7 @@ public class QueryHelper {
         System.out.println("Query recibida: "+query);
         /* Requests 'GET' */
         if(query.equals("getUserData")){
+
             Messages.INSTANCE.sendToServer(new SMessageDatosServer("query"));
             ClientProxy.callbackMisiones = callback;
             return true;

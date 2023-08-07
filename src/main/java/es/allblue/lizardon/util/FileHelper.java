@@ -2,16 +2,11 @@ package es.allblue.lizardon.util;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.client.CMessageDatosServer;
-import es.allblue.lizardon.objects.DatosServer;
-import net.minecraftforge.fml.network.PacketDistributor;
+import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.objects.LizardonConfig;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -88,6 +83,35 @@ public class FileHelper {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static LizardonConfig getConfig() {
+        Gson gson = new Gson();
+        File file = new File("config/lizardon.json");
+        LizardonConfig config;
+        try{
+            BufferedReader br = new BufferedReader(new java.io.FileReader(file));
+            config = gson.fromJson(br, LizardonConfig.class);
+            Lizardon.config = config;
+            return config;
+        } catch (FileNotFoundException e) {
+            config = new LizardonConfig();
+            config.setId(RandomStringUtils.random(8, true, true));
+            config.setHome("http://localhost:8080");
+            config.setAPI_URL("http://localhost:3000");
+
+            Lizardon.config = config;
+            writeFile(file, config);
+
+            System.out.println("Config file created");
+            System.out.println("Please, edit config/lizardon.json with your server data");
+            System.out.println("Then, restart the server");
+            System.out.println(config);
+
+            return config;
+        }
+
+        //return (LizardonConfig) readFile(ruta, LizardonConfig.class);
     }
 
 }

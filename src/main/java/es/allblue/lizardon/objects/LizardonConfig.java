@@ -6,13 +6,6 @@ public class LizardonConfig {
     private String API_URL;
 
 
-    public LizardonConfig(String id, String SMARTROTOM_HOME) {
-        this.id = id;
-        this.home = SMARTROTOM_HOME;
-
-
-    }
-
     public String getId() {
         return id;
     }
