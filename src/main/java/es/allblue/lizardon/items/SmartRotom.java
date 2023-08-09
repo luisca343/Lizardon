@@ -5,28 +5,21 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.init.BlockInit;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.util.*;
 
 public class SmartRotom extends Item {
     public SmartRotom(Properties properties) {
         super(properties);
     }
-
-
 
     @Override
     public ActionResultType interactLivingEntity(ItemStack item, PlayerEntity player, LivingEntity entity, Hand hand) {
@@ -64,7 +57,7 @@ public class SmartRotom extends Item {
     }
 
     public static void actualizarPad(ItemStack stack){
-        if(!stack.hasTag()){
+        if(!stack.hasTag() && !stack.getTag().contains("PadID")){
             stack.setTag(new CompoundNBT());
             stack.getTag().putString("PadURL", "http://www.google.es");
             int id = Lizardon.PROXY.getNextPadID();

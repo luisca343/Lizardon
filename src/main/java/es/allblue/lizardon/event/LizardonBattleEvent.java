@@ -10,11 +10,13 @@ import es.allblue.lizardon.objects.dex.ActualizarDex;
 import es.allblue.lizardon.objects.pixelmon.Combate;
 import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.WingullAPI;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import noppes.npcs.api.entity.ICustomNpc;
 
 @Mod.EventBusSubscriber
 public class LizardonBattleEvent {
@@ -68,6 +70,10 @@ public class LizardonBattleEvent {
             if(combate.getConfigCombate().esEntrenador()) finCombateEntrenador(event, combate);
             else finCombateSalvaje(event, combate);
 
+            MobEntity entity = CombateCommand.combatesEspeciales.get(event.getBattleController().battleIndex).getEntidad();
+            if(entity != null){
+                entity.remove();
+            }
             CombateCommand.combatesEspeciales.remove(event.getBattleController().battleIndex);
         }
 

@@ -180,7 +180,7 @@ public class ConfigCombate {
         this.equipo = equipo;
     }
 
-    public void setNivelEquipo(int nivelJugador){
+    public int getNivelEquipo(int nivelJugador){
         int nivel;
         System.out.println("Nivel del jugador: " + nivelJugador);
 
@@ -189,12 +189,23 @@ public class ConfigCombate {
         else if(this.nivel.equals("0") || this.nivel.equals("=") || this.nivel.equals("IGUALADO") || this.nivel.equals("EQUAL")) nivel = nivelJugador;
         else nivel = Integer.parseInt(this.nivel);
 
+        System.out.println("Nivel del equipo: " + nivel);
+        return nivel;
+    }
+
+    public void setNivelEquipo(int nivelJugador){
+        int nivel = getNivelEquipo(nivelJugador);
+
         for (Pokemon pokemon : equipo) {
-            System.out.println("Nivel del pokemon: " + pokemon.getSpecies().getName());
             pokemon.setLevel(nivel);
         }
 
         System.out.println("Nivel del equipo: " + nivel);
+    }
+
+    public int getNivelesExtra(){
+        if(this.nivel.contains("+")) return Integer.parseInt(this.nivel.split("\\+")[1]);
+        else return 0;
     }
 
     public String getNombreArchivo() {

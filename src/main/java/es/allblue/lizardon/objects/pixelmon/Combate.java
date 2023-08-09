@@ -1,6 +1,7 @@
 package es.allblue.lizardon.objects.pixelmon;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTier;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTierRegistry;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
@@ -19,11 +20,13 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.Scoreboard;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
+import java.awt.*;
 import java.util.List;
 
 public class Combate {
@@ -31,17 +34,27 @@ public class Combate {
     private ServerPlayerEntity player;
     private ConfigCombate configCombate;
 
+    private MobEntity entidad;
+
+
 
     public Combate(ServerPlayerEntity player, ConfigCombate configCombate) {
         this.player = player;
         this.configCombate = configCombate;
     }
 
+    public int nivelMaximoJugador(){
+        return getPlayerParty().getHighestLevel();
+    }
+
+    public int getNivelEquipoRival(){
+        return configCombate.getNivelEquipo(nivelMaximoJugador());
+    }
+
     public void iniciarCombate(){
         System.out.println("Iniciando combate");
 
-        int nivelJugador = getPlayerParty().getHighestLevel();
-        configCombate.setNivelEquipo(nivelJugador);
+        configCombate.setNivelEquipo(nivelMaximoJugador());
 
         if(configCombate.curar()){
             System.out.println("Curando equipo");
@@ -89,6 +102,7 @@ public class Combate {
         Pokemon pkm = configCombate.getFirstPokemon();
         PixelmonEntity pixelmon = pkm.getOrCreatePixelmon();
         player.level.addFreshEntity(pixelmon);
+        setEntidad(pixelmon);
 
         System.out.println("Participante: " + new WildPixelmonParticipant(pixelmon));
         return new WildPixelmonParticipant(pixelmon);
@@ -97,11 +111,20 @@ public class Combate {
     private BattleParticipant getPartRivalEntrenador() {
         NPCTrainer npc = new NPCTrainer(player.level);
         npc.setName("Entrenador");
+
         npc.setBossTier(BossTierRegistry.NOT_BOSS);
+        if(getNivelEquipoRival() > 100){
+            int niveles = getNivelEquipoRival() - 100;
+            BossTier tier = new BossTier("+"+niveles,"+"+niveles, false, 0, Color.BLACK, 1.0f, false,0.0, 0.0, "PALETA", 1.0, niveles);
+            npc.setBossTier(tier);
+        }
+
+
         npc.setBattleAIMode(configCombate.getIA());
         if(!npc.isAddedToWorld()){
             npc.setPos(player.getX(), player.getY(), player.getZ());
             player.level.addFreshEntity(npc);
+            setEntidad(npc);
         }
 
         List<Pokemon> equipoEntrenador = configCombate.getEquipo();
@@ -132,6 +155,14 @@ public class Combate {
 
     public void setPlayer(ServerPlayerEntity player) {
         this.player = player;
+    }
+
+    public MobEntity getEntidad() {
+        return entidad;
+    }
+
+    public void setEntidad(MobEntity entidad) {
+        this.entidad = entidad;
     }
 }
 
