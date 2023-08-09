@@ -22,7 +22,6 @@ public class Scoreboard {
     }
 
     public static void set(ServerPlayerEntity player, String objective, int value){
-
         String tag = objective.replace("/","_");
         ServerScoreboard scoreboard = player.server.getScoreboard();
         ScoreObjective objetivo = scoreboard.getObjective(tag);

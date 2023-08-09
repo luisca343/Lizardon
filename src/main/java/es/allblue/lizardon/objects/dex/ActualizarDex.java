@@ -4,7 +4,6 @@ import es.allblue.lizardon.Lizardon;
 
 public class ActualizarDex {
     private String uuid;
-
     private String server;
     private int idPokemon;
     private int estado;

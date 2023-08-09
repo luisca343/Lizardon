@@ -1,7 +1,9 @@
 package es.allblue.lizardon.util;
 
 import com.google.gson.Gson;
-import es.allblue.lizardon.objects.Entrenador;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import es.allblue.lizardon.api.PokePasteReader;
+import es.allblue.lizardon.objects.pixelmon.ConfigCombate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Reader {
@@ -27,12 +30,19 @@ public class Reader {
         return null;
     }
 
+    public static ConfigCombate getDatosEncuentro(String npc) {
+        return getDatosCombate(npc, "eventos");
+    }
 
-    public static Entrenador getDatosNPC(String npc) {
-        Gson gson = new Gson();
+    public static ConfigCombate getDatosNPC(String npc) {
+        return getDatosCombate(npc, "entrenadores");
+    }
+
+    public static ConfigCombate getDatosCombate(String npc, String tipo) {
+
         URL url = null;
         try {
-            url = new URL("http://i.lizardon.es/pixelmon/combates/entrenadores/"+npc+".json");
+            url = new URL("http://i.lizardon.es/pixelmon/combates/"+ tipo +"/"+npc+".json");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -43,6 +53,15 @@ public class Reader {
         }
 
         String str = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.joining());
-        return gson.fromJson(str, Entrenador.class);
+
+        ConfigCombate configCombate = new Gson().fromJson(str, ConfigCombate.class);
+
+        List<Pokemon> team = PokePasteReader.fromLizardon(tipo +"/"+npc).build();
+        configCombate.setEquipo(team);
+        configCombate.setNombreArchivo(npc);
+        configCombate.setCarpeta(tipo);
+
+
+        return configCombate;
     }
 }

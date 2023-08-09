@@ -1,5 +1,6 @@
 package es.allblue.lizardon.event;
 
+import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.EndRaidEvent;
@@ -60,6 +61,17 @@ public class MisionesCaza {
         avanzarMision("CAPTURA", stats, event.getPlayer());
     }
 
+    @SubscribeEvent
+    public void derrotarEntrenador(BeatTrainerEvent event){
+
+        Pokemon[] pokemon = event.trainer.getPokemonStorage().getAll();
+        for(Pokemon poke : pokemon){
+            if(poke == null) continue;
+            Stats stats = poke.getForm();
+            avanzarMision("DERROTA", stats, event.player);
+        }
+    }
+
 
 
     public void avanzarMision(String nombreCategoria, Stats stats, ServerPlayerEntity player){
@@ -70,18 +82,20 @@ public class MisionesCaza {
             return;
         }
         String nombre = stats.getParentSpecies().getName();
-        for(IQuest quest : categoria.quests()){
+        IQuest[] questsActivas = playerWrapper.getActiveQuests();
+        for(IQuest quest : questsActivas){
+            if(!quest.getCategory().getName().equalsIgnoreCase(nombreCategoria)) continue;
             for(IQuestObjective objetivo :quest.getObjectives(playerWrapper)){
-                String nombrePokemon = objetivo.getText().split(":")[0];
-                if(nombrePokemon.toLowerCase().contains("tipo")){
-                    String tipo = nombrePokemon.split(" ")[1];
+                String condicion = objetivo.getText().split(":")[0];
+                if(condicion.toLowerCase().contains("tipo")){
+                    String tipo = condicion.split(" ")[1];
                     Element element = getTipo(tipo.toUpperCase());
                     if(stats.getTypes().contains(element)){
                         avanzar(objetivo, player);
                         player.sendMessage(new StringTextComponent("Has avanzado en la misión " + quest.getName()), UUID.randomUUID());
                     }
                 }
-                else if(nombre.equalsIgnoreCase(nombrePokemon)){
+                else if(nombre.equalsIgnoreCase(condicion)){
                     avanzar(objetivo, player);
                     player.sendMessage(new StringTextComponent("Has avanzado en la misión " + quest.getName()), UUID.randomUUID());
                 }

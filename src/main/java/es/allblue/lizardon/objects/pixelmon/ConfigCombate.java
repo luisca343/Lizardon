@@ -1,11 +1,12 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.pixelmon;
 
 import com.pixelmonmod.pixelmon.api.battles.BattleAIMode;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.allblue.lizardon.Lizardon;
-import net.minecraft.command.CommandSource;
+import es.allblue.lizardon.objects.Recompensa;
 import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.ArrayList;
@@ -13,23 +14,42 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Entrenador {
-    private int dinero;
+public class ConfigCombate {
+    private transient String nombreArchivo;
+    private transient String carpeta;
     private String nivel;
     private String tipo;
-    private String IA;
-    private boolean curar;
-    private boolean preview;
     private String frecuencia;
     private ArrayList<Recompensa> recompensas;
     private ArrayList<String> normas;
+    private transient ICustomNpc npc;
+    private transient List<Pokemon> equipo;
 
-    private ICustomNpc npc;
+    private ArrayList<String> gimmick;
+    private int dinero;
+    private String IA;
+    private boolean curar;
+    private boolean preview;
 
-    public Entrenador(int dinero, ArrayList<Recompensa> recompensas) {
-        this.dinero = dinero;
-        this.recompensas = recompensas;
 
+    public ConfigCombate(){
+        this.dinero = 0;
+        this.nivel = "0";
+        this.tipo = "1vs1";
+        this.IA = "TÁCTICA";
+        this.curar = false;
+        this.preview = false;
+        this.frecuencia = "DIA";
+        this.recompensas = new ArrayList<>();
+        this.normas = new ArrayList<>();
+    }
+
+    public int numPokemonJugador(){
+        return getTipo()[0];
+    }
+
+    public int numPokemonNPC(){
+        return getTipo()[1];
     }
 
     public int getDinero() {
@@ -150,6 +170,55 @@ public class Entrenador {
 
     public ICustomNpc getNpc(){
         return npc;
+    }
+
+    public List<Pokemon> getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(List<Pokemon> equipo) {
+        this.equipo = equipo;
+    }
+
+    public void setNivelEquipo(int nivelJugador){
+        int nivel;
+        System.out.println("Nivel del jugador: " + nivelJugador);
+
+        if(this.nivel.contains("+")) nivel = nivelJugador + Integer.parseInt(this.nivel.split("\\+")[1]);
+        else if(this.nivel.contains("-")) nivel = nivelJugador - Integer.parseInt(this.nivel.split("-")[1]);
+        else if(this.nivel.equals("0") || this.nivel.equals("=") || this.nivel.equals("IGUALADO") || this.nivel.equals("EQUAL")) nivel = nivelJugador;
+        else nivel = Integer.parseInt(this.nivel);
+
+        for (Pokemon pokemon : equipo) {
+            System.out.println("Nivel del pokemon: " + pokemon.getSpecies().getName());
+            pokemon.setLevel(nivel);
+        }
+
+        System.out.println("Nivel del equipo: " + nivel);
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
+
+    public String getCarpeta() {
+        return carpeta;
+    }
+
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
+    }
+
+    public boolean esEntrenador(){
+        return carpeta.equals("entrenadores");
+    }
+
+    public Pokemon getFirstPokemon(){
+        return getEquipo().get(0);
     }
 
 }
