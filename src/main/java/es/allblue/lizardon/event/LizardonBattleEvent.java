@@ -1,22 +1,31 @@
 package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.allblue.lizardon.commands.CombateCommand;
 import es.allblue.lizardon.objects.dex.ActualizarDex;
 import es.allblue.lizardon.objects.pixelmon.Combate;
 import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.Scoreboard;
 import es.allblue.lizardon.util.WingullAPI;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noppes.npcs.api.entity.ICustomNpc;
+import org.h2.tools.Server;
+
+import java.util.Map;
 
 @Mod.EventBusSubscriber
 public class LizardonBattleEvent {
@@ -35,9 +44,7 @@ public class LizardonBattleEvent {
     }
 
     public void inicioCombateEntrenador(BattleStartedEvent event, Combate combate){
-        MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.LIGHT_PURPLE + "¡Recibidos datos de combate!");
-        MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.LIGHT_PURPLE + combate.getConfigCombate().toString());
-        MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.LIGHT_PURPLE + combate.getPartRival().allPokemon.toString());
+
     }
 
     public void inicioCombateSalvaje(BattleStartedEvent event, Combate combate){
@@ -45,11 +52,33 @@ public class LizardonBattleEvent {
     }
 
     public void finCombateEntrenador(BattleEndEvent event, Combate combate){
-
+        getGanador(event, combate);
     }
 
     public void finCombateSalvaje(BattleEndEvent event, Combate combate){
+        getGanador(event, combate);
+    }
 
+    public void getGanador(BattleEndEvent event, Combate combate){
+        LivingEntity ganador = null, perdedor = null;
+        try{
+            for(Map.Entry<BattleParticipant, BattleResults> entry : event.getResults().entrySet()){
+                if(entry.getValue() == BattleResults.VICTORY){
+                    ganador = entry.getKey().getEntity();
+                }else if(entry.getValue() == BattleResults.DEFEAT){
+                    perdedor = entry.getKey().getEntity();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(ganador instanceof ServerPlayerEntity) {
+            Scoreboard.set(combate.getPlayer(), combate.getConfigCombate().getNombreArchivo(), 1);
+            MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.GREEN + "Has ganado el combate contra " + combate.getConfigCombate().getNombre());
+        }else {
+            MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.RED + "Has perdido el combate contra " + combate.getConfigCombate().getNombre());
+        }
     }
 
     @SubscribeEvent

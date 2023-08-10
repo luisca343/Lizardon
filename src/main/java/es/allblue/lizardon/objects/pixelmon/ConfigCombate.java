@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class ConfigCombate {
+    private String nombre;
     private transient String nombreArchivo;
     private transient String carpeta;
     private String nivel;
@@ -232,4 +233,11 @@ public class ConfigCombate {
         return getEquipo().get(0);
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }

@@ -3,7 +3,6 @@ package es.allblue.lizardon.objects.pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTier;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTierRegistry;
-import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
@@ -23,8 +22,6 @@ import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
-import noppes.npcs.api.NpcAPI;
-import noppes.npcs.api.entity.ICustomNpc;
 
 import java.awt.*;
 import java.util.List;
@@ -63,7 +60,7 @@ public class Combate {
 
         System.out.println("Creando scoreboard");
         System.out.println(configCombate.getNombreArchivo());
-        Scoreboard.init(player, configCombate.getNombreArchivo());
+        Scoreboard.getOrCreateObjective(player, configCombate.getNombreArchivo());
 
         System.out.println("Creando reglas");
         BattleRules br = new BattleRules();
