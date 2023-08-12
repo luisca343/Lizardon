@@ -4,8 +4,10 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerMisiones;
+import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.ObjetivoMision;
+import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -30,6 +32,8 @@ public class SMessageVerMisiones implements Runnable{
     private ServerPlayerEntity player;
     private IJSQueryCallback callback;
 
+    Map<String, DatosNPC> datosNpc;
+
     public SMessageVerMisiones(String str){
         this.str = str;
     }
@@ -37,6 +41,7 @@ public class SMessageVerMisiones implements Runnable{
     @Override
     public void run() {
         NpcAPI api = NpcAPI.Instance();
+        datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new io.leangen.geantyref.TypeToken<Map<String, DatosNPC>>(){}.getType());
 
         PlayerWrapper wrapper = new PlayerWrapper(player);
         
@@ -74,7 +79,11 @@ public class SMessageVerMisiones implements Runnable{
         mision.setNombreNPC(quest.getNpcName());
         mision.setRepetible(quest.getIsRepeatable());
         mision.setId(quest.getId());
-        
+
+        mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
+        mision.setX(datosNpc.get(mision.getNombreNPC()).getX());
+        mision.setY(datosNpc.get(mision.getNombreNPC()).getY());
+        mision.setZ(datosNpc.get(mision.getNombreNPC()).getZ());
 
 
         if(idActivas.contains(quest.getId())){
@@ -91,6 +100,7 @@ public class SMessageVerMisiones implements Runnable{
                 }
             }
             mision.setObjetivos(objetivosMision);
+
         }else {
             mision.setEstado("Completa");
         }

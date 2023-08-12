@@ -8,6 +8,7 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
+import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -35,28 +36,17 @@ public class CMessageVerMisiones implements Runnable{
 
     @Override
     public void run() {
-        String nombreArchivo = "npcs.json";
-        File fileDatos = new File(nombreArchivo);
-        try{
-        if(!fileDatos.exists()) {
-            fileDatos.createNewFile();
-        }
-            Gson gson = new Gson();
+        datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new io.leangen.geantyref.TypeToken<Map<String, DatosNPC>>(){}.getType());
 
-            Reader reader = Files.newBufferedReader(Lizardon.PROXY.getRuta(nombreArchivo));
-            datosNpc = gson.fromJson(reader, new TypeToken<Map<String, DatosNPC>>(){}.getType());
+        Gson gson = new Gson();
+        ArrayList<Mision> misiones = gson.fromJson(str, new TypeToken<ArrayList<Mision>>(){}.getType());
+        ArrayList<Mision> misionesNuevas = new ArrayList<>();
+        //actualizar(misiones, misionesNuevas);
 
-            ArrayList<Mision> misiones = gson.fromJson(str, new TypeToken<ArrayList<Mision>>(){}.getType());
+        Collections.sort(misiones, comparing(Mision::getId));
+        String res = gson.toJson(misiones);
+        ClientProxy.callbackMisiones.success(res);
 
-            ArrayList<Mision> misionesNuevas = new ArrayList<>();
-            actualizar(misiones, misionesNuevas);
-
-            Collections.sort(misionesNuevas, comparing(Mision::getId));
-            String res = gson.toJson(misionesNuevas);
-            ClientProxy.callbackMisiones.success(res);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static CMessageVerMisiones decode(PacketBuffer buf) {
@@ -68,7 +58,15 @@ public class CMessageVerMisiones implements Runnable{
         for (Mision mision : listaAnterior) {
             if(datosNpc.containsKey(mision.getNombreNPC())){
                 mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
+                mision.setX(datosNpc.get(mision.getNombreNPC()).getX());
+                mision.setY(datosNpc.get(mision.getNombreNPC()).getY());
+                mision.setZ(datosNpc.get(mision.getNombreNPC()).getZ());
             }
+            System.out.println(mision.getNombreNPC());
+            System.out.println(mision.getSkin());
+            System.out.println(mision.getX());
+            System.out.println(mision.getY());
+            System.out.println(mision.getZ());
             lista.add(mision);
         }
     }
