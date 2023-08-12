@@ -1,5 +1,9 @@
 {
   "variants":{
-    "": {"model": "lizardon:block/itamilk"}
+    "facing=north": {"model": "lizardon:block/itamilk"},
+    "facing=south": { "model":"lizardon:block/itamilk", "y" : 180},
+    "facing=west": { "model":"lizardon:block/itamilk", "y" : 270},
+    "facing=east": { "model":"lizardon:block/itamilk", "y" : 90}
+
   }
 }
