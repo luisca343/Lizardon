@@ -10,6 +10,8 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileHelper {
     public static boolean writeFile(String ruta, Object o) {
@@ -40,19 +42,26 @@ public class FileHelper {
         }
     }
 
+    public static Map getMapFromFile(String ruta) {
+        Object o = readFile(ruta, Map.class);
+        if(o == null){
+            return new HashMap();
+        }
+        return (Map) o;
+    }
 
     public static Object readFile(String ruta, Type token) {
         return readFile(new File(ruta), token);
     }
 
-    private static Object readFile(File file, Type token) {
+    private static <T> T readFile(File file, Type token) {
         Gson gson = new Gson();
         try {
             if(!file.exists()){
                 file.createNewFile();
                 Object o = token.getClass().newInstance();
                 writeFile(file, o);
-                return o;
+                return (T) o;
             } else{
                 BufferedReader reader = Files.newBufferedReader(Paths.get(file.getPath()));
                 return gson.fromJson(reader, token);

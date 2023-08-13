@@ -8,6 +8,7 @@ import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.ObjetivoMision;
 import es.allblue.lizardon.util.FileHelper;
+import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -41,8 +42,10 @@ public class SMessageVerMisiones implements Runnable{
     @Override
     public void run() {
         NpcAPI api = NpcAPI.Instance();
-        datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new io.leangen.geantyref.TypeToken<Map<String, DatosNPC>>(){}.getType());
-
+        datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new TypeToken<Map<String, DatosNPC>>(){}.getType());
+        if(datosNpc == null){
+            datosNpc = new HashMap<>();
+        }
         PlayerWrapper wrapper = new PlayerWrapper(player);
         
 
@@ -76,15 +79,24 @@ public class SMessageVerMisiones implements Runnable{
         mision.setTipo(quest.getType());
         mision.setTextoCompletar(quest.getCompleteText());
         mision.setTextoLog(quest.getLogText());
-        mision.setNombreNPC(quest.getNpcName());
         mision.setRepetible(quest.getIsRepeatable());
         mision.setId(quest.getId());
 
-        mision.setSkin(datosNpc.get(mision.getNombreNPC()).getSkin());
-        mision.setX(datosNpc.get(mision.getNombreNPC()).getX());
-        mision.setY(datosNpc.get(mision.getNombreNPC()).getY());
-        mision.setZ(datosNpc.get(mision.getNombreNPC()).getZ());
 
+        Map<String, String> datosQuest = (Map<String, String>) FileHelper.readFile("config/lizardon/quests.json", new TypeToken<Map<String, String>>(){}.getType());
+        if(datosQuest == null){
+            datosQuest = new HashMap<>();
+        }
+
+        String npc = datosQuest.get(quest.getName());
+        DatosNPC datos = datosNpc.get(npc);
+
+        mision.setSkin(datos.getSkin());
+        mision.setNombreNPC(npc);
+
+        mision.setX(datos.getX());
+        mision.setY(datos.getY());
+        mision.setZ(datos.getZ());
 
         if(idActivas.contains(quest.getId())){
             mision.setEstado("Activa");

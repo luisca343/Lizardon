@@ -7,6 +7,8 @@ public class DatosNPC {
     private double y;
     private double z;
 
+    private String quest;
+
 
     public String getNombre() {
         return nombre;
@@ -46,5 +48,13 @@ public class DatosNPC {
 
     public void setZ(double z) {
         this.z = z;
+    }
+
+    public String getQuest() {
+        return quest;
+    }
+
+    public void setQuest(String quest) {
+        this.quest = quest;
     }
 }
