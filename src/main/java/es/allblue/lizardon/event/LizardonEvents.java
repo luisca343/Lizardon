@@ -2,10 +2,7 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.commands.DiscosCommand;
-import es.allblue.lizardon.commands.TestCommand;
-import es.allblue.lizardon.commands.KartsCommand;
-import es.allblue.lizardon.commands.CombateCommand;
+import es.allblue.lizardon.commands.*;
 import es.allblue.lizardon.init.FluidInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;

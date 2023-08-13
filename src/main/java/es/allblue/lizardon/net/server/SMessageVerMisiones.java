@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerMisiones;
+import es.allblue.lizardon.objects.DatosMision;
 import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
 import es.allblue.lizardon.objects.ObjetivoMision;
@@ -34,14 +35,64 @@ public class SMessageVerMisiones implements Runnable{
     private IJSQueryCallback callback;
 
     Map<String, DatosNPC> datosNpc;
+    Map<Integer, DatosMision> datosMisionMap;
 
     public SMessageVerMisiones(String str){
         this.str = str;
     }
 
     @Override
-    public void run() {
-        NpcAPI api = NpcAPI.Instance();
+    public void run(){
+        datosMisionMap = ( Map<Integer, DatosMision>) FileHelper.readFile("config/lizardon/misiones.json", new TypeToken< Map<Integer, DatosMision>>(){}.getType());
+        if(datosMisionMap == null){
+            datosMisionMap = new HashMap<>();
+        }
+
+        PlayerWrapper wrapper = new PlayerWrapper(player);
+        IQuest[] mActivas = wrapper.getActiveQuests();
+        IQuest[] mCompletadas = wrapper.getFinishedQuests();
+        ArrayList<DatosMision> misiones = new ArrayList<>();
+
+        for(IQuest mActiva : mActivas){
+            DatosMision datos = datosMisionMap.get(mActiva.getId());
+            datos.setActiva(true);
+            datos.setEstado("Activa");
+
+            IQuestObjective[] objetivos = mActiva.getObjectives(wrapper);
+            ArrayList<ObjetivoMision> objetivosMision = new ArrayList<>();
+            if (objetivos.length > 0 ){
+                for (IQuestObjective objetivo : objetivos) {
+                    ObjetivoMision objetivoMision = new ObjetivoMision();
+                    objetivoMision.setNombre(objetivo.getText());
+                    objetivoMision.setProgreso(objetivo.getProgress());
+                    objetivoMision.setTotal(objetivo.getMaxProgress());
+                    objetivosMision.add(objetivoMision);
+                }
+            }
+
+            datos.setObjetivos(objetivosMision);
+            misiones.add(datos);
+        }
+
+        for(IQuest mCompleta : mCompletadas){
+            DatosMision datos = datosMisionMap.get(mCompleta.getId());
+            datos.setActiva(false);
+            datos.setEstado("Completa");
+
+            misiones.add(datos);
+        }
+
+        Gson gson = new Gson();
+        String res = gson.toJson(misiones);
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
+    }
+
+    private void guardarMision(IQuest mActiva, PlayerWrapper wrapper) {
+
+    }
+
+/*
+    public void runOld() {
         datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new TypeToken<Map<String, DatosNPC>>(){}.getType());
         if(datosNpc == null){
             datosNpc = new HashMap<>();
@@ -72,7 +123,8 @@ public class SMessageVerMisiones implements Runnable{
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
     }
 
-    public void guardarMision(ArrayList<Mision> lista, IQuest quest, PlayerWrapper wrapper, ArrayList<Integer> idActivas){
+
+    public void guardarMisionOld(ArrayList<Mision> lista, IQuest quest, PlayerWrapper wrapper, ArrayList<Integer> idActivas){
         Mision mision = new Mision();
         mision.setCategoria(quest.getCategory().getName());
         mision.setNombre(quest.getName());
@@ -117,7 +169,7 @@ public class SMessageVerMisiones implements Runnable{
             mision.setEstado("Completa");
         }
         lista.add(mision);
-    }
+    }*/
 
     public static SMessageVerMisiones decode(PacketBuffer buf) {
         SMessageVerMisiones message = new SMessageVerMisiones(buf.toString(Charsets.UTF_8));

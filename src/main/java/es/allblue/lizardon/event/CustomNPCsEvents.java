@@ -1,26 +1,21 @@
 package es.allblue.lizardon.event;
 
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.DatosNPC;
+import es.allblue.lizardon.objects.DatosMision;
 import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageUtil;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.event.DialogEvent;
-import noppes.npcs.api.event.NpcEvent;
-import noppes.npcs.api.event.PlayerEvent;
 import noppes.npcs.api.event.QuestEvent;
 import noppes.npcs.api.handler.data.IQuest;
+import noppes.npcs.api.wrapper.PlayerWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class CustomNPCsEvents {
@@ -33,72 +28,59 @@ public class CustomNPCsEvents {
     }
 
     @SubscribeEvent
-    public static void read(DialogEvent.OpenEvent event){
+    public static void openDialog(DialogEvent.OpenEvent event){
+        IQuest quest = event.dialog.getQuest();
+        ServerPlayerEntity player = event.player.getMCEntity();
+
+        PlayerWrapper wrapper = new PlayerWrapper(player);
+
+        if(quest == null || !wrapper.canQuestBeAccepted(quest.getId())) return;
+
         String npcName = event.npc.getName();
-        Map<String, DatosNPC> datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new TypeToken<Map<String, DatosNPC>>(){}.getType());
-        if(datosNpc == null){
-            datosNpc = new HashMap<>();
+        Map<Integer, DatosMision> listaMisiones = (Map<Integer, DatosMision>) FileHelper.readFile("config/lizardon/misiones.json", new TypeToken<Map<Integer, DatosMision>>(){}.getType());
+        if(listaMisiones == null){
+            listaMisiones = new HashMap<>();
         }
 
-        DatosNPC datosNPC = new DatosNPC();
-        if(datosNpc.containsKey(npcName)){
-            datosNpc.get(npcName);
+        DatosMision datosMision = new DatosMision();
+        DatosMision datosMisionArchivo = new DatosMision();
+
+        if(listaMisiones.containsKey(quest.getId())){
+            datosMisionArchivo = listaMisiones.get(quest.getId());
         }
-        datosNPC.setNombre(npcName);
-        datosNPC.setX(event.npc.getX());
-        datosNPC.setY(event.npc.getY());
-        datosNPC.setZ(event.npc.getZ());
+        /* Datos de la mision */
+
+        datosMision.setId(quest.getId());
+        datosMision.setNombre(quest.getName());
+        datosMision.setTextoLog(quest.getLogText());
+        datosMision.setTextoCompletar(quest.getCompleteText());
+        datosMision.setRepetible(quest.getIsRepeatable());
+        datosMision.setTipo(quest.getType());
+        datosMision.setSiguienteMision(-1);
+        if(quest.getNextQuest() != null){
+            datosMision.setSiguienteMision(quest.getNextQuest().getId());
+        }
+        datosMision.setCategoria(quest.getCategory().getName());
+
+        /* Datos del NPC */
+        datosMision.setNombreNPC(event.npc.getName());
+        datosMision.setX(event.npc.getX());
+        datosMision.setY(event.npc.getY());
+        datosMision.setZ(event.npc.getZ());
 
         String rutaSkin = event.npc.getEntityNbt().getString("Texture");
         String[] partes = rutaSkin.split("/");
-        datosNPC.setSkin(partes[partes.length-1]);
+        datosMision.setSkin(partes[partes.length-1]);
 
-        datosNpc.put(npcName, datosNPC);
-        FileHelper.writeFile("config/lizardon/npcs.json", datosNpc);
-
-        Map<String, String> datosQuest = (Map<String, String>) FileHelper.readFile("config/lizardon/quests.json", new TypeToken<Map<String, String>>(){}.getType());
-        if(datosQuest == null){
-            datosQuest = new HashMap<>();
+        // Comparamos los datos de la mision actual con los datos de la mision guardada
+        if(!datosMision.equals(datosMisionArchivo)){
+            listaMisiones.put(quest.getId(), datosMision);
+            FileHelper.writeFile("config/lizardon/misiones.json", listaMisiones);
         }
-
-        IQuest quest = event.dialog.getQuest();
-        if(!datosQuest.containsKey(quest.getName())){
-            datosQuest.put(quest.getName(), npcName);
-            FileHelper.writeFile("config/lizardon/quests.json", datosQuest);
-        }
-
-        Lizardon.getLogger().info("Se ha leido el dialogo");
-    }
-
-
-    @SubscribeEvent
-    public static void test(NpcEvent.InteractEvent event){
-        /*
-        Lizardon.getLogger().info("Se ha interactuado con un NPC");
-        Map<String, DatosNPC> datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new TypeToken<Map<String, DatosNPC>>(){}.getType());
-
-        if(datosNpc == null) datosNpc = new HashMap<>();
-        DatosNPC datos = new DatosNPC();
-        datos.setX(event.npc.getX());
-        datos.setY(event.npc.getY());
-        datos.setZ(event.npc.getZ());
-
-        ICustomNpc npc = event.npc;
-        datos.setNombre(npc.getName());
-        String rutaSkin = npc.getEntityNbt().getString("Texture");
-        String[] partes = rutaSkin.split("/");
-        datos.setSkin(partes[partes.length-1]);
-
-        datosNpc.put(npc.getName(), datos);
-
-
-        FileHelper.writeFile("config/lizardon/npcs.json", datosNpc);*/
     }
 
     @SubscribeEvent
     public static void misionCumplida(QuestEvent.QuestCompletedEvent event){
         ServerPlayerEntity jugador = (ServerPlayerEntity) event.player.getMCEntity();
-        jugador.sendMessage(new StringTextComponent("Has completado '" + event.quest.getName()+"'"), UUID.randomUUID());
-        Lizardon.getLogger().info("FINALIZADA");
     }
 }
