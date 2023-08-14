@@ -213,6 +213,10 @@ public class ConfigCombate {
         return nombreArchivo;
     }
 
+    public String getNombreObjetivo() {
+        return nombreArchivo.replace("/","");
+    }
+
     public void setNombreArchivo(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
     }

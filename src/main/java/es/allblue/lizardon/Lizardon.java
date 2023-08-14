@@ -3,7 +3,6 @@ package es.allblue.lizardon;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
-import com.pixelmonmod.pixelmon.battles.controller.ai.AdvancedAI;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.event.LizardonBattleEvent;
 import es.allblue.lizardon.event.MisionesCaza;

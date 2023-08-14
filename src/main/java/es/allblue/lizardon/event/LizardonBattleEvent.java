@@ -73,8 +73,11 @@ public class LizardonBattleEvent {
             e.printStackTrace();
         }
 
+
         if(ganador instanceof ServerPlayerEntity) {
-            Scoreboard.set(combate.getPlayer(), combate.getConfigCombate().getNombreArchivo(), 1);
+            String nombreObjetivo = combate.getConfigCombate().getNombreObjetivo();
+
+            Scoreboard.set(combate.getPlayer(), nombreObjetivo, 1);
             MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.GREEN + "Has ganado el combate contra " + combate.getConfigCombate().getNombre());
         }else {
             MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.RED + "Has perdido el combate contra " + combate.getConfigCombate().getNombre());

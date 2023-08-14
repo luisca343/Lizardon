@@ -6,8 +6,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
+import es.allblue.lizardon.objects.DatosMision;
 import es.allblue.lizardon.objects.DatosNPC;
 import es.allblue.lizardon.objects.Mision;
+import es.allblue.lizardon.objects.misiones.MisionesJugador;
 import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -36,15 +38,12 @@ public class CMessageVerMisiones implements Runnable{
 
     @Override
     public void run() {
-        datosNpc = (Map<String, DatosNPC>) FileHelper.readFile("config/lizardon/npcs.json", new io.leangen.geantyref.TypeToken<Map<String, DatosNPC>>(){}.getType());
-
         Gson gson = new Gson();
-        ArrayList<Mision> misiones = gson.fromJson(str, new TypeToken<ArrayList<Mision>>(){}.getType());
-        ArrayList<Mision> misionesNuevas = new ArrayList<>();
+        MisionesJugador misionesJugador = gson.fromJson(str, MisionesJugador.class);
         //actualizar(misiones, misionesNuevas);
 
-        Collections.sort(misiones, comparing(Mision::getId));
-        String res = gson.toJson(misiones);
+        Collections.sort(misionesJugador.getMisiones(), comparing(DatosMision::getId));
+        String res = gson.toJson(misionesJugador);
         ClientProxy.callbackMisiones.success(res);
 
     }
