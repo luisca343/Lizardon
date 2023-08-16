@@ -1,10 +1,13 @@
 package es.allblue.lizardon.items;
 
 
+import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.init.BlockInit;
+import es.allblue.lizardon.objects.dex.ActualizarDex;
+import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
@@ -30,8 +33,14 @@ public class SmartRotom extends Item {
             int smartRotomID = item.getTag().getInt("PadID");
             ClientProxy.PadData smartRotom = Lizardon.PROXY.getPadByID(smartRotomID);
 
+            int idPokemon = pixelmon.getSpecies().getDex();
             //smartRotom.view.loadURL(Lizardon.config.getHome()+"/smartrotom/dex/datos/"+pixelmon.getSpecies().getDex()+"/base");
-            smartRotom.view.runJS("abrirDex("+ pixelmon.getSpecies().getDex() +")", null);
+            smartRotom.view.runJS("abrirDex("+ idPokemon +")", null);
+
+            ActualizarDex dex = new ActualizarDex(player.getUUID().toString(), idPokemon, 0);
+            Gson gson = new Gson();
+
+            WingullAPI.wingullPOST("/dex", gson.toJson(dex));
 
             return ActionResultType.FAIL;
         }

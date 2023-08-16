@@ -30,18 +30,6 @@ import java.util.Map;
 @Mod.EventBusSubscriber
 public class LizardonBattleEvent {
 
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    @SubscribeEvent
-    public void guardarDex(PokedexEvent.Post event){
-        String uuid = event.getPlayer().getStringUUID();
-        int idPokemon = event.getPokemon().getSpecies().getDex();
-        int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
-
-        ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado);
-        Gson gson = new Gson();
-
-        WingullAPI.wingullPOST("rotom/dex", gson.toJson(dex));
-    }
 
     public void inicioCombateEntrenador(BattleStartedEvent event, Combate combate){
 
