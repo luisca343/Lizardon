@@ -37,7 +37,7 @@ public class PixelmonEvents {
         ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado);
         Gson gson = new Gson();
 
-        WingullAPI.wingullPOST("/dex", gson.toJson(dex));
+        WingullAPI.wingullPOST("/dex/registro", gson.toJson(dex));
     }
 
     @SubscribeEvent

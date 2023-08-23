@@ -44,6 +44,7 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessageTaxi.class, SMessageTaxi::encode, SMessageTaxi::decode, SMessageTaxi::handle);
         INSTANCE.registerMessage(index++, CMessageConfigServer.class, CMessageConfigServer::encode, CMessageConfigServer::decode, CMessageConfigServer::handle);
 
+        INSTANCE.registerMessage(index++, SMessageUpdateDex.class, SMessageUpdateDex::encode, SMessageUpdateDex::decode, SMessageUpdateDex::handle);
         INSTANCE.registerMessage(index++, CMessageWaypoints.class, CMessageWaypoints::encode, CMessageWaypoints::decode, CMessageWaypoints::handle);
 
     }
