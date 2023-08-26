@@ -1,29 +1,19 @@
 package es.allblue.lizardon.event;
 
-import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
-import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
-import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
-import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
-import es.allblue.lizardon.commands.CombateCommand;
-import es.allblue.lizardon.objects.dex.ActualizarDex;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.pixelmon.Combate;
 import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.Scoreboard;
-import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import noppes.npcs.api.entity.ICustomNpc;
-import org.h2.tools.Server;
 
 import java.util.Map;
 
@@ -74,8 +64,8 @@ public class LizardonBattleEvent {
 
     @SubscribeEvent
     public void onBattleStart(BattleStartedEvent event){
-        if(CombateCommand.combatesEspeciales.containsKey(event.bc.battleIndex)) {
-            Combate combate = CombateCommand.combatesEspeciales.get(event.bc.battleIndex);
+        if(Lizardon.getLBC().existeCombateEspecial(event.bc.battleIndex)) {
+            Combate combate = Lizardon.getLBC().getCombateEspecial(event.bc.battleIndex);
             if(combate.getConfigCombate().esEntrenador()) inicioCombateEntrenador(event, combate);
             else inicioCombateSalvaje(event, combate);
         }
@@ -85,16 +75,16 @@ public class LizardonBattleEvent {
 
     @SubscribeEvent
     public void onBattleEnd(BattleEndEvent event){
-        if(CombateCommand.combatesEspeciales.containsKey(event.getBattleController().battleIndex)) {
-            Combate combate = CombateCommand.combatesEspeciales.get(event.getBattleController().battleIndex);
+        if(Lizardon.getLBC().existeCombateEspecial(event.getBattleController().battleIndex)) {
+            Combate combate = Lizardon.getLBC().getCombateEspecial(event.getBattleController().battleIndex);
             if(combate.getConfigCombate().esEntrenador()) finCombateEntrenador(event, combate);
             else finCombateSalvaje(event, combate);
 
-            MobEntity entity = CombateCommand.combatesEspeciales.get(event.getBattleController().battleIndex).getEntidad();
+            MobEntity entity = Lizardon.getLBC().getCombateEspecial(event.getBattleController().battleIndex).getEntidad();
             if(entity != null){
                 entity.remove();
             }
-            CombateCommand.combatesEspeciales.remove(event.getBattleController().battleIndex);
+            Lizardon.getLBC().removeCombateEspecial(event.getBattleController().battleIndex);
         }
 
     }

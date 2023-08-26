@@ -16,7 +16,7 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipa
 import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import es.allblue.lizardon.commands.CombateCommand;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.entity.MobEntity;
@@ -75,7 +75,7 @@ public class Combate {
 
         System.out.println("Combate iniciado: " + idCombate);
 
-        CombateCommand.combatesEspeciales.put(idCombate, this);
+        Lizardon.getLBC().addCombateEspecial(idCombate, this);
         MessageUtil.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
     }
 
@@ -109,6 +109,7 @@ public class Combate {
         NPCTrainer npc = new NPCTrainer(player.level);
         npc.setName("Entrenador");
 
+
         npc.setBossTier(BossTierRegistry.NOT_BOSS);
         if(getNivelEquipoRival() > 100){
             int niveles = getNivelEquipoRival() - 100;
@@ -116,7 +117,7 @@ public class Combate {
             npc.setBossTier(tier);
         }
 
-
+        System.out.println("IA: " + configCombate.getIA());
         npc.setBattleAIMode(configCombate.getIA());
         if(!npc.isAddedToWorld()){
             npc.setPos(player.getX(), player.getY(), player.getZ());
@@ -124,7 +125,12 @@ public class Combate {
             setEntidad(npc);
         }
 
+        System.out.println("Equipo: " + configCombate.getEquipo());
         List<Pokemon> equipoEntrenador = configCombate.getEquipo();
+        if(equipoEntrenador.size() == 0){
+            System.out.println("Equipo vacio");
+            return null;
+        }
         int i = 0;
         for (Pokemon pkm : equipoEntrenador) {
             npc.getPokemonStorage().set(i, pkm);
@@ -133,6 +139,7 @@ public class Combate {
             if (i == 6) break;
         }
 
+        System.out.println("Participante: " + new TrainerParticipant(npc, configCombate.numPokemonNPC()));
         TrainerParticipant partNPC = new TrainerParticipant(npc, configCombate.numPokemonNPC());
 
         return partNPC;

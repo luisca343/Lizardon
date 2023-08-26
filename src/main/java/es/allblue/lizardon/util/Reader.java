@@ -57,6 +57,7 @@ public class Reader {
         ConfigCombate configCombate = new Gson().fromJson(str, ConfigCombate.class);
 
         List<Pokemon> team = PokePasteReader.fromLizardon(tipo +"/"+npc).build();
+
         configCombate.setEquipo(team);
         configCombate.setNombreArchivo(npc);
         configCombate.setCarpeta(tipo);

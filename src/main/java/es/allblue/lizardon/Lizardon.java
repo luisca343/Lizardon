@@ -13,6 +13,7 @@ import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.objects.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.pixelmon.attacks.TestAttack;
+import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
 import es.allblue.lizardon.tileentity.PantallaRenderer;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
@@ -33,7 +34,6 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
-import nick1st.fancyvideo.FancyVideoEvents;
 import nick1st.fancyvideo.api.DynamicResourceLocation;
 import nick1st.fancyvideo.api.eventbus.EventException;
 import nick1st.fancyvideo.api.eventbus.FancyVideoEvent;
@@ -69,7 +69,9 @@ public class Lizardon
     // SmartRotom END
     public static final Logger LOGGER = LogManager.getLogger();
     //public static final String BLACKLIST_URL = "http://lizardon.es/smartrotom";
+
     public static Lizardon INSTANCE = null;
+    public static LizardonBattleController lbc;
     private API api;
     public static String MOD_ID = "lizardon";
     public static String HEADER_MENSAJE = TextFormatting.BLUE + "" + TextFormatting.BOLD+"[Lizardon]: ";
@@ -84,6 +86,19 @@ public class Lizardon
     public API getAPI() {
         return api;
     }
+
+    public static Lizardon getInstance() {
+        return INSTANCE;
+    }
+
+    public static Logger getLogger(){
+        return LOGGER;
+    }
+
+    public static LizardonBattleController getLBC() {
+        return lbc;
+    }
+
 
     public Lizardon() {
         INSTANCE = this;
@@ -147,38 +162,9 @@ public class Lizardon
         api.registerScheme("lizardon", ModScheme.class, true, false, false, true, true, false, false);
 
         PROXY.preInit();
+        lbc = new LizardonBattleController();
 
 
-
-        /*
-        LOGGER.info("DESCARGANDO MUSICA");
-        try{
-            String url = "http://i.lizardon.es/pixelmon/sonido/denden.mp3";
-            String[] partes = url.split("/");
-            String carpetaMusica = "Lizardon/musica/";
-            File directorio = new File(carpetaMusica);
-            if(!directorio.exists()){
-                // Files.createDirectories(Util.getRuta(carpetaMusica));
-            }
-
-            URLConnection connection = new 	URL(url).openConnection();
-
-            connection.addRequestProperty("User-Agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
-            InputStream is = connection.getInputStream();
-
-            OutputStream outstream = new FileOutputStream(new File(carpetaMusica + partes[partes.length-1]));
-
-            byte[] buffer = new byte[4096];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                outstream.write(buffer, 0, length);
-            }
-            System.out.println("mp3 download completed.");
-            outstream.close();
-        }catch (Exception e){
-            LOGGER.info(e.getMessage());
-        }*/
 
         EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
     }
@@ -265,9 +251,6 @@ public class Lizardon
         return false;
     }
 
-    public static Logger getLogger(){
-        return LOGGER;
-    }
 
     @FancyVideoEvent
     @SuppressWarnings("unused")

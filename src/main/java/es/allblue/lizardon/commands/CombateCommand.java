@@ -15,10 +15,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import java.util.HashMap;
 
 public class CombateCommand {
-    public static HashMap<Integer, Combate> combatesEspeciales = new HashMap<>();
-    public static HashMap<Integer, ConfigCombate> combatesEntrenador = new HashMap<>();
-    public static HashMap<Integer, ConfigCombate> combatesSalvajes = new HashMap<>();
-
     public CombateCommand(CommandDispatcher<CommandSource> dispatcher){
         dispatcher.register(Commands.literal("combate")
                 .then(Commands.argument("player", EntityArgument.player())
@@ -58,8 +54,6 @@ public class CombateCommand {
             ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
             String url = StringArgumentType.getString(command, "url");
             ConfigCombate configCombateEntrenador = Reader.getDatosNPC(url);
-            System.out.println("Iniciando combate entrenador");
-            System.out.println(configCombateEntrenador.toString());
             Combate combate = new Combate(player, configCombateEntrenador);
             combate.iniciarCombate();
         }catch(CommandSyntaxException e){

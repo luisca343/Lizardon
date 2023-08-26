@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.export.PokemonConverterFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.export.exception.PokemonImportException;
+import es.allblue.lizardon.Lizardon;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -35,7 +36,7 @@ public class PokePasteReader {
         try {
             return PokemonConverterFactory.importText(lines);
         } catch (PokemonImportException e) {
-            e.printStackTrace();
+            Lizardon.getLogger().error("Error al importar el equipo desde PokePaste: {}", e.getReason());
         }
 
         return Collections.emptyList();

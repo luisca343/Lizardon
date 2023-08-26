@@ -90,7 +90,7 @@ public class ConfigCombate {
     }
 
     public int[] getTipo() {
-        if(tipo == null) return new int[]{6, 6};
+        if(tipo == null) return new int[]{1, 1};
         tipo.replace("v", "vs");
         String[] partes = tipo.split("vs");
         int[] numeros = new int[partes.length];
@@ -199,6 +199,7 @@ public class ConfigCombate {
 
         for (Pokemon pokemon : equipo) {
             pokemon.setLevel(nivel);
+
         }
 
         System.out.println("Nivel del equipo: " + nivel);
