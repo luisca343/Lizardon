@@ -21,7 +21,10 @@ public class BlockInit {
     public static final DeferredRegister<Block> BLOCKS
             = DeferredRegister.create(ForgeRegistries.BLOCKS, Lizardon.MOD_ID);
 
-
+    public static RegistryObject TWISTER_AMARILLO = registerBlock("twister_amarillo", () -> new Alfombra(Material.WOOL));
+    public static RegistryObject TWISTER_AZUL = registerBlock("twister_azul", () -> new Alfombra(Material.WOOL));
+    public static RegistryObject TWISTER_ROJO = registerBlock("twister_rojo", () -> new Alfombra(Material.WOOL));
+    public static RegistryObject TWISTER_VERDE = registerBlock("twister_verde", () -> new Alfombra(Material.WOOL));
     public static final RegistryObject<Block> FUNKO = registerBlock("funko", () -> new Funko(AbstractBlock.Properties.of(Material.STONE)));
 
 
