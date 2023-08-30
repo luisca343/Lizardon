@@ -1,13 +1,10 @@
 package es.allblue.lizardon.client.gui;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.StringTextComponent;
 import nick1st.fancyvideo.api.DynamicResourceLocation;
 import nick1st.fancyvideo.api.MediaPlayerHandler;

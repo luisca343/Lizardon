@@ -1,6 +1,8 @@
 package es.allblue.lizardon.client;
 
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.blocks.BloquePantalla;
+import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
 import es.allblue.lizardon.client.gui.PantallaVideo;
@@ -11,10 +13,14 @@ import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
 import es.allblue.lizardon.tileentity.PantallaTE;
+import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +29,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -105,7 +112,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void preInit() {
         System.out.println("PRE INIT");
         mc = Minecraft.getInstance();
-        mcef = Lizardon.INSTANCE.getAPI();
+        mcef = Lizardon.getInstance().getAPI();
         MinecraftForge.EVENT_BUS.register(this);
 
 
@@ -115,7 +122,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     }
 
     public void end (FMLLoadCompleteEvent event){
-        API api = Lizardon.INSTANCE.getAPI();
+        API api = Lizardon.getInstance().getAPI();
         if(api != null) {
             //Register this class to handle onAddressChange and onQuery events
             //api.registerDisplayHandler(this);
@@ -194,27 +201,32 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
             if(mc.player != null && !screenTracking.isEmpty()) {
                 int id = lastTracked % screenTracking.size();
                 lastTracked++;
-                System.out.println("LOG: Checking screen " + id);
-
+                //System.out.println("LOG: Checking screen " + id);
                 PantallaTE tes = screenTracking.get(id);
-                double dist2 = mc.player.distanceToSqr(tes.getBlockPos().getX(), tes.getBlockPos().getY(), tes.getBlockPos().getZ());
+                //System.out.println("LOG: Checking screen " + id + " at " + tes.getBlockPos());
+                Block bloque = mc.level.getBlockState(tes.getBlockPos()).getBlock();
+                if(!(bloque instanceof BloquePantalla)){
+                    System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's not a screen");
+                    tes.unload();
+                    return;
+                }
+                //System.out.println("LOG: Checking screen " + id + " at " + tes.getBlockPos() + " with block " + bloque);
 
-                /*
+                double dist2 = mc.player.distanceToSqr(tes.getBlockPos().getX(), tes.getBlockPos().getY(), tes.getBlockPos().getZ());
+                //System.out.println("and distance " + dist2);
+                //System.out.println(tes.isLoaded());
+
+                MessageUtil.enviarMensaje(mc.player, "Distancia: " + dist2 + " Cargado: " + tes.isLoaded());
                 if(tes.isLoaded()) {
                     if(dist2 >  50){
                         System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
-
                         tes.unload();
                     }
                     tes.updateTrackDistance(dist2, 80); //ToDo find master volume
                 } else if(dist2 <= 50){
                     tes.load();
                     System.out.println("LOG: Loading screen " + id + " at " + tes.getBlockPos() + " because it's close enough");
-                }*/
-
-
-
-
+                }
             }
 
 
@@ -360,7 +372,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void abrirPantallaCine(PantallaTE te) {
         IBrowser browser = te.browser;
         if(browser == null){
-            browser = Lizardon.INSTANCE.getAPI().createBrowser("http://google.es", false);
+            browser = Lizardon.getInstance().getAPI().createBrowser("http://google.es", false);
             browser.loadURL("http://google.es");
             te.browser = browser;
         }
@@ -369,6 +381,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void trackScreen(PantallaTE tes, boolean track) {
+        System.out.println(track ? "Tracking" : "Untracking" + " screen at " + tes.getBlockPos());
         int idx = -1;
         for(int i = 0; i < screenTracking.size(); i++) {
             if(screenTracking.get(i) == tes) {
@@ -378,11 +391,16 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
 
         if(track) {
-            if(idx < 0)
+            if(idx < 0){
+                System.out.println("LOG: Tracking screen at " + tes.getBlockPos());
                 screenTracking.add(tes);
-        } else if(idx >= 0)
+            }
+        } else if(idx >= 0){
+            System.out.println("LOG: Untracking screen at " + tes.getBlockPos());
             screenTracking.remove(idx);
+        }
     }
+
 
 
 }

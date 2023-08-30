@@ -52,7 +52,7 @@ public class PantallaVideo extends Screen {
         System.out.println("http://localhost:3000/video?url="+urlVideo);
         if(browser == null) {
             //Grab the API and make sure it isn't null.
-            API api = Lizardon.INSTANCE.getAPI();
+            API api = Lizardon.getInstance().getAPI();
             if(api == null)
                 return;
 

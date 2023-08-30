@@ -33,8 +33,6 @@ public final class SmartRotomRenderer implements IItemRenderer {
 
     private static final float PI = (float) Math.PI;
     private final Minecraft mc = Minecraft.getInstance();
-    private final ResourceLocation tex = new ResourceLocation("webdisplays", "textures/item/test.png");
-
     private float sinSqrtSwingProg1;
     private float sinSqrtSwingProg2;
     private float sinSwingProg1;

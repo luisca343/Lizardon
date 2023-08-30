@@ -66,6 +66,7 @@ public class SmartRotom extends Item {
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         World world = context.getLevel();
+
         if(!world.isClientSide()){
             return super.onItemUseFirst(stack, context);
         }
@@ -84,11 +85,12 @@ public class SmartRotom extends Item {
     }
 
     public static void actualizarPad(ItemStack stack){
-        if(!stack.hasTag() && !stack.getTag().contains("PadID")){
-            stack.setTag(new CompoundNBT());
-            stack.getTag().putString("PadURL", "http://www.google.es");
+        if(!stack.hasTag() || !stack.getTag().contains("PadID")){
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("PadURL", "http://www.google.es");
             int id = Lizardon.PROXY.getNextPadID();
-            stack.getTag().putInt("PadID", id);
+            nbt.putInt("PadID", id);
+            stack.setTag(nbt);
 
             Lizardon.PROXY.updatePad(id, stack.getTag(), true);
         }

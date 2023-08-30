@@ -6,9 +6,11 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.brigadier.Message;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.util.BlockSide;
+import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.vector.Vector3f;
 import es.allblue.lizardon.util.vector.Vector3i;
 import net.minecraft.client.Minecraft;
@@ -49,20 +51,23 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
             return;
         }
 
-        IBrowser browser = te.browser;
+        if (te.browser == null) {
+            te.browser = Lizardon.getInstance().getAPI().createBrowser("http://google.es", false);
+            te.browser.loadURL("http://google.es");
+            te.browser.resize(1920, 1080);
 
-        if (browser == null) {
-            Minecraft.getInstance().player.sendMessage(new StringTextComponent("Browser is null"), UUID.randomUUID());
-            te.browser = Lizardon.INSTANCE.getAPI().createBrowser("http://google.es", false);
             return;
         }
 
-        if (browser.getTextureID() == 0) {
+        if (te.browser.getTextureID() == 0) {
+            MessageUtil.enviarMensaje(Minecraft.getInstance().player, "Texture is null");
             //Minecraft.getInstance().player.sendMessage(new StringTextComponent("Texture is null"), UUID.randomUUID());
             return;
         }
 
 
+        GlStateManager._disableDepthTest();
+        GlStateManager._enableTexture();
 
         Tessellator tesselator = Tessellator.getInstance();
         BufferBuilder builder = tesselator.getBuilder();
@@ -91,27 +96,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
         //enviar mensaje al jugador con la orientación de la pantalla
         /**/
-        BlockSide lado;
-        switch (te.facing){
-            case SOUTH:
-                lado = BlockSide.SOUTH;
-                break;
-            case EAST:
-                lado = BlockSide.EAST;
-                break;
-            case WEST:
-                lado = BlockSide.WEST;
-                break;
-            case DOWN:
-                lado = BlockSide.BOTTOM;
-                break;
-            case UP:
-                lado = BlockSide.TOP;
-                break;
-            default:
-                lado = BlockSide.NORTH;
-                break;
-        }
+        BlockSide lado = te.orientacionPantalla;
 
 
         tmpi.set(lado.right);
@@ -128,11 +113,12 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         matrixStack.translate(mid.x, mid.y, mid.z);
 
 
-        switch (te.facing){
-            case DOWN:
+
+        switch (lado){
+            case TOP:
                 matrixStack.mulPose(XP.rotationDegrees(90.f + 49.8f));
                 break;
-            case UP:
+            case BOTTOM:
                 matrixStack.mulPose(XN.rotation(90.f + 49.8f));
                 break;
             case NORTH:
@@ -151,7 +137,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
 
         RenderSystem.enableDepthTest();
-        GlStateManager._bindTexture(browser.getTextureID() );
+        GlStateManager._bindTexture(te.browser.getTextureID() );
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -165,6 +151,9 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
         matrixStack.popPose();
 
+        GlStateManager._enableDepthTest();
+
+        System.out.println("FIN RENDER");
     }
 
 
