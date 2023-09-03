@@ -1,8 +1,0 @@
-{
-  "type_id": "simple",
-  "id": "lizardon",
-  "suffix": "ribbon.lizardon.title",
-  "translation_key": "ribbon.lizardon",
-  "description": "ribbon.lizardon.description",
-  "icon": "lizardon:textures/gui/ribbons/lizardon.png"
-}
