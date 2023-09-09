@@ -12,6 +12,7 @@ import com.pixelmonmod.pixelmon.comm.packetHandlers.clientStorage.newStorage.pc.
 import com.pixelmonmod.pixelmon.enums.EnumGuiScreen;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.DarObjetos;
+import es.allblue.lizardon.util.MessageUtil;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -44,7 +45,11 @@ public class SMessageEncenderPC implements Runnable{
         try{
             UUID uuid = UUID.fromString(str);
             NetworkHelper.sendPacket(new ClientChangeOpenPCPacket(uuid), player);
-            OpenScreenPacket.open(player, EnumGuiScreen.PC, new int[0]);
+            if(!player.getPersistentData().getBoolean("frentebatalla")){
+                OpenScreenPacket.open(player, EnumGuiScreen.PC, new int[0]);
+            } else {
+                MessageUtil.enviarMensaje(player, "No puedes abrir el PC en el Frente Batalla");
+            }
         }catch(Exception e){
             player.sendMessage(new StringTextComponent("Ha ocurrido un error"), UUID.randomUUID());
         }

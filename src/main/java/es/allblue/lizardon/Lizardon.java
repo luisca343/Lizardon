@@ -120,9 +120,6 @@ public class Lizardon
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(Messages::registryNetworkPackets);
 
-
-
-
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
         FluidInit.register(eventBus);
@@ -192,7 +189,25 @@ public class Lizardon
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        // some example code to dispatch IMC to another mod
+        /*
+        SlotTypePreset[] slots = {
+                SlotTypePreset.HEAD, SlotTypePreset.NECKLACE, SlotTypePreset.BACK, SlotTypePreset.BODY,
+                SlotTypePreset.HANDS, SlotTypePreset.RING, SlotTypePreset.CHARM
+        };
+        List<SlotTypeMessage.Builder> builders = new ArrayList<>();
+        for (SlotTypePreset slot : slots) {
+            SlotTypeMessage.Builder builder = slot.getMessageBuilder();
+            if (slot == SlotTypePreset.RING) {
+                builder.size(2);
+            }
+            builders.add(builder);
+        }
+        for (SlotTypeMessage.Builder builder : builders) {
+            SlotTypeMessage message = builder.build();
+            InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE,
+                    ()->message);
+        }*/
+
         InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
     }
 

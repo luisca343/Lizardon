@@ -58,8 +58,6 @@ public class Combate {
             getPlayerParty().heal();
         }
 
-        System.out.println("Creando scoreboard");
-        System.out.println(configCombate.getNombreArchivo());
         Scoreboard.getOrCreateObjective(player, configCombate.getNombreArchivo());
 
         System.out.println("Creando reglas");
@@ -85,8 +83,6 @@ public class Combate {
 
     public PlayerParticipant getPartJugador(){
         List<Pokemon> pokemon = getPlayerParty().findAll(Pokemon::canBattle);
-        System.out.println("Pokemon: " + pokemon.size());
-        System.out.println(new PlayerParticipant(player, pokemon, configCombate.numPokemonJugador()));
         return new PlayerParticipant(player, pokemon, configCombate.numPokemonJugador());
     }
 
@@ -127,7 +123,7 @@ public class Combate {
 
         System.out.println("Equipo: " + configCombate.getEquipo());
         List<Pokemon> equipoEntrenador = configCombate.getEquipo();
-        if(equipoEntrenador.size() == 0){
+        if(equipoEntrenador.isEmpty()){
             System.out.println("Equipo vacio");
             return null;
         }
@@ -139,10 +135,7 @@ public class Combate {
             if (i == 6) break;
         }
 
-        System.out.println("Participante: " + new TrainerParticipant(npc, configCombate.numPokemonNPC()));
-        TrainerParticipant partNPC = new TrainerParticipant(npc, configCombate.numPokemonNPC());
-
-        return partNPC;
+        return new TrainerParticipant(npc, configCombate.numPokemonNPC());
     }
 
     public ConfigCombate getConfigCombate() {

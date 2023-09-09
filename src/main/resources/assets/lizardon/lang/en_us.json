@@ -4,6 +4,10 @@
   "block.lizardon.itamilk": "Itamilk",
 
   "block.lizardon.tocadiscos": "Tocadiscos",
+  "block.lizardon.twister_amarillo": "Alfombra de Twister Amarilla",
+  "block.lizardon.twister_azul": "Alfombra de Twister Azul",
+  "block.lizardon.twister_rojo": "Alfombra de Twister Roja",
+  "block.lizardon.twister_verde": "Alfombra de Twister Verde",
 
   "item.lizardon.smartrotom": "Smart Rotom",
   "item.lizardon.cubo_aguas_termales": "Cubo de aguas termales",
@@ -48,5 +52,10 @@
   "ability.TestAbility.description": "Duplica el ataque de tu dinosaurio amorfo de mierda.",
 
   "attack.test_attack": "Ataque de prueba",
-  "attack.test_attack.description": "Ataque de prueba"
+  "attack.test_attack.description": "Ataque de prueba",
+
+
+  "ribbon.lizardon": "Cinta Lizardon",
+  "ribbon.lizardon.description": "Cinta obtenida por derrotar a Lizardon en el modo aventura.",
+  "ribbon.lizardon.title": "%s el Lizardon"
 }

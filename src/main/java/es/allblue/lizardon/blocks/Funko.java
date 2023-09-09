@@ -60,6 +60,9 @@ public class Funko extends Block {
         }
     }
 
+
+
+
     @Override
     public void onPlace(BlockState p_220082_1_, World p_220082_2_, BlockPos p_220082_3_, BlockState p_220082_4_, boolean p_220082_5_) {
         super.onPlace(p_220082_1_, p_220082_2_, p_220082_3_, p_220082_4_, p_220082_5_);
@@ -81,11 +84,10 @@ public class Funko extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        /*FunkoTE te = TileEntityInit.FUNKO_TE.get().create();
-        return TileEntityInit.FUNKO_TE.get().create();*/
+        return TileEntityInit.FUNKO_TE.get().create();
 
-        return null;
     }
+
 
 
 

@@ -89,17 +89,27 @@ public class QueryHelper {
             Lizardon.PROXY.closeSmartRotom();
             return true;
         }
-        /*
         if(query.contains("getPC")){
             ClientProxy.callbackMCEF = callback;
             Messages.INSTANCE.sendToServer(new SMessageGetPC(query));
             return true;
         }
+        if(query.contains("getEquipo")){
+            ClientProxy.callbackMCEF = callback;
+            Messages.INSTANCE.sendToServer(new SMessageGetEquipo(query));
+            return true;
+        }
+
         if(query.contains("setPC")){
             ClientProxy.callbackMCEF = callback;
             Messages.INSTANCE.sendToServer(new SMessageSetPC(query));
             return true;
-        }*/
+        }
+        if(query.contains("setEquipo")){
+            ClientProxy.callbackMCEF = callback;
+            Messages.INSTANCE.sendToServer(new SMessageCargarEquipo(query));
+            return true;
+        }
         return false;
     }
 

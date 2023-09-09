@@ -8,26 +8,68 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mrcrayfish.vehicle.network.PacketHandler;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
+import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
+import com.pixelmonmod.pixelmon.api.storage.StorageManager;
+import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.command.SchematicCommands;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.*;
+import com.sk89q.worldedit.forge.ForgeAdapter;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.World;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerVideo;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.objects.WayPoint;
 import es.allblue.lizardon.objects.karts.Circuito;
+import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
+import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
+import es.allblue.lizardon.util.FileHelper;
+import es.allblue.lizardon.util.MessageUtil;
 import es.allblue.lizardon.util.music.AudioManager;
+import io.leangen.geantyref.TypeToken;
+import journeymap.client.ui.component.ScrollListPane;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.wrapper.PlayerWrapper;
 
-import java.util.UUID;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class TestCommand {
     private Circuito circuito;
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(registrarEquipo())
+                .then(baseSecreta())
+                .then(guardarBase())
+                .then(guardarEquipo())
+                .then(cargarEquipo())
+                .then(iniciarCombateFrenteBatalla())
                 .then(playVideo())
                 .requires((commandSource -> commandSource.hasPermission(3))
                 ).then(crearWaypoint())
@@ -37,6 +79,144 @@ public class TestCommand {
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource,?> registrarEquipo() {
+        return Commands.literal("registrarEquipo")
+                        .executes((command) -> {
+                            ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                            TorreBatallaController.registrarEquipo(LizardonBattleController.TipoCombate.TB_INDIVIDUAL, player);
+                            return 1;
+                        });
+    }
+
+    public int parcelasCreadas = 0;
+    public BlockVector3 inicio = BlockVector3.at(50, 100, 100);
+
+    private ArgumentBuilder<CommandSource,?> baseSecreta() {
+        return Commands.literal("baseSecreta")
+                .executes((command) -> {
+                    PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+                    File schem = FileHelper.getSchematic("baseSecreta");
+                    try {
+                        ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(new FileInputStream(schem));
+                        Clipboard clipboard = reader.read();
+
+                        System.out.println("CLIPBOARD CARGADA");
+
+                        World world = ForgeAdapter.adapt(player.level);
+                        EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1);
+
+                        System.out.println("EDIT SESSION CREADA");
+                        BlockVector3 inicioNueva = inicio.add(0, 0, 15 * parcelasCreadas);
+                        Operation operation = new ClipboardHolder(clipboard)
+                                .createPaste(editSession)
+                                .to(inicioNueva)
+                                .ignoreAirBlocks(false)
+                                .build();
+                        try {
+                            Operations.complete(operation);
+                            MessageUtil.enviarMensaje(player, "Parcela creada: " + ++parcelasCreadas);
+                            editSession.flushSession();
+                        } catch (WorldEditException e) {
+                            e.printStackTrace();
+                        }
+
+                        return 1;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                });
+    }
+
+    private ArgumentBuilder<CommandSource,?> guardarBase() {
+        return Commands.literal("guardarBase")
+                .executes((command) -> {
+                        PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+
+                    World world = ForgeAdapter.adapt(player.level);
+                    System.out.println("WORLD ADAPTADO");
+                    BlockVector3 pos1 = BlockVector3.at(0, 0, 0);
+                    BlockVector3 pos2 = BlockVector3.at(10, 10, 10);
+
+                    CuboidRegion region = new CuboidRegion(world, pos1, pos2);
+                    Clipboard clipboard = new BlockArrayClipboard(region);
+
+
+                    ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+                            world, region, clipboard, region.getMinimumPoint()
+                    );
+
+
+                    try {
+                        Operations.complete(forwardExtentCopy);
+                        MessageUtil.enviarMensaje(player, "OPERACION COMPLETADA, BLOQUES AFECTADOS: " + forwardExtentCopy.getAffected());
+                        System.out.println("OPERACION COMPLETADA");
+                        System.out.println("CLIPBOARD CREADA");
+
+                        File schem = FileHelper.getSchematic("baseSecreta");
+
+                        System.out.println("FILE CARGADO");
+
+                        System.out.println("TRY");
+
+                        ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(schem));
+                        writer.write(clipboard);
+                        writer.close();
+
+                        System.out.println("CLIPBOARD ESCRITA");
+
+                    } catch (WorldEditException e) {
+                        System.out.println("ERROR");
+                        throw new RuntimeException(e);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    return 1;
+
+                });
+    }
+
+    private ArgumentBuilder<CommandSource,?> iniciarCombateFrenteBatalla() {
+        return Commands.literal("iniciarCombateFrenteBatalla")
+                .executes((command) -> {
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                    TorreBatallaController.iniciarCombate(player);
+
+
+                    return 1;
+                });
+    }
+
+    private ArgumentBuilder<CommandSource,?> cargarEquipo() {
+        return Commands.literal("cargarEquipo")
+                .then(Commands.argument("nombre", StringArgumentType.string())
+                .executes((command) -> {
+                    PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+                    String nombre = StringArgumentType.getString(command, "nombre");
+
+                    Lizardon.getLBC().cargarEquipoBase(player);
+
+                    return 1;
+                }));
+    }
+
+    private ArgumentBuilder<CommandSource,?> guardarEquipo() {
+        return Commands.literal("guardarEquipo")
+                .then(Commands.argument("nombre", StringArgumentType.string())
+           .executes((command) -> {
+                       PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+                       String nombre = StringArgumentType.getString(command, "nombre");
+
+                       Lizardon.getLBC().guardarEquipo(player, nombre);
+
+              return 1;
+           }
+           ));
     }
 
     private ArgumentBuilder<CommandSource,?> playVideo() {

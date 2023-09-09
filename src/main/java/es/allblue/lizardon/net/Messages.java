@@ -35,6 +35,8 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageCambioRegion.class, CMessageCambioRegion::encode, CMessageCambioRegion::decode, CMessageCambioRegion::handle);
         INSTANCE.registerMessage(index++, SMessageGetPC.class, SMessageGetPC::encode, SMessageGetPC::decode, SMessageGetPC::handle);
         INSTANCE.registerMessage(index++, CMessageGetPC.class, CMessageGetPC::encode, CMessageGetPC::decode, CMessageGetPC::handle);
+        INSTANCE.registerMessage(index++, SMessageGetEquipo.class, SMessageGetEquipo::encode, SMessageGetEquipo::decode, SMessageGetEquipo::handle);
+        INSTANCE.registerMessage(index++, SMessageCargarEquipo.class, SMessageCargarEquipo::encode, SMessageCargarEquipo::decode, SMessageCargarEquipo::handle);
         INSTANCE.registerMessage(index++, SMessageSetPC.class, SMessageSetPC::encode, SMessageSetPC::decode, SMessageSetPC::handle);
         INSTANCE.registerMessage(index++, CMessageReturn.class, CMessageReturn::encode, CMessageReturn::decode, CMessageReturn::handle);
         INSTANCE.registerMessage(index++, CMessageCambioPosicion.class, CMessageCambioPosicion::encode, CMessageCambioPosicion::decode, CMessageCambioPosicion::handle);
@@ -44,8 +46,12 @@ public class Messages {
         INSTANCE.registerMessage(index++, SMessageTaxi.class, SMessageTaxi::encode, SMessageTaxi::decode, SMessageTaxi::handle);
         INSTANCE.registerMessage(index++, CMessageConfigServer.class, CMessageConfigServer::encode, CMessageConfigServer::decode, CMessageConfigServer::handle);
 
+        INSTANCE.registerMessage(index++, CMessageRunJS.class, CMessageRunJS::encode, CMessageRunJS::decode, CMessageRunJS::handle);
+
         INSTANCE.registerMessage(index++, SMessageUpdateDex.class, SMessageUpdateDex::encode, SMessageUpdateDex::decode, SMessageUpdateDex::handle);
         INSTANCE.registerMessage(index++, CMessageWaypoints.class, CMessageWaypoints::encode, CMessageWaypoints::decode, CMessageWaypoints::handle);
+
+
 
     }
 }

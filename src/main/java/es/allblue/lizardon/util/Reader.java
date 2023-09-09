@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Reader {
-    private static InputStream getConnectionStream(URL url) {
+    public static InputStream getConnectionStream(URL url) {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.addRequestProperty("User-Agent", "Mozilla/4.0");
@@ -33,6 +33,7 @@ public class Reader {
     public static ConfigCombate getDatosEncuentro(String npc) {
         return getDatosCombate(npc, "eventos");
     }
+
 
     public static ConfigCombate getDatosNPC(String npc) {
         return getDatosCombate(npc, "entrenadores");

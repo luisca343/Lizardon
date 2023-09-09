@@ -231,7 +231,7 @@ public class ConfigCombate {
     }
 
     public boolean esEntrenador(){
-        return carpeta.equals("entrenadores");
+        return !carpeta.equals("eventos");
     }
 
     public Pokemon getFirstPokemon(){

@@ -4,6 +4,8 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.LizardonConfig;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.*;
@@ -48,6 +50,30 @@ public class FileHelper {
             return new HashMap();
         }
         return (Map) o;
+    }
+
+    public static void writeNBT(CompoundNBT nbt, String ruta){
+        try {
+            CompressedStreamTools.write(nbt, new File(ruta));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static CompoundNBT readNBT(String ruta){
+        try {
+            return CompressedStreamTools.read(new File(ruta));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean deleteFile(String ruta){
+        return new File(ruta).delete();
+    }
+
+    public static boolean exists(String ruta){
+        return new File(ruta).exists();
     }
 
     public static Object readFile(String ruta, Type token) {
@@ -119,8 +145,19 @@ public class FileHelper {
 
             return config;
         }
+    }
 
-        //return (LizardonConfig) readFile(ruta, LizardonConfig.class);
+    public static File getSchematic(String name) {
+        File file = new File("plugins/WorldEdit/schematics/" + name + ".schematic");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+                return file;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return file;
     }
 
 }

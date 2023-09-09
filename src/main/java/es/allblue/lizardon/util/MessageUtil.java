@@ -28,4 +28,13 @@ public class MessageUtil {
     public static String formatearTiempo(long tiempo){
         return new SimpleDateFormat("mm:ss:SSS").format(new Date(tiempo));
     }
+
+    public static String formatearQuery(String query, String[] partes){
+        String[] parametros = new String[partes.length - 1];
+        for (int i = 0; i < parametros.length; i++) {
+            parametros[i] = "\""+partes[i]+"\"";
+        }
+
+        return String.format("%s(%s)", query, parametros);
+    }
 }
