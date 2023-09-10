@@ -5,10 +5,10 @@ import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import es.allblue.lizardon.objects.GetEquipo;
-import es.allblue.lizardon.objects.pixelmon.Combate;
+import es.allblue.lizardon.objects.pixelmon.frentebatalla.GetEquipo;
 import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -61,13 +61,13 @@ public class LizardonBattleController {
 
     public void guardarEquipo(PlayerEntity player, String equipo){
         if(existeEquipo(player, equipo)){
-            MessageUtil.enviarMensaje(player, "Ya tienes un equipo guardado, usa /cargarEquipo " + equipo + " para cargarlo");
+            MessageHelper.enviarMensaje(player, "Ya tienes un equipo guardado, usa /cargarEquipo " + equipo + " para cargarlo");
         }
         PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         List<Pokemon> team = storage.getTeam();
 
 
-        MessageUtil.enviarMensaje(player, "Tienes " + storage.getTeam().size() + " pokemon en tu equipo");
+        MessageHelper.enviarMensaje(player, "Tienes " + storage.getTeam().size() + " pokemon en tu equipo");
         CompoundNBT nbt = new CompoundNBT();
         HashMap<Integer, String> lista = new HashMap<>();
         for (int i = 0; i < team.size(); i++) {
@@ -78,9 +78,9 @@ public class LizardonBattleController {
             nbt.put(i+"", pknbt);
         }
 
-        FileHelper.writeNBT(nbt, "lizardon/data/" + player.getUUID() + "/"+ equipo +".dat");
+        FileHelper.writeNBT( "lizardon/data/" + player.getUUID() + "/"+ equipo +".dat", nbt);
 
-        MessageUtil.enviarMensaje(player, "Se ha guardado tu equipo en lizardon/data/" + player.getUUID() + "/" + equipo + ".dat");
+        MessageHelper.enviarMensaje(player, "Se ha guardado tu equipo en lizardon/data/" + player.getUUID() + "/" + equipo + ".dat");
 
         /*
         for(int i = 0; i < team.size(); i++) {
@@ -88,94 +88,6 @@ public class LizardonBattleController {
         }*/
     }
 
-    public void cargarEquipoBase(PlayerEntity player){
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
-        List<Pokemon> team = storage.getTeam();
 
-        for(int i = 0; i < team.size(); i++) {
-            storage.set(i, null);
-        }
-
-        CompoundNBT nbt = FileHelper.readNBT("lizardon/data/" + player.getUUID() + "/equipo.dat");
-
-        for(int i = 0; i < nbt.size(); i++) {
-            CompoundNBT pknbt = nbt.getCompound(i+"");
-            Pokemon pokemon = PokemonFactory.create(pknbt);
-            storage.set(i, pokemon);
-        }
-
-        player.getPersistentData().putBoolean("frentebatalla", false);
-    }
-
-    public void cargarEquipo(PlayerEntity player, String equipo){
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
-
-        CompoundNBT nbt = FileHelper.readNBT("lizardon/data/" + player.getUUID() + "/" + equipo + ".dat");
-
-        for(int i = 0; i < nbt.size(); i++) {
-            CompoundNBT pknbt = nbt.getCompound(i+"");
-            Pokemon pokemon = PokemonFactory.create(pknbt);
-            storage.set(i, pokemon);
-        }
-
-        FileHelper.deleteFile("lizardon/data/" + player.getUUID() + "/" + equipo + ".dat");
-
-        MessageUtil.enviarMensaje(player, "Equipo cargado");
-    }
-
-    public void cargarEquipo(PlayerEntity player, CompoundNBT nbt){
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
-
-        for(int i = 0; i < nbt.size(); i++) {
-            CompoundNBT pknbt = nbt.getCompound(i+"");
-            Pokemon pokemon = PokemonFactory.create(pknbt);
-            storage.set(i, pokemon);
-        }
-    }
-    public void cargarEquipo(PlayerEntity player, List<Pokemon> list){
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
-
-        for(int i = 0; i < list.size(); i++) {
-            Pokemon pokemon = list.get(i);
-            storage.set(i, pokemon);
-        }
-    }
-
-    public List<Pokemon> cargarEquipo(ServerPlayerEntity player) {
-        List<Pokemon> team = new ArrayList<>();
-        CompoundNBT nbt = FileHelper.readNBT("lizardon/data/" + player.getUUID() + "/equipo.dat");
-
-        for(int i = 0; i < nbt.size(); i++) {
-            CompoundNBT pknbt = nbt.getCompound(i+"");
-            Pokemon pokemon = PokemonFactory.create(pknbt);
-            team.set(i, pokemon);
-        }
-
-        return team;
-    }
-
-    public void cargarEquipo(ServerPlayerEntity player, List<GetEquipo.PkmSlot> slots) {
-        System.out.println("Cargando equipo...");
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
-        List<Pokemon> team = storage.getTeam();
-
-
-        for(int i = 0; i < 6; i++) {
-            if(i >= slots.size()){
-                storage.set(i, null);
-                continue;
-            }
-            GetEquipo.PkmSlot slot = slots.get(i);
-            Pokemon pkm;
-            if(slot.getCaja() == -1){
-               pkm = team.get(slot.getSlot());
-            } else {
-                PCStorage pc = StorageProxy.getPCForPlayer(player);
-                pkm = pc.get(slot.getCaja(), slot.getSlot());
-            }
-
-            storage.set(i, pkm);
-        }
-    }
 
 }

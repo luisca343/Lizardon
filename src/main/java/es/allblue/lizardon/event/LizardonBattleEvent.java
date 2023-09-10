@@ -5,8 +5,8 @@ import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.pixelmon.Combate;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.pixelmon.battle.Combate;
+import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -56,9 +56,9 @@ public class LizardonBattleEvent {
             String nombreObjetivo = combate.getConfigCombate().getNombreObjetivo();
 
             Scoreboard.set(combate.getPlayer(), nombreObjetivo, 1);
-            MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.GREEN + "Has ganado el combate contra " + combate.getConfigCombate().getNombre());
+            MessageHelper.enviarMensaje(combate.getPlayer(), TextFormatting.GREEN + "Has ganado el combate contra " + combate.getConfigCombate().getNombre());
         }else {
-            MessageUtil.enviarMensaje(combate.getPlayer(), TextFormatting.RED + "Has perdido el combate contra " + combate.getConfigCombate().getNombre());
+            MessageHelper.enviarMensaje(combate.getPlayer(), TextFormatting.RED + "Has perdido el combate contra " + combate.getConfigCombate().getNombre());
         }
     }
 

@@ -7,16 +7,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mrcrayfish.vehicle.network.PacketHandler;
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
-import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
-import com.pixelmonmod.pixelmon.api.storage.StorageManager;
-import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.command.SchematicCommands;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.*;
@@ -28,35 +21,27 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerVideo;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.objects.WayPoint;
 import es.allblue.lizardon.objects.karts.Circuito;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
+import es.allblue.lizardon.pixelmon.battle.TeamManager;
 import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
 import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import es.allblue.lizardon.util.music.AudioManager;
-import io.leangen.geantyref.TypeToken;
-import journeymap.client.ui.component.ScrollListPane;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import noppes.npcs.api.NpcAPI;
-import noppes.npcs.api.wrapper.PlayerWrapper;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class TestCommand {
@@ -65,6 +50,7 @@ public class TestCommand {
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
                 .then(registrarEquipo())
+                .then(testFB())
                 .then(baseSecreta())
                 .then(guardarBase())
                 .then(guardarEquipo())
@@ -74,11 +60,26 @@ public class TestCommand {
                 .requires((commandSource -> commandSource.hasPermission(3))
                 ).then(crearWaypoint())
                 .then(reproducirSonido())
-                .then(testset())
-                ;
+                .then(testset());
 
         dispatcher.register(literalBuilder);
 
+    }
+
+
+
+    private ArgumentBuilder<CommandSource,?> testFB() {
+        return Commands.literal("testFB")
+                .executes((command) -> {
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                    if(player.getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)) {
+                        TorreBatallaController.iniciarCombatev2(player);
+                        MessageHelper.enviarMensaje(player, "Actualmetne participando en: " + player.getPersistentData().getString(PersistentDataFields.FB_ACTIVO.label));
+                    } else{
+                        MessageHelper.enviarMensaje(player, "No tienes un equipo registrado en el frente de batalla");
+                    }
+                    return 1;
+                });
     }
 
     private ArgumentBuilder<CommandSource,?> registrarEquipo() {
@@ -116,7 +117,7 @@ public class TestCommand {
                                 .build();
                         try {
                             Operations.complete(operation);
-                            MessageUtil.enviarMensaje(player, "Parcela creada: " + ++parcelasCreadas);
+                            MessageHelper.enviarMensaje(player, "Parcela creada: " + ++parcelasCreadas);
                             editSession.flushSession();
                         } catch (WorldEditException e) {
                             e.printStackTrace();
@@ -151,7 +152,7 @@ public class TestCommand {
 
                     try {
                         Operations.complete(forwardExtentCopy);
-                        MessageUtil.enviarMensaje(player, "OPERACION COMPLETADA, BLOQUES AFECTADOS: " + forwardExtentCopy.getAffected());
+                        MessageHelper.enviarMensaje(player, "OPERACION COMPLETADA, BLOQUES AFECTADOS: " + forwardExtentCopy.getAffected());
                         System.out.println("OPERACION COMPLETADA");
                         System.out.println("CLIPBOARD CREADA");
 
@@ -196,10 +197,11 @@ public class TestCommand {
         return Commands.literal("cargarEquipo")
                 .then(Commands.argument("nombre", StringArgumentType.string())
                 .executes((command) -> {
-                    PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
                     String nombre = StringArgumentType.getString(command, "nombre");
 
-                    Lizardon.getLBC().cargarEquipoBase(player);
+                    TeamManager.loadTeam(player, "equipo");
+                    player.getPersistentData().putBoolean(PersistentDataFields.FB_ACTIVO.label, false);
 
                     return 1;
                 }));
@@ -208,11 +210,11 @@ public class TestCommand {
     private ArgumentBuilder<CommandSource,?> guardarEquipo() {
         return Commands.literal("guardarEquipo")
                 .then(Commands.argument("nombre", StringArgumentType.string())
-           .executes((command) -> {
-                       PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
+                .executes((command) -> {
+                       ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
                        String nombre = StringArgumentType.getString(command, "nombre");
 
-                       Lizardon.getLBC().guardarEquipo(player, nombre);
+                       TeamManager.saveTeam(player, nombre);
 
               return 1;
            }

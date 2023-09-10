@@ -4,15 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import es.allblue.lizardon.objects.pixelmon.Combate;
+import es.allblue.lizardon.pixelmon.battle.Combate;
 import es.allblue.lizardon.objects.pixelmon.ConfigCombate;
 import es.allblue.lizardon.util.Reader;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
-
-import java.util.HashMap;
 
 public class CombateCommand {
     public CombateCommand(CommandDispatcher<CommandSource> dispatcher){
