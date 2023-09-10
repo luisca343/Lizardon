@@ -1,7 +1,5 @@
 package es.allblue.lizardon.objects.misiones;
 
-import es.allblue.lizardon.objects.DatosMision;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 

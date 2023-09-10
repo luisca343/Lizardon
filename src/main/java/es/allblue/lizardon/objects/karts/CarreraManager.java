@@ -2,7 +2,7 @@ package es.allblue.lizardon.objects.karts;
 
 import com.google.gson.internal.LinkedTreeMap;
 import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
@@ -62,7 +62,7 @@ public class CarreraManager {
             salirCarrera(jugador);
         }
 
-        MessageUtil.enviarMensaje(jugador, "Entrando en la carrera " + nombreCircuito + " con " + vueltas + " vueltas");
+        MessageHelper.enviarMensaje(jugador, "Entrando en la carrera " + nombreCircuito + " con " + vueltas + " vueltas");
 
         Participante participante = new Participante(jugador, carrera);
         participantes.put(jugador.getUUID(), participante);
@@ -103,20 +103,20 @@ public class CarreraManager {
     }
 
     public void salirCarrera(ServerPlayerEntity jugador) {
-        MessageUtil.enviarMensaje(jugador, "Saliendo de la carrera");
+        MessageHelper.enviarMensaje(jugador, "Saliendo de la carrera");
         if (!participantes.containsKey(jugador.getUUID())) {
-            MessageUtil.enviarMensaje(jugador, "No estás en ninguna carrera");
+            MessageHelper.enviarMensaje(jugador, "No estás en ninguna carrera");
             return;
         }
 
         Carrera carrera = participantes.get(jugador.getUUID()).getCarrera();
         carrera.getParticipantes().removeIf(participante -> participante.getJugador().getUUID().equals(jugador.getUUID()));
         participantes.remove(jugador);
-        MessageUtil.enviarMensaje(jugador, "Has salido de la carrera");
+        MessageHelper.enviarMensaje(jugador, "Has salido de la carrera");
 
         if (carrera.getParticipantes().size() == 0) {
             carreras.remove(carrera.getCircuito().getNombre());
-            MessageUtil.enviarMensaje(jugador, "La carrera ha sido eliminada al no tener participantes");
+            MessageHelper.enviarMensaje(jugador, "La carrera ha sido eliminada al no tener participantes");
 
         }
     }
@@ -124,13 +124,13 @@ public class CarreraManager {
 
     public void votarCircuito(ServerPlayerEntity jugador) {
         if (!participantes.containsKey(jugador.getUUID())) {
-            MessageUtil.enviarMensaje(jugador, "No estás en ninguna carrera");
+            MessageHelper.enviarMensaje(jugador, "No estás en ninguna carrera");
             return;
         }
         Carrera carrera = participantes.get(jugador.getUUID()).getCarrera();
 
         if(carrera.getVotos().contains(jugador.getUUID())){
-            MessageUtil.enviarMensaje(jugador, "Ya has votado por este circuito");
+            MessageHelper.enviarMensaje(jugador, "Ya has votado por este circuito");
             return;
         }
         carrera.getVotos().add(jugador.getUUID());
@@ -145,17 +145,17 @@ public class CarreraManager {
 
     public void desvotarCircuito(ServerPlayerEntity player) {
         if (!participantes.containsKey(player.getUUID())) {
-            MessageUtil.enviarMensaje(player, "No estás en ninguna carrera");
+            MessageHelper.enviarMensaje(player, "No estás en ninguna carrera");
             return;
         }
         Carrera carrera = participantes.get(player.getUUID()).getCarrera();
 
         if(!carrera.getVotos().contains(player.getUUID())){
-            MessageUtil.enviarMensaje(player, "No has votado por este circuito");
+            MessageHelper.enviarMensaje(player, "No has votado por este circuito");
             return;
         }
 
-        MessageUtil.enviarMensaje(player, "Has cancelado tu voto");
+        MessageHelper.enviarMensaje(player, "Has cancelado tu voto");
         carrera.getVotos().remove(player.getUUID());
     }
 

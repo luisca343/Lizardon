@@ -2,10 +2,8 @@ package es.allblue.lizardon.client;
 
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.BloquePantalla;
-import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.client.gui.PantallaSmartRotom;
-import es.allblue.lizardon.client.gui.PantallaVideo;
 import es.allblue.lizardon.client.gui.VideoScreen;
 import es.allblue.lizardon.client.renders.IItemRenderer;
 import es.allblue.lizardon.client.renders.SmartRotomRenderer;
@@ -13,14 +11,12 @@ import es.allblue.lizardon.SharedProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.SMessagePadCtrl;
 import es.allblue.lizardon.tileentity.PantallaTE;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +25,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -216,7 +211,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                 //System.out.println("and distance " + dist2);
                 //System.out.println(tes.isLoaded());
 
-                MessageUtil.enviarMensaje(mc.player, "Distancia: " + dist2 + " Cargado: " + tes.isLoaded());
+                MessageHelper.enviarMensaje(mc.player, "Distancia: " + dist2 + " Cargado: " + tes.isLoaded());
                 if(tes.isLoaded()) {
                     if(dist2 >  50){
                         System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
@@ -401,6 +396,14 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         }
     }
 
+    @Override
+    public void runJS(String js) {
+        if(getPadByID(0) == null){
+            MessageHelper.enviarMensaje(Minecraft.getInstance().player, "No se ha detectado una SmartRotom en tu inventario");
+        }
+        getPadByID(0).view.runJS(js,"");
+        Minecraft.getInstance().setScreen(new PantallaSmartRotom(getPadByID(0)));
+    }
 
 
 }

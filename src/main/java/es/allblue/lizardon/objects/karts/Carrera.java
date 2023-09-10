@@ -8,7 +8,7 @@ import com.mrcrayfish.vehicle.init.ModEntities;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageCambioPosicion;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -130,12 +130,12 @@ public class Carrera {
                     for (Participante participante : participantes) {
                         sonido(participante.getJugador(), 0.3f);
                         // Send title to player
-                        MessageUtil.enviarTitulo(participante.getJugador(), j + "");
+                        MessageHelper.enviarTitulo(participante.getJugador(), j + "");
                     }
                     Thread.sleep(1000);
                 }
                 for (Participante participante : participantes) {
-                    MessageUtil.enviarTitulo(participante.getJugador(), "¡YA!");
+                    MessageHelper.enviarTitulo(participante.getJugador(), "¡YA!");
                     sonido(participante.getJugador(), 0.8f);
                     participante.getJugador().sendMessage(new StringTextComponent("¡YA!"), UUID.randomUUID());
                     moverVehiculo(participante.getJugador().getUUID(), true);
@@ -235,7 +235,7 @@ public class Carrera {
 
             participantesCarrera.add(participanteCarrera);
 
-            MessageUtil.enviarTitulo(participante.getJugador(), "¡FIN!");
+            MessageHelper.enviarTitulo(participante.getJugador(), "¡FIN!");
             sonido(participante.getJugador(), 0.8f);
 
             Lizardon.carreraManager.participantes.remove(participante.getJugador().getUUID());
@@ -256,10 +256,10 @@ public class Carrera {
     public void printResultados(ServerPlayerEntity jugador){
         String resultados = "";
         for (Participante participante : participantes) {
-            resultados += participante.getJugador().getScoreboardName() + ": " +MessageUtil.formatearTiempo(participante.getTiempoFin() - getTiempoInicio());
+            resultados += participante.getJugador().getScoreboardName() + ": " + MessageHelper.formatearTiempo(participante.getTiempoFin() - getTiempoInicio());
         }
 
-        MessageUtil.enviarMensaje(jugador, resultados);
+        MessageHelper.enviarMensaje(jugador, resultados);
 
     }
 

@@ -2,7 +2,7 @@ package es.allblue.lizardon.blocks;
 
 import es.allblue.lizardon.init.ItemInit;
 import es.allblue.lizardon.tileentity.TocadiscosTE;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -18,7 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 
@@ -74,7 +73,7 @@ public class BloqueTocadiscos extends HorizontalBlock {
         CompoundNBT tags = item.getOrCreateTag();
 
         if (tags.isEmpty()) {
-            MessageUtil.enviarMensaje(player, "Ese disco está vacío");
+            MessageHelper.enviarMensaje(player, "Ese disco está vacío");
             return ActionResultType.FAIL;
         }
 

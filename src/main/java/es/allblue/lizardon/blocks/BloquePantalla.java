@@ -3,7 +3,7 @@ package es.allblue.lizardon.blocks;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.tileentity.PantallaTE;
 import es.allblue.lizardon.util.BlockSide;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.Multiblock;
 import es.allblue.lizardon.util.vector.Vector2i;
 import es.allblue.lizardon.util.vector.Vector3i;
@@ -18,7 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -99,7 +98,7 @@ public class BloquePantalla extends HorizontalBlock {
         boolean created = false;
 
         if (te == null) {
-            MessageUtil.enviarMensaje(player, "No existe un TE");
+            MessageHelper.enviarMensaje(player, "No existe un TE");
             BlockPos bp = pos.toBlock();
             te =  new PantallaTE(orientacionPantalla);
             world.setBlockEntity(bp, te);
@@ -111,7 +110,7 @@ public class BloquePantalla extends HorizontalBlock {
 
             created = true;
         }else{
-            MessageUtil.enviarMensaje(player, "Ya existe un TE");
+            MessageHelper.enviarMensaje(player, "Ya existe un TE");
         }
 
         te.load();

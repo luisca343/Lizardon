@@ -5,23 +5,17 @@ import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.commands.*;
-import es.allblue.lizardon.init.FluidInit;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
-import es.allblue.lizardon.objects.LizardonConfig;
+import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageUtil;
-import net.minecraft.block.BlockState;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -34,10 +28,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.server.command.ConfigCommand;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.util.UUID;
 
 
 @Mod.EventBusSubscriber
@@ -94,21 +84,21 @@ public class LizardonEvents {
 
     @SubscribeEvent
     public static void onTeleport(PlayerEvent.PlayerChangedDimensionEvent event){
-        if(event.getPlayer().getPersistentData().getBoolean("frentebatalla")){
+        if(event.getPlayer().getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)){
             event.setCanceled(true);
-            MessageUtil.enviarMensaje(event.getPlayer(), "NO PUEDES TELETRANSPORTARTE EN ESTE MOMENTO");
+            MessageHelper.enviarMensaje(event.getPlayer(), "NO PUEDES TELETRANSPORTARTE EN ESTE MOMENTO");
         }
     }
 
     @SubscribeEvent
-    public static void test(PlayerInteractEvent.RightClickBlock event){
+    public static void interactuarBloque(PlayerInteractEvent.RightClickBlock event){
         TileEntity block = event.getWorld().getBlockEntity(event.getPos());
         TileEntity blockDebajo = event.getWorld().getBlockEntity(event.getPos().below());
-        if(!event.getPlayer().getPersistentData().getBoolean("frentebatalla")) return;
+        if(!event.getPlayer().getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)) return;
 
 
         if(block instanceof PCTileEntity || blockDebajo instanceof PCTileEntity){
-            MessageUtil.enviarMensaje(event.getPlayer(), "NO PUEDES USAR EL PC EN ESTE MOMENTO");
+            MessageHelper.enviarMensaje(event.getPlayer(), "NO PUEDES USAR EL PC EN ESTE MOMENTO");
             event.setCanceled(true);
         }
     }
@@ -128,7 +118,7 @@ public class LizardonEvents {
 
 
         //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
-
+        ev.getPlayer().getPersistentData().putBoolean("frentebatalla", false);
         Gson gson = new Gson();
         LizardonConfig lizardonConfig = FileHelper.getConfig();
         String data = gson.toJson(lizardonConfig);
