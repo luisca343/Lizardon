@@ -2,23 +2,12 @@ package es.allblue.lizardon.net.client;
 
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
-import es.allblue.lizardon.objects.DatosNPC;
-import es.allblue.lizardon.objects.Mision;
+import es.allblue.lizardon.objects.misiones.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 

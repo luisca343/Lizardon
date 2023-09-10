@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.chatapp;
 
 public class DatosLlamada {
     private String query;

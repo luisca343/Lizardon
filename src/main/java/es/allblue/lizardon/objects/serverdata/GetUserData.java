@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.serverdata;
 
 public class GetUserData {
     private String uuid;

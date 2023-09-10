@@ -3,7 +3,7 @@ package es.allblue.lizardon.net.client;
 
 import com.google.common.base.Charsets;
 import es.allblue.lizardon.client.ClientProxy;
-import es.allblue.lizardon.objects.DatosNPC;
+import es.allblue.lizardon.objects.misiones.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

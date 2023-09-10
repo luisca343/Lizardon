@@ -2,26 +2,11 @@ package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.DarObjetos;
-import es.allblue.lizardon.objects.EntrarCarrera;
-import net.minecraft.entity.item.ItemEntity;
+import es.allblue.lizardon.objects.karts.EntrarCarrera;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class SMessageEntrarCarrera implements Runnable{

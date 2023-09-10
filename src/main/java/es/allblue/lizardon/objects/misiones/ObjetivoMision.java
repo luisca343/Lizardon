@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.misiones;
 
 public class ObjetivoMision {
     private String nombre;

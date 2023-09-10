@@ -6,7 +6,6 @@ import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.Recompensa;
 import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ public class ConfigCombate {
     private String IA;
     private boolean curar;
     private boolean preview;
+    private boolean exp;
 
 
     public ConfigCombate(){
@@ -38,6 +38,7 @@ public class ConfigCombate {
         this.nivel = "0";
         this.tipo = "1vs1";
         this.IA = "TÁCTICA";
+        this.exp = false;
         this.curar = false;
         this.preview = false;
         this.frecuencia = "DIA";
@@ -244,5 +245,9 @@ public class ConfigCombate {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setExp(boolean b) {
+        this.exp = b;
     }
 }

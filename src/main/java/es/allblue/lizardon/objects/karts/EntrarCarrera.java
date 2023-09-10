@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.karts;
 
 public class EntrarCarrera {
     private String query;

@@ -5,8 +5,10 @@ import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageReturn;
-import es.allblue.lizardon.objects.GetEquipo;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.objects.pixelmon.frentebatalla.GetEquipo;
+import es.allblue.lizardon.pixelmon.battle.TeamManager;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -41,10 +43,11 @@ public class SMessageCargarEquipo implements Runnable{
 
         List<GetEquipo.PkmSlot> slots = getEquipo.getEquipo();
 
-        Lizardon.getLBC().cargarEquipo(player, slots);
+        TeamManager.loadFromSlots(player, slots);
 
-        MessageUtil.enviarMensaje(player, "Equipo cargado correctamente");
-        player.getPersistentData().putBoolean("frentebatalla", true);
+        MessageHelper.enviarMensaje(player, "Equipo cargado correctamente");
+        player.getPersistentData().putBoolean(PersistentDataFields.FB_ACTIVO.label, true);
+        player.getPersistentData().putString(PersistentDataFields.EQUIPO_ACTIVO.label, getEquipo.getTipo());
 
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageReturn("Equipo cargado correctamente"));
     }

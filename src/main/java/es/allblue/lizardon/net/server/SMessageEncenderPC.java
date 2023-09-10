@@ -1,34 +1,17 @@
 package es.allblue.lizardon.net.server;
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.storage.PCStorage;
-import com.pixelmonmod.pixelmon.api.storage.PixelmonStorageManager;
 import com.pixelmonmod.pixelmon.api.util.helpers.NetworkHelper;
-import com.pixelmonmod.pixelmon.client.storage.ClientStorageManager;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.OpenScreenPacket;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.clientStorage.newStorage.pc.ClientChangeOpenPCPacket;
 import com.pixelmonmod.pixelmon.enums.EnumGuiScreen;
-import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.DarObjetos;
-import es.allblue.lizardon.util.MessageUtil;
-import net.minecraft.entity.item.ItemEntity;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -45,10 +28,10 @@ public class SMessageEncenderPC implements Runnable{
         try{
             UUID uuid = UUID.fromString(str);
             NetworkHelper.sendPacket(new ClientChangeOpenPCPacket(uuid), player);
-            if(!player.getPersistentData().getBoolean("frentebatalla")){
+            if(!player.getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)){
                 OpenScreenPacket.open(player, EnumGuiScreen.PC, new int[0]);
             } else {
-                MessageUtil.enviarMensaje(player, "No puedes abrir el PC en el Frente Batalla");
+                MessageHelper.enviarMensaje(player, "No puedes abrir el PC en el Frente Batalla");
             }
         }catch(Exception e){
             player.sendMessage(new StringTextComponent("Ha ocurrido un error"), UUID.randomUUID());

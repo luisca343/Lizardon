@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.allblue.lizardon.LizardonVoicechatPlugin;
-import es.allblue.lizardon.objects.DatosLlamada;
+import es.allblue.lizardon.objects.chatapp.DatosLlamada;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

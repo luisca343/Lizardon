@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.unused;
 
 public class DatosServer {
     private String id;

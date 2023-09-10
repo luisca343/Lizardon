@@ -1,4 +1,6 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.mina;
+
+import es.allblue.lizardon.objects.ObjetoMC;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,8 @@
 package es.allblue.lizardon.objects.karts;
 
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
 
 public class Participante {
     private ServerPlayerEntity jugador;
@@ -73,7 +72,7 @@ public class Participante {
 
         setSiguienteCheck(1);
         setVuelta(getVuelta() + 1);
-        MessageUtil.enviarTitulo(jugador, "Vuelta " + getVuelta() +" / "+carrera.getVueltas());
+        MessageHelper.enviarTitulo(jugador, "Vuelta " + getVuelta() +" / "+carrera.getVueltas());
     }
 
     public void nuevoCheck(Punto pos){
@@ -99,7 +98,7 @@ public class Participante {
         terminada = true;
 
         jugador.getVehicle().remove();
-        MessageUtil.enviarMensaje(jugador, "Has terminado la carrera en " + MessageUtil.formatearTiempo(getTiempoFin() - carrera.getTiempoInicio()));
+        MessageHelper.enviarMensaje(jugador, "Has terminado la carrera en " + MessageHelper.formatearTiempo(getTiempoFin() - carrera.getTiempoInicio()));
         carrera.añadirTerminado(jugador.getUUID());
 
     }

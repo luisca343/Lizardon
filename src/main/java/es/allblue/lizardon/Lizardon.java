@@ -10,7 +10,7 @@ import es.allblue.lizardon.event.CustomNPCsEvents;
 import es.allblue.lizardon.event.PixelmonEvents;
 import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.objects.LizardonConfig;
+import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;

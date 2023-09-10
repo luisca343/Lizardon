@@ -6,6 +6,7 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.event.wungill.CarreraEventsClient;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
 import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 
 public class CMessageRunJS implements Runnable{
     private String str;
-    private ServerPlayerEntity player;
+    private PlayerEntity player;
 
     public CMessageRunJS(String str){
         this.str = str;
@@ -22,7 +23,7 @@ public class CMessageRunJS implements Runnable{
 
     @Override
     public void run() {
-        Lizardon.PROXY.getPadByID(0).view.runJS(str,"");
+        Lizardon.PROXY.runJS(str);
     }
 
     public static CMessageRunJS decode(PacketBuffer buf) {

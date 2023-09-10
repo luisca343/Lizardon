@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.serverdata;
 
 import es.allblue.lizardon.Lizardon;
 import net.minecraft.client.Minecraft;

@@ -1,4 +1,4 @@
-package es.allblue.lizardon.objects;
+package es.allblue.lizardon.objects.pixelmon.frentebatalla;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import net.minecraft.nbt.CompoundNBT;

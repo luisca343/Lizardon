@@ -3,7 +3,7 @@ package es.allblue.lizardon.net.server;
 import com.google.common.base.Charsets;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageDatosServer;
-import es.allblue.lizardon.objects.LizardonConfig;
+import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.util.FileHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
