@@ -1,41 +1,24 @@
 package es.allblue.lizardon.items;
 
 
-import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.PixelmonEventHandler;
-import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
-import com.pixelmonmod.pixelmon.api.events.pokemon.BottleCapEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PlayerPokedex;
-import com.pixelmonmod.pixelmon.api.pokedex.PokedexEntry;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
-import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
-import com.pixelmonmod.pixelmon.api.storage.PokemonStorage;
-import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import com.pixelmonmod.pixelmon.items.BottlecapItem;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.init.BlockInit;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.client.CMessageCambioRegion;
 import es.allblue.lizardon.net.server.SMessageUpdateDex;
-import es.allblue.lizardon.objects.dex.ActualizarDex;
-import es.allblue.lizardon.util.MessageUtil;
-import es.allblue.lizardon.util.WingullAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.util.*;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 public class SmartRotom extends Item {
     public SmartRotom(Properties properties) {

@@ -1,16 +1,12 @@
 package es.allblue.lizardon.tileentity;
 
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.brigadier.Message;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.util.BlockSide;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.vector.Vector3f;
 import es.allblue.lizardon.util.vector.Vector3i;
 import net.minecraft.client.Minecraft;
@@ -18,18 +14,9 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.montoyo.mcef.api.IBrowser;
 import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.UUID;
 
 import static net.minecraft.util.math.vector.Vector3f.*;
 
@@ -60,7 +47,7 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         }
 
         if (te.browser.getTextureID() == 0) {
-            MessageUtil.enviarMensaje(Minecraft.getInstance().player, "Texture is null");
+            MessageHelper.enviarMensaje(Minecraft.getInstance().player, "Texture is null");
             //Minecraft.getInstance().player.sendMessage(new StringTextComponent("Texture is null"), UUID.randomUUID());
             return;
         }

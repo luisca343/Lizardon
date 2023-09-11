@@ -1,7 +1,7 @@
 package es.allblue.lizardon.event;
 
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.DatosMision;
+import es.allblue.lizardon.objects.misiones.DatosMision;
 import es.allblue.lizardon.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;

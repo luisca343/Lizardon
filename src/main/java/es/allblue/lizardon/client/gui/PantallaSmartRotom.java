@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -57,6 +58,12 @@ public class PantallaSmartRotom extends Screen {
     public PantallaSmartRotom(ClientProxy.PadData pd) {
         this();
         this.pad = pd;
+    }
+
+
+    @Override
+    public void resize(Minecraft p_231152_1_, int p_231152_2_, int p_231152_3_) {
+        browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
     }
 
     @Override
