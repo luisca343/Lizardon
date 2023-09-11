@@ -72,6 +72,7 @@ public class LizardonEvents {
         new CombateCommand(event.getDispatcher());
 
         new KartsCommand(event.getDispatcher());
+        new FrenteBatallaCommand(event.getDispatcher());
 
         /*
         if(event.getEnvironment().compareTo(Commands.EnvironmentType.DEDICATED) == 0){

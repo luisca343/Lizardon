@@ -73,7 +73,8 @@ public class TestCommand {
                 .executes((command) -> {
                     ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
                     if(player.getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)) {
-                        TorreBatallaController.iniciarCombatev2(player);
+                        String modalidad = player.getPersistentData().getString(PersistentDataFields.EQUIPO_ACTIVO.label);
+                        TorreBatallaController.iniciarCombatev2(player, modalidad);
                         MessageHelper.enviarMensaje(player, "Actualmetne participando en: " + player.getPersistentData().getString(PersistentDataFields.FB_ACTIVO.label));
                     } else{
                         MessageHelper.enviarMensaje(player, "No tienes un equipo registrado en el frente de batalla");
@@ -86,7 +87,7 @@ public class TestCommand {
         return Commands.literal("registrarEquipo")
                         .executes((command) -> {
                             ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
-                            TorreBatallaController.registrarEquipo(LizardonBattleController.TipoCombate.TB_INDIVIDUAL, player);
+                            TorreBatallaController.registrarEquipo(LizardonBattleController.TipoCombate.TB_INDIVIDUAL.label, player);
                             return 1;
                         });
     }

@@ -7,9 +7,11 @@ import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import es.allblue.lizardon.objects.pixelmon.frentebatalla.GetEquipo;
 import es.allblue.lizardon.util.FileHelper;
+import es.allblue.lizardon.util.MessageHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamManager {
@@ -19,17 +21,19 @@ public class TeamManager {
     }
 
     public static List<Pokemon> getTeam(ServerPlayerEntity player, String file){
-        PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         CompoundNBT nbt = FileHelper.readNBT("lizardon/data/" + player.getUUID() + "/" + file + ".dat");
 
+        List<Pokemon> team = new ArrayList<>();
         for(int i = 0; i < nbt.size(); i++) {
             CompoundNBT pknbt = nbt.getCompound(i+"");
             Pokemon pokemon = PokemonFactory.create(pknbt);
-            storage.set(i, pokemon);
+            team.add(pokemon);
         }
+        return team;
+    }
 
-        FileHelper.deleteFile("lizardon/data/" + player.getUUID() + "/" + file + ".dat");
-        return storage.getTeam();
+    public static boolean existsTeam(ServerPlayerEntity player, String file){
+        return FileHelper.exists("lizardon/data/" + player.getUUID() + "/" + file + ".dat");
     }
 
     public static void deleteTeam(ServerPlayerEntity player, String file){
@@ -37,11 +41,13 @@ public class TeamManager {
     }
 
     public static void saveTeam(ServerPlayerEntity player, String file){
+        System.out.println("Guardando equipo de " + player.getUUID() + " en " + file + ".dat");
         CompoundNBT nbt = new CompoundNBT();
         PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         List<Pokemon> team = storage.getTeam();
         for(int i = 0; i < team.size(); i++) {
-            CompoundNBT pknbt = team.get(i).writeToNBT(new CompoundNBT());
+            CompoundNBT pknbt = new CompoundNBT();
+            team.get(i).writeToNBT(pknbt);
             nbt.put(i+"", pknbt);
         }
         FileHelper.writeNBT("lizardon/data/" + player.getUUID() + "/"+file+".dat", nbt);
@@ -72,8 +78,16 @@ public class TeamManager {
 
 
     public static void loadTeam(ServerPlayerEntity player, String file){
+        System.out.println("Cargando equipo de " + player.getUUID() + " de " + file + ".dat");
         PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         List<Pokemon> team = getTeam(player, file);
+
+        if(team == null || team.isEmpty()) {
+            MessageHelper.enviarMensaje(player, "No se ha encontrado el equipo");
+            return;
+        };
+        System.out.println("Equipo cargado");
+        System.out.println(team);
 
         for(int i = 0; i < 6; i++) {
             if(i >= team.size()){

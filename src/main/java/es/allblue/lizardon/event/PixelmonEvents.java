@@ -1,27 +1,24 @@
 package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
-import com.pixelmonmod.pixelmon.api.events.npc.NPCEvent;
-import com.pixelmonmod.pixelmon.api.events.pokemon.ItemInteractionEvent;
-import com.pixelmonmod.pixelmon.api.events.storage.ChangeStorageEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
-import com.pixelmonmod.pixelmon.api.registries.PixelmonTileEntities;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.links.PokemonLink;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
 import es.allblue.lizardon.objects.dex.ActualizarDex;
-import es.allblue.lizardon.util.MessageUtil;
+import es.allblue.lizardon.util.MessageHelper;
+import es.allblue.lizardon.util.PersistentDataFields;
 import es.allblue.lizardon.util.WingullAPI;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -31,19 +28,19 @@ import java.util.ArrayList;
 public class PixelmonEvents {
 
     @SubscribeEvent
-    public void test(PlayerInteractEvent.RightClickBlock event){
-        TileEntity block = event.getWorld().getBlockEntity(event.getPos());
-        if(block instanceof PCTileEntity){
-            MessageUtil.enviarMensaje(event.getPlayer(), "NO PUEDES USAR EL PC EN ESTE MOMENTO");
+    public void cancelarXP(ExperienceGainEvent event){
+        try {
+            if (!event.pokemon.hasOwner()) return;
+        }catch (NullPointerException e){
+            System.out.println("Error al cancelar XP. Ignorando...");
+            return;
         }
-        /*
-        * PC
-        * Inventario
-        * TP
-        *
-        * */
-
+        ServerPlayerEntity player = event.pokemon.getPlayerOwner();
+        if(!event.pokemon.getPlayerOwner().getPersistentData().getBoolean(PersistentDataFields.FB_ACTIVO.label)) return;
+        MessageHelper.enviarMensaje(player, "No puedes ganar experiencia en el Frente Batalla");
+        event.setCanceled(true);
     }
+
 
 
     @OnlyIn(Dist.DEDICATED_SERVER)

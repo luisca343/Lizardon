@@ -7,7 +7,7 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.server.*;
-import es.allblue.lizardon.objects.UserData;
+import es.allblue.lizardon.objects.serverdata.UserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.NetworkPlayerInfo;
 import net.montoyo.mcef.api.IBrowser;

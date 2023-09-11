@@ -31,8 +31,8 @@ public class Combate {
     public int idCombate;
     public ServerPlayerEntity player;
     public ConfigCombate configCombate;
-
     public MobEntity entidad;
+
 
 
 

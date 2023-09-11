@@ -2,8 +2,7 @@ package es.allblue.lizardon;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import es.allblue.lizardon.client.ClientProxy;
-import es.allblue.lizardon.client.gui.PantallaCine;
-import es.allblue.lizardon.objects.Recompensa;
+import es.allblue.lizardon.objects.pixelmon.Recompensa;
 import es.allblue.lizardon.tileentity.PantallaTE;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.item.ItemEntity;
@@ -12,8 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
@@ -21,15 +18,12 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.loading.FMLCommonLaunchHandler;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.montoyo.mcef.api.API;
 import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -147,6 +141,10 @@ public class SharedProxy {
     }
 
     public void trackScreen(PantallaTE tes, boolean track){
+        System.out.println("Esto en servidor no hace nada");
+    }
+
+    public void runJS(String str) {
         System.out.println("Esto en servidor no hace nada");
     }
 }

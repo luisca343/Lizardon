@@ -33,12 +33,6 @@ public class SMessageCargarEquipo implements Runnable{
         Gson gson = new Gson();
         GetEquipo getEquipo = gson.fromJson(str, GetEquipo.class);
 
-        /*
-        if(FileHelper.exists("lizardon/data/" + player.getUUID() + "/equipo.dat")){
-            return;
-        }
-        */
-
         Lizardon.getLBC().guardarEquipo(player, "equipo");
 
         List<GetEquipo.PkmSlot> slots = getEquipo.getEquipo();

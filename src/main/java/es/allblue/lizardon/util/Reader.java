@@ -40,7 +40,6 @@ public class Reader {
     }
 
     public static ConfigCombate getDatosCombate(String npc, String tipo) {
-
         URL url = null;
         try {
             url = new URL("http://i.lizardon.es/pixelmon/combates/"+ tipo +"/"+npc+".json");

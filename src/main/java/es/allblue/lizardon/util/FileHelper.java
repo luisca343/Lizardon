@@ -3,7 +3,7 @@ package es.allblue.lizardon.util;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.objects.LizardonConfig;
+import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -52,7 +52,7 @@ public class FileHelper {
         return (Map) o;
     }
 
-    public static void writeNBT(CompoundNBT nbt, String ruta){
+    public static void writeNBT( String ruta, CompoundNBT nbt){
         try {
             CompressedStreamTools.write(nbt, new File(ruta));
         } catch (IOException e) {
