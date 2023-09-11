@@ -60,13 +60,13 @@ public class LatigoNumeril extends Item {
         AxisAlignedBB boundingBox = player.getBoundingBox().expandTowards(lookVec).inflate(1, 1, 1);
         EntityRayTraceResult entityRayTraceResult = rayTraceEntities(player, startVec, endVec, boundingBox, s -> s instanceof LivingEntity, range * range);
 
-        if (entityRayTraceResult != null && !(entityRayTraceResult.getEntity() instanceof PixelmonEntity)) {
+        if (entityRayTraceResult != null) {
             LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
 
             // Pull entity towards player
-            Vector3d playerPos = player.position();
+            Vector3d playerPos = player.position().add(0, player.getEyeHeight(), 0);
             Vector3d entityPos = entity.position();
-            Vector3d pullVec = playerPos.subtract(entityPos).normalize().scale(0.5);
+            Vector3d pullVec = playerPos.subtract(entityPos).normalize().scale(1);
             entity.setDeltaMovement(pullVec);
 
 
