@@ -38,7 +38,7 @@ public class Taser extends Item {
 
         if (entityRayTraceResult != null) {
             LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
-            entity.hurt(LizardonDamageSource.LATIGO_NUMERIL, 1.0F);
+            entity.hurt(LizardonDamageSource.TASER, 1.0F);
             if(!(entity instanceof PixelmonEntity)) {
                 entity.animateHurt();
             }
