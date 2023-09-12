@@ -118,7 +118,7 @@ public class FrenteBatallaCommand {
                     Entity entity = command.getSource().getEntity();
                     if (!(entity instanceof ServerPlayerEntity)) return 0;
                     ServerPlayerEntity player = (ServerPlayerEntity) entity;
-                    if(!TorreBatallaController.puedeIniciar(player)) return 0;
+                    if(TorreBatallaController.puedeIniciar(player)) return 0;
 
                     String modalidad = player.getPersistentData().getString(PersistentDataFields.EQUIPO_ACTIVO.label);
                     TorreBatallaController.iniciarCombatev2(player, modalidad);

@@ -107,7 +107,6 @@ public class TorreBatallaController {
     }
 
     public static void pausar(ServerPlayerEntity player, String modalidad) {
-        System.out.println("Pausando");
         TeamManager.saveTeam(player, modalidad);
         TeamManager.loadTeam(player, "equipo");
         TeamManager.deleteTeam(player, "equipo");
@@ -148,12 +147,8 @@ public class TorreBatallaController {
     }
 
     public static void reanudar(ServerPlayerEntity player, String modalidad) {
-        System.out.println("Reanudando: " + modalidad);
-        System.out.println("SAVING TEAM");
         TeamManager.saveTeam(player, "equipo");
-        System.out.println("LOADING TEAM");
         TeamManager.loadTeam(player, modalidad);
-        System.out.println("DELETING TEAM");
         TeamManager.deleteTeam(player, modalidad);
         player.getPersistentData().putBoolean(PersistentDataFields.FB_ACTIVO.label, true);
         player.getPersistentData().putString(PersistentDataFields.EQUIPO_ACTIVO.label, modalidad);
