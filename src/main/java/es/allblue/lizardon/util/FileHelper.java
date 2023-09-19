@@ -25,6 +25,31 @@ public class FileHelper {
         return writeFile(new File(ruta), o);
     }
 
+    public static boolean writeStringFile(String ruta, String o) {
+        String folder = ruta.substring(0, ruta.lastIndexOf("/"));
+        File folderFile = new File(folder);
+        if(!folderFile.exists()){
+            folderFile.mkdirs();
+        }
+        return writeStringFile(new File(ruta), o);
+    }
+
+
+    public static boolean writeStringFile(File file, String o) {
+        try {
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            Files.write(file.toPath(), o.getBytes(Charsets.UTF_8));
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean writeFile(File file, Object o) {
         Gson gson = new Gson();
         try {

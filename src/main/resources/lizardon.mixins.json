@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "es.allblue.lizardon.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8.4",
+  "server": [
+    "LogMixin", "StatChangeActionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "lizardon.mixin-refmap.json"
+}

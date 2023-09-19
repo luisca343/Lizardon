@@ -7,6 +7,16 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.pixelmonmod.api.pokemon.PokemonSpecification;
+import com.pixelmonmod.api.registry.RegistryValue;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
+import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import com.pixelmonmod.pixelmon.api.pokemon.species.dimensions.Dimensions;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
+import com.pixelmonmod.pixelmon.api.util.helpers.SpeciesHelper;
+import com.pixelmonmod.pixelmon.entities.pixelmon.StatueEntity;
+import com.pixelmonmod.pixelmon.enums.EnumBoundingBoxMode;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
@@ -36,6 +46,7 @@ import es.allblue.lizardon.util.music.AudioManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
@@ -49,6 +60,7 @@ public class TestCommand {
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(peluche())
                 .then(registrarEquipo())
                 .then(testFB())
                 .then(baseSecreta())
@@ -66,8 +78,40 @@ public class TestCommand {
 
     }
 
+    private ArgumentBuilder<CommandSource,?> peluche() {
+        return Commands.literal("peluche")
+                .then(Commands.argument("nombre", StringArgumentType.string())
+                .executes((command) -> {
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                    String nombre = StringArgumentType.getString(command, "nombre").toLowerCase(Locale.ROOT);
+                    StatueEntity entity = new StatueEntity(player.level);
+                    entity.setPos(player.getX(), player.getY(), player.getZ());
+                    
+                    if(!PixelmonSpecies.get(nombre).isPresent()) {
+                        MessageHelper.enviarMensaje(player, "No existe el pokemon " + nombre);
+                        return 1;
+                    };
+
+                    Species species = PixelmonSpecies.get(nombre).get().getValue().get();
+                    Dimensions dim = species.getDefaultForm().getDimensions();
+                    entity.setSpecies(species);
+                    entity.setForm(species.getDefaultForm());
+                    entity.setBoundingMode(EnumBoundingBoxMode.None);
+
+                    double mayor = dim.getHeight();
+                    if(dim.getLength() > mayor){
+                        mayor = dim.getLength();
+                    }
+
+                    float escala = (float) (1 / mayor);
+                    entity.setPixelmonScale(escala);
 
 
+                    player.level.addFreshEntity(entity);
+                    return 1;
+                }));
+    }
+    
     private ArgumentBuilder<CommandSource,?> testFB() {
         return Commands.literal("testFB")
                 .executes((command) -> {

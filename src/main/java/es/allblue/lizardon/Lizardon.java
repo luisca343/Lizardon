@@ -4,10 +4,7 @@ package es.allblue.lizardon;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
-import es.allblue.lizardon.event.LizardonBattleEvent;
-import es.allblue.lizardon.event.MisionesCaza;
-import es.allblue.lizardon.event.CustomNPCsEvents;
-import es.allblue.lizardon.event.PixelmonEvents;
+import es.allblue.lizardon.event.*;
 import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
@@ -133,6 +130,7 @@ public class Lizardon
         Pixelmon.EVENT_BUS.register(new MisionesCaza());
         Pixelmon.EVENT_BUS.register(new PixelmonEvents());
         Pixelmon.EVENT_BUS.register(new LizardonBattleEvent());
+        Pixelmon.EVENT_BUS.register(new LizardonBattleLogEvent());
         try{
             FancyVideoEventBus.getInstance().registerEvent(this);
         } catch (EventException.UnauthorizedRegistryException | EventException.EventRegistryException e) {

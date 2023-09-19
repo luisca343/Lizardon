@@ -6,6 +6,7 @@ import net.minecraft.network.play.server.STitlePacket;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,6 +15,14 @@ public class MessageHelper {
     public static void enviarMensaje(PlayerEntity player, String mensaje) {
         player.sendMessage(new StringTextComponent(mensaje), UUID.randomUUID());
     }
+
+
+    public static void enviarMensaje(ArrayList<ServerPlayerEntity> jugadores, String mensaje) {
+        for (ServerPlayerEntity jugador : jugadores) {
+            enviarMensaje(jugador, mensaje);
+        }
+    }
+
 
     public static void enviarTitulo(ServerPlayerEntity player, String titulo, int entrada, int permanencia, int salida) {
         player.connection.send(new STitlePacket(STitlePacket.Type.TITLE, new StringTextComponent(titulo),entrada,permanencia,salida));

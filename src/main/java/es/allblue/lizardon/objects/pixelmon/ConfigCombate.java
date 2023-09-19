@@ -18,7 +18,7 @@ public class ConfigCombate {
     private transient String nombreArchivo;
     private transient String carpeta;
     private String nivel;
-    private String tipo;
+    private String modalidad;
     private String frecuencia;
     private ArrayList<Recompensa> recompensas;
     private ArrayList<String> normas;
@@ -36,7 +36,7 @@ public class ConfigCombate {
     public ConfigCombate(){
         this.dinero = 0;
         this.nivel = "0";
-        this.tipo = "1vs1";
+        this.modalidad = "1vs1";
         this.IA = "TÁCTICA";
         this.exp = false;
         this.curar = false;
@@ -46,12 +46,12 @@ public class ConfigCombate {
         this.normas = new ArrayList<>();
     }
 
-    public int numPokemonJugador(){
-        return getTipo()[0];
+    public int getNumPkmJugador(){
+        return getModalidad()[0];
     }
 
-    public int numPokemonNPC(){
-        return getTipo()[1];
+    public int getNumPkmRival(){
+        return getModalidad()[1];
     }
 
     public int getDinero() {
@@ -90,10 +90,10 @@ public class ConfigCombate {
         this.preview = preview;
     }
 
-    public int[] getTipo() {
-        if(tipo == null) return new int[]{1, 1};
-        tipo.replace("v", "vs");
-        String[] partes = tipo.split("vs");
+    public int[] getModalidad() {
+        if(modalidad == null) return new int[]{1, 1};
+        modalidad.replace("v", "vs");
+        String[] partes = modalidad.split("vs");
         int[] numeros = new int[partes.length];
         for(int i = 0; i < partes.length; i++){
             numeros[i] = Integer.parseInt(partes[i]);
@@ -102,8 +102,8 @@ public class ConfigCombate {
         return numeros;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setModalidad(String modalidad) {
+        this.modalidad = modalidad;
     }
 
     public String getFrecuencia() {

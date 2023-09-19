@@ -19,7 +19,7 @@ public class CombateFrenteBatalla extends Combate {
         for (Pokemon pokemon1 : pokemon) {
             pokemon1.setLevel(50);
         }
-        return new PlayerParticipant(player, pokemon, configCombate.numPokemonJugador());
+        return new PlayerParticipant(player, pokemon, configCombate.getNumPkmJugador());
     }
 
     public String getModalidad() {

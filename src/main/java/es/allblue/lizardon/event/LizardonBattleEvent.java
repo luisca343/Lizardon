@@ -1,13 +1,16 @@
 package es.allblue.lizardon.event;
 
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
-import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
+import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
+import com.pixelmonmod.pixelmon.battles.controller.log.BattleLog;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.pixelmon.battle.Combate;
 import es.allblue.lizardon.pixelmon.battle.CombateFrenteBatalla;
+import es.allblue.lizardon.pixelmon.battle.LizardonBattleLog;
 import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
+import es.allblue.lizardon.util.FileHelper;
 import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.entity.LivingEntity;
@@ -24,15 +27,19 @@ public class LizardonBattleEvent {
 
 
     public void inicioCombateEntrenador(BattleStartedEvent event, Combate combate){
-
+        System.out.println("Iniciando combate entrenador");
+        //LizardonBattleLog.parseLog(event.bc.battleLog, combate);
     }
 
     public void inicioCombateSalvaje(BattleStartedEvent event, Combate combate){
-
+        System.out.println("Iniciando combate salvaje");
     }
 
     public void finCombateEntrenador(BattleEndEvent event, Combate combate){
+        System.out.println("Fin combate entrenador");
+        //LizardonBattleLog.parseLog(event.getBattleController().battleLog, combate);
         getGanador(event, combate);
+        FileHelper.writeStringFile("logs/lizardonbattle/"+combate.getConfigCombate().getNombreArchivo()+".log", combate.getLog());
     }
 
     public void finCombateSalvaje(BattleEndEvent event, Combate combate){
@@ -69,8 +76,8 @@ public class LizardonBattleEvent {
 
     @SubscribeEvent
     public void onBattleStart(BattleStartedEvent event){
-        if(Lizardon.getLBC().existeCombateEspecial(event.bc.battleIndex)) {
-            Combate combate = Lizardon.getLBC().getCombateEspecial(event.bc.battleIndex);
+        if(Lizardon.getLBC().existeCombateEspecial(event.getBattleController().battleIndex)) {
+            Combate combate = Lizardon.getLBC().getCombateEspecial(event.getBattleController().battleIndex);
             if(combate.getConfigCombate().esEntrenador()) inicioCombateEntrenador(event, combate);
             else inicioCombateSalvaje(event, combate);
         }
@@ -78,8 +85,15 @@ public class LizardonBattleEvent {
 
     }
 
+    public void log(BattleLog log){
+
+    }
+
+
     @SubscribeEvent
     public void onBattleEnd(BattleEndEvent event){
+
+        log(event.getBattleController().battleLog);
         if(Lizardon.getLBC().existeCombateEspecial(event.getBattleController().battleIndex)) {
             Combate combate = Lizardon.getLBC().getCombateEspecial(event.getBattleController().battleIndex);
 
