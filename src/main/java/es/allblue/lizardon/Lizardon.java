@@ -6,9 +6,11 @@ import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.event.*;
 import es.allblue.lizardon.init.*;
+import es.allblue.lizardon.integration.Integrations;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import es.allblue.lizardon.pixelmon.attacks.DesenvaineSubito;
 import es.allblue.lizardon.pixelmon.attacks.TestAttack;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
 import es.allblue.lizardon.tileentity.FunkoTERenderer;
@@ -160,8 +162,12 @@ public class Lizardon
         lbc = new LizardonBattleController();
 
 
+        Integrations.registerBackpackIntegrations();
+
 
         EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
+        EffectTypeAdapter.EFFECTS.put("DesenvaineSubito", DesenvaineSubito.class);
+
     }
 
     public void end (FMLLoadCompleteEvent event){
