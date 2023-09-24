@@ -10,11 +10,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
@@ -61,7 +63,8 @@ public class LatigoNumeril extends Item {
         EntityRayTraceResult entityRayTraceResult = rayTraceEntities(player, startVec, endVec, boundingBox, s -> s instanceof LivingEntity, range * range);
 
         if (entityRayTraceResult != null) {
-            LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
+            Entity entity = entityRayTraceResult.getEntity();
+            if(!(entity instanceof LivingEntity) && !(entity instanceof ItemEntity)) return new ActionResult<>(ActionResultType.FAIL, player.getItemInHand(hand));
 
             // Pull entity towards player
             Vector3d playerPos = player.position().add(0, player.getEyeHeight(), 0);
@@ -69,12 +72,12 @@ public class LatigoNumeril extends Item {
             Vector3d pullVec = playerPos.subtract(entityPos).normalize().scale(1);
             entity.setDeltaMovement(pullVec);
 
-
-
+            player.getCooldowns().addCooldown(this, 100);
         }
 
         return super.use(world, player, hand);
     }
+
 
 
 

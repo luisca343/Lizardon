@@ -1,5 +1,6 @@
 package es.allblue.lizardon.items;
 
+import com.pixelmonmod.pixelmon.client.music.BattleMusic;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.util.LizardonDamageSource;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
@@ -45,6 +46,7 @@ public class Taser extends Item {
             entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2));
         }
 
+        player.getCooldowns().addCooldown(this, 100);
         return super.use(world, player, hand);
     }
 

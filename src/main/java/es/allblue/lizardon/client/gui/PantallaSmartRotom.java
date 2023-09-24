@@ -271,8 +271,8 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public boolean charTyped(char key, int mod) {
-        boolean consume = enviarInterfaz(key) ? super.charTyped(key, mod) : false; // 257 335
-        if (browser != null && (!consume || key == 256)) {
+        boolean consume = enviarInterfaz(key) && super.charTyped(key, mod); // 257 335
+        if (browser != null && (!consume || (key == 256 || key == 46))) {
             browser.injectKeyTyped(key, key, getMask());
             return true;
         }
@@ -282,13 +282,17 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public boolean keyPressed(int key, int p_231046_2_, int p_231046_3_) {
-        System.out.println(key);
-        boolean consume = enviarInterfaz(key) ? super.keyPressed(key, p_231046_2_, p_231046_3_) : false;
+        boolean consume = enviarInterfaz(key) && super.keyPressed(key, p_231046_2_, p_231046_3_);
         if (minecraft == null) return true;
 
         char c = (char) key;
 
         if (browser != null && (!consume || key == 256)) {
+            Lizardon.LOGGER.info("HAS PULSADO: " + key + " " + c);
+            if(key == 46){
+                browser.injectKeyPressedByKeyCode(330, '?', getMask());
+                return true;
+            }
             browser.injectKeyPressedByKeyCode(key, c, getMask());
             return true;
         }
