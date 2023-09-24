@@ -18,18 +18,15 @@ public class ItemInit {
     public static final RegistryObject<Item> SMARTROTOM = ITEMS.register("smartrotom",
             () -> new SmartRotom(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
 
-
-    public static final RegistryObject<Item> MEDALLA = ITEMS.register("medalla_prueba",
+    public static final RegistryObject<Item> MEDALLA = ITEMS.register("medalla_helada",
             () -> new BadgeItem());
-
 
     public static final RegistryObject<Item> DISCO = ITEMS.register("disco",
             () -> new Disco());
 
     public static final RegistryObject<Item> TEST = ITEMS.register("test",
             () -> new Item(new Item.Properties().stacksTo(6).tab(LizardonItemGroup.LIZARDON_GROUP)));
-
-
+    
     public static final RegistryObject<Item> LATIGO_NUMERIL = ITEMS.register("latigo_numeril",
             () -> new LatigoNumeril(new Item.Properties().stacksTo(1).tab(LizardonItemGroup.LIZARDON_GROUP)));
     public static final RegistryObject<Item> PORRA = ITEMS.register("porra",
