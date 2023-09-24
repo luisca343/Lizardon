@@ -19,5 +19,11 @@
     "sounds": [
       "lizardon:bonk"
     ]
+  },
+  "sparkle": {
+    "subtitle": "lizardon.subtitle.sparkle",
+    "sounds": [
+      "lizardon:sparkle"
+    ]
   }
 }

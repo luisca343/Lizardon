@@ -44,6 +44,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -168,6 +170,18 @@ public class Lizardon
         EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
         EffectTypeAdapter.EFFECTS.put("DesenvaineSubito", DesenvaineSubito.class);
 
+    }
+
+    public static InputStream getResource(String filename) throws IOException {
+        URL url = Lizardon.class.getClassLoader().getResource("assets/" + MOD_ID + "/" + filename);
+
+        if (url == null) {
+            return null;
+        }
+
+        URLConnection connection = url.openConnection();
+        connection.setUseCaches(false);
+        return connection.getInputStream();
     }
 
     public void end (FMLLoadCompleteEvent event){

@@ -2,6 +2,7 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.commands.*;
@@ -9,9 +10,10 @@ import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
-import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageHelper;
-import es.allblue.lizardon.util.PersistentDataFields;
+import es.allblue.lizardon.util.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -19,10 +21,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -35,6 +40,36 @@ public class LizardonEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
+    public static void onPokemonSpawn(EntityJoinWorldEvent event) {
+        /*
+        Lizardon.LOGGER.info("SPAWNED " + event.getEntity().toString());
+        Lizardon.LOGGER.info(event.getEntity() instanceof PixelmonEntity);
+        Lizardon.LOGGER.info(event.isCanceled());
+        Lizardon.LOGGER.info(event.getResult() != Event.Result.DENY);
+        Lizardon.LOGGER.info(event.getWorld().isClientSide());*/
+
+        if (event.getEntity() instanceof PixelmonEntity && !event.isCanceled() && event.getResult() != Event.Result.DENY) {
+            Lizardon.LOGGER.info("Pixelmon spawned on client: " + event.getWorld().isClientSide());
+            ClientScheduler.schedule(1, () -> { //Wait a tick so the entity is fully loaded, so it isn't a bulbasaur
+                PixelmonEntity entity = (PixelmonEntity) event.getEntity();
+                Lizardon.LOGGER.info("Pixelmon spawned on client1.5: " + event.getWorld().isClientSide());
+                Lizardon.LOGGER.warn("Pixelmon spawned on client1.6: " + entity.getPokemon().isShiny());
+                Lizardon.LOGGER.warn("Pixelmon spawned on client1.7: " + entity.isBossPokemon());
+                if (entity.getPokemon().isShiny() && !entity.isBossPokemon()) {
+                    Lizardon.LOGGER.info("Pixelmon spawned on client2: " + event.getWorld().isClientSide());
+                    ShinyTracker tracker = ShinyTracker.INSTANCE;
+                    if (tracker.shouldTrackShiny(entity)) {
+                        Lizardon.LOGGER.info("Pixelmon spawned on client3: " + event.getWorld().isClientSide());
+                        tracker.track(entity);
+                    }
+                }
+            });
+        }
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
     public static void modelBake(ModelBakeEvent event) {
         System.out.println("modelBake");
         ModelResourceLocation mrl = new ModelResourceLocation("lizardon:funko", "inventory");
@@ -44,7 +79,18 @@ public class LizardonEvents {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
+    public static void worldRender(RenderWorldLastEvent event){
+        ShinyTracker.INSTANCE.camera = new ClippingHelper(event.getMatrixStack().last().pose(), event.getProjectionMatrix());
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
     public static void onClientTickEvent(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused() && (Minecraft.getInstance().screen == null || Minecraft.getInstance().screen instanceof ChatScreen)){
+
+            ShinyTracker.INSTANCE.tick();
+            ClientScheduler.tick();
+        }
         /*
         if (event.phase == TickEvent.Phase.START) {
             BlockState bloque = event.player.level.getBlockState(event.player.blockPosition());

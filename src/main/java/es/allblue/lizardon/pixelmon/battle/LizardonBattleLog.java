@@ -1,16 +1,14 @@
 package es.allblue.lizardon.pixelmon.battle;
 
 import com.pixelmonmod.pixelmon.api.pokemon.species.gender.Gender;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.DamageTypeEnum;
 import com.pixelmonmod.pixelmon.battles.controller.log.MoveResults;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.*;
-import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
-import com.pixelmonmod.pixelmon.battles.status.GlobalStatusBase;
-import com.pixelmonmod.pixelmon.battles.status.StatusBase;
-import com.pixelmonmod.pixelmon.battles.status.Terrain;
+import com.pixelmonmod.pixelmon.battles.status.*;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.pixelmon.PosicionEquipo;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -19,11 +17,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class LizardonBattleLog {
 
     public static void logEvent(BattleAction action, Combate combate) {
+        /*
         if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, combate);
         if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, combate);
         if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, combate);
@@ -39,16 +37,30 @@ public class LizardonBattleLog {
         if (action instanceof TerrainChangeAction) terrainChangeAction((TerrainChangeAction) action, combate);
 
 
-        Lizardon.LOGGER.info("SE HA LOGEADO UNA ACCION: " + action.getClass().getSimpleName());
+        Lizardon.LOGGER.info("SE HA LOGEADO UNA ACCION: " + action.getClass().getSimpleName());*/
     }
 
     private static void terrainChangeAction(TerrainChangeAction action, Combate combate) {
         Lizardon.LOGGER.warn("========== TERRAIN CHANGE ACTION ==========");
         Terrain newTerrain = (Terrain) getProtectedProperty("newTerrain", action);
         Terrain oldTerrain = (Terrain) getProtectedProperty("oldTerrain", action);
+        PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
 
         Lizardon.LOGGER.warn("Nuevo terreno: " + newTerrain);
         Lizardon.LOGGER.warn("Viejo terreno: " + oldTerrain);
+
+
+
+        if(oldTerrain instanceof  NoTerrain && !(newTerrain instanceof NoTerrain)){
+            if(pokemon == null) return;
+            String nombreTerreno = newTerrain.getClass().getSimpleName();
+            combate.appendLog("|fieldstart| " + "move: "+nombreTerreno+"|[of] " + combate.getPosicionv2(pokemon) + ": " + pokemon.getNickname() + System.lineSeparator());
+        }
+
+        if(!(oldTerrain instanceof  NoTerrain) && newTerrain instanceof NoTerrain){
+            combate.appendLog("|-fieldend|move: Test" + System.lineSeparator());
+        }
+
     }
 
     private static void globalStatusAddAction(GlobalStatusAddAction action, Combate combate) {
@@ -79,7 +91,11 @@ public class LizardonBattleLog {
 
     private static void turnEndAction(TurnEndAction action, Combate combate) {
         List<PixelmonWrapper> teams = (List<PixelmonWrapper>) getProtectedProperty("teams", action);
+        Terrain terrain = (Terrain) getProtectedProperty("terrain", action);
+        Weather weather = (Weather) getProtectedProperty("weather", action);
+
         int turn = (int) getProtectedProperty("turn", action);
+
 
     }
 
@@ -173,6 +189,8 @@ public class LizardonBattleLog {
             //if(objetivo.getHealth() > 0) combate.appendLog("|-damage|" + posObjetivo + ": " + objetivo.getNickname() + "|" + objetivo.getHealth() + "\\/" + objetivo.getMaxHealth() + System.lineSeparator());
             acciones.add("|-damage|" + posObjetivo + ": " + objetivo.getNickname() + "|" + vidaRestante + System.lineSeparator());
 
+
+
             if(moveResult.getDamage() == 0){
                 //combate.appendLog("|-fail|"+posObjetivo+": " + objetivo.getNickname() + System.lineSeparator());
                 acciones.add("|-fail|"+posObjetivo+": " + objetivo.getNickname() + System.lineSeparator());
@@ -204,6 +222,7 @@ public class LizardonBattleLog {
                 String nombreGanador = ganador == 1 ? combate.player.getDisplayName().getString() : combate.getPartRival().getDisplayName();
                 combate.appendLog("|win|" + nombreGanador + System.lineSeparator());
             }
+
         }
 
 
@@ -216,23 +235,42 @@ public class LizardonBattleLog {
 
     private static void battleMessageAction(BattleMessageAction action, Combate combate) {
         String message = (String) getProtectedProperty("message", action);
-        Lizardon.LOGGER.warn("BATTLE LOG: " + message);
+        if(message.contains("used")) return;
+        if(message.contains("sent out")) return;
+        if(message.contains("fainted")) return;
+
+        combate.appendLog("|-message|" + message + System.lineSeparator());
     }
 
     private static void statChangeAction(StatChangeAction action, Combate combate) {
+        /*
         //Lizardon.LOGGER.info("========== STAT CHANGE ACTION ==========");
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
-        final int[] oldStats = (int[]) getProtectedProperty("oldStats", action);
-        final int[] newStats = (int[]) getProtectedProperty("newStats", action);
-
-        LogHelper helper = combate.logHelper;
-        //helper.checkFallecimiento(pokemon, combate);
-
-        if(Arrays.equals(oldStats, newStats)){
-            Lizardon.LOGGER.info("Los stats de " + pokemon.getNickname() + " no han cambiado");
+        LogHelper logHelper = combate.logHelper;
+        ArrayList<Integer> oldBoosts = logHelper.getBoosts(pokemon.getPokemonUUID());
+        if(oldBoosts == null){
+            logHelper.initBoosts(pokemon);
+            Lizardon.LOGGER.info("Se ha inicializado los boosts de " + pokemon.getNickname());
             return;
         }
 
+        ArrayList<Integer> currentBoosts = logHelper.getBoostsActuales(pokemon);
+
+        // Compare oldBoosts with currentBoosts
+        for (int i = 0; i < oldBoosts.size(); i++) {
+            int oldBoost = oldBoosts.get(i);
+            int currentBoost = currentBoosts.get(i);
+            if(oldBoost != currentBoost){
+                int cambio = currentBoost - oldBoost;
+                String stat = LogHelper.BattleBoostsType.fromIndex(i).getName();
+                String tipo = cambio > 0 ? "|-boost|" : "|-unboost|";
+                PosicionEquipo pos = combate.getPosicionv2(pokemon);
+                cambio = Math.abs(cambio);
+                combate.appendLog(tipo + pos.toString() + ": " + pokemon.getNickname() + "|" + stat + "|" + cambio + System.lineSeparator() );
+            }
+        }
+
+        logHelper.setBoosts(pokemon, currentBoosts);*/
     }
 
     public static void appendEquipo(PixelmonWrapper[] equipo1, Combate combate, int numJugador) {

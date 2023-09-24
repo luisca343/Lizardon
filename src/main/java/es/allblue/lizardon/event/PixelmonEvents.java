@@ -9,16 +9,17 @@ import com.pixelmonmod.pixelmon.api.pokemon.stats.links.PokemonLink;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.objects.dex.ActualizarDex;
-import es.allblue.lizardon.util.MessageHelper;
-import es.allblue.lizardon.util.PersistentDataFields;
-import es.allblue.lizardon.util.WingullAPI;
+import es.allblue.lizardon.util.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
+
 
     @SubscribeEvent
     public void cancelarXP(ExperienceGainEvent event){
@@ -40,6 +42,7 @@ public class PixelmonEvents {
         MessageHelper.enviarMensaje(player, "No puedes ganar experiencia en el Frente Batalla");
         event.setCanceled(true);
     }
+
 
 
 
