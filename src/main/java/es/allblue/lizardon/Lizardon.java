@@ -20,6 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,15 +34,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
-import nick1st.fancyvideo.api.DynamicResourceLocation;
-import nick1st.fancyvideo.api.eventbus.EventException;
-import nick1st.fancyvideo.api.eventbus.FancyVideoEvent;
-import nick1st.fancyvideo.api.eventbus.FancyVideoEventBus;
-import nick1st.fancyvideo.api.eventbus.event.PlayerRegistryEvent;
-import nick1st.fancyvideo.api.mediaPlayer.SimpleMediaPlayer;
 import noppes.npcs.api.NpcAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import team.creative.creativecore.common.network.CreativeNetwork;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -80,7 +76,6 @@ public class Lizardon
     public static CarreraManager carreraManager;
 
     public static LizardonConfig config;
-    private static DynamicResourceLocation resourceLocation;
 
     public API getAPI() {
         return api;
@@ -97,6 +92,7 @@ public class Lizardon
     public static LizardonBattleController getLBC() {
         return lbc;
     }
+    public static final CreativeNetwork NETWORK = new CreativeNetwork("1.0", LOGGER, new ResourceLocation(Lizardon.MOD_ID, "main"));
 
 
     public Lizardon() {
@@ -133,11 +129,6 @@ public class Lizardon
         Pixelmon.EVENT_BUS.register(new PixelmonEvents());
         Pixelmon.EVENT_BUS.register(new LizardonBattleEvent());
         Pixelmon.EVENT_BUS.register(new LizardonBattleLogEvent());
-        try{
-            FancyVideoEventBus.getInstance().registerEvent(this);
-        } catch (EventException.UnauthorizedRegistryException | EventException.EventRegistryException e) {
-            LOGGER.warn("FancyVideoEventBus.getInstance().registerEvent(this);");
-        }
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
@@ -271,21 +262,5 @@ public class Lizardon
     }
 
 
-    @FancyVideoEvent
-    @SuppressWarnings("unused")
-    public void init(PlayerRegistryEvent.AddPlayerEvent event) {
-        LOGGER.info("REGISTERING EVENT FANCYVIDEO-API");
-        resourceLocation = new DynamicResourceLocation(Lizardon.MOD_ID, "video");
-        event.handler().registerPlayerOnFreeResLoc(resourceLocation, SimpleMediaPlayer.class);
-        if (event.handler().getMediaPlayer(resourceLocation).providesAPI()) {
-            LOGGER.info("Correctly setup");
-        } else {
-            LOGGER.warn("Running in NO_LIBRARY_MODE");
-        }
-    }
-
-    public static DynamicResourceLocation getResourceLocation() {
-        return resourceLocation;
-    }
 
 }

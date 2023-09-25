@@ -31,6 +31,7 @@ public class BlockInit {
     public static final RegistryObject<Block> PANTALLA = registerBlock("pantalla", () -> new BloquePantalla(AbstractBlock.Properties.of(Material.STONE)));
 
     public static final RegistryObject<Block> TOCADISCOS = registerBlock("tocadiscos", () -> new BloqueTocadiscos(AbstractBlock.Properties.of(Material.STONE)));
+    public static final RegistryObject<Block> PICTURE_FRAME = registerBlock("picture_frame", () -> new PictureFrame(AbstractBlock.Properties.of(Material.STONE)));
 
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();

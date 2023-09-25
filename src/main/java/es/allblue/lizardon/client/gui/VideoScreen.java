@@ -1,195 +1,200 @@
 package es.allblue.lizardon.client.gui;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.util.MemoryTracker;
+import me.lib720.caprica.vlcj.player.base.State;
+import me.srrapero720.watermedia.api.WaterMediaAPI;
+import me.srrapero720.watermedia.api.player.SyncVideoPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.StringTextComponent;
-import nick1st.fancyvideo.api.DynamicResourceLocation;
-import nick1st.fancyvideo.api.MediaPlayerHandler;
-import nick1st.fancyvideo.api.mediaPlayer.MediaPlayerBase;
-import uk.co.caprica.vlcj.media.Media;
-import uk.co.caprica.vlcj.media.MediaEventAdapter;
-import uk.co.caprica.vlcj.media.MediaRef;
-import uk.co.caprica.vlcj.media.TrackType;
-import uk.co.caprica.vlcj.medialist.MediaList;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventListener;
-import uk.co.caprica.vlcj.player.base.TitleDescription;
+import net.minecraftforge.fml.loading.FMLLoader;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class VideoScreen extends Screen {
+    private static final DateFormat FORMAT = new SimpleDateFormat("HH:mm:ss");
+    static {
+        FORMAT.setTimeZone(TimeZone.getTimeZone("GMT-00:00"));
+    }
 
-    boolean init = false;
-    boolean stopped = true;
-    MediaPlayerBase mediaPlayer;
+    // STATUS
+    int tick = 0;
+    int closingOnTick = -1;
+    float fadeLevel = 0;
+    boolean started;
+    boolean closing = false;
 
-    public VideoScreen(String url) {
-        super(new StringTextComponent("Video"));
-        if (MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).providesAPI()) {
-            Minecraft.getInstance().getSoundManager().pause();
-            MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().media().prepare(url);
-            MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().events().addMediaEventListener(new MediaEventAdapter() {
-                @Override
-                public void mediaSubItemAdded(Media media, MediaRef newChild) {
-                    Lizardon.LOGGER.info("item added");
-                    MediaList mediaList = MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().media().subitems().newMediaList();
-                    for (String mrl : mediaList.media().mrls()) {
-                        Lizardon.LOGGER.info("mrl=" + mrl);
-                    }
-                    mediaList.release();
-                }
+    // TOOLS
+    private final SyncVideoPlayer player;
 
-                @Override
-                public void mediaSubItemTreeAdded(Media media, MediaRef item) {
-                    Lizardon.LOGGER.info("item tree added");
-                    MediaList mediaList = MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().media().subitems().newMediaList();
-                    for (String mrl : mediaList.media().mrls()) {
-                        Lizardon.LOGGER.info("mrl=" + mrl);
-                    }
-                    mediaList.release();
-                }
-            });
-            MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().events().addMediaPlayerEventListener(new MediaPlayerEventListener() {
-                @Override
-                public void mediaChanged(MediaPlayer mediaPlayer, MediaRef mediaRef) {}
-                @Override
-                public void opening(MediaPlayer mediaPlayer) {}
-                @Override
-                public void buffering(MediaPlayer mediaPlayer, float v) {}
-                @Override
-                public void playing(MediaPlayer mediaPlayer) {}
-                @Override
-                public void paused(MediaPlayer mediaPlayer) {}
-                @Override
-                public void stopped(MediaPlayer mediaPlayer) { if (!stopped) onClose(); }
-                @Override
-                public void forward(MediaPlayer mediaPlayer) {}
-                @Override
-                public void backward(MediaPlayer mediaPlayer) {}
-                @Override
-                public void stopping(MediaPlayer mediaPlayer) {}
-                @Override
-                public void finished(MediaPlayer mediaPlayer) {}
-                @Override
-                public void timeChanged(MediaPlayer mediaPlayer, long l) {}
-                @Override
-                public void positionChanged(MediaPlayer mediaPlayer, double v) {}
-                @Override
-                public void seekableChanged(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void pausableChanged(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void titleListChanged(MediaPlayer mediaPlayer) {}
-                @Override
-                public void titleSelectionChanged(MediaPlayer mediaPlayer, TitleDescription titleDescription, int i) {}
-                @Override
-                public void snapshotTaken(MediaPlayer mediaPlayer, String s) {}
-                @Override
-                public void lengthChanged(MediaPlayer mediaPlayer, long l) {}
-                @Override
-                public void videoOutput(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void elementaryStreamAdded(MediaPlayer mediaPlayer, TrackType trackType, int i, String s) {}
-                @Override
-                public void elementaryStreamDeleted(MediaPlayer mediaPlayer, TrackType trackType, int i, String s) {}
-                @Override
-                public void elementaryStreamUpdated(MediaPlayer mediaPlayer, TrackType trackType, int i, String s) {}
-                @Override
-                public void elementaryStreamSelected(MediaPlayer mediaPlayer, TrackType trackType, String s, String s1) {}
-                @Override
-                public void corked(MediaPlayer mediaPlayer, boolean b) {}
-                @Override
-                public void muted(MediaPlayer mediaPlayer, boolean b) {}
-                @Override
-                public void volumeChanged(MediaPlayer mediaPlayer, float v) {}
-                @Override
-                public void audioDeviceChanged(MediaPlayer mediaPlayer, String s) {}
-                @Override
-                public void chapterChanged(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void programAdded(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void programDeleted(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void programUpdated(MediaPlayer mediaPlayer, int i) {}
-                @Override
-                public void programSelected(MediaPlayer mediaPlayer, int i, int i1) {}
-                @Override
-                public void error(MediaPlayer mediaPlayer) {}
-                @Override
-                public void mediaPlayerReady(MediaPlayer mediaPlayer) {}
-            });
-            MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).api().audio().setVolume(200);
+    // VIDEO INFO
+    int videoTexture = -1;
+
+
+    public VideoScreen(String url, int volume) {
+        super(new StringTextComponent(""));
+
+        Minecraft minecraft = Minecraft.getInstance();
+        Minecraft.getInstance().getSoundManager().pause();
+
+        this.player = new SyncVideoPlayer(null, minecraft, MemoryTracker::create);
+        player.setVolume(volume);
+        player.start(url);
+        started = true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        tick++;
+    }
+
+    @Override
+    public void render(MatrixStack stack, int pMouseX, int pMouseY, float pPartialTicks) {
+        if (!started) return;
+
+        videoTexture = player.prepareTexture();
+
+        if (player.isEnded() || player.isStopped() || player.getRawPlayerState().equals(State.ERROR)) {
+            if (fadeLevel == 1 || closing) {
+                closing = true;
+                if (closingOnTick == -1) closingOnTick = tick + 20;
+                if (tick >= closingOnTick) fadeLevel = Math.max(fadeLevel - (pPartialTicks / 8), 0.0f);
+                renderBlackBackground(stack);
+                renderLoadingGif(stack);
+                if (fadeLevel == 0) onClose();
+                return;
+            }
+        }
+
+        boolean playingState = player.isPlaying() && player.getRawPlayerState().equals(State.PLAYING);
+        fadeLevel = (playingState) ? Math.max(fadeLevel - (pPartialTicks / 8), 0.0f) : Math.min(fadeLevel + (pPartialTicks / 16), 1.0f);
+
+        // RENDER VIDEO
+        if (playingState || player.isStopped() || player.isEnded()) {
+            renderTexture(stack, videoTexture);
+        }
+
+        // BLACK SCREEN
+        renderBlackBackground(stack);
+
+        // RENDER GIF
+        if (!player.isPlaying() || !player.getRawPlayerState().equals(State.PLAYING)) renderLoadingGif(stack);
+
+        // DEBUG RENDERING
+        if (!FMLLoader.isProduction()) {
+            draw(stack, String.format("State: %s", player.getRawPlayerState().name()), getHeightCenter(-12));
+            draw(stack, String.format("Time: %s (%s) / %s (%s)", FORMAT.format(new Date(player.getTime())), player.getTime(), FORMAT.format(new Date(player.getDuration())), player.getDuration()), getHeightCenter(0));
+            draw(stack, String.format("Media Duration: %s (%s)", FORMAT.format(new Date(player.getMediaInfoDuration())), player.getMediaInfoDuration()), getHeightCenter(12));
         }
     }
 
-
-    @Override
-    public void render(MatrixStack pMatrixStack, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        mediaPlayer = (MediaPlayerBase) MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation());
-        if (MediaPlayerHandler.getInstance().getMediaPlayer(Lizardon.getResourceLocation()).providesAPI()) {
-            if (!init) {
-                mediaPlayer.api().audio().setVolume(50);
-                mediaPlayer.api().controls().play();
-                init = true;
-                stopped = false;
-            }
-            // Generic Render Code for Screens
-            int width = Minecraft.getInstance().screen.width;
-            int height = Minecraft.getInstance().screen.height;
-
-            Minecraft.getInstance().textureManager.bind(mediaPlayer.renderToResourceLocation());
-
-            RenderSystem.enableBlend();
-            RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-            AbstractGui.blit(pMatrixStack, 0, 0, 0.0F, 0.0F, width, height, width, height);
-        } else {
-            // Generic Render Code for Screens
-            int width = Minecraft.getInstance().screen.width;
-            int height = Minecraft.getInstance().screen.height;
-
-            int width2;
-
-            if (width <= height) {
-                width2 = width / 3;
-            } else {
-                width2 = height / 2;
-            }
-
-            Minecraft.getInstance().textureManager.bind(new DynamicResourceLocation(Lizardon.MOD_ID, "fallback"));
-
-            RenderSystem.enableBlend();
-            RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-            AbstractGui.blit(pMatrixStack, 0, 0, 0.0F, 0.0F, width, height, width2, width2);
-        }
+    private void renderBlackBackground(MatrixStack stack) {
+        RenderSystem.enableBlend();
+        fill(stack, 0, 0, width, height, WaterMediaAPI.math_colorARGB((int) (fadeLevel * 255), 0, 0, 0));
         RenderSystem.disableBlend();
     }
 
+    private void renderTexture(MatrixStack stack, int texture) {
+        if (player.getDimensions() == null) return; // Checking if video available
+
+        RenderSystem.enableBlend();
+        fill(stack, 0, 0, width, height, WaterMediaAPI.math_colorARGB(255, 0, 0, 0));
+        RenderSystem.disableBlend();
+
+        RenderSystem.bindTexture(texture);
+
+        // Get video dimensions
+        Dimension videoDimensions = player.getDimensions();
+        double videoWidth = videoDimensions.getWidth();
+        double videoHeight = videoDimensions.getHeight();
+
+        // Calculate aspect ratios for both the screen and the video
+        float screenAspectRatio = (float) width / height;
+        float videoAspectRatio = (float) ((float) videoWidth / videoHeight);
+
+        // New dimensions for rendering video texture
+        int renderWidth, renderHeight;
+
+        // If video's aspect ratio is greater than screen's, it means video's width needs to be scaled down to screen's width
+        if(videoAspectRatio > screenAspectRatio) {
+            renderWidth = width;
+            renderHeight = (int) (width / videoAspectRatio);
+        } else {
+            renderWidth = (int) (height * videoAspectRatio);
+            renderHeight = height;
+        }
+
+        int xOffset = (width - renderWidth) / 2; // xOffset for centering the video
+        int yOffset = (height - renderHeight) / 2; // yOffset for centering the video
+
+        RenderSystem.enableBlend();
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        AbstractGui.blit(stack, xOffset, yOffset, 0.0F, 0.0F, renderWidth, renderHeight, renderWidth, renderHeight);
+        RenderSystem.disableBlend();
+    }
+
+    private void renderLoadingGif(MatrixStack stack) {
+        RenderSystem.enableBlend();
+        RenderSystem.bindTexture(WaterMediaAPI.api_getTexture(WaterMediaAPI.img_getLoading(), tick, 1, true));
+        AbstractGui.blit(stack, width - 36, height - 36 , 0, 0, 36, 36, 28, 28);
+        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        RenderSystem.disableBlend();
+    }
+
+    private int getHeightCenter(int offset) {
+        return (height / 2) + offset;
+    }
+
+    private void draw(MatrixStack stack, String text, int height) {
+        drawString(stack, Minecraft.getInstance().font, text, 5, height, 0xffffff);
+    }
+
+    @Override
+    public boolean isPauseScreen() { return false; }
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        //if (hasShiftDown() && pKeyCode == 256) {
-        if (pKeyCode == 256) {
+        if (hasShiftDown() && pKeyCode == 256) {
             this.onClose();
         }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 
-
     @Override
     public boolean shouldCloseOnEsc() {
-        return true;
+        return false;
     }
 
     @Override
     public void onClose() {
-        if (!stopped) {
-            stopped = true;
+        super.onClose();
+        if (started) {
+            this.player.stop();
+            started = false;
             Minecraft.getInstance().getSoundManager().resume();
-            mediaPlayer.api().controls().stop();
-            super.onClose();
+            GlStateManager._deleteTexture(videoTexture);
+            player.release();
         }
-        Minecraft.getInstance().setScreen(null);
+    }
+
+    @Override
+    protected void init() {
+        if (Minecraft.getInstance().screen != null) {
+            this.width = Minecraft.getInstance().screen.width;
+            this.height = Minecraft.getInstance().screen.height;
+        }
+        super.init();
     }
 }

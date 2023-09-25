@@ -148,6 +148,11 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         mc.setScreen(null);
     }
 
+    public float getFrameTime() {
+        if (mc.isPaused())
+            return 1.0F;
+        return mc.getFrameTime();
+    }
 
     @Override
     public void prepararNavegador(API api) {
@@ -161,7 +166,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public void verVideo(String url) {
         System.out.println("verVideo");
         System.out.println("VERVIDEO: "+ url );
-        mc.setScreen(new VideoScreen(url));
+        mc.setScreen(new VideoScreen(url, 50));
 
     }
 

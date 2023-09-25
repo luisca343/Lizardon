@@ -39,6 +39,10 @@ public class SharedProxy {
     public void init() {
     }
 
+    public  float getFrameTime() {
+        Lizardon.LOGGER.info("Called SharedProxy.getFrameTime() on server side...");
+        return 0;
+    }
     public void postInit() {
     }
 

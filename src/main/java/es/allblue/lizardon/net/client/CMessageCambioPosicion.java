@@ -1,6 +1,5 @@
 package es.allblue.lizardon.net.client;
 
-
 import com.google.common.base.Charsets;
 import es.allblue.lizardon.event.wungill.CarreraEventsClient;
 import es.allblue.lizardon.event.wungill.RegionEventsClient;
