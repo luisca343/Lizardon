@@ -1,8 +1,8 @@
 package es.allblue.lizardon.client.gui;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.util.MemoryTracker;
 import me.lib720.caprica.vlcj.player.base.State;
 import me.srrapero720.watermedia.api.WaterMediaAPI;
@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class VideoScreen extends Screen {
+public class VideoScreen2 extends Screen {
     private static final DateFormat FORMAT = new SimpleDateFormat("HH:mm:ss");
     static {
         FORMAT.setTimeZone(TimeZone.getTimeZone("GMT-00:00"));
@@ -40,7 +40,8 @@ public class VideoScreen extends Screen {
     int videoTexture = -1;
 
 
-    public VideoScreen(String url, int volume) {
+
+    public VideoScreen2(String url, int volume) {
         super(new StringTextComponent(""));
 
         Minecraft minecraft = Minecraft.getInstance();
@@ -52,11 +53,7 @@ public class VideoScreen extends Screen {
         started = true;
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        tick++;
-    }
+
 
     @Override
     public void render(MatrixStack stack, int pMouseX, int pMouseY, float pPartialTicks) {
@@ -71,7 +68,7 @@ public class VideoScreen extends Screen {
                 if (tick >= closingOnTick) fadeLevel = Math.max(fadeLevel - (pPartialTicks / 8), 0.0f);
                 renderBlackBackground(stack);
                 renderLoadingGif(stack);
-                if (fadeLevel == 0) onClose();
+                onClose();
                 return;
             }
         }

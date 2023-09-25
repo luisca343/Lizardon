@@ -2,18 +2,22 @@ package es.allblue.lizardon.net;
 
 import es.allblue.lizardon.net.client.*;
 import es.allblue.lizardon.net.server.*;
+import es.allblue.lizardon.net.video.FrameVideoMessage;
+import es.allblue.lizardon.net.video.OpenVideoManagerScreen;
+import es.allblue.lizardon.net.video.UploadVideoUpdateMessage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.IndexedMessageCodec;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 @Mod.EventBusSubscriber
 public class Messages {
 
     private static final String PROTOCOL_VERSION = "1";
-    private static int index = 0;
+    public static int index = 0;
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             new ResourceLocation("lizardon", "packetsystem"),
             () -> PROTOCOL_VERSION,
@@ -22,7 +26,7 @@ public class Messages {
     );
 
     @SubscribeEvent
-    public static void registryNetworkPackets (FMLCommonSetupEvent event) {
+    public static void registryNetworkPackets(FMLCommonSetupEvent event) {
         INSTANCE.registerMessage(index++, SMessagePadCtrl.class, SMessagePadCtrl::encode, SMessagePadCtrl::decode, SMessagePadCtrl::handle);
         INSTANCE.registerMessage(index++, SMessageIniciarLlamada.class, SMessageIniciarLlamada::encode, SMessageIniciarLlamada::decode, SMessageIniciarLlamada::handle);
         INSTANCE.registerMessage(index++, SMessageFinalizarLlamada.class, SMessageFinalizarLlamada::encode, SMessageFinalizarLlamada::decode, SMessageFinalizarLlamada::handle);
@@ -52,6 +56,11 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageWaypoints.class, CMessageWaypoints::encode, CMessageWaypoints::decode, CMessageWaypoints::handle);
 
 
+        /*
+        INSTANCE.registerMessage(index++, FrameVideoMessage.class, FrameVideoMessage::encode, FrameVideoMessage::decode, FrameVideoMessage::handle);
+        INSTANCE.registerMessage(index++, OpenVideoManagerScreen.class, OpenVideoManagerScreen::encode, OpenVideoManagerScreen::decode, OpenVideoManagerScreen::handle);
+        INSTANCE.registerMessage(index++, UploadVideoUpdateMessage.class, UploadVideoUpdateMessage::encode, UploadVideoUpdateMessage::decode, UploadVideoUpdateMessage::handle);
 
+*/
     }
 }

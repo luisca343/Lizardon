@@ -8,6 +8,7 @@ import es.allblue.lizardon.event.*;
 import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.integration.Integrations;
 import es.allblue.lizardon.net.Messages;
+import es.allblue.lizardon.net.PacketHandler;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.pixelmon.attacks.DesenvaineSubito;
@@ -33,15 +34,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
-import nick1st.fancyvideo.api.DynamicResourceLocation;
-import nick1st.fancyvideo.api.eventbus.EventException;
-import nick1st.fancyvideo.api.eventbus.FancyVideoEvent;
-import nick1st.fancyvideo.api.eventbus.FancyVideoEventBus;
-import nick1st.fancyvideo.api.eventbus.event.PlayerRegistryEvent;
-import nick1st.fancyvideo.api.mediaPlayer.SimpleMediaPlayer;
 import noppes.npcs.api.NpcAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import es.allblue.lizardon.client.renders.TVBlockRenderer;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -80,7 +76,6 @@ public class Lizardon
     public static CarreraManager carreraManager;
 
     public static LizardonConfig config;
-    private static DynamicResourceLocation resourceLocation;
 
     public API getAPI() {
         return api;
@@ -117,7 +112,9 @@ public class Lizardon
         // Register ourselves for server and other game events we are interested in
         //MinecraftForge.EVENT_BUS.register(this);
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         eventBus.addListener(Messages::registryNetworkPackets);
+
 
         ItemInit.register(eventBus);
         BlockInit.register(eventBus);
@@ -133,11 +130,6 @@ public class Lizardon
         Pixelmon.EVENT_BUS.register(new PixelmonEvents());
         Pixelmon.EVENT_BUS.register(new LizardonBattleEvent());
         Pixelmon.EVENT_BUS.register(new LizardonBattleLogEvent());
-        try{
-            FancyVideoEventBus.getInstance().registerEvent(this);
-        } catch (EventException.UnauthorizedRegistryException | EventException.EventRegistryException e) {
-            LOGGER.warn("FancyVideoEventBus.getInstance().registerEvent(this);");
-        }
         // some preinit code
         //PROXY.es.allblue.lizardon.init();
         LOGGER.info("HELLO FROM PREINIT");
@@ -168,6 +160,8 @@ public class Lizardon
         EffectTypeAdapter.EFFECTS.put("TestAttack", TestAttack.class);
         EffectTypeAdapter.EFFECTS.put("DesenvaineSubito", DesenvaineSubito.class);
 
+
+        event.enqueueWork(CommonHandler::setup);
     }
 
     public void end (FMLLoadCompleteEvent event){
@@ -186,6 +180,10 @@ public class Lizardon
         RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_SOURCE.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_FLOWING.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(FluidInit.AGUAS_TERMALES_BLOCK.get(), RenderType.translucent());
+
+
+        RenderTypeLookup.setRenderLayer(BlockInit.TVBLOCK.get(), RenderType.cutout());
+        ClientRegistry.bindTileEntityRenderer(TileEntityInit.TV_TE.get(), TVBlockRenderer::new);
 
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
@@ -270,22 +268,5 @@ public class Lizardon
         return false;
     }
 
-
-    @FancyVideoEvent
-    @SuppressWarnings("unused")
-    public void init(PlayerRegistryEvent.AddPlayerEvent event) {
-        LOGGER.info("REGISTERING EVENT FANCYVIDEO-API");
-        resourceLocation = new DynamicResourceLocation(Lizardon.MOD_ID, "video");
-        event.handler().registerPlayerOnFreeResLoc(resourceLocation, SimpleMediaPlayer.class);
-        if (event.handler().getMediaPlayer(resourceLocation).providesAPI()) {
-            LOGGER.info("Correctly setup");
-        } else {
-            LOGGER.warn("Running in NO_LIBRARY_MODE");
-        }
-    }
-
-    public static DynamicResourceLocation getResourceLocation() {
-        return resourceLocation;
-    }
 
 }

@@ -32,6 +32,9 @@ public class BlockInit {
 
     public static final RegistryObject<Block> TOCADISCOS = registerBlock("tocadiscos", () -> new BloqueTocadiscos(AbstractBlock.Properties.of(Material.STONE)));
 
+    public static final RegistryObject<Block> TVBLOCK = registerBlock("tv_block", () -> new TVBlock(AbstractBlock.Properties.of(Material.STONE)));
+
+
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();
         for (ObjColocable objeto : objetos) {
@@ -54,6 +57,7 @@ public class BlockInit {
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block){
         ItemInit.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(LizardonItemGroup.LIZARDON_GROUP)));
     }
+
 
     public static void register(IEventBus eventBus) {
         inicializarComidas();

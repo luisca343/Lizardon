@@ -12,6 +12,8 @@ import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.util.FileHelper;
 import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.PersistentDataFields;
+import es.allblue.lizardon.util.cache.TextureCache;
+import es.allblue.lizardon.util.displayers.VideoDisplayer;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -23,6 +25,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -41,6 +44,30 @@ public class LizardonEvents {
         IBakedModel model = event.getModelRegistry().get(mrl);
         event.getModelRegistry().put(mrl, new TestModeloFunko(model));
     }
+
+    @SubscribeEvent
+    public static void onRenderTickEvent(TickEvent.RenderTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            TextureCache.renderTick();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onClientTickEvent(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            TextureCache.clientTick();
+            VideoDisplayer.tick();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onUnloadingLevel(WorldEvent.Unload unload) {
+        if (unload.getWorld() != null && unload.getWorld().isClientSide()) {
+            TextureCache.unload();
+            VideoDisplayer.unload();
+        }
+    }
+
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent

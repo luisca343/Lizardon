@@ -151,11 +151,11 @@ dependencies {
     implementation fg.deobf('curse.maven:curiosapi-309927:4419403')
 
     //implementation fg.deobf('curse.maven:videoapi-591686:3684076')
-    implementation files('libs/FancyVideo-API-1.16.5-2.2.0.3.jar')
+    //implementation files('libs/FancyVideo-API-1.16.5-2.2.0.3.jar')
+    implementation fg.deobf('curse.maven:watermedia-869524:4748769')
 
     implementation fg.deobf('curse.maven:CustomNPCs-221826:3791072')
 
-    implementation fg.deobf('curse.maven:CreativeCore-257814:3419983')
     //implementation files('libs/CustomNPCs-1.16.5.20220728snapshot.jar')
     
     // You may put jars on which you depend on in ./libs or you may define them like so..

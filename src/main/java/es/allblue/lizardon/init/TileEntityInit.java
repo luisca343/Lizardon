@@ -3,6 +3,7 @@ package es.allblue.lizardon.init;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.tileentity.FunkoTE;
 import es.allblue.lizardon.tileentity.PantallaTE;
+import es.allblue.lizardon.tileentity.TVBlockEntity;
 import es.allblue.lizardon.tileentity.TocadiscosTE;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,6 +24,10 @@ public class TileEntityInit {
 
     public static RegistryObject<TileEntityType<TocadiscosTE>> TOCADISCOS =
             TILE_ENTITIES.register("tocadiscos_te", () -> TileEntityType.Builder.of(TocadiscosTE::new, BlockInit.TOCADISCOS.get()).build(null));
+
+    public static RegistryObject<TileEntityType<TVBlockEntity>> TV_TE =
+            TILE_ENTITIES.register("tv_block_entity", () -> TileEntityType.Builder.of(TVBlockEntity::new, BlockInit.TVBLOCK.get()).build(null));
+
 
 
     public static void register(IEventBus eventBus){
