@@ -48,6 +48,15 @@
   "lizardon.taser": "Taser",
   "lizardon.bonk": "¡BONK!",
 
+  "gui.frame.save": "Save",
+  "gui.frame.play": "Play",
+  "gui.frame.pause": "Pause",
+  "gui.frame.stop": "Stop",
+  "gui.frame.url_text": "Url:",
+  "gui.frame.volume": "Volume",
+
+  "customslider.videoplayer.value": "%s: %d",
+
   "pixelmon.generic.form.calle": "Calle",
 
   "ability.TestAbility": "Potencia Floral",

@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -20,6 +21,7 @@ public class TVVideoScreen extends Screen {
 
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Lizardon.MOD_ID, "textures/gui/background.png");
+    private static final ResourceLocation BUTTONS = new ResourceLocation(Lizardon.MOD_ID, "textures/gui/frame.png");
 
     private final TileEntity be;
     private String url;
@@ -34,16 +36,32 @@ public class TVVideoScreen extends Screen {
 
     // Components useful for the GUI
     private TextFieldWidget urlBox;
+    private TextFieldWidget canalBox;
     private CustomSlider volumeSlider;
+
+    private int prevX;
+    private int prevY;
+
+    private TextFieldWidget xBox;
+    private TextFieldWidget yBox;
 
     private boolean changed;
 
+    private int posX = 0;
+    private int posY = 0;
 
-    public TVVideoScreen(TileEntity be, String url, int volume) {
-        super(new TranslationTextComponent("gui.tv_video_screen.title"));
+
+    public TVVideoScreen(TileEntity be, String url, int volume, int sizeX, int sizeY, int posX, int posY) {
+        super(new TranslationTextComponent("gui.frame.title"));
+
         this.be = be;
         this.url = url;
         this.volume = volume;
+        this.prevX = sizeX;
+        this.prevY = sizeY;
+        this.posX = posX;
+        this.posY = posY;
+
     }
 
     @Override
@@ -60,23 +78,101 @@ public class TVVideoScreen extends Screen {
         urlBox.setMaxLength(32767);
         urlBox.setValue(url == null ? "" : url);
 
-        // Play button
-        addButton(new Button(leftPos + 10, topPos + 80, imageWidth - 24, 20, new TranslationTextComponent("gui.tv_video_screen.play"), button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, true, true));
+        // X dir button
+        addButton(new Button(leftPos + 10, topPos + 75, (imageWidth - 24) / 2 +5, 20, new StringTextComponent(getStrPosX()), button -> {
+            posX++;
+            if(posX > 2) posX = 0;
+            button.setMessage(new StringTextComponent(getStrPosX()));
         }));
+
+        // Y dir button
+        addButton(new Button(leftPos + 10 + (imageWidth - 24) / 2 +5, topPos + 75, (imageWidth - 24) / 2 -5, 20, new StringTextComponent(getStrPosY()), button -> {
+            posY++;
+            if(posY > 2) posY = 0;
+            button.setMessage(new StringTextComponent(getStrPosY()));
+
+        }));
+
+
+
+        addButton(new ImageButton(
+                leftPos + imageWidth - 50 - 96,
+                topPos + 215,
+                20,
+                20,
+                0,
+                0,
+                0,
+                BUTTONS,
+                256,
+                256, button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, true, true, getValueX() ,getValueY(), posX, posY));
+        }));
+
+        /*
+        // Play button
+        addButton(new Button(leftPos + 10, topPos + 80, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.play"), button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, true, true, getValueX() ,getValueY(), posX, posY));
+        }));*/
+
+        // new pause
+        addButton(new ImageButton(
+                leftPos + imageWidth - 50 - 64,
+                topPos + 215,
+                20,
+                20,
+                20,
+                0,
+                0,
+                BUTTONS,
+                256,
+                256, button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, false, getValueX() ,getValueY(), posX, posY));
+        }));
+
+        // new stop
+
+        addButton(new ImageButton(
+                leftPos + imageWidth - 50 - 32,
+                topPos + 215,
+                20,
+                20,
+                40,
+                0,
+                0,
+                BUTTONS,
+                256,
+                256, button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, true, getValueX() ,getValueY(), posX, posY));
+        }));
+
 
         // Pause button
-        addButton(new Button(leftPos + 10, topPos + 105, imageWidth - 24, 20, new TranslationTextComponent("gui.tv_video_screen.pause"), button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, false));
-        }));
+        /*
+        addButton(new Button(leftPos + 10, topPos + 105, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.pause"), button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, false, getValueX() ,getValueY(), posX, posY));
+        }));*/
 
         // Stop button
-        addButton(new Button(leftPos + 10, topPos + 130, imageWidth - 24, 20, new TranslationTextComponent("gui.tv_video_screen.stop"), button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, true));
-        }));
+        /*
+        addButton(new Button(leftPos + 10, topPos + 130, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.stop"), button -> {
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, true, getValueX() ,getValueY(), posX, posY));
+        }));*/
 
-        // Save button
-        addButton(new Button(leftPos + 10, topPos + 220, imageWidth - 24, 20, new TranslationTextComponent("gui.tv_video_screen.save"), button -> {
+
+        //new save
+        addButton(new ImageButton(
+                leftPos + imageWidth - 50,
+                topPos + 215,
+
+                20,
+                20,
+                60,
+                0,
+                0,
+                BUTTONS,
+                256,
+                256, button -> {
             int tempVolume = volumeSlider.getValue();
             String tempUrl = urlBox.getValue();
 
@@ -87,14 +183,108 @@ public class TVVideoScreen extends Screen {
             ((TVBlockEntity) be).setVolume(tempVolume);
 
             changed = true;
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), tempUrl, tempVolume, true, true, false));
+            Lizardon.LOGGER.info("ENVIANDO DATOS: " + tempUrl + " " + tempVolume + " " + getValueX() + " " + getValueY());
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), tempUrl, tempVolume, true, true, false, getValueX() ,getValueY(), posX, posY));
         }));
 
+
+        // NUMERITOS
+        xBox = new TextFieldWidget(font, leftPos + 10, topPos + 120, (imageWidth - 24)/2 - 5, 20, new StringTextComponent(""));
+        xBox.setValue(String.valueOf(prevX));
+        addButton(xBox);
+
+        yBox = new TextFieldWidget(font, leftPos + 10 + (imageWidth - 24)/2 + 5, topPos + 120, (imageWidth - 24)/2 - 5, 20, new StringTextComponent(""));
+        yBox.setValue(String.valueOf(prevY));
+        addButton(yBox);
+
+
         // Volume slider
-        addButton(volumeSlider = new CustomSlider(leftPos + 10, topPos + 155, imageWidth - 24, 20, new TranslationTextComponent("gui.tv_video_screen.volume"), volume / 100f));
+        addButton(volumeSlider = new CustomSlider(leftPos + 10, topPos + 145, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.volume"), volume / 100f));
+
+
+
+        addButton(canalBox = new TextFieldWidget(font, leftPos + 10, topPos + 185, imageWidth - 26, 20, new StringTextComponent("")));
+
+        canalBox.setMaxLength(32767);
+        canalBox.setValue(url == null ? "" : url);
+
+        /*
+        // Save button
+        addButton(new Button(leftPos + 10, topPos + 220, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.save"), button -> {
+            int tempVolume = volumeSlider.getValue();
+            String tempUrl = urlBox.getValue();
+
+            this.url = tempUrl;
+            this.volume = tempVolume;
+
+            // Cast the block entity to the correct type and set the volume
+            ((TVBlockEntity) be).setVolume(tempVolume);
+
+            changed = true;
+            Lizardon.LOGGER.info("ENVIANDO DATOS: " + tempUrl + " " + tempVolume + " " + getValueX() + " " + getValueY());
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), tempUrl, tempVolume, true, true, false, getValueX() ,getValueY(), posX, posY));
+        }));*/
 
         // Cast the block entity to the correct type and set the volume
         ((TVBlockEntity) be).setVolume(volume);
+    }
+
+    public String getStrPosX(){
+        String strPosX = "";
+        switch(posX){
+            case 0:
+                strPosX = "left";
+                break;
+            case 1:
+                strPosX = "center";
+                break;
+            case 2:
+                strPosX = "right";
+                break;
+        }
+        return strPosX;
+    }
+
+    public String getStrPosY(){
+        String strPosY = "";
+        switch(posY){
+            case 0:
+                strPosY = "bottom";
+                break;
+            case 1:
+                strPosY = "center";
+                break;
+            case 2:
+                strPosY = "top";
+                break;
+        }
+        return strPosY;
+    }
+
+    public int getValueX(){
+        String sX = xBox.getValue();
+        int x;
+
+        try{
+            x = Integer.parseInt(sX);
+        }catch (NumberFormatException e){
+            x = 1;
+        }
+
+        return x;
+    }
+
+    public int getValueY(){
+        String sY = yBox.getValue();
+        int y;
+
+        try{
+            y = Integer.parseInt(sY);
+        }catch (NumberFormatException e){
+            y = 1;
+        }
+
+        return y;
     }
 
     @Override
@@ -106,13 +296,16 @@ public class TVVideoScreen extends Screen {
 
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
 
-        font.draw(pPoseStack, new TranslationTextComponent("gui.tv_video_screen.url_text"), width / 2f - font.width(new TranslationTextComponent("gui.tv_video_screen.url_text")) / 2f, topPos + 16, 0xFFFFFF);
+        font.draw(pPoseStack, new TranslationTextComponent("gui.frame.url_text"), width / 2f - font.width(new TranslationTextComponent("gui.frame.url_text")) / 2f, topPos + 16, 0xFFFFFF);
+        font.draw(pPoseStack, new StringTextComponent("Posicion"), width / 2f - font.width(new StringTextComponent("Posicion")) / 2f, topPos + 60, 0xFFFFFF);
+        font.draw(pPoseStack, new StringTextComponent("Ancho y alto"), width / 2f - font.width(new StringTextComponent("Ancho y alto")) / 2f, topPos + 105, 0xFFFFFF);
+        font.draw(pPoseStack, new StringTextComponent("Canal"), width / 2f - font.width(new StringTextComponent("Canal")) / 2f, topPos + 170, 0xFFFFFF);
     }
 
     @Override
     public void removed() {
         if (!changed)
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, -1, true, true, false));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, -1, true, true, false, getValueX() ,getValueY(), posX, posY));
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
     }
 

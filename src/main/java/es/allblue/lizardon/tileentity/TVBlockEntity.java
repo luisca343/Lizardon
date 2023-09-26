@@ -6,6 +6,8 @@ import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.PacketHandler;
 import es.allblue.lizardon.net.video.FrameVideoMessage;
 import es.allblue.lizardon.net.video.OpenVideoManagerScreen;
+import es.allblue.lizardon.util.CreateFrameBox;
+import es.allblue.lizardon.util.Multiblock;
 import es.allblue.lizardon.util.cache.TextureCache;
 import es.allblue.lizardon.util.displayers.IDisplay;
 import es.allblue.lizardon.util.math.AlignedBox;
@@ -21,7 +23,9 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -59,9 +63,40 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         super(tileEntityTypeIn);
     }
 
+    public int sizeX = 1;
+    public int sizeY = 1;
+
+    public int posX = 0;
+    public int posY = 0;
+
+    public AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
     @OnlyIn(Dist.CLIENT)
     public boolean isURLEmpty() {
         return url.isEmpty();
+    }
+
+
+
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return AABB;
+    }
+
+    public void updateAABB() {
+        try{
+            BlockPos pos = getBlockPos();
+            AlignedBox box = new AlignedBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
+
+            Direction d = getBlockState().getValue(TVBlock.FACING);
+            AlignedBox boxExtra = CreateFrameBox.getBox(box, d, sizeX, sizeY, posX, posY);
+            AlignedBox boxFinal = new AlignedBox(box.minX + boxExtra.minX, box.minY + boxExtra.minY, box.minZ + boxExtra.minZ, box.minX + boxExtra.maxX, box.minY + boxExtra.maxY, box.minZ + boxExtra.maxZ);
+
+            AABB = boxFinal.getBB();
+
+        }catch (Exception e) {
+            Lizardon.LOGGER.warn("ERROR: " + e);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -125,7 +160,7 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
 
     public void openVideoManagerGUI(BlockPos blockPos, PlayerEntity player) {
         setBeingUsed(player.getUUID());
-        PacketHandler.sendTo(new OpenVideoManagerScreen(blockPos, url, tick, (int) (volume * 100), loop), player);
+        PacketHandler.sendTo(new OpenVideoManagerScreen(blockPos, url, tick, (int) (volume * 100), loop, sizeX, sizeY, posX, posY), player);
     }
 
     public void setBeingUsed(UUID player) {
@@ -181,8 +216,14 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         pTag.putBoolean("playing", playing);
         pTag.putInt("tick", tick);
         pTag.putFloat("volume", volume);
+        pTag.putInt("sizeX", sizeX);
+        pTag.putInt("sizeY", sizeY);
+        pTag.putInt("posX", posX);
+        pTag.putInt("posY", posY);
         return pTag;
     }
+
+
 
     @Override
     public void load(BlockState state, CompoundNBT pTag) {
@@ -197,29 +238,75 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         playing = nbt.getBoolean("playing");
         tick = nbt.getInt("tick");
         volume = nbt.getFloat("volume");
+        sizeX = nbt.getInt("sizeX");
+        sizeY = nbt.getInt("sizeY");
+        posX = nbt.getInt("posX");
+        posY = nbt.getInt("posY");
+        updateAABB();
     }
 
     public void notifyPlayer() {
-        Lizardon.LOGGER.info("Notify player");
-        Lizardon.LOGGER.info("Playing: " + playing);
-        Lizardon.LOGGER.info("Tick: " + tick);
-        Lizardon.LOGGER.info("Level: " + level);
-        Lizardon.LOGGER.info("World position: " + worldPosition);
-        PacketHandler.sendToClient(new FrameVideoMessage(worldPosition, playing, tick), level, worldPosition);
+        PacketHandler.sendToClient(new FrameVideoMessage(worldPosition, playing, tick, sizeX, sizeY, posX, posY), level, worldPosition);
     }
 
-    public float getSizeX() {
-        return 1.4F;
+    public int getSizeX() {
+        return sizeX;
     }
 
-    public float getSizeY() {
-        return 0.81F;
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public void setSizeX(int sizeX) {
+        if(sizeX > 0 && sizeX <= 10) {
+            this.sizeX = sizeX;
+        }
+
+        if(sizeX > 10) {
+            this.sizeX = 10;
+        }
+
+        if(sizeX < 0) {
+            this.sizeX = 1;
+        }
+    }
+
+    public void setSizeY(int sizeY) {
+        if(sizeY > 0 && sizeY <= 10) {
+            this.sizeY = sizeY;
+        }
+
+        if(sizeY > 10) {
+            this.sizeY = 10;
+        }
+
+        if(sizeY < 0) {
+            this.sizeY = 1;
+        }
+    }
+
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
     }
 
     public AlignedBox getBox() {
         Direction direction = getBlockState().getValue(TVBlock.FACING);
-        Facing facing = Facing.get(direction);
         AlignedBox box = TVBlock.box(direction);
+
+        /*
 
         Axis one = facing.one();
         Axis two = facing.two();
@@ -233,7 +320,7 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         box.setMax(one, getSizeX());
 
         box.setMin(two, 0);
-        box.setMax(two, getSizeY());
+        box.setMax(two, getSizeY());*/
         return box;
     }
 
@@ -264,4 +351,5 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         if (be.playing)
             be.tick++;
     }
+
 }

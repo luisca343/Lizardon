@@ -11,9 +11,9 @@ public interface IDisplay {
         return 0;
     }
 
-    void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick);
+    void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY);
 
-    void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick);
+    void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY);
 
     void release();
 

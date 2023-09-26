@@ -1,5 +1,6 @@
 package es.allblue.lizardon.net.video;
 
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.tileentity.TVBlockEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -18,6 +19,13 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
     private boolean isPlaying;
     private boolean reset;
 
+    private int x;
+
+    private int y;
+
+    private int posX;
+
+    private int posY;
 
     public UploadVideoUpdateMessage() {}
 
@@ -30,6 +38,23 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
         this.reset = reset;
     }
 
+    public UploadVideoUpdateMessage(BlockPos blockPos, String url, int volume, boolean loop, boolean isPlaying, boolean reset, int tempX, int tempY, int posX, int posY) {
+        this.blockPos = blockPos;
+        this.url = url;
+        this.volume = volume;
+        this.loop = loop;
+        this.isPlaying = isPlaying;
+        this.reset = reset;
+        this.x = tempX;
+        this.y = tempY;
+
+        this.posX = posX;
+        this.posY = posY;
+
+
+    }
+
+
     @Override
     public void encode(UploadVideoUpdateMessage message, PacketBuffer buffer) {
         buffer.writeBlockPos(message.blockPos);
@@ -38,11 +63,16 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
         buffer.writeBoolean(message.loop);
         buffer.writeBoolean(message.isPlaying);
         buffer.writeBoolean(message.reset);
+        buffer.writeInt(message.x);
+        buffer.writeInt(message.y);
+        buffer.writeInt(message.posX);
+        buffer.writeInt(message.posY);
+
     }
 
     @Override
     public UploadVideoUpdateMessage decode(PacketBuffer buffer) {
-        return new UploadVideoUpdateMessage(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
+        return new UploadVideoUpdateMessage(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
     }
 
     @Override
@@ -62,6 +92,11 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
                 tvBlockEntity.setVolume(message.volume);
                 tvBlockEntity.setLoop(message.loop);
                 tvBlockEntity.setPlaying(message.isPlaying);
+                tvBlockEntity.setSizeX(message.x);
+                tvBlockEntity.setSizeY(message.y);
+                tvBlockEntity.setPosX(message.posX);
+                tvBlockEntity.setPosY(message.posY);
+
                 tvBlockEntity.notifyPlayer();
 
                 if (message.reset)

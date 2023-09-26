@@ -166,14 +166,14 @@ public class VideoDisplayer implements IDisplay {
     }
 
     @Override
-    public void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick) {
+    public void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY) {
         if (player == null) return;
         player.seekTo(tick);
         player.pause();
     }
 
     @Override
-    public void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick) {
+    public void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY) {
         if (player == null) return;
         Logger.getGlobal().info("Resuming video");
         player.seekTo(tick);

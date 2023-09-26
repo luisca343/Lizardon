@@ -30,6 +30,7 @@ public class PantallaTE extends TileEntity {
     public float ytVolume = Float.POSITIVE_INFINITY;
 
     public void updateAABB(BlockPos pos2) {
+
         AxisAlignedBB box = new AxisAlignedBB(this.getBlockPos());
 
         if (box == null) renderBB = new AxisAlignedBB(worldPosition);

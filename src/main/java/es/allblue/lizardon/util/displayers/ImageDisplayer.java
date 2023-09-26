@@ -25,10 +25,10 @@ public class ImageDisplayer implements IDisplay {
     public void tick(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick) {}
 
     @Override
-    public void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick) {}
+    public void pause(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY) {}
 
     @Override
-    public void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick) {}
+    public void resume(String url, float volume, float minDistance, float maxDistance, boolean playing, boolean loop, int tick, int sizeX, int sizeY) {}
 
     @Override
     public void release() {

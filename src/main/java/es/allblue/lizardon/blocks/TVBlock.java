@@ -32,17 +32,32 @@ public class TVBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
-    private static final VoxelShape SHAPE_EAST_WEST = Block.box(7, 0, -4, 8, 15, 20);
-    private static final VoxelShape SHAPE_NORTH_SOUTH = Block.box(-4, 0, 7, 20, 15, 8);
+    private static final VoxelShape BOX_NORTH = Block.box(0, 0, 0, 16, 16, 1);
+    private static final VoxelShape BOX_SOUTH = Block.box(0, 0, 15, 16, 16, 16);
+    private static final VoxelShape BOX_WEST = Block.box(15, 0, 0, 16, 16, 16);
+    private static final VoxelShape BOX_EAST = Block.box(0, 0, 0, 1, 16, 16);
 
     public TVBlock(Properties properties) {
-        super(properties);
+        super(properties.noOcclusion());
+
         this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return state.getValue(FACING).getAxis() == Direction.Axis.X ? SHAPE_EAST_WEST : SHAPE_NORTH_SOUTH;
+        switch (state.getValue(FACING)) {
+            case NORTH:
+                return BOX_NORTH;
+            case SOUTH:
+                return BOX_SOUTH;
+            case EAST:
+                return BOX_EAST;
+            case WEST:
+                return BOX_WEST;
+            default:
+                return BOX_NORTH;
+        }
     }
 
     @Override
@@ -114,12 +129,17 @@ public class TVBlock extends Block {
     public static AlignedBox box(Direction direction) {
         Facing facing = Facing.get(direction);
         AlignedBox box = new AlignedBox();
+
+        /*
         if (facing.positive)
             box.setMax(facing.axis, 0.031F);
         else
-            box.setMin(facing.axis, 1 - 0.031F);
+            box.setMin(facing.axis, 1 - 0.031F);*/
         return box;
     }
+
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package es.allblue.lizardon.net.video;
 
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientHandler;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -13,12 +14,26 @@ public class FrameVideoMessage implements IMessage<FrameVideoMessage> {
     private boolean playing;
     private int tick;
 
+    private int sizeX;
+
+    private int sizeY;
+
+    private int posX;
+
+    private int posY;
+
     public FrameVideoMessage() {}
 
-    public FrameVideoMessage(BlockPos pos, boolean playing, int tick) {
+    public FrameVideoMessage(BlockPos pos, boolean playing, int tick, int sizeX, int sizeY, int posX, int posY) {
         this.pos = pos;
         this.playing = playing;
         this.tick = tick;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.posX = posX;
+        this.posY = posY;
+
+
     }
 
     @Override
@@ -26,15 +41,20 @@ public class FrameVideoMessage implements IMessage<FrameVideoMessage> {
         buffer.writeBlockPos(message.pos);
         buffer.writeBoolean(message.playing);
         buffer.writeInt(message.tick);
+        buffer.writeInt(message.sizeX);
+        buffer.writeInt(message.sizeY);
+        buffer.writeInt(message.posX);
+        buffer.writeInt(message.posY);
+
     }
 
     @Override
     public FrameVideoMessage decode(PacketBuffer buffer) {
-        return new FrameVideoMessage(buffer.readBlockPos(), buffer.readBoolean(), buffer.readInt());
+        return new FrameVideoMessage(buffer.readBlockPos(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
     }
     @Override
     public void handle(FrameVideoMessage message, Supplier<NetworkEvent.Context> supplier) {
-        supplier.get().enqueueWork(() -> ClientHandler.manageVideo(message.pos, message.playing, message.tick));
+        supplier.get().enqueueWork(() -> ClientHandler.manageVideo(message.pos, message.playing, message.tick, message.sizeX, message.sizeY, message.posX, message.posY));
         supplier.get().setPacketHandled(true);
     }
 }
