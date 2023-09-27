@@ -29,6 +29,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.server.permission.PermissionAPI;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -38,7 +40,7 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
     private boolean playing = true;
     private int tick = 0;
 
-    private float volume = 1;
+    private float volume = 1.0F;
 
     public float minDistance = 5;
     public float maxDistance = 20;
@@ -69,11 +71,14 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
     public int posX = 0;
     public int posY = 0;
 
+    public int canal = 0;
+
     public AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
     @OnlyIn(Dist.CLIENT)
     public boolean isURLEmpty() {
         return url.isEmpty();
     }
+
 
 
 
@@ -86,17 +91,63 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
     public void updateAABB() {
         try{
             BlockPos pos = getBlockPos();
-            AlignedBox box = new AlignedBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
+            AlignedBox box = new AlignedBox(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ());
 
             Direction d = getBlockState().getValue(TVBlock.FACING);
             AlignedBox boxExtra = CreateFrameBox.getBox(box, d, sizeX, sizeY, posX, posY);
-            AlignedBox boxFinal = new AlignedBox(box.minX + boxExtra.minX, box.minY + boxExtra.minY, box.minZ + boxExtra.minZ, box.minX + boxExtra.maxX, box.minY + boxExtra.maxY, box.minZ + boxExtra.maxZ);
+
+            AlignedBox boxFinal = getAlignedBox(box, boxExtra);
+
+
+            Lizardon.LOGGER.info("box:" + box);
+            Lizardon.LOGGER.info("boxExtra:" + boxExtra);
+            Lizardon.LOGGER.info("boxFinal:" + boxFinal);
 
             AABB = boxFinal.getBB();
 
         }catch (Exception e) {
             Lizardon.LOGGER.warn("ERROR: " + e);
         }
+    }
+
+    @NotNull
+    private AlignedBox getAlignedBox(AlignedBox box, AlignedBox boxExtra) {
+        Direction d = getBlockState().getValue(TVBlock.FACING);
+        float x1, y1, z1, x2, y2, z2;
+        if(d.equals(Direction.NORTH) || d.equals(Direction.SOUTH)) {
+            x1 = box.minX + boxExtra.maxX;
+            y1 = box.minY + boxExtra.maxY;
+            z1 = box.minZ + boxExtra.maxZ;
+
+            x2 = box.maxX + Math.abs(boxExtra.minX);
+            y2 = box.maxY + Math.abs(boxExtra.minY);
+            z2 = box.maxZ + Math.abs(boxExtra.minZ);
+
+        }else{
+
+            x1 = box.minX + boxExtra.minX;
+            y1 = box.minY + boxExtra.minY;
+            z1 = box.minZ + boxExtra.minZ;
+
+            x2 = box.maxX + boxExtra.maxX;
+            y2 = box.maxY + boxExtra.maxY;
+            z2 = box.maxZ + boxExtra.maxZ;
+        }
+
+
+        /*
+        float x1 = (Math.abs(box.minX) + Math.abs(boxExtra.minX)) * Math.signum(box.minX);
+        float y1 = (Math.abs(box.minY) + Math.abs(boxExtra.minY)) * Math.signum(box.minY);
+        float z1 = (Math.abs(box.minZ) + Math.abs(boxExtra.minZ)) * Math.signum(box.minZ);
+
+        float x2 = (Math.abs(box.maxX) + Math.abs(boxExtra.maxX)) * Math.signum(box.maxX);
+        float y2 = (Math.abs(box.maxY) + Math.abs(boxExtra.maxY)) * Math.signum(box.maxY);
+        float z2 = (Math.abs(box.maxZ) + Math.abs(boxExtra.maxZ)) * Math.signum(box.maxZ);
+*/
+
+        //AlignedBox boxFinal = new AlignedBox(box.minX + boxExtra.minX, box.minY + boxExtra.minY, box.minZ + boxExtra.minZ, box.minX + boxExtra.maxX, box.minY + boxExtra.maxY, box.minZ + boxExtra.maxZ);
+        AlignedBox boxFinal = new AlignedBox(x1, y1, z1, x2, y2, z2);
+        return boxFinal;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -160,7 +211,10 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
 
     public void openVideoManagerGUI(BlockPos blockPos, PlayerEntity player) {
         setBeingUsed(player.getUUID());
-        PacketHandler.sendTo(new OpenVideoManagerScreen(blockPos, url, tick, (int) (volume * 100), loop, sizeX, sizeY, posX, posY), player);
+        Lizardon.LOGGER.info("Comprobando permisos de " + player.getUUID());
+        boolean permisos = PermissionAPI.hasPermission(player, "lizardon.frames.video");
+        Lizardon.LOGGER.info("Permisos de " + player.getUUID() + ": " + permisos);
+        PacketHandler.sendTo(new OpenVideoManagerScreen(blockPos, url, tick, (int) (volume * 100), loop, sizeX, sizeY, posX, posY, canal, permisos), player);
     }
 
     public void setBeingUsed(UUID player) {
@@ -220,6 +274,7 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         pTag.putInt("sizeY", sizeY);
         pTag.putInt("posX", posX);
         pTag.putInt("posY", posY);
+        pTag.putInt("canal", canal);
         return pTag;
     }
 
@@ -242,11 +297,12 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         sizeY = nbt.getInt("sizeY");
         posX = nbt.getInt("posX");
         posY = nbt.getInt("posY");
+        canal = nbt.getInt("canal");
         updateAABB();
     }
 
     public void notifyPlayer() {
-        PacketHandler.sendToClient(new FrameVideoMessage(worldPosition, playing, tick, sizeX, sizeY, posX, posY), level, worldPosition);
+        PacketHandler.sendToClient(new FrameVideoMessage(worldPosition, playing, tick, sizeX, sizeY, posX, posY, canal, url), level, worldPosition);
     }
 
     public int getSizeX() {
@@ -340,6 +396,11 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
         this.tick = tick;
     }
 
+
+    public void setCanal(int canal) {
+        this.canal = canal;
+    }
+
     @Override
     public void tick() {
         TVBlockEntity be = this;
@@ -352,4 +413,15 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
             be.tick++;
     }
 
+    public void broadcastVideo(String url) {
+        Lizardon.LOGGER.info("Broadcasting video: " + url + " to " + worldPosition);
+        this.url = url;
+        this.tick = 0;
+        this.playing = true;
+        PacketHandler.sendToClient(new FrameVideoMessage(worldPosition, true, tick, sizeX, sizeY, posX, posY, canal, url), level, worldPosition);
+    }
+
+    public int getCanal() {
+        return canal;
+    }
 }

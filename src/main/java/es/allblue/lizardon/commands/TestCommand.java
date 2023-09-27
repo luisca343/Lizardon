@@ -34,6 +34,7 @@ import com.sk89q.worldedit.world.World;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerVideo;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
+import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.WayPoint;
 import es.allblue.lizardon.objects.karts.Circuito;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
@@ -60,6 +61,7 @@ public class TestCommand {
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(broadcast())
                 .then(peluche())
                 .then(registrarEquipo())
                 .then(testFB())
@@ -76,6 +78,19 @@ public class TestCommand {
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource,?> broadcast() {
+        return Commands.literal("broadcast")
+                .then(Commands.argument("canal", IntegerArgumentType.integer())
+                 .then(Commands.argument("url", StringArgumentType.string())
+                .executes((command) -> {
+                    String url = StringArgumentType.getString(command, "url");
+                    int canal = IntegerArgumentType.getInteger(command, "canal");
+
+                    ScreenManager.broadcastVideo(url, canal, command.getSource().getLevel());
+                    return 1;
+                })));
     }
 
     private ArgumentBuilder<CommandSource,?> peluche() {

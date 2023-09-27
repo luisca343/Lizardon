@@ -7,6 +7,7 @@ import es.allblue.lizardon.client.gui.components.CustomSlider;
 import es.allblue.lizardon.net.video.UploadVideoUpdateMessage;
 import es.allblue.lizardon.tileentity.TVBlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import es.allblue.lizardon.net.PacketHandler;
+import net.minecraftforge.server.permission.PermissionAPI;
 
 public class TVVideoScreen extends Screen {
 
@@ -50,8 +52,12 @@ public class TVVideoScreen extends Screen {
     private int posX = 0;
     private int posY = 0;
 
+    private int canal;
 
-    public TVVideoScreen(TileEntity be, String url, int volume, int sizeX, int sizeY, int posX, int posY) {
+    private boolean permisos;
+    ClientPlayerEntity mcPlayer;
+
+    public TVVideoScreen(TileEntity be, String url, int volume, int sizeX, int sizeY, int posX, int posY, int canal, boolean permisos) {
         super(new TranslationTextComponent("gui.frame.title"));
 
         this.be = be;
@@ -61,6 +67,11 @@ public class TVVideoScreen extends Screen {
         this.prevY = sizeY;
         this.posX = posX;
         this.posY = posY;
+        this.canal = canal;
+        this.permisos = permisos;
+        mcPlayer = Minecraft.getInstance().player;
+
+        Lizardon.LOGGER.info("TVVideoScreen: " + be + " " + url + " " + volume + " " + sizeX + " " + sizeY + " " + posX + " " + posY + " " + canal + " " + permisos);
 
     }
 
@@ -106,7 +117,7 @@ public class TVVideoScreen extends Screen {
                 BUTTONS,
                 256,
                 256, button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, true, true, getValueX() ,getValueY(), posX, posY));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, true, true, getValueX() ,getValueY(), posX, posY, getCanal()));
         }));
 
         /*
@@ -127,7 +138,7 @@ public class TVVideoScreen extends Screen {
                 BUTTONS,
                 256,
                 256, button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, false, getValueX() ,getValueY(), posX, posY));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, false, getValueX() ,getValueY(), posX, posY, getCanal()));
         }));
 
         // new stop
@@ -143,7 +154,7 @@ public class TVVideoScreen extends Screen {
                 BUTTONS,
                 256,
                 256, button -> {
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, true, getValueX() ,getValueY(), posX, posY));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, volume, true, false, true, getValueX() ,getValueY(), posX, posY, getCanal()));
         }));
 
 
@@ -173,18 +184,23 @@ public class TVVideoScreen extends Screen {
                 BUTTONS,
                 256,
                 256, button -> {
-            int tempVolume = volumeSlider.getValue();
-            String tempUrl = urlBox.getValue();
 
+             if(!permisos) {
+                 volume = 0;
+
+             }else{
+                 int tempVolume = volumeSlider.getValue();
+                 this.volume = tempVolume;
+                 ((TVBlockEntity) be).setVolume(tempVolume);
+             }
+
+            String tempUrl = urlBox.getValue();
             this.url = tempUrl;
-            this.volume = tempVolume;
 
             // Cast the block entity to the correct type and set the volume
-            ((TVBlockEntity) be).setVolume(tempVolume);
 
             changed = true;
-            Lizardon.LOGGER.info("ENVIANDO DATOS: " + tempUrl + " " + tempVolume + " " + getValueX() + " " + getValueY());
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), tempUrl, tempVolume, true, true, false, getValueX() ,getValueY(), posX, posY));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), tempUrl, volume, true, true, false, getValueX() ,getValueY(), posX, posY, getCanal()));
         }));
 
 
@@ -198,15 +214,18 @@ public class TVVideoScreen extends Screen {
         addButton(yBox);
 
 
-        // Volume slider
-        addButton(volumeSlider = new CustomSlider(leftPos + 10, topPos + 145, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.volume"), volume / 100f));
+        if(permisos){
+            // Volume slider
+            addButton(volumeSlider = new CustomSlider(leftPos + 10, topPos + 145, imageWidth - 24, 20, new TranslationTextComponent("gui.frame.volume"), volume / 100f));
 
 
 
-        addButton(canalBox = new TextFieldWidget(font, leftPos + 10, topPos + 185, imageWidth - 26, 20, new StringTextComponent("")));
+            addButton(canalBox = new TextFieldWidget(font, leftPos + 10, topPos + 185, imageWidth - 26, 20, new StringTextComponent("")));
+            canalBox.setMaxLength(32767);
+            canalBox.setValue(canal + "");
+        }
 
-        canalBox.setMaxLength(32767);
-        canalBox.setValue(url == null ? "" : url);
+
 
         /*
         // Save button
@@ -227,6 +246,20 @@ public class TVVideoScreen extends Screen {
 
         // Cast the block entity to the correct type and set the volume
         ((TVBlockEntity) be).setVolume(volume);
+    }
+
+    private int getCanal() {
+        if(!permisos) return 0;
+        String sCanal = canalBox.getValue();
+        int canal;
+
+        try{
+            canal = Integer.parseInt(sCanal);
+        }catch (NumberFormatException e){
+            canal = 0;
+        }
+
+        return canal;
     }
 
     public String getStrPosX(){
@@ -299,13 +332,13 @@ public class TVVideoScreen extends Screen {
         font.draw(pPoseStack, new TranslationTextComponent("gui.frame.url_text"), width / 2f - font.width(new TranslationTextComponent("gui.frame.url_text")) / 2f, topPos + 16, 0xFFFFFF);
         font.draw(pPoseStack, new StringTextComponent("Posicion"), width / 2f - font.width(new StringTextComponent("Posicion")) / 2f, topPos + 60, 0xFFFFFF);
         font.draw(pPoseStack, new StringTextComponent("Ancho y alto"), width / 2f - font.width(new StringTextComponent("Ancho y alto")) / 2f, topPos + 105, 0xFFFFFF);
-        font.draw(pPoseStack, new StringTextComponent("Canal"), width / 2f - font.width(new StringTextComponent("Canal")) / 2f, topPos + 170, 0xFFFFFF);
+        if(permisos)font.draw(pPoseStack, new StringTextComponent("Canal"), width / 2f - font.width(new StringTextComponent("Canal")) / 2f, topPos + 170, 0xFFFFFF);
     }
 
     @Override
     public void removed() {
         if (!changed)
-            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, -1, true, true, false, getValueX() ,getValueY(), posX, posY));
+            PacketHandler.sendToServer(new UploadVideoUpdateMessage(be.getBlockPos(), url, -1, true, true, false, getValueX() ,getValueY(), posX, posY, getCanal()));
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
     }
 

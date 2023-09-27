@@ -288,7 +288,7 @@ public class PantallaSmartRotom extends Screen {
         char c = (char) key;
 
         if (browser != null && (!consume || key == 256)) {
-            Lizardon.LOGGER.info("HAS PULSADO: " + key + " " + c);
+            // El punto está bugeado, así que lo remapeamos por el del teclado numérico
             if(key == 46){
                 browser.injectKeyPressedByKeyCode(330, '?', getMask());
                 return true;

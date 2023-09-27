@@ -2,6 +2,7 @@ package es.allblue.lizardon.blocks;
 
 import es.allblue.lizardon.init.BlockInit;
 import es.allblue.lizardon.init.TileEntityInit;
+import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.tileentity.TVBlockEntity;
 import es.allblue.lizardon.util.math.AlignedBox;
 import es.allblue.lizardon.util.math.Facing;
@@ -23,6 +24,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -139,7 +141,13 @@ public class TVBlock extends Block {
     }
 
 
+    @Override
+    public void destroy(IWorld world, BlockPos pos, BlockState state) {
+        TileEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof TVBlockEntity) {
+            ScreenManager.removePunto(pos);
+        }
+        super.destroy(world, pos, state);
 
-
-
+    }
 }

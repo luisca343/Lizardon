@@ -27,18 +27,12 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
 
     private int posY;
 
+    private int canal;
+
     public UploadVideoUpdateMessage() {}
 
-    public UploadVideoUpdateMessage(BlockPos blockPos, String url, int volume, boolean loop, boolean isPlaying, boolean reset) {
-        this.blockPos = blockPos;
-        this.url = url;
-        this.volume = volume;
-        this.loop = loop;
-        this.isPlaying = isPlaying;
-        this.reset = reset;
-    }
 
-    public UploadVideoUpdateMessage(BlockPos blockPos, String url, int volume, boolean loop, boolean isPlaying, boolean reset, int tempX, int tempY, int posX, int posY) {
+    public UploadVideoUpdateMessage(BlockPos blockPos, String url, int volume, boolean loop, boolean isPlaying, boolean reset, int tempX, int tempY, int posX, int posY, int canal) {
         this.blockPos = blockPos;
         this.url = url;
         this.volume = volume;
@@ -50,6 +44,7 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
 
         this.posX = posX;
         this.posY = posY;
+        this.canal = canal;
 
 
     }
@@ -68,20 +63,26 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
         buffer.writeInt(message.posX);
         buffer.writeInt(message.posY);
 
+        buffer.writeInt(message.canal);
+
     }
 
     @Override
     public UploadVideoUpdateMessage decode(PacketBuffer buffer) {
-        return new UploadVideoUpdateMessage(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
+        return new UploadVideoUpdateMessage(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
     }
 
     @Override
     public void handle(UploadVideoUpdateMessage message, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
+
             if (player == null) return;
             if (player.level.getBlockEntity(message.blockPos) instanceof TVBlockEntity) {
                 TVBlockEntity tvBlockEntity = (TVBlockEntity) player.level.getBlockEntity(message.blockPos);
+
+                ScreenManager.addScreen(message.blockPos, message.canal);
+
                 if (tvBlockEntity == null) return;
 
                 tvBlockEntity.setBeingUsed(new UUID(0, 0));
@@ -96,6 +97,7 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
                 tvBlockEntity.setSizeY(message.y);
                 tvBlockEntity.setPosX(message.posX);
                 tvBlockEntity.setPosY(message.posY);
+                tvBlockEntity.setCanal(message.canal);
 
                 tvBlockEntity.notifyPlayer();
 

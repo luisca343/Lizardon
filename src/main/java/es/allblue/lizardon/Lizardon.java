@@ -9,6 +9,7 @@ import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.integration.Integrations;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.PacketHandler;
+import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.pixelmon.attacks.DesenvaineSubito;
@@ -32,6 +33,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.server.permission.DefaultPermissionLevel;
+import net.minecraftforge.server.permission.PermissionAPI;
 import net.montoyo.mcef.api.*;
 import net.montoyo.mcef.example.ModScheme;
 import noppes.npcs.api.NpcAPI;
@@ -165,6 +168,7 @@ public class Lizardon
     }
 
     public void end (FMLLoadCompleteEvent event){
+        PermissionAPI.registerNode("lizardon.frames.video", DefaultPermissionLevel.OP, "Permission to use video frames");
         PROXY.end(event);
     }
 

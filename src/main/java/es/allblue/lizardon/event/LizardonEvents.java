@@ -7,6 +7,7 @@ import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.commands.*;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
+import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.util.FileHelper;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.server.command.ConfigCommand;
+import net.minecraftforge.server.permission.PermissionAPI;
 
 
 @Mod.EventBusSubscriber
@@ -83,6 +85,7 @@ public class LizardonEvents {
 
     @SubscribeEvent
     public static void onServerStarted(FMLServerStartedEvent event){
+        ScreenManager.loadScreens();
 
         try {
             Lizardon.carreraManager = new CarreraManager();
@@ -140,6 +143,10 @@ public class LizardonEvents {
 
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent ev){
+        Lizardon.LOGGER.info("LOGIN");
+        PermissionAPI.getPermissionHandler().getRegisteredNodes().forEach(Lizardon.LOGGER::info);
+        Lizardon.LOGGER.info(PermissionAPI.hasPermission(ev.getPlayer(), "admin"));
+
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 
         boolean inicio = serverPlayer.getPersistentData().getBoolean("inicio");

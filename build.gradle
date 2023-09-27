@@ -147,12 +147,9 @@ dependencies {
 
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
     implementation fg.deobf('curse.maven:vechiclemod-286660:3103940')
-
     implementation fg.deobf('curse.maven:curiosapi-309927:4419403')
-
-    //implementation fg.deobf('curse.maven:videoapi-591686:3684076')
-    //implementation files('libs/FancyVideo-API-1.16.5-2.2.0.3.jar')
     implementation fg.deobf('curse.maven:watermedia-869524:4748769')
+
 
     implementation fg.deobf('curse.maven:CustomNPCs-221826:3791072')
 

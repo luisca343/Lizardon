@@ -24,9 +24,13 @@ public class OpenVideoManagerScreen implements IMessage<OpenVideoManagerScreen> 
 
     private int posY;
 
+    private int canal;
+
+    private boolean permisos;
+
     public OpenVideoManagerScreen() {}
 
-    public OpenVideoManagerScreen(BlockPos blockPos, String url, int tick, int volume, boolean loop, int sizeX, int sizeY, int posX, int posY) {
+    public OpenVideoManagerScreen(BlockPos blockPos, String url, int tick, int volume, boolean loop, int sizeX, int sizeY, int posX, int posY, int canal, boolean permisos) {
         this.blockPos = blockPos;
         this.url = url;
         this.tick = tick;
@@ -36,6 +40,10 @@ public class OpenVideoManagerScreen implements IMessage<OpenVideoManagerScreen> 
         this.sizeY = sizeY;
         this.posX = posX;
         this.posY = posY;
+        this.canal = canal;
+        this.permisos = permisos;
+
+        Lizardon.LOGGER.warn("OpenVideoManagerScreen: " + blockPos + " " + url + " " + tick + " " + volume + " " + loop + " " + sizeX + " " + sizeY + " " + posX + " " + posY + " " + canal + " " + permisos);
     }
 
     @Override
@@ -49,18 +57,20 @@ public class OpenVideoManagerScreen implements IMessage<OpenVideoManagerScreen> 
         buffer.writeInt(message.sizeY);
         buffer.writeInt(message.posX);
         buffer.writeInt(message.posY);
+        buffer.writeInt(message.canal);
+        buffer.writeBoolean(message.permisos);
 
     }
 
     @Override
     public OpenVideoManagerScreen decode(PacketBuffer buffer) {
-        return new OpenVideoManagerScreen(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
+        return new OpenVideoManagerScreen(buffer.readBlockPos(), buffer.readUtf(), buffer.readInt(), buffer.readInt(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readBoolean());
     }
 
     @Override
     public void handle(OpenVideoManagerScreen message, Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
-            ClientHandler.openVideoGUI(message.blockPos, message.url, message.tick, message.volume, message.loop, message.sizeX, message.sizeY, message.posX, message.posY);
+            ClientHandler.openVideoGUI(message.blockPos, message.url, message.tick, message.volume, message.loop, message.sizeX, message.sizeY, message.posX, message.posY, message.canal, message.permisos);
         });
     }
 }
