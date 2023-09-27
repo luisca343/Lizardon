@@ -11,6 +11,7 @@ public class Circuito {
     String nombre;
     ArrayList<Checkpoint> checkpoints;
     LinkedList<Punto> inicios;
+    public String orientacion;
 
     public Circuito(String nombre) {
         this.nombre = nombre;
@@ -79,5 +80,9 @@ public class Circuito {
 
 
 
+    }
+
+    public String getOrientacion() {
+        return orientacion;
     }
 }

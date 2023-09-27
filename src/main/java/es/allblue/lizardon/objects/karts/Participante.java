@@ -1,6 +1,7 @@
 package es.allblue.lizardon.objects.karts;
 
 import es.allblue.lizardon.util.MessageHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -76,7 +77,6 @@ public class Participante {
     }
 
     public void nuevoCheck(Punto pos){
-
         if (getSiguienteCheck() == carrera.getCheckpoints().size()) {
             nuevaVuelta();
             return;
@@ -85,7 +85,7 @@ public class Participante {
         Checkpoint check = carrera.getCheckpoints().get(getSiguienteCheck());
         if(enCheckPoint(pos, check.getPos1(), check.getPos2())){
             setSiguienteCheck(getSiguienteCheck() + 1);
-            //MessageUtil.enviarMensaje(jugador, "Has pasado el checkpoint " + getSiguienteCheck());
+            MessageHelper.enviarMensaje(jugador, "Has pasado el checkpoint " + getSiguienteCheck());
         }
 
     }
@@ -114,7 +114,11 @@ public class Participante {
     public void tick() {
         if(carrera == null || terminada) return;
         if(carrera.getEstado().equals(EstadoCarrera.EN_CURSO)){
-            Punto nuevaPosicion = new Punto(jugador.getX(), jugador.getY(), jugador.getZ());
+            //Punto nuevaPosicion = new Punto(jugador.getX(), jugador.getY(), jugador.getZ());
+            Entity vehicle = jugador.getVehicle();
+            if(vehicle == null) return;
+            Punto nuevaPosicion = new Punto(vehicle.getX(), vehicle.getY(), vehicle.getZ());
+
             if(nuevaPosicion.equals(coords)) return;
             coords = nuevaPosicion;
             nuevoCheck(nuevaPosicion);

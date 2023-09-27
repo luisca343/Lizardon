@@ -3,7 +3,9 @@ package es.allblue.lizardon.objects.karts;
 import com.google.gson.Gson;
 import com.mrcrayfish.vehicle.entity.EngineTier;
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
+import com.mrcrayfish.vehicle.entity.vehicle.ATVEntity;
 import com.mrcrayfish.vehicle.entity.vehicle.GoKartEntity;
+import com.mrcrayfish.vehicle.entity.vehicle.OffRoaderEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
@@ -19,10 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.UUID;
+import java.util.*;
 
 public class Carrera {
     private Circuito circuito;
@@ -119,7 +118,8 @@ public class Carrera {
         for (Participante participante : participantes) {
             // Teleport each participant to a position
             Punto punto = circuito.getInicios().get(i);
-            spawnearVehiculo(participante.getJugador(), punto);
+            String orientacion = circuito.getOrientacion() == null ? "NORTE" : circuito.getOrientacion();
+            spawnearVehiculo(participante.getJugador(), punto, orientacion);
             i++;
         }
 
@@ -149,16 +149,37 @@ public class Carrera {
     }
 
 
-    public void spawnearVehiculo(ServerPlayerEntity player, Punto punto) {
+    public void spawnearVehiculo(ServerPlayerEntity player, Punto punto, String orientacion) {
         World world = player.level;
-        GoKartEntity vehicleEntity = new GoKartEntity(ModEntities.GO_KART.get(), world);
+        ATVEntity vehicleEntity = new ATVEntity(ModEntities.ATV.get(), world);
         vehicleEntity.setRequiresFuel(false);
         vehicleEntity.setColorRGB(1, 2, 3);
         vehicleEntity.setEngineTier(EngineTier.WOOD);
         vehicleEntity.setPos(punto.getX() + 0.5f, punto.getY() + 1, punto.getZ() + 0.5f);
-        //vehicleEntity.setOwner(uuid);
-        vehicleEntity.yRot = -90;
+        vehicleEntity.disableFallDamage = true;
 
+        Random random = new Random();
+        int r = random.nextInt(255);
+        int g = random.nextInt(255);
+        int b = random.nextInt(255);
+        vehicleEntity.setColorRGB(r,g,b);
+
+        //vehicleEntity.setOwner(uuid);
+
+        switch (orientacion){
+            case "ESTE":
+                vehicleEntity.yRot = -90;
+                break;
+            case "OESTE":
+                vehicleEntity.yRot = 90;
+                break;
+            case "NORTE":
+                vehicleEntity.yRot = 0;
+                break;
+            case "SUR":
+                vehicleEntity.yRot = 180;
+                break;
+        }
 
         world.addFreshEntity(vehicleEntity);
         vehicleEntity.getSeatTracker().setSeatIndex(0, player.getUUID());
@@ -246,7 +267,7 @@ public class Carrera {
         resultado.setParticipantes(participantesCarrera);
         String json = gson.toJson(resultado);
 
-        WingullAPI.wingullPOST("rotom/karts/carrera", json);
+        WingullAPI.wingullPOST("/karts/carrera", json);
 
         cerrarCarrera();
         Lizardon.carreraManager.carreras.remove(circuito.nombre);
