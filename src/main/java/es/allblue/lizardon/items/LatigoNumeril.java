@@ -20,9 +20,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 
-import java.util.UUID;
-
-import static es.allblue.lizardon.util.vector.RayTrace.rayTraceEntities;
+import static es.allblue.lizardon.util.math.vector.RayTrace.rayTraceEntities;
 
 public class LatigoNumeril extends Item {
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;

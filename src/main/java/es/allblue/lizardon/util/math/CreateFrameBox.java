@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util;
+package es.allblue.lizardon.util.math;
 
 import es.allblue.lizardon.util.math.AlignedBox;
 import net.minecraft.util.Direction;

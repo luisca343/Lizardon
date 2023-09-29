@@ -1,5 +1,7 @@
 package es.allblue.lizardon.util.math;
 
+import es.allblue.lizardon.util.math.vector.Vec3d;
+import es.allblue.lizardon.util.math.vector.Vec3f;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;

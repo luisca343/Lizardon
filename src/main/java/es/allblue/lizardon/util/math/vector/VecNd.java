@@ -1,6 +1,6 @@
-package es.allblue.lizardon.util.math;
+package es.allblue.lizardon.util.math.vector;
 
-import java.lang.reflect.InvocationTargetException;
+import es.allblue.lizardon.util.math.Axis;
 
 public abstract class VecNd<T extends VecNd> {
     public VecNd() {

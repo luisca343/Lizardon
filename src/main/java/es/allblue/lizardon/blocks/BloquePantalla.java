@@ -2,11 +2,11 @@ package es.allblue.lizardon.blocks;
 
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.tileentity.PantallaTE;
-import es.allblue.lizardon.util.BlockSide;
+import es.allblue.lizardon.util.math.BlockSide;
 import es.allblue.lizardon.util.MessageHelper;
-import es.allblue.lizardon.util.Multiblock;
-import es.allblue.lizardon.util.vector.Vector2i;
-import es.allblue.lizardon.util.vector.Vector3i;
+import es.allblue.lizardon.util.math.Multiblock;
+import es.allblue.lizardon.util.math.vector.Vector2i;
+import es.allblue.lizardon.util.math.vector.Vector3i;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;

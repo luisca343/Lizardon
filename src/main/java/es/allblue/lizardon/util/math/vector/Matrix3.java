@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util.math;
+package es.allblue.lizardon.util.math.vector;
 
 public class Matrix3 {
 

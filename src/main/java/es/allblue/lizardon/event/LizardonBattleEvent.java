@@ -3,12 +3,14 @@ package es.allblue.lizardon.event;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.controller.log.BattleLog;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.objects.logros.LogroCombate;
 import es.allblue.lizardon.pixelmon.battle.Combate;
 import es.allblue.lizardon.pixelmon.battle.CombateFrenteBatalla;
-import es.allblue.lizardon.pixelmon.battle.LizardonBattleLog;
 import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
 import es.allblue.lizardon.util.FileHelper;
 import es.allblue.lizardon.util.MessageHelper;
@@ -20,6 +22,7 @@ import net.minecraft.util.text.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber
@@ -38,7 +41,15 @@ public class LizardonBattleEvent {
     public void finCombateEntrenador(BattleEndEvent event, Combate combate){
         System.out.println("Fin combate entrenador");
         //LizardonBattleLog.parseLog(event.getBattleController().battleLog, combate);
-        getGanador(event, combate);
+        boolean ganador = getGanador(event, combate);
+
+        LogroCombate logroCombate = new LogroCombate();
+        logroCombate.setUuid(combate.getPlayer().getStringUUID());
+        logroCombate.setNpc(combate.getConfigCombate().getNombre());
+        logroCombate.setVictoria(ganador);
+        List<Pokemon> team = StorageProxy.getParty(combate.getPlayer()).getTeam();
+        logroCombate.setEquipo(team);
+
         FileHelper.writeStringFile("logs/lizardonbattle/"+combate.getConfigCombate().getNombreArchivo()+".log", combate.getLog());
     }
 

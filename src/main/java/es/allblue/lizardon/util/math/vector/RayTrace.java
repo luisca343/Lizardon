@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util.vector;
+package es.allblue.lizardon.util.math.vector;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;

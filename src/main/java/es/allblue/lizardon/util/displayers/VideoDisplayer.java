@@ -3,11 +3,10 @@ package es.allblue.lizardon.util.displayers;
 import com.mojang.blaze3d.platform.GlStateManager;
 import es.allblue.lizardon.util.MemoryTracker;
 import es.allblue.lizardon.util.cache.TextureCache;
-import es.allblue.lizardon.util.math.Vec3d;
+import es.allblue.lizardon.util.math.vector.Vec3d;
 import me.lib720.watermod.safety.TryCore;
 import me.srrapero720.watermedia.api.player.SyncVideoPlayer;
 import net.minecraft.client.Minecraft;
-import org.jline.utils.Log;
 
 import java.awt.*;
 import java.util.ArrayList;

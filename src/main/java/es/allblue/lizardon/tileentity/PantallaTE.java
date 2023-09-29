@@ -3,14 +3,12 @@ package es.allblue.lizardon.tileentity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.PantallaCine;
 import es.allblue.lizardon.init.TileEntityInit;
-import es.allblue.lizardon.util.BlockSide;
-import es.allblue.lizardon.util.Multiblock;
+import es.allblue.lizardon.util.math.BlockSide;
+import es.allblue.lizardon.util.math.Multiblock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.montoyo.mcef.api.IBrowser;
-
-import java.util.UUID;
 
 
 public class PantallaTE extends TileEntity {

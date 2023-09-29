@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.blocks.TVBlock;
 import es.allblue.lizardon.tileentity.TVBlockEntity;
-import es.allblue.lizardon.util.CreateFrameBox;
+import es.allblue.lizardon.util.math.CreateFrameBox;
 import es.allblue.lizardon.util.displayers.IDisplay;
 import es.allblue.lizardon.util.math.*;
 import me.srrapero720.watermedia.api.WaterMediaAPI;

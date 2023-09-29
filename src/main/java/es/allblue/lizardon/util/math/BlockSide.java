@@ -1,7 +1,7 @@
-package es.allblue.lizardon.util;
+package es.allblue.lizardon.util.math;
 
 
-import es.allblue.lizardon.util.vector.Vector3i;
+import es.allblue.lizardon.util.math.vector.Vector3i;
 
 public enum BlockSide {
 

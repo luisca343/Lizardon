@@ -1,11 +1,10 @@
 package es.allblue.lizardon.util.cache;
 
 
-import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.util.displayers.IDisplay;
 import es.allblue.lizardon.util.displayers.ImageDisplayer;
 import es.allblue.lizardon.util.displayers.VideoDisplayer;
-import es.allblue.lizardon.util.math.Vec3d;
+import es.allblue.lizardon.util.math.vector.Vec3d;
 import me.srrapero720.watermedia.api.image.ImageFetch;
 import me.srrapero720.watermedia.api.image.ImageRenderer;
 import net.minecraft.client.Minecraft;

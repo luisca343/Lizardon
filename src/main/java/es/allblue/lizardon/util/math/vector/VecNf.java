@@ -1,4 +1,6 @@
-package es.allblue.lizardon.util.math;
+package es.allblue.lizardon.util.math.vector;
+
+import es.allblue.lizardon.util.math.Axis;
 
 public abstract class VecNf<T extends VecNf> {
     public VecNf() {

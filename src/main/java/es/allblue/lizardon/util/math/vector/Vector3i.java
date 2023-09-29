@@ -1,4 +1,4 @@
-package es.allblue.lizardon.util.vector;
+package es.allblue.lizardon.util.math.vector;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;

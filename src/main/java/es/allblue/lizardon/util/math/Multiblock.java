@@ -1,9 +1,10 @@
-package es.allblue.lizardon.util;
+package es.allblue.lizardon.util.math;
 
 
 import es.allblue.lizardon.init.BlockInit;
-import es.allblue.lizardon.util.vector.Vector2i;
-import es.allblue.lizardon.util.vector.Vector3i;
+import es.allblue.lizardon.util.math.BlockSide;
+import es.allblue.lizardon.util.math.vector.Vector2i;
+import es.allblue.lizardon.util.math.vector.Vector3i;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
