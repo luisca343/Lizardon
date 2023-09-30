@@ -53,7 +53,7 @@ public class Funko extends Block {
             while ((length = is.read(buffer)) > 0) {
                 outstream.write(buffer, 0, length);
             }
-            System.out.println("png download completed.");
+            Lizardon.LOGGER.info("png download completed.");
             outstream.close();
         }catch (Exception e){
             LOGGER.info(e.getMessage());

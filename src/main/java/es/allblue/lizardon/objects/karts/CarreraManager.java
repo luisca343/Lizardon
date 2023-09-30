@@ -1,6 +1,7 @@
 package es.allblue.lizardon.objects.karts;
 
 import com.google.gson.internal.LinkedTreeMap;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.util.FileHelper;
 import es.allblue.lizardon.util.MessageHelper;
 import io.leangen.geantyref.TypeToken;
@@ -23,7 +24,6 @@ public class CarreraManager {
     public Map<UUID, Participante> participantes;
 
     public CarreraManager(){
-        System.out.println("CarreraManager");
         circuitos = new LinkedTreeMap<>();
         carreras = new HashMap<>();
         participantes = new HashMap<>();
@@ -37,15 +37,13 @@ public class CarreraManager {
 
        circuitos = (LinkedTreeMap<String, Circuito>) FileHelper.readFile("config/lizardon/circuitos.json", token);
 
-       System.out.println("Circuitos cargados: " + circuitos.size());
         for (Map.Entry<String, Circuito> entry : circuitos.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+            Lizardon.LOGGER.info(entry.getKey() + " : " + entry.getValue());
         }
     }
 
 
     public void entrarCarrera(String nombreCircuito, int vueltas, ServerPlayerEntity jugador) {
-        System.out.println("EntrarCarrera");
         if (!circuitos.containsKey(nombreCircuito)) {
             return;
         }
@@ -67,8 +65,6 @@ public class CarreraManager {
         Participante participante = new Participante(jugador, carrera);
         participantes.put(jugador.getUUID(), participante);
         carrera.getParticipantes().add(participante);
-
-        System.out.println("Participantes: " + carrera.getParticipantes().size());
 
         for (Participante part : carrera.getParticipantes()) {
             TextComponent mensaje = new StringTextComponent("Participantes: " + carrera.getParticipantes().size());
@@ -200,10 +196,6 @@ public class CarreraManager {
     }
 
     public void listarCircuitos(ServerPlayerEntity player) {
-        System.out.println("ListarCircuitos");
-        System.out.println(circuitos.size());
-        System.out.println(player.getUUID());
-
         for (Map.Entry<String, Circuito> entry : circuitos.entrySet()) {
            player.sendMessage(new StringTextComponent(entry.getKey()), UUID.randomUUID());
         }
@@ -212,7 +204,7 @@ public class CarreraManager {
 
     public void listarCarreras() {
         for (Map.Entry<String, Carrera> entry : carreras.entrySet()){
-            System.out.println(entry.getValue());
+            Lizardon.LOGGER.info(entry.getValue());
         }
     }
 

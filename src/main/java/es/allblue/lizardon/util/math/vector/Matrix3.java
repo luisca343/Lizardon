@@ -1136,14 +1136,12 @@ public class Matrix3 {
 
         // Do some optimization here. If scale is unity, simply return the rotation matric.
         if (almostEqual(Math.abs(scales[0]), 1.0) && almostEqual(Math.abs(scales[1]), 1.0) && almostEqual(Math.abs(scales[2]), 1.0)) {
-            //  System.out.println("Scale components almost to 1.0");
 
             for (i = 0; i < 3; i++)
                 if (scales[i] < 0.0)
                     negCnt++;
 
             if ((negCnt == 0) || (negCnt == 2)) {
-                //System.out.println("Optimize!!");
                 outScale[0] = outScale[1] = outScale[2] = 1.0;
                 for (i = 0; i < 9; i++)
                     outRot[i] = rot[i];
@@ -1156,15 +1154,15 @@ public class Matrix3 {
         transpose_mat(v1, t2);
 
         /*
-          System.out.println("t1 is \n" + t1);
-          System.out.println("t1="+t1[0]+" "+t1[1]+" "+t1[2]);
-          System.out.println("t1="+t1[3]+" "+t1[4]+" "+t1[5]);
-          System.out.println("t1="+t1[6]+" "+t1[7]+" "+t1[8]);
+          Lizardon.LOGGER.info("t1 is \n" + t1);
+          Lizardon.LOGGER.info("t1="+t1[0]+" "+t1[1]+" "+t1[2]);
+          Lizardon.LOGGER.info("t1="+t1[3]+" "+t1[4]+" "+t1[5]);
+          Lizardon.LOGGER.info("t1="+t1[6]+" "+t1[7]+" "+t1[8]);
 
-          System.out.println("t2 is \n" + t2);
-          System.out.println("t2="+t2[0]+" "+t2[1]+" "+t2[2]);
-          System.out.println("t2="+t2[3]+" "+t2[4]+" "+t2[5]);
-          System.out.println("t2="+t2[6]+" "+t2[7]+" "+t2[8]);
+          Lizardon.LOGGER.info("t2 is \n" + t2);
+          Lizardon.LOGGER.info("t2="+t2[0]+" "+t2[1]+" "+t2[2]);
+          Lizardon.LOGGER.info("t2="+t2[3]+" "+t2[4]+" "+t2[5]);
+          Lizardon.LOGGER.info("t2="+t2[6]+" "+t2[7]+" "+t2[8]);
           */
 
         svdReorder(m, t1, t2, scales, outRot, outScale);
@@ -1247,10 +1245,10 @@ public class Matrix3 {
             }
 
             /*
-            System.out.println("\nscales="+scales[0]+" "+scales[1]+" "+scales[2]);
-            System.out.println("\nrot="+rot[0]+" "+rot[1]+" "+rot[2]);
-            System.out.println("rot="+rot[3]+" "+rot[4]+" "+rot[5]);
-            System.out.println("rot="+rot[6]+" "+rot[7]+" "+rot[8]);
+            Lizardon.LOGGER.info("\nscales="+scales[0]+" "+scales[1]+" "+scales[2]);
+            Lizardon.LOGGER.info("\nrot="+rot[0]+" "+rot[1]+" "+rot[2]);
+            Lizardon.LOGGER.info("rot="+rRot[3]+" "+rot[4]+" "+rot[5]);
+            Lizardon.LOGGER.info("rot="+rot[6]+" "+rot[7]+" "+rot[8]);
             */
 
             // sort the order of the input matrix
@@ -1835,7 +1833,6 @@ public class Matrix3 {
         double det;
 
         det = mat[0] * mat[4] * mat[8] + mat[1] * mat[5] * mat[6] + mat[2] * mat[3] * mat[7] - mat[2] * mat[4] * mat[6] - mat[0] * mat[5] * mat[7] - mat[1] * mat[3] * mat[8];
-        System.out.println("det= " + det);
     }
 
     static void mat_mul(double[] m1, double[] m2, double[] m3) {

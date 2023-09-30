@@ -100,11 +100,9 @@ public final class SmartRotomRenderer implements IItemRenderer {
         //Render web view
         boolean existePad = true;
         if(is.getTag() != null && is.getTag().contains("PadID")) {
-            //System.out.println("PUNTO 2");
             int id = is.getTag().getInt("PadID");
             ClientProxy.PadData pd = Lizardon.PROXY.getPadByID(id);
             if(pd != null) {
-                //System.out.println("PUNTO 3");
                 stack.translate(0.063f, 0.28f, 0.001f);
                 GlStateManager._disableDepthTest();
                 GlStateManager._enableTexture();

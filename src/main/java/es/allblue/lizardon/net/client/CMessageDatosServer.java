@@ -38,7 +38,6 @@ public class CMessageDatosServer implements Runnable{
         userData.setNombre(nombre);
 
         String respuesta = gson.toJson(userData);
-        System.out.println("RECIBIDA RESPUESTA: " + respuesta);
 
         ClientProxy.callbackMisiones.success(respuesta);
 

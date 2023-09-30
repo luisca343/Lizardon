@@ -223,7 +223,6 @@ public class PantallaCine extends Screen {
 
     @Override
     public boolean keyPressed(int key, int p_231046_2_, int p_231046_3_) {
-        System.out.println(key);
         boolean consume = enviarInterfaz(key) ? super.keyPressed(key, p_231046_2_, p_231046_3_) : false;
         if (minecraft == null) return true;
 

@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.pixelmon.frentebatalla.GetEquipo;
 import es.allblue.lizardon.util.FileHelper;
 import es.allblue.lizardon.util.MessageHelper;
@@ -41,7 +42,7 @@ public class TeamManager {
     }
 
     public static void saveTeam(ServerPlayerEntity player, String file){
-        System.out.println("Guardando equipo de " + player.getUUID() + " en " + file + ".dat");
+        Lizardon.LOGGER.info("Guardando equipo de " + player.getUUID() + " en " + file + ".dat");
         CompoundNBT nbt = new CompoundNBT();
         PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         List<Pokemon> team = storage.getTeam();
@@ -78,7 +79,7 @@ public class TeamManager {
 
 
     public static void loadTeam(ServerPlayerEntity player, String file){
-        System.out.println("Cargando equipo de " + player.getUUID() + " de " + file + ".dat");
+        Lizardon.LOGGER.info("Cargando equipo de " + player.getUUID() + " de " + file + ".dat");
         PlayerPartyStorage storage = StorageProxy.getParty(player.getUUID());
         List<Pokemon> team = getTeam(player, file);
 
@@ -86,8 +87,6 @@ public class TeamManager {
             MessageHelper.enviarMensaje(player, "No se ha encontrado el equipo");
             return;
         };
-        System.out.println("Equipo cargado");
-        System.out.println(team);
 
         for(int i = 0; i < 6; i++) {
             if(i >= team.size()){

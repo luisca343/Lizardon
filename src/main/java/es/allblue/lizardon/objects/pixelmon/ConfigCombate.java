@@ -184,14 +184,11 @@ public class ConfigCombate {
 
     public int getNivelEquipo(int nivelJugador){
         int nivel;
-        System.out.println("Nivel del jugador: " + nivelJugador);
 
         if(this.nivel.contains("+")) nivel = nivelJugador + Integer.parseInt(this.nivel.split("\\+")[1]);
         else if(this.nivel.contains("-")) nivel = nivelJugador - Integer.parseInt(this.nivel.split("-")[1]);
         else if(this.nivel.equals("0") || this.nivel.equals("=") || this.nivel.equals("IGUALADO") || this.nivel.equals("EQUAL")) nivel = nivelJugador;
         else nivel = Integer.parseInt(this.nivel);
-
-        System.out.println("Nivel del equipo: " + nivel);
         return nivel;
     }
 
@@ -200,10 +197,7 @@ public class ConfigCombate {
 
         for (Pokemon pokemon : equipo) {
             pokemon.setLevel(nivel);
-
         }
-
-        System.out.println("Nivel del equipo: " + nivel);
     }
 
     public int getNivelesExtra(){

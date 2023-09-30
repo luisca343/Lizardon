@@ -9,6 +9,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.stats.links.PokemonLink;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.dex.ActualizarDex;
 import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.PersistentDataFields;
@@ -32,7 +33,7 @@ public class PixelmonEvents {
         try {
             if (!event.pokemon.hasOwner()) return;
         }catch (NullPointerException e){
-            System.out.println("Error al cancelar XP. Ignorando...");
+            Lizardon.LOGGER.warn("Error al cancelar XP. Ignorando...");
             return;
         }
         ServerPlayerEntity player = event.pokemon.getPlayerOwner();
@@ -46,7 +47,6 @@ public class PixelmonEvents {
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent
     public void guardarDex(PokedexEvent.Post event){
-        System.out.println("Guardando dex");
         String uuid = event.getPlayer().getStringUUID();
         int idPokemon = event.getPokemon().getSpecies().getDex();
         int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
@@ -85,12 +85,10 @@ public class PixelmonEvents {
                 int precioUnidad = event instanceof ShopkeeperEvent.Purchase ? objeto.getBuyCost() : objeto.getSellCost();
                 int precioTotal = itemStack.getCount() * precioUnidad;
                 encontrado = true;
-                System.out.println("Se ha realizado una " + operacion + " de " + itemStack.getCount() + " " + itemStack.getDisplayName().getString() +" por " + precioTotal);
             }
         }
         if(!encontrado) {
             event.setCanceled(true);
-            System.out.println("No se ha encontrado. Cancelando.");
         }
     }
 }

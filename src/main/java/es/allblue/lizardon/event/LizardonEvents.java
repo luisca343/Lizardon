@@ -41,7 +41,6 @@ public class LizardonEvents {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void modelBake(ModelBakeEvent event) {
-        System.out.println("modelBake");
         ModelResourceLocation mrl = new ModelResourceLocation("lizardon:funko", "inventory");
         IBakedModel model = event.getModelRegistry().get(mrl);
         event.getModelRegistry().put(mrl, new TestModeloFunko(model));
@@ -90,7 +89,7 @@ public class LizardonEvents {
         try {
             Lizardon.carreraManager = new CarreraManager();
         }catch (NullPointerException e){
-            System.out.println("ERROR AL CREAR EL CARRERA MANAGER");
+            Lizardon.LOGGER.error("ERROR AL CREAR EL CARRERA MANAGER");
         }
     }
 

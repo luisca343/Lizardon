@@ -20,7 +20,7 @@ public class QueryHelper {
 
     public static boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
         Gson gson = new Gson();
-        System.out.println("Query recibida: "+query);
+        Lizardon.LOGGER.info("Query recibida: "+query);
         /* Requests 'GET' */
         if(query.equals("getUserData")){
 
@@ -46,7 +46,6 @@ public class QueryHelper {
         }
         /* Requests 'POST' */
         if(query.contains("entrarLlamada")){
-            System.out.println("entrarLlamada");
             Messages.INSTANCE.sendToServer(new SMessageIniciarLlamada(query));
             callback.success("test");
             return true;

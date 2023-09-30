@@ -139,16 +139,12 @@ public class BloquePantalla extends HorizontalBlock {
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, world, pos, block, fromPos, isMoving);
         if (!world.isClientSide) {
-
             Vector3i vec1 = new Vector3i(pos);
-            System.out.println("Vec1: " + vec1);
             /*¡
             for (BlockSide side : BlockSide.values()) {
                 Vector3i vec = new Vector3i(pos);
-                System.out.println("Vec antes: " + vec);
                 Multiblock.findOrigin(world, vec, side, null);
 
-                System.out.println("Vec despues: " + vec);
 
                 PantallaTE tes = (PantallaTE) world.getBlockEntity(vec.toBlock());
 
@@ -158,9 +154,9 @@ public class BloquePantalla extends HorizontalBlock {
             }*/
 
             if(block != this){
-                System.out.println("Neighbor changed");
+                Lizardon.LOGGER.info("Neighbor changed");
             }else {
-                System.out.println("I'm the neighbor");
+                Lizardon.LOGGER.info("I'm the neighbor");
             }
         }
     }

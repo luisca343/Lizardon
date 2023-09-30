@@ -1,6 +1,7 @@
 package es.allblue.lizardon;
 
 
+import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
 import es.allblue.lizardon.client.ClientProxy;
@@ -55,6 +56,7 @@ public class Lizardon
 
     // SmartRotom START
     public static final double PAD_RATIO = 59.0 / 30.0;
+    public static Gson GSON = new Gson();
     //public  static final String SMARTROTOM_HOME = "http://lizardon.es/smartrotom";
     // public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
     public double padResX;
@@ -145,10 +147,10 @@ public class Lizardon
         api = MCEFApi.getAPI();
 
         if(api == null){
-            System.out.println("API NO FUNKA");
+            Lizardon.LOGGER.error("API NO FUNKA");
             return;
         }else{
-            System.out.println("API FUNKA");
+            Lizardon.LOGGER.info("API FUNKA");
         }
 
         api.registerScheme("lizardon", ModScheme.class, true, false, false, true, true, false, false);

@@ -29,7 +29,6 @@ public class SMessageCargarEquipo implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(str);
         Gson gson = new Gson();
         GetEquipo getEquipo = gson.fromJson(str, GetEquipo.class);
 

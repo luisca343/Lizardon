@@ -72,7 +72,7 @@ public class SharedProxy {
     }
 
     public Path getRuta(String carpeta) {
-        System.out.println("Llamando getRuta en servidor");
+        Lizardon.LOGGER.warn("Llamando getRuta en servidor");
         return Paths.get("");
     }
 
@@ -87,11 +87,11 @@ public class SharedProxy {
     }
 
     public void prepararNavegador(API api) {
-        System.out.println("Esto en servidor no hace nada");
+        Lizardon.LOGGER.warn("Esto en servidor no hace nada");
     }
 
     public void abrirPantalla(Screen pantallaCine) {
-        System.out.println("Esto en servidor no hace nada");
+        Lizardon.LOGGER.warn("Esto en servidor no hace nada");
     }
 
     public void darObjetos(ArrayList<Recompensa> objetos, UUID uuid){
@@ -137,14 +137,14 @@ public class SharedProxy {
     }
 
     public void abrirPantallaCine(PantallaTE te) {
-        System.out.println("Esto en servidor no hace nada");
+        Lizardon.LOGGER.warn("Esto en servidor no hace nada");
     }
 
     public void trackScreen(PantallaTE tes, boolean track){
-        System.out.println("Esto en servidor no hace nada");
+        Lizardon.LOGGER.warn("Esto en servidor no hace nada");
     }
 
     public void runJS(String str) {
-        System.out.println("Esto en servidor no hace nada");
+        Lizardon.LOGGER.warn("Esto en servidor no hace nada");
     }
 }

@@ -310,7 +310,7 @@ public class Combate {
 
     public void appendLog(String log){
         this.log += log;
-        Lizardon.LOGGER.info(log);
+        //Lizardon.LOGGER.info(log);
     }
 
     public String getLog(){

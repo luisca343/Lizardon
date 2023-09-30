@@ -50,7 +50,6 @@ public class PantallaTE extends TileEntity {
     }
 
     public void iniciarBrowser() {
-        System.out.println("Iniciando browser");
         browser = Lizardon.getInstance().getAPI().createBrowser("http://google.es", false);
         browser.loadURL("http://google.es");
     }

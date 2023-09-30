@@ -29,8 +29,8 @@ public class WingullAPI {
                 response.append(line);
             }
             br.close();
-            System.out.println(response.toString());
-            System.out.println("WingullAPI: " + con.getResponseCode());
+            Lizardon.LOGGER.info(response.toString());
+            Lizardon.LOGGER.info("WingullAPI: " + con.getResponseCode());
             return response.toString();
 
 
@@ -57,8 +57,7 @@ public class WingullAPI {
 
     // SSend post request
     public static void post(String str, String json) {
-
-        System.out.println("WingullAPI: " + str + " " + json);
+        Lizardon.LOGGER.info("WingullAPI: " + str + " " + json);
         new Thread(() -> {
             try {
                 URL url = new URL(str);
@@ -82,15 +81,15 @@ public class WingullAPI {
                     response.append(line);
                 }
                 br.close();
-                System.out.println(response.toString());
-                System.out.println("WingullAPI: " + con.getResponseCode());
+                Lizardon.LOGGER.info(response.toString());
+                Lizardon.LOGGER.info("WingullAPI: " + con.getResponseCode());
 
             } catch (ProtocolException e) {
                 throw new RuntimeException(e);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
-                System.out.println("WingullAPI: " + e.getMessage());
+                Lizardon.LOGGER.info("WingullAPI: " + e.getMessage());
             }
         }).start();
     }

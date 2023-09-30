@@ -29,13 +29,11 @@ public class TocadiscosTE extends TileEntity {
         if(this.level.isClientSide()){
             return;
         }
-        System.out.println("TocadiscosTE.setDisco");
 
         disco = nombre;
         AudioManager manager = new AudioManager();
         player = manager.getPlayer(this.level, this.worldPosition, nombre);
         if(player == null){
-            System.out.println("Player is null");
             return;
         }
 

@@ -37,7 +37,7 @@ public class PantallaVideo extends Screen {
 
     public PantallaVideo(String url) {
         super(new StringTextComponent("forgecef.example.screen.title"));
-        System.out.println("Constructor: " + url);
+        Lizardon.LOGGER.info("Constructor: " + url);
         this.url = url;
         this.urlVideo = url;
        // urlToLoad = (url == null) ? MCEF.HOME_PAGE : url;
@@ -46,10 +46,6 @@ public class PantallaVideo extends Screen {
     @Override
     public void init() {
         super.init(); // narrator trigger lmao
-        System.out.println("Cargando pantalla...");
-        System.out.println("http://localhost:3000/video?url="+url);
-        System.out.println("TEST...");
-        System.out.println("http://localhost:3000/video?url="+urlVideo);
         if(browser == null) {
             //Grab the API and make sure it isn't null.
             API api = Lizardon.getInstance().getAPI();

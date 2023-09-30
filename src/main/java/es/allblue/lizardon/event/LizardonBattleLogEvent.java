@@ -17,14 +17,13 @@ public class LizardonBattleLogEvent {
         Combate combate = Lizardon.getLBC().getCombateEspecial(bc.battleIndex);
 
         if(event instanceof AttackEvent.Use) {
-            System.out.println("Evento ataque");
+            Lizardon.LOGGER.info("Evento ataque");
         }
 
         if(event instanceof AttackEvent.Damage) {
-            System.out.println("Evento ataque hit");
 
-            System.out.println("Ataque: " + event.user.attack.getMove().getAttackName());
-            System.out.println("El ataque le ha provocado " + ((AttackEvent.Damage) event).damage + " de daño. Actualmente tiene " + (event.target.getHealth() - ((AttackEvent.Damage) event).damage) + " de vida.");
+            Lizardon.LOGGER.info("Ataque: " + event.user.attack.getMove().getAttackName());
+            Lizardon.LOGGER.info("El ataque le ha provocado " + ((AttackEvent.Damage) event).damage + " de daño. Actualmente tiene " + (event.target.getHealth() - ((AttackEvent.Damage) event).damage) + " de vida.");
 
         }
 */
@@ -32,8 +31,6 @@ public class LizardonBattleLogEvent {
 
     @SubscribeEvent
     public void msg(BattleMessageEvent event){
-        //System.out.println("Evento turno");
-        //System.out.println(event.textComponent.toString());
 
     }
 

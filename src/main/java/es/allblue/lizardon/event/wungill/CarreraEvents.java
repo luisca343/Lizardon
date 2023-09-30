@@ -3,6 +3,7 @@ import com.mrcrayfish.vehicle.entity.EngineTier;
 import com.mrcrayfish.vehicle.entity.PoweredVehicleEntity;
 import com.mrcrayfish.vehicle.entity.vehicle.GoKartEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageCambioPosicion;
 import es.allblue.lizardon.net.client.CMessageCambioRegion;
@@ -52,7 +53,7 @@ public class CarreraEvents {
     }
 
     public static void golpearCoche(UUID uuid){
-        System.out.println("GOLPEANDO COCHE");
+        Lizardon.LOGGER.info("GOLPEANDO COCHE");
         ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(uuid);
         PoweredVehicleEntity vehicleEntity = (PoweredVehicleEntity) player.getVehicle();
 
@@ -69,7 +70,7 @@ public class CarreraEvents {
                 vehicleEntity.yRotO = f+ 45f ;
                 player.yRot = f2+45f;
 
-                System.out.println(vehicleEntity.yRot);
+                Lizardon.LOGGER.info(vehicleEntity.yRot);
                 try {
                     Thread.sleep(tiempo / 8);
                 } catch (InterruptedException e) {

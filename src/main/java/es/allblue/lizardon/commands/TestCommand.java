@@ -163,12 +163,10 @@ public class TestCommand {
                         ClipboardReader reader = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getReader(new FileInputStream(schem));
                         Clipboard clipboard = reader.read();
 
-                        System.out.println("CLIPBOARD CARGADA");
 
                         World world = ForgeAdapter.adapt(player.level);
                         EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1);
 
-                        System.out.println("EDIT SESSION CREADA");
                         BlockVector3 inicioNueva = inicio.add(0, 0, 15 * parcelasCreadas);
                         Operation operation = new ClipboardHolder(clipboard)
                                 .createPaste(editSession)
@@ -197,7 +195,6 @@ public class TestCommand {
                         PlayerEntity player = (PlayerEntity) command.getSource().getEntity();
 
                     World world = ForgeAdapter.adapt(player.level);
-                    System.out.println("WORLD ADAPTADO");
                     BlockVector3 pos1 = BlockVector3.at(0, 0, 0);
                     BlockVector3 pos2 = BlockVector3.at(10, 10, 10);
 
@@ -213,23 +210,16 @@ public class TestCommand {
                     try {
                         Operations.complete(forwardExtentCopy);
                         MessageHelper.enviarMensaje(player, "OPERACION COMPLETADA, BLOQUES AFECTADOS: " + forwardExtentCopy.getAffected());
-                        System.out.println("OPERACION COMPLETADA");
-                        System.out.println("CLIPBOARD CREADA");
 
                         File schem = FileHelper.getSchematic("baseSecreta");
 
-                        System.out.println("FILE CARGADO");
-
-                        System.out.println("TRY");
 
                         ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(schem));
                         writer.write(clipboard);
                         writer.close();
 
-                        System.out.println("CLIPBOARD ESCRITA");
 
                     } catch (WorldEditException e) {
-                        System.out.println("ERROR");
                         throw new RuntimeException(e);
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);

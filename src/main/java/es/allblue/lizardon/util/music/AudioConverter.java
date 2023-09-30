@@ -106,23 +106,16 @@ public class AudioConverter {
     public static short[] convertMp3v2(Path file) throws IOException, UnsupportedAudioFileException {
         /*
         Sound sound = new Sound(new BufferedInputStream(Files.newInputStream(file)));
-        System.out.println(sound.getSamplingFrequency());
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         int read = sound.decodeFullyInto(os);
         int samples = read / 2;
 
         AudioInputStream stream = new AudioInputStream(new ByteArrayInputStream(os.toByteArray()), sound.getAudioFormat(), samples);
-        System.out.println(stream.getFormat().getSampleRate());
-        System.out.println(stream.getFormat().getChannels());
-        System.out.println(stream.getFormat().getFrameSize());
-        System.out.println(stream.getFormat().getFrameRate());
-        System.out.println(stream.getFormat().getSampleSizeInBits());
-        System.out.println(stream.getFormat().getEncoding());*/
 
-        System.out.println("Converting mp3");
+        */
+
         Mp3Decoder decoder = Mp3DecoderImpl.createDecoder(new BufferedInputStream(Files.newInputStream(file)));
-        System.out.println("Decoded mp3");
 
 
 

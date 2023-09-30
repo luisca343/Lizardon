@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.pixelmon.battle.Combate;
 import es.allblue.lizardon.objects.pixelmon.ConfigCombate;
 import es.allblue.lizardon.util.Reader;
@@ -42,7 +43,7 @@ public class CombateCommand {
             Combate combate = new Combate(player, configSalvaje);
             combate.iniciarCombate();
         } catch (CommandSyntaxException e){
-            System.out.println("Error al iniciar el combate");
+            Lizardon.LOGGER.error("Error al iniciar el combate");
         }
         return 1;
     }
@@ -55,7 +56,7 @@ public class CombateCommand {
             Combate combate = new Combate(player, configCombateEntrenador);
             combate.iniciarCombate();
         }catch(CommandSyntaxException e){
-            System.out.println("Error al iniciar el combate");
+            Lizardon.LOGGER.error("Error al iniciar el combate");
         }
 
         return 1;

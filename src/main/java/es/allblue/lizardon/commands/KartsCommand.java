@@ -173,8 +173,6 @@ public class KartsCommand {
                             String nombre = StringArgumentType.getString(command, "nombre");
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
 
-                            System.out.println(nombre);
-                            System.out.println(player.getUUID());
 
                             // Usar el CarreraManager para crear la carrera
                             Lizardon.carreraManager.entrarCarrera(nombre, vueltas, player);

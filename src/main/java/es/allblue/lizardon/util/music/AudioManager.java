@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.api.*;
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import de.maxhenkel.voicechat.api.audiochannel.StaticAudioChannel;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.LizardonVoicechatPlugin;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -153,15 +154,15 @@ public class AudioManager {
 
     public void playMp3(ServerPlayerEntity player){
         try {
-            System.out.println("RECUPERANDO AUDIO");
+            Lizardon.LOGGER.info("RECUPERANDO AUDIO");
             short[] audio = AudioConverter.convertMp3v2(getFile("test", "mp3"));
-            System.out.println("AUDIO RECIBIDO");
+            Lizardon.LOGGER.info("AUDIO RECIBIDO");
 
 
             AudioPlayer audioPlayer = LizardonVoicechatPlugin.SERVER_API.createAudioPlayer(LizardonVoicechatPlugin.SERVER_API.createEntityAudioChannel(UUID.randomUUID(), LizardonVoicechatPlugin.SERVER_API.fromServerPlayer(player)), LizardonVoicechatPlugin.SERVER_API.createEncoder(), audio);
-            System.out.println("AUDIO PLAYER CREADO");
+            Lizardon.LOGGER.info("AUDIO PLAYER CREADO");
             audioPlayer.startPlaying();
-            System.out.println("AUDIO PLAYER INICIADO");
+            Lizardon.LOGGER.info("AUDIO PLAYER INICIADO");
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (UnsupportedAudioFileException e) {

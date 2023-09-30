@@ -2,6 +2,7 @@ package es.allblue.lizardon.net.client;
 
 
 import com.google.common.base.Charsets;
+import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.objects.misiones.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -24,7 +25,7 @@ public class CMessageGetPC implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(str);
+        Lizardon.LOGGER.info(str);
         ClientProxy.callbackMCEF.success(str);
     }
 

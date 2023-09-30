@@ -28,7 +28,6 @@ public class SmartRotom extends Item {
     @Override
     public ActionResultType interactLivingEntity(ItemStack item, PlayerEntity player, LivingEntity entity, Hand hand) {
         if(entity instanceof PixelmonEntity){
-            System.out.println("Interact with pixelmon");
             PixelmonEntity pixelmon = (PixelmonEntity) entity;
             int smartRotomID = item.getTag().getInt("PadID");
             ClientProxy.PadData smartRotom = Lizardon.PROXY.getPadByID(smartRotomID);

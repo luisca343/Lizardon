@@ -163,11 +163,6 @@ public class FileHelper {
             Lizardon.config = config;
             writeFile(file, config);
 
-            System.out.println("Config file created");
-            System.out.println("Please, edit config/lizardon.json with your server data");
-            System.out.println("Then, restart the server");
-            System.out.println(config);
-
             return config;
         }
     }

@@ -83,7 +83,6 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
 
     public void iniciarPadMap(){
-        System.out.println("Iniciando PAD MAP");
         padMap = new HashMap<>();
     }
 
@@ -105,7 +104,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void preInit() {
-        System.out.println("PRE INIT");
+        Lizardon.LOGGER.info("PRE INIT");
         mc = Minecraft.getInstance();
         mcef = Lizardon.getInstance().getAPI();
         MinecraftForge.EVENT_BUS.register(this);
@@ -122,7 +121,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
             //Register this class to handle onAddressChange and onQuery events
             //api.registerDisplayHandler(this);
             //prepararNavegador(api);
-            System.out.println("Registering JSQueryHandler...");
+            Lizardon.LOGGER.info("Registering JSQueryHandler...");
             api.registerJSQueryHandler(this);
         }
     }
@@ -151,10 +150,8 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void prepararNavegador(API api) {
-        System.out.println("Creando cargador de cosas de carga de cosas");
         IBrowser browser = api.createBrowser("about:blank", false);
         browser.loadURL("about:blank");
-        System.out.println("EL COSO SE HA CREADO");
     }
 
     @Override
@@ -195,31 +192,25 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
             if(mc.player != null && !screenTracking.isEmpty()) {
                 int id = lastTracked % screenTracking.size();
                 lastTracked++;
-                //System.out.println("LOG: Checking screen " + id);
                 PantallaTE tes = screenTracking.get(id);
-                //System.out.println("LOG: Checking screen " + id + " at " + tes.getBlockPos());
                 Block bloque = mc.level.getBlockState(tes.getBlockPos()).getBlock();
                 if(!(bloque instanceof BloquePantalla)){
-                    System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's not a screen");
+                    Lizardon.LOGGER.info("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's not a screen");
                     tes.unload();
                     return;
                 }
-                //System.out.println("LOG: Checking screen " + id + " at " + tes.getBlockPos() + " with block " + bloque);
-
                 double dist2 = mc.player.distanceToSqr(tes.getBlockPos().getX(), tes.getBlockPos().getY(), tes.getBlockPos().getZ());
-                //System.out.println("and distance " + dist2);
-                //System.out.println(tes.isLoaded());
 
                 MessageHelper.enviarMensaje(mc.player, "Distancia: " + dist2 + " Cargado: " + tes.isLoaded());
                 if(tes.isLoaded()) {
                     if(dist2 >  50){
-                        System.out.println("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
+                        Lizardon.LOGGER.info("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
                         tes.unload();
                     }
                     tes.updateTrackDistance(dist2, 80); //ToDo find master volume
                 } else if(dist2 <= 50){
                     tes.load();
-                    System.out.println("LOG: Loading screen " + id + " at " + tes.getBlockPos() + " because it's close enough");
+                    Lizardon.LOGGER.info("LOG: Loading screen " + id + " at " + tes.getBlockPos() + " because it's close enough");
                 }
             }
 
@@ -323,7 +314,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void cancelQuery(IBrowser iBrowser, long l) {
-        System.out.println("SCRIPT CAANCELAD");
+        Lizardon.LOGGER.info("SCRIPT CANCELADO");
     }
 
     @Override
@@ -347,7 +338,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
         Path path = Paths.get(basePath.toString(),"Lizardon/"+ ruta);
         File fileDatos = new File(path.toString());
         if(!fileDatos.exists()) {
-            System.out.println("Creando archivo inexistente "+ruta);
+            Lizardon.LOGGER.info("Creando archivo inexistente "+ruta);
             try {
                 fileDatos.createNewFile();
             } catch (IOException e) {
@@ -375,7 +366,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     @Override
     public void trackScreen(PantallaTE tes, boolean track) {
-        System.out.println(track ? "Tracking" : "Untracking" + " screen at " + tes.getBlockPos());
+        Lizardon.LOGGER.info(track ? "Tracking" : "Untracking" + " screen at " + tes.getBlockPos());
         int idx = -1;
         for(int i = 0; i < screenTracking.size(); i++) {
             if(screenTracking.get(i) == tes) {
@@ -386,11 +377,11 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
         if(track) {
             if(idx < 0){
-                System.out.println("LOG: Tracking screen at " + tes.getBlockPos());
+                Lizardon.LOGGER.info("LOG: Tracking screen at " + tes.getBlockPos());
                 screenTracking.add(tes);
             }
         } else if(idx >= 0){
-            System.out.println("LOG: Untracking screen at " + tes.getBlockPos());
+            Lizardon.LOGGER.info("LOG: Untracking screen at " + tes.getBlockPos());
             screenTracking.remove(idx);
         }
     }

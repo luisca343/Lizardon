@@ -22,7 +22,6 @@ public class CMessageVerVideo implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("CMESSAGE: "+ str );
         Lizardon.PROXY.verVideo(str);
     }
 

@@ -21,7 +21,6 @@ public class SMessageTaxi implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(str);
         Gson gson = new Gson();
         Taxi taxi = gson.fromJson(str, Taxi.class);
 

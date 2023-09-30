@@ -43,10 +43,8 @@ public class SMessageSetPC implements Runnable{
         PCStorage pc = StorageProxy.getPCForPlayer(player);
         try{
 
-            System.out.println("EL POKEMON ES: " + pc.get(0,0).getSpecies().getName());
             CompoundNBT nbt = NBTJsonUtil.Convert(datos);
             PCStorage pc2 = pc.readFromNBT(nbt);
-            System.out.println("EL POKEMON ES: " + pc2.get(0,0).getSpecies().getName());
 
 
         }catch(Exception e){

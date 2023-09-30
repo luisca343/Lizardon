@@ -140,7 +140,6 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
 
         GlStateManager._enableDepthTest();
 
-        System.out.println("FIN RENDER");
     }
 
 

@@ -1,21 +1,16 @@
 package es.allblue.lizardon.objects.logros;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import es.allblue.lizardon.objects.pixelmon.PokemonData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogroCombate {
     String uuid;
     String npc;
     boolean victoria;
-    String equipo;
-
-    public LogroCombate(String uuid, String npc, boolean resultado, String equipo) {
-        this.uuid = uuid;
-        this.npc = npc;
-        this.victoria = resultado;
-        this.equipo = equipo;
-    }
+    ArrayList<PokemonData> equipo;
 
     public LogroCombate() {
 
@@ -45,11 +40,15 @@ public class LogroCombate {
         this.victoria = victoria;
     }
 
-    public String getEquipo() {
+    public ArrayList<PokemonData> getEquipo() {
         return equipo;
     }
 
     public void setEquipo(List<Pokemon> equipo) {
-
+        this.equipo = new ArrayList<>();
+        for (Pokemon pokemon : equipo) {
+            PokemonData pokemonData = new PokemonData(pokemon);
+            this.equipo.add(pokemonData);
+        }
     }
 }

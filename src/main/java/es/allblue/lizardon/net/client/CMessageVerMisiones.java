@@ -53,11 +53,6 @@ public class CMessageVerMisiones implements Runnable{
                 mision.setY(datosNpc.get(mision.getNombreNPC()).getY());
                 mision.setZ(datosNpc.get(mision.getNombreNPC()).getZ());
             }
-            System.out.println(mision.getNombreNPC());
-            System.out.println(mision.getSkin());
-            System.out.println(mision.getX());
-            System.out.println(mision.getY());
-            System.out.println(mision.getZ());
             lista.add(mision);
         }
     }

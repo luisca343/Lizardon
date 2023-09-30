@@ -41,7 +41,6 @@ public class TorreBatallaController {
         List<Pokemon> equipo = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             int num = new Random().nextInt(tier1.size());
-            System.out.println(i + " " + num);
             MessageHelper.enviarMensaje(player, "§aCargando pokemon " + tier1.get(num).getSpecies().getName());
             Pokemon pokemon = tier1.get(num);
 
@@ -76,7 +75,6 @@ public class TorreBatallaController {
         List<Pokemon> equipo = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             int num = new Random().nextInt(tier1.size());
-            System.out.println(i + " " + num);
             MessageHelper.enviarMensaje(player, "§aCargando pokemon " + tier1.get(num).getSpecies().getName());
             Pokemon pokemon = tier1.get(num);
 
