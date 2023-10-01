@@ -6,6 +6,8 @@ import es.allblue.lizardon.items.LizardonItemGroup;
 import es.allblue.lizardon.objects.ObjColocable;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -34,6 +36,7 @@ public class BlockInit {
 
     public static final RegistryObject<Block> TVBLOCK = registerBlock("tv_block", () -> new TVBlock(AbstractBlock.Properties.of(Material.STONE)));
 
+    public static final RegistryObject<Block> BLUE_NETHER_BRICK_STAIRS = registerBlock("blue_nether_brick_stairs", () -> new StairsBlock(Blocks.OAK_PLANKS.defaultBlockState(),AbstractBlock.Properties.of(Material.STONE)));
 
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();

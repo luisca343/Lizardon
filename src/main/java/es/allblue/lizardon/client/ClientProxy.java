@@ -139,7 +139,9 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
         if(pd != null && pd.view != null){
             mc.setScreen(new PantallaSmartRotom(pd));
-            pd.view.resize(1920, 1080);
+            if(!pd.view.getURL().contains("liga")){
+                pd.view.resize(1920, 1080);
+            }
         }
     }
 

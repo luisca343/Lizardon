@@ -30,6 +30,8 @@ public class ConfigCombate {
     private String IA;
     private boolean curar;
     private boolean preview;
+
+    private String logro;
     private boolean exp;
 
 
@@ -243,5 +245,33 @@ public class ConfigCombate {
 
     public void setExp(boolean b) {
         this.exp = b;
+    }
+
+    public ArrayList<String> getGimmick() {
+        return gimmick;
+    }
+
+    public void setGimmick(ArrayList<String> gimmick) {
+        this.gimmick = gimmick;
+    }
+
+    public boolean isCurar() {
+        return curar;
+    }
+
+    public boolean isPreview() {
+        return preview;
+    }
+
+    public String getLogro() {
+        return logro;
+    }
+
+    public void setLogro(String logro) {
+        this.logro = logro;
+    }
+
+    public boolean isExp() {
+        return exp;
     }
 }

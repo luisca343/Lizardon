@@ -3,9 +3,11 @@ package es.allblue.lizardon.objects.pixelmon;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.allblue.lizardon.Lizardon;
+import net.minecraft.world.biome.BiomeRegistry;
 
 public class PokemonData {
-private String especie;
+    private String naturaleza;
+    private String especie;
     private String nombre;
     private int nivel;
     private String item;
@@ -16,11 +18,13 @@ private String especie;
     private String[] stats;
 
     public PokemonData(Pokemon pokemon) {
+
         especie = pokemon.getSpecies().getName();
         nombre = pokemon.getDisplayName();
         nivel = pokemon.getPokemonLevel();
-        item = pokemon.getHeldItem().getDisplayName().getString();
-        habilidad = pokemon.getAbility().getName();
+        item = pokemon.getHeldItemAsItemHeld().getLocalizedName();
+        habilidad = pokemon.getAbility().getLocalizedName();
+        naturaleza = pokemon.getNature().getLocalizedName();
         ataques = new String[4];
         for (int i = 0; i < 4; i++) {
             if(pokemon.getMoveset().get(i) == null) continue;
@@ -119,6 +123,14 @@ private String especie;
 
     public void setStats(String[] stats) {
         this.stats = stats;
+    }
+
+    public String getNaturaleza() {
+        return naturaleza;
+    }
+
+    public void setNaturaleza(String naturaleza) {
+        this.naturaleza = naturaleza;
     }
 }
 

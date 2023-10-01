@@ -99,6 +99,7 @@ public class LizardonEvents {
         new TestCommand(event.getDispatcher());
         new DiscosCommand(event.getDispatcher());
         new CombateCommand(event.getDispatcher());
+        new WECommand(event.getDispatcher());
 
         new KartsCommand(event.getDispatcher());
         new FrenteBatallaCommand(event.getDispatcher());

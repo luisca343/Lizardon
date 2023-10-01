@@ -41,7 +41,9 @@ public class PantallaRenderer extends TileEntityRenderer<PantallaTE> {
         if (te.browser == null) {
             te.browser = Lizardon.getInstance().getAPI().createBrowser("http://google.es", false);
             te.browser.loadURL("http://google.es");
-            te.browser.resize(1920, 1080);
+            if(!te.browser.getURL().contains("liga")){
+                te.browser.resize(1920, 1080);
+            }
 
             return;
         }

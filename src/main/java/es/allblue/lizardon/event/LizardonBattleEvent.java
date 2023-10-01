@@ -47,6 +47,8 @@ public class LizardonBattleEvent {
         LogroCombate logroCombate = new LogroCombate();
         logroCombate.setUuid(combate.getPlayer().getStringUUID());
         logroCombate.setNpc(combate.getConfigCombate().getNombreArchivo());
+        logroCombate.setNpc(combate.getConfigCombate().getNombreArchivo());
+        logroCombate.setLogro(combate.getConfigCombate().getLogro());
         logroCombate.setVictoria(ganador);
         List<Pokemon> team = StorageProxy.getParty(combate.getPlayer()).getTeam();
         logroCombate.setEquipo(team);

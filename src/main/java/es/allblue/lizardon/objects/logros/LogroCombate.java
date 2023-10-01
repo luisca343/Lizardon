@@ -10,6 +10,7 @@ public class LogroCombate {
     String uuid;
     String npc;
     boolean victoria;
+    String logro;
     ArrayList<PokemonData> equipo;
 
     public LogroCombate() {
@@ -50,5 +51,13 @@ public class LogroCombate {
             PokemonData pokemonData = new PokemonData(pokemon);
             this.equipo.add(pokemonData);
         }
+    }
+
+    public String getLogro() {
+        return logro;
+    }
+
+    public void setLogro(String logro) {
+        this.logro = logro;
     }
 }

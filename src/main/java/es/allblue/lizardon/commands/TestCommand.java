@@ -17,26 +17,39 @@ import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.util.helpers.SpeciesHelper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.StatueEntity;
 import com.pixelmonmod.pixelmon.enums.EnumBoundingBoxMode;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.command.WorldEditCommands;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.*;
 import com.sk89q.worldedit.forge.ForgeAdapter;
+import com.sk89q.worldedit.forge.ForgePlayer;
+import com.sk89q.worldedit.function.RegionFunction;
+import com.sk89q.worldedit.function.RegionMaskingFilter;
+import com.sk89q.worldedit.function.biome.BiomeReplace;
+import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.function.visitor.RegionVisitor;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.session.SessionManager;
+import com.sk89q.worldedit.util.formatting.text.Component;
+import com.sk89q.worldedit.util.formatting.text.TextComponent;
+import com.sk89q.worldedit.util.formatting.text.TranslatableComponent;
 import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.world.biome.BiomeType;
+import es.allblue.lizardon.init.ModBiomes;
 import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageVerVideo;
 import es.allblue.lizardon.net.client.CMessageWaypoints;
 import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.WayPoint;
 import es.allblue.lizardon.objects.karts.Circuito;
+import es.allblue.lizardon.objects.karts.Punto;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;
 import es.allblue.lizardon.pixelmon.battle.TeamManager;
 import es.allblue.lizardon.pixelmon.frentebatalla.TorreBatallaController;
@@ -51,6 +64,7 @@ import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.io.*;
@@ -79,6 +93,9 @@ public class TestCommand {
         dispatcher.register(literalBuilder);
 
     }
+
+
+
 
     private ArgumentBuilder<CommandSource,?> broadcast() {
         return Commands.literal("broadcast")

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "lizardon:block/blue_nether_bricks",
+    "top": "lizardon:block/blue_nether_bricks",
+    "side": "lizardon:block/blue_nether_bricks"
+  }
+}

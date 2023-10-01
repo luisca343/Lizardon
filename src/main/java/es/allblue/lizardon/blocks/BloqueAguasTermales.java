@@ -26,7 +26,6 @@ public class BloqueAguasTermales extends FlowingFluidBlock {
     @Override
     public void entityInside(BlockState state, World world, BlockPos post, Entity entity) {
         super.entityInside(state, world, post, entity);
-
         if(!world.isClientSide() && entity instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entity;
             if(!player.hasEffect(Effects.REGENERATION)){

@@ -34,20 +34,42 @@ public class ModBiomes {
                                 .waterFogColor(4445678)
                                 .build());
 
+    public static final RegistryObject<Biome> PUERTO_WINGULL = getPueblo("puerto_wingull", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(4445678)
+            .waterFogColor(4445678)
+            .build());
+
+    public static Biome getBiomeByName(String name){
+        for (RegistryObject<Biome> biome : BIOMES.getEntries()) {
+            if(biome.getId().getPath().equals(name)){
+                return biome.get();
+            }
+        }
+        return null;
+    }
 
 
 
     //
     public static final RegistryObject<Biome> PUEBLO_TULIPAN = crearPuebloBasico("pueblo_tulipan", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_SHIROI = crearPuebloBasico("pueblo_shiroi", Biome.RainType.SNOW);
-    public static final RegistryObject<Biome> PUEBLO_HAGANE = crearPuebloBasico("pueblo_hagane", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_HAGANE = getPueblo("pueblo_hagane", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(0xcccccc)
+            .skyColor(0x6a778f)
+            .waterColor(0x525975)
+            .waterFogColor(0x1c1c30)
+            .grassColorOverride(0x696969)
+            .foliageColorOverride(0x3d3d3d)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_YUME = getPueblo("pueblo_yume", Biome.RainType.RAIN, new BiomeAmbience.Builder()
-            .fogColor(15658734)
-            .skyColor(7907327)
+            .fogColor(0xeeeeee)
+            .skyColor(0x6a778f)
             .waterColor(0x3e4a7a)
-            .waterFogColor(329011)
-            .grassColorOverride(0x415e36)
-            .foliageColorOverride(0x587a4b)
+            .waterFogColor(0x050533)
+            .grassColorOverride(0x4b4d49)
+            .foliageColorOverride(0x646e60)
             .build());
     public static final RegistryObject<Biome> PUEBLO_DENTO = crearPuebloBasico("pueblo_dento", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_IWA = crearPuebloBasico("pueblo_iwa", Biome.RainType.RAIN);
@@ -55,14 +77,34 @@ public class ModBiomes {
     public static final RegistryObject<Biome> PUEBLO_OASIS = crearPuebloBasico("pueblo_oasis", Biome.RainType.NONE);
     public static final RegistryObject<Biome> PUEBLO_SENSHI = crearPuebloBasico("pueblo_senshi", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_KINOKO = crearPuebloBasico("pueblo_kinoko", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_SAKURA = crearPuebloBasico("pueblo_sakura", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_SAKURA = getPueblo("pueblo_sakura", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(0x4fbae0)
+            .waterFogColor(0x4fbae0)
+            .grassColorOverride(0xd1ffdd)
+            .foliageColorOverride(0x97baa0)
+            .build());
 
     public static final RegistryObject<Biome> PUEBLO_TAKAI = crearPuebloBasico("pueblo_takai", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_DOKU = crearPuebloBasico("pueblo_doku", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_GAKU = crearPuebloBasico("pueblo_gaku", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_LAVANDA = crearPuebloBasico("pueblo_lavanda", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_LAVANDA = getPueblo("pueblo_lavanda", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(0x6a778f)
+            .waterColor(0x4fbae0)
+            .waterFogColor(0x4fbae0)
+            .build());
+
     public static final RegistryObject<Biome> PUEBLO_DENKI = crearPuebloBasico("pueblo_denki", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_MIZU = crearPuebloBasico("pueblo_mizu", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_MIZU = getPueblo("pueblo_mizu", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(0x4fbae0)
+            .waterFogColor(0x4fbae0)
+            .grassColorOverride(0x2fc28c)
+            .foliageColorOverride(0x218f66)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_OLIVO = crearPuebloBasico("pueblo_olivo", Biome.RainType.RAIN);
 
     public static final RegistryObject<Biome> NARUKAMI_AKINA = crearPuebloBasico("narukami_akina", Biome.RainType.RAIN);
