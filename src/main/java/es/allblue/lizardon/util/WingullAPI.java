@@ -7,7 +7,6 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class WingullAPI {
-    private String LABOON_URL = "http://79.116.9.120:34301/laboon/";
     // private static String WINGULL_URL = "http://79.116.9.120:34301/";
     public static String wingullGET(String str) {
         try {
@@ -44,11 +43,6 @@ public class WingullAPI {
         }
 
     }
-
-    private void getFromLaboon(URL url, String json) throws IOException {
-        WingullAPI.post(LABOON_URL + "circuito", json);
-    }
-
 
     public static void wingullPOST( String str, String json) {
         post(Lizardon.config.getAPI_URL() + str, json);

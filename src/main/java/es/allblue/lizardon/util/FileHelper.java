@@ -147,7 +147,7 @@ public class FileHelper {
 
     public static LizardonConfig getConfig() {
         Gson gson = new Gson();
-        File file = new File("config/lizardon.json");
+        File file = new File("config/lizardon/config.json");
         LizardonConfig config;
         try{
             BufferedReader br = new BufferedReader(new java.io.FileReader(file));

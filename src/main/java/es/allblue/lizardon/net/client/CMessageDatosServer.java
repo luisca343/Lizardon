@@ -24,22 +24,27 @@ public class CMessageDatosServer implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Recibido idServer: " + idServer);
         Lizardon.PROXY.setIdServidor(idServer);
         Gson gson = new Gson();
         String uuid = Minecraft.getInstance().player.getStringUUID();
         String nombre = Minecraft.getInstance().player.getName().getString();
 
-        UserData data = new UserData(uuid, nombre, idServer);
-
+        System.out.println("Enviando datos de usuario: " + uuid + " " + nombre);
 
         GetUserData userData = new GetUserData();
         userData.setMundo(idServer);
         userData.setUuid(uuid);
         userData.setNombre(nombre);
 
+        System.out.println("Enviando datos de usuario: " + userData.toString());
+
         String respuesta = gson.toJson(userData);
 
+        System.out.println("Enviando datos de usuario: " + respuesta);
+
         ClientProxy.callbackMisiones.success(respuesta);
+
 
         // Hacer el sistema de necesitar medallas para hacer misiones
         // Y el sistema de misiones que se activen en días concretos

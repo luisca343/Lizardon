@@ -197,7 +197,6 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                 PantallaTE tes = screenTracking.get(id);
                 Block bloque = mc.level.getBlockState(tes.getBlockPos()).getBlock();
                 if(!(bloque instanceof BloquePantalla)){
-                    Lizardon.LOGGER.info("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's not a screen");
                     tes.unload();
                     return;
                 }
@@ -206,13 +205,11 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
                 MessageHelper.enviarMensaje(mc.player, "Distancia: " + dist2 + " Cargado: " + tes.isLoaded());
                 if(tes.isLoaded()) {
                     if(dist2 >  50){
-                        Lizardon.LOGGER.info("LOG: Unloading screen " + id + " at " + tes.getBlockPos() + " because it's too far away");
                         tes.unload();
                     }
                     tes.updateTrackDistance(dist2, 80); //ToDo find master volume
                 } else if(dist2 <= 50){
                     tes.load();
-                    Lizardon.LOGGER.info("LOG: Loading screen " + id + " at " + tes.getBlockPos() + " because it's close enough");
                 }
             }
 

@@ -116,7 +116,10 @@ public class Participante {
         if(carrera.getEstado().equals(EstadoCarrera.EN_CURSO)){
             //Punto nuevaPosicion = new Punto(jugador.getX(), jugador.getY(), jugador.getZ());
             Entity vehicle = jugador.getVehicle();
-            if(vehicle == null) return;
+            if(vehicle == null) {
+
+                return;
+            };
             Punto nuevaPosicion = new Punto(vehicle.getX(), vehicle.getY(), vehicle.getZ());
 
             if(nuevaPosicion.equals(coords)) return;

@@ -22,13 +22,12 @@ public class QueryHelper {
         Gson gson = new Gson();
         Lizardon.LOGGER.info("Query recibida: "+query);
         /* Requests 'GET' */
-        if(query.equals("getUserData")){
-
+        if(query.contains("getUserData")){
             Messages.INSTANCE.sendToServer(new SMessageDatosServer("query"));
             ClientProxy.callbackMisiones = callback;
             return true;
         }
-        if(query.equals("getPlayers")){
+        if(query.contains("getPlayers")){
             Collection<NetworkPlayerInfo> jugadores = Minecraft.getInstance().getConnection().getOnlinePlayers();
             ArrayList<UserData> usuarios = new ArrayList<>();
             for (NetworkPlayerInfo jugador : jugadores) {

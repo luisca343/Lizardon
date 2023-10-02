@@ -107,10 +107,10 @@ public class CarreraManager {
 
         Carrera carrera = participantes.get(jugador.getUUID()).getCarrera();
         carrera.getParticipantes().removeIf(participante -> participante.getJugador().getUUID().equals(jugador.getUUID()));
-        participantes.remove(jugador);
+        participantes.remove(jugador.getUUID());
         MessageHelper.enviarMensaje(jugador, "Has salido de la carrera");
 
-        if (carrera.getParticipantes().size() == 0) {
+        if (carrera.getParticipantes().isEmpty()) {
             carreras.remove(carrera.getCircuito().getNombre());
             MessageHelper.enviarMensaje(jugador, "La carrera ha sido eliminada al no tener participantes");
 
@@ -166,7 +166,6 @@ public class CarreraManager {
         if (!participantes.containsKey(jugador.getUUID())) {
             return;
         }
-
         Participante participante = participantes.get(jugador.getUUID());
         participante.tick();
     }
