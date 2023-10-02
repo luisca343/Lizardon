@@ -30,7 +30,7 @@ public class WECommand {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("wefix")
                 .requires((commandSource -> commandSource.hasPermission(3)))
                 .then(cambiarBioma())
-                .then(regenerar())
+                //.then(regenerar())
                 ;
 
         dispatcher.register(literalBuilder);
