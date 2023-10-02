@@ -53,8 +53,23 @@ public class ModBiomes {
 
 
     //
-    public static final RegistryObject<Biome> PUEBLO_TULIPAN = crearPuebloBasico("pueblo_tulipan", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_SHIROI = crearPuebloBasico("pueblo_shiroi", Biome.RainType.SNOW);
+    public static final RegistryObject<Biome> PUEBLO_TULIPAN = getPueblo("pueblo_tulipan", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0x28340A)
+            .foliageColorOverride(0x28340A)
+            .build());
+    public static final RegistryObject<Biome> PUEBLO_SHIROI = getPueblo("pueblo_shiroi", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(0xcccccc)
+            .skyColor(0x6a778f)
+            .waterColor(0x3938C9)
+            .waterFogColor(0x3938C9)
+            .grassColorOverride(0x80B497)
+            .foliageColorOverride(0x60A17B)
+            .build());
+
     public static final RegistryObject<Biome> PUEBLO_HAGANE = getPueblo("pueblo_hagane", Biome.RainType.RAIN, new BiomeAmbience.Builder()
             .fogColor(0xcccccc)
             .skyColor(0x6a778f)
@@ -72,22 +87,66 @@ public class ModBiomes {
             .foliageColorOverride(0x646e60)
             .build());
     public static final RegistryObject<Biome> PUEBLO_DENTO = crearPuebloBasico("pueblo_dento", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_IWA = crearPuebloBasico("pueblo_iwa", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_TSUCHI = crearPuebloBasico("pueblo_tsuchi", Biome.RainType.NONE);
-    public static final RegistryObject<Biome> PUEBLO_OASIS = crearPuebloBasico("pueblo_oasis", Biome.RainType.NONE);
+    public static final RegistryObject<Biome> PUEBLO_IWA = getPueblo("pueblo_iwa", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0x9ABE4B)
+            .foliageColorOverride(0x82AC1E)
+            .build());
+
+    public static final RegistryObject<Biome> PUEBLO_TSUCHI = getPueblo("pueblo_tsuchi", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0x90814D)
+            .foliageColorOverride(0x90814D)
+            .build());
+
+    public static final RegistryObject<Biome> PUEBLO_OASIS = getPueblo("pueblo_oasis",  Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0xBFB755)
+            .foliageColorOverride(0xAEA42A)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_SENSHI = crearPuebloBasico("pueblo_senshi", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_KINOKO = crearPuebloBasico("pueblo_kinoko", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_KINOKO = getPueblo("pueblo_kinoko", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0x55C93F)
+            .foliageColorOverride(0x2BBB0F)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_SAKURA = getPueblo("pueblo_sakura", Biome.RainType.RAIN, new BiomeAmbience.Builder()
             .fogColor(15658734)
             .skyColor(7907327)
-            .waterColor(0x4fbae0)
-            .waterFogColor(0x4fbae0)
-            .grassColorOverride(0xd1ffdd)
+            .waterColor(0x5DB7EF)
+            .waterFogColor(0x5DB7EF)
+            .grassColorOverride(0xB6DB61)
             .foliageColorOverride(0x97baa0)
             .build());
 
-    public static final RegistryObject<Biome> PUEBLO_TAKAI = crearPuebloBasico("pueblo_takai", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> PUEBLO_DOKU = crearPuebloBasico("pueblo_doku", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> PUEBLO_TAKAI = getPueblo("pueblo_takai",  Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(0x3938C9)
+            .waterFogColor(0x3938C9)
+            .grassColorOverride(0x83BB6D)
+            .foliageColorOverride(0x63A948)
+            .build());
+    public static final RegistryObject<Biome> PUEBLO_DOKU = getPueblo("pueblo_doku", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(15658734)
+            .skyColor(7907327)
+            .waterColor(9421531)
+            .waterFogColor(9421531)
+            .grassColorOverride(0x6A7039)
+            .foliageColorOverride(0x4C763C)
+            .build());
     public static final RegistryObject<Biome> PUEBLO_GAKU = crearPuebloBasico("pueblo_gaku", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> PUEBLO_LAVANDA = getPueblo("pueblo_lavanda", Biome.RainType.RAIN, new BiomeAmbience.Builder()
             .fogColor(15658734)
@@ -107,13 +166,16 @@ public class ModBiomes {
             .build());
     public static final RegistryObject<Biome> PUEBLO_OLIVO = crearPuebloBasico("pueblo_olivo", Biome.RainType.RAIN);
 
-    public static final RegistryObject<Biome> NARUKAMI_AKINA = crearPuebloBasico("narukami_akina", Biome.RainType.RAIN);
-    public static final RegistryObject<Biome> FUKITSU_GANSOLIA = crearPuebloBasico("fukitsu_gansolia", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> NARUKAMI= crearPuebloBasico("narukami", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> AKINA = crearPuebloBasico("akina", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> FUKITSU = crearPuebloBasico("fukitsu", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> GANSOLIA = crearPuebloBasico("gansolia", Biome.RainType.RAIN);
 
 
 
     public static void generateBiomes() {
         setupBiome(ARRECIFE_WINGULL.get(), BiomeManager.BiomeType.WARM, 0);
+        setupBiome(PUERTO_WINGULL.get(), BiomeManager.BiomeType.WARM, 0);
 
         setupBiome(PUEBLO_TULIPAN.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_SHIROI.get(), BiomeManager.BiomeType.WARM, 0);
@@ -135,8 +197,12 @@ public class ModBiomes {
         setupBiome(PUEBLO_MIZU.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(PUEBLO_OLIVO.get(), BiomeManager.BiomeType.WARM, 0);
 
-        setupBiome(NARUKAMI_AKINA.get(), BiomeManager.BiomeType.WARM, 0);
-        setupBiome(FUKITSU_GANSOLIA.get(), BiomeManager.BiomeType.WARM, 0);
+        setupBiome(NARUKAMI.get(), BiomeManager.BiomeType.WARM, 0);
+        setupBiome(AKINA.get(), BiomeManager.BiomeType.WARM, 0);
+        setupBiome(FUKITSU.get(), BiomeManager.BiomeType.WARM, 0);
+        setupBiome(GANSOLIA.get(), BiomeManager.BiomeType.WARM, 0);
+
+
 
     }
 
@@ -188,7 +254,6 @@ public class ModBiomes {
 
     private static void setupBiome(Biome biome, BiomeManager.BiomeType biomeType, int weight, BiomeDictionary.Type... types){
         RegistryKey<Biome> key = RegistryKey.create(ForgeRegistries.Keys.BIOMES, Objects.requireNonNull(ForgeRegistries.BIOMES.getKey(biome)));
-
         BiomeDictionary.addTypes(key, types);
         BiomeManager.addBiome(biomeType, new BiomeManager.BiomeEntry(key, weight));
     }
