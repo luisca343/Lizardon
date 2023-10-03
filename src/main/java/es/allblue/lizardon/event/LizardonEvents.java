@@ -10,18 +10,22 @@ import es.allblue.lizardon.net.Messages;
 import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import es.allblue.lizardon.particle.FakeParticle;
 import es.allblue.lizardon.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -110,6 +114,17 @@ public class LizardonEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event){
+        /*
+        Lizardon.LOGGER.info("onTextureStitch");
+        if(event.getMap().location().equals(AtlasTexture.LOCATION_BLOCKS)){
+            event.addSprite(new ResourceLocation(Lizardon.MOD_ID, "particle/stars_0"));
+            event.addSprite(new ResourceLocation(Lizardon.MOD_ID, "particle/stars_1"));
+            FakeParticle.atlasTexture = event.getMap();
+        }*/
+    }
+
 
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event){
@@ -155,6 +170,11 @@ public class LizardonEvents {
 
     }
 
+    @SubscribeEvent
+    public static void logout(PlayerEvent.PlayerLoggedOutEvent event){
+
+    }
+
 
 
     @SubscribeEvent
@@ -162,8 +182,6 @@ public class LizardonEvents {
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 
         boolean inicio = serverPlayer.getPersistentData().getBoolean("inicio");
-
-
         //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
         ev.getPlayer().getPersistentData().putBoolean("frentebatalla", false);
         Gson gson = new Gson();

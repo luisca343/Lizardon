@@ -29,13 +29,9 @@ public class ClientScheduler {
 
             ScheduledTask t = it.next();
             if (--t.ticks <= 0) {
-
                 t.task.run();
-                if(t!=null) {
-                    it.remove();
-                } else {
-                    Lizardon.LOGGER.warn("Tried to remove null task");
-                }
+                it.remove();
+
             }
         }
         iterating = false;

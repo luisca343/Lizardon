@@ -298,6 +298,7 @@ public class PantallaSmartRotom extends Screen {
     @Override
     public boolean keyReleased(int key, int p_223281_2_, int p_223281_3_) {
         boolean consume = enviarInterfaz(key) ? super.keyReleased(key, p_223281_2_, p_223281_3_) : false;
+        Lizardon.LOGGER.info("KEY: "+key);
         char c = (char) key;
         if (browser != null && (!consume || key == 256)) {
             browser.injectKeyReleasedByKeyCode(key, c, getMask());

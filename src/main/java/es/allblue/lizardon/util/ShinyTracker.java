@@ -29,7 +29,7 @@ public class ShinyTracker {
     private Set<PixelmonEntity> shinyTracking = new HashSet<>();
 
     public ClippingHelper camera = null;
-    private double range = 20 ;//TweaksConfig.shinySparkleRange.get();
+    private double range = 20f ;//TweaksConfig.shinySparkleRange.get();
     private float volume = 1f ;//Math.min(TweaksConfig.shinySparkleVolume.get().floatValue(), 2F);
 
     public boolean shouldTrackShiny(PixelmonEntity entity) {
@@ -74,13 +74,18 @@ public class ShinyTracker {
         while (iterator.hasNext()) {
             Lizardon.LOGGER.info("SHINYTRACKING3: "+shinyTracking.size());
             PixelmonEntity entity = iterator.next();
+            Lizardon.LOGGER.info("SHINYTRACKING4: "+entity.getPokemon().getDisplayName());
             //Check if the pokemon is in range & entity is being rendered
 
             boolean rendered = Minecraft.getInstance().getEntityRenderDispatcher().shouldRender(entity, camera, vec.x, vec.y, vec.z);
-            boolean visible = rayTrace(entity);
+            //boolean visible = rayTrace(entity);
+            boolean visible = true;
 
+            Lizardon.LOGGER.info("SHINYTRACKING5: "+rendered);
             Lizardon.LOGGER.info("Visisble: " + visible);
 
+            Lizardon.LOGGER.info(entity.position().distanceToSqr(Minecraft.getInstance().player.position()));
+            Lizardon.LOGGER.info(range * range);
             if (entity.position().distanceToSqr(Minecraft.getInstance().player.position()) <= range * range && rendered && visible) {
                 Lizardon.LOGGER.info("Visisble1: " + visible);
                 //PixelTweaks.LOGGER.info("Visisble2: " + visible);
@@ -94,7 +99,7 @@ public class ShinyTracker {
                     boolean rendered2 = Minecraft.getInstance().getEntityRenderDispatcher().shouldRender(entity, camera, vec.x, vec.y, vec.z);
 
                     Lizardon.LOGGER.info("Visisble3: " + visible);
-                    if (rendered2 && rayTrace(entity)) {
+                    if (rendered2) {
                         Lizardon.LOGGER.info("Visisble4: " + visible);
                         //Add to shiny map
                         shinyMap.add(entity.getPokemon());
@@ -161,8 +166,13 @@ public class ShinyTracker {
             double y = h + entity.getY() + driftY;
             double z = zz * d + entity.getZ() + driftZ;
 
+            Lizardon.LOGGER.info("============ SPARKLE4 ============");
+            Lizardon.LOGGER.info(x + " " + y + " " + z);
+            Lizardon.LOGGER.info(entity);
+
+            /*
             StarParticle particle = new StarParticle(Minecraft.getInstance().level, x, y, z, 0.01 * xx, 0.1 * entity.getEyeHeight(), 0.01 * zz);
-            Minecraft.getInstance().particleEngine.add(particle);
+            Minecraft.getInstance().particleEngine.add(particle);*/
         }
     }
 }
