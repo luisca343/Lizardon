@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.gui.components.CustomSlider;
 import es.allblue.lizardon.net.video.UploadVideoUpdateMessage;
-import es.allblue.lizardon.tileentity.TVBlockEntity;
+import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import es.allblue.lizardon.net.PacketHandler;
-import net.minecraftforge.server.permission.PermissionAPI;
 
 public class TVVideoScreen extends Screen {
 
@@ -191,7 +190,7 @@ public class TVVideoScreen extends Screen {
              }else{
                  int tempVolume = volumeSlider.getValue();
                  this.volume = tempVolume;
-                 ((TVBlockEntity) be).setVolume(tempVolume);
+                 ((FrameBlockEntity) be).setVolume(tempVolume);
              }
 
             String tempUrl = urlBox.getValue();
@@ -245,7 +244,7 @@ public class TVVideoScreen extends Screen {
         }));*/
 
         // Cast the block entity to the correct type and set the volume
-        ((TVBlockEntity) be).setVolume(volume);
+        ((FrameBlockEntity) be).setVolume(volume);
     }
 
     private int getCanal() {

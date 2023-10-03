@@ -1,9 +1,8 @@
 package es.allblue.lizardon.blocks;
 
-import es.allblue.lizardon.init.BlockInit;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.video.ScreenManager;
-import es.allblue.lizardon.tileentity.TVBlockEntity;
+import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import es.allblue.lizardon.util.math.AlignedBox;
 import es.allblue.lizardon.util.math.Facing;
 import net.minecraft.block.Block;
@@ -65,7 +64,7 @@ public class TVBlock extends Block {
     @Override
     public void setPlacedBy(World world, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         TileEntity blockEntity = world.getBlockEntity(pPos);
-        if (blockEntity instanceof TVBlockEntity) {
+        if (blockEntity instanceof FrameBlockEntity) {
             blockEntity.setChanged();
             world.setBlockEntity(pPos, blockEntity);
         }
@@ -107,9 +106,9 @@ public class TVBlock extends Block {
     public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
         TileEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (!pLevel.isClientSide) {
-            if (blockEntity instanceof TVBlockEntity) {
-                TVBlockEntity tvBlockEntity = (TVBlockEntity) blockEntity;
-                tvBlockEntity.tryOpen(pLevel, pPos, pPlayer);
+            if (blockEntity instanceof FrameBlockEntity) {
+                FrameBlockEntity frameBlockEntity = (FrameBlockEntity) blockEntity;
+                frameBlockEntity.tryOpen(pLevel, pPos, pPlayer);
             }
         }
 
@@ -124,7 +123,7 @@ public class TVBlock extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return TileEntityInit.TV_TE.get().create();
+        return TileEntityInit.FRAME_TE.get().create();
     }
 
 
@@ -144,7 +143,7 @@ public class TVBlock extends Block {
     @Override
     public void destroy(IWorld world, BlockPos pos, BlockState state) {
         TileEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof TVBlockEntity) {
+        if (blockEntity instanceof FrameBlockEntity) {
             ScreenManager.removePunto(pos);
         }
         super.destroy(world, pos, state);

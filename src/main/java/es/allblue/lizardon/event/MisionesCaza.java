@@ -49,6 +49,7 @@ public class MisionesCaza {
         if(event.didRaidersWin()){
             String nombre = event.getRaid().getSpecies().getName();
             Stats stats = event.getRaid().getForm();
+
             avanzarMision("DERROTA", stats, event.getRaidParticipant().getWrapper().getPlayerOwner());
         }
     }
@@ -75,6 +76,7 @@ public class MisionesCaza {
 
 
     public void avanzarMision(String nombreCategoria, Stats stats, ServerPlayerEntity player){
+        if(player == null) return;
         IQuestCategory categoria = getCategoria(nombreCategoria);
         PlayerWrapper playerWrapper = new PlayerWrapper(player);
         if(categoria == null) {

@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=north": {
-      "model": "lizardon:block/tv_block"
+      "model": "lizardon:block/frame"
     },
     "facing=east": {
-      "model": "lizardon:block/tv_block",
+      "model": "lizardon:block/frame",
       "y": 270
     },
     "facing=south": {
-      "model": "lizardon:block/tv_block",
+      "model": "lizardon:block/frame",
       "y": 180
     },
     "facing=west": {
-      "model": "lizardon:block/tv_block",
+      "model": "lizardon:block/frame",
       "y": 90
     }
   }

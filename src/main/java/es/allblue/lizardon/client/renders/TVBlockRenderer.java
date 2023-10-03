@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.blocks.TVBlock;
-import es.allblue.lizardon.tileentity.TVBlockEntity;
+import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import es.allblue.lizardon.util.math.CreateFrameBox;
 import es.allblue.lizardon.util.displayers.IDisplay;
 import es.allblue.lizardon.util.math.*;
@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class TVBlockRenderer extends TileEntityRenderer<TVBlockEntity> {
+public class TVBlockRenderer extends TileEntityRenderer<FrameBlockEntity> {
 
     private static BufferedImage blackTextureBuffer = null;
     private static ImageRenderer blackTexture = null;
@@ -44,7 +44,7 @@ public class TVBlockRenderer extends TileEntityRenderer<TVBlockEntity> {
     }
 
     @Override
-    public void render(TVBlockEntity frame, float pPartialTick, MatrixStack pose, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+    public void render(FrameBlockEntity frame, float pPartialTick, MatrixStack pose, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
         if (frame.isURLEmpty()) {
             if (frame.display != null) frame.display.release();
             return;
@@ -69,10 +69,10 @@ public class TVBlockRenderer extends TileEntityRenderer<TVBlockEntity> {
     }
 
     @Override
-    public boolean shouldRenderOffScreen(TVBlockEntity frame) {
+    public boolean shouldRenderOffScreen(FrameBlockEntity frame) {
         return frame.getSizeX() > 16 || frame.getSizeY() > 16;
     }
-    private void renderTexture(TVBlockEntity frame, IDisplay display, int texture, MatrixStack pose, boolean aspectRatio) {
+    private void renderTexture(FrameBlockEntity frame, IDisplay display, int texture, MatrixStack pose, boolean aspectRatio) {
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -165,7 +165,7 @@ public class TVBlockRenderer extends TileEntityRenderer<TVBlockEntity> {
     }
 
 
-        private void renderTexture2(TVBlockEntity frame, IDisplay display, int texture, MatrixStack pose, boolean aspectRatio) {
+        private void renderTexture2(FrameBlockEntity frame, IDisplay display, int texture, MatrixStack pose, boolean aspectRatio) {
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

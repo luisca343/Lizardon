@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
-public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
+public class FrameBlockEntity extends TileEntity implements ITickableTileEntity {
 
     private String url = "";
     private boolean playing = true;
@@ -52,12 +52,12 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
     public TextureCache cache;
 
 
-    public TVBlockEntity() {
-        super(TileEntityInit.TV_TE.get());
+    public FrameBlockEntity() {
+        super(TileEntityInit.FRAME_TE.get());
     }
 
 
-    public TVBlockEntity(TileEntityType<?> tileEntityTypeIn) {
+    public FrameBlockEntity(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
     }
 
@@ -399,7 +399,7 @@ public class TVBlockEntity extends TileEntity implements ITickableTileEntity {
 
     @Override
     public void tick() {
-        TVBlockEntity be = this;
+        FrameBlockEntity be = this;
         if (level.isClientSide) {
             IDisplay display = be.requestDisplay();
             if (display != null)

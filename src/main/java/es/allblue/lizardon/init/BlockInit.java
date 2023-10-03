@@ -4,13 +4,11 @@ import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.*;
 import es.allblue.lizardon.items.LizardonItemGroup;
 import es.allblue.lizardon.objects.ObjColocable;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,15 +26,11 @@ public class BlockInit {
     public static RegistryObject TWISTER_ROJO = registerBlock("twister_rojo", () -> new Alfombra(Material.WOOL));
     public static RegistryObject TWISTER_VERDE = registerBlock("twister_verde", () -> new Alfombra(Material.WOOL));
     public static final RegistryObject<Block> FUNKO = registerBlock("funko", () -> new Funko(AbstractBlock.Properties.of(Material.STONE)));
-
-
     public static final RegistryObject<Block> PANTALLA = registerBlock("pantalla", () -> new BloquePantalla(AbstractBlock.Properties.of(Material.STONE)));
-
     public static final RegistryObject<Block> TOCADISCOS = registerBlock("tocadiscos", () -> new BloqueTocadiscos(AbstractBlock.Properties.of(Material.STONE)));
-
-    public static final RegistryObject<Block> TVBLOCK = registerBlock("tv_block", () -> new TVBlock(AbstractBlock.Properties.of(Material.STONE)));
-
+    public static final RegistryObject<Block> TVBLOCK = registerBlock("frame", () -> new TVBlock(AbstractBlock.Properties.of(Material.STONE)));
     public static final RegistryObject<Block> BLUE_NETHER_BRICK_STAIRS = registerBlock("blue_nether_brick_stairs", () -> new StairsBlock(Blocks.OAK_PLANKS.defaultBlockState(),AbstractBlock.Properties.of(Material.STONE)));
+    public static final RegistryObject<Block> BLUE_NETHER_BRICK_SLAB = registerBlock("blue_nether_brick_slab", () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE)));
 
     public static void inicializarComidas(){
         ArrayList<ObjColocable> objetos = ComidasLizardon.getComidas();

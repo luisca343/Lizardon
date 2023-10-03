@@ -2,7 +2,7 @@ package es.allblue.lizardon.net.video;
 
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.objects.karts.Punto;
-import es.allblue.lizardon.tileentity.TVBlockEntity;
+import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import es.allblue.lizardon.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.util.math.BlockPos;
@@ -48,13 +48,13 @@ public class ScreenManager {
             for (Punto pos : pantallas.get(canal)) {
                 BlockPos blockPos = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
 
-                if(world.getBlockEntity(blockPos) == null || !(world.getBlockEntity(blockPos) instanceof TVBlockEntity)) {
+                if(world.getBlockEntity(blockPos) == null || !(world.getBlockEntity(blockPos) instanceof FrameBlockEntity)) {
                     Lizardon.LOGGER.info("Pantalla no encontrada: " + pos);
                     removePunto(blockPos);
                     return;
                 }
-                TVBlockEntity tv = (TVBlockEntity) world.getBlockEntity(blockPos);
-                tv.broadcastVideo(url);
+                FrameBlockEntity frame = (FrameBlockEntity) world.getBlockEntity(blockPos);
+                frame.broadcastVideo(url);
             }
         }
 

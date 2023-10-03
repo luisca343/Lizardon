@@ -61,7 +61,7 @@ public class ModBiomes {
             .grassColorOverride(0x28340A)
             .foliageColorOverride(0x28340A)
             .build());
-    public static final RegistryObject<Biome> PUEBLO_SHIROI = getPueblo("pueblo_shiroi", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+    public static final RegistryObject<Biome> PUEBLO_SHIROI = getPueblo("pueblo_shiroi", Biome.RainType.SNOW, new BiomeAmbience.Builder()
             .fogColor(0xcccccc)
             .skyColor(0x6a778f)
             .waterColor(0x3938C9)
@@ -170,6 +170,14 @@ public class ModBiomes {
     public static final RegistryObject<Biome> AKINA = crearPuebloBasico("akina", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> FUKITSU = crearPuebloBasico("fukitsu", Biome.RainType.RAIN);
     public static final RegistryObject<Biome> GANSOLIA = crearPuebloBasico("gansolia", Biome.RainType.RAIN);
+    public static final RegistryObject<Biome> QUESTION_MARK = getPueblo("acento_circunflejo", Biome.RainType.RAIN, new BiomeAmbience.Builder()
+            .fogColor(0x000000)
+            .skyColor(0x000000)
+            .waterColor(0x8a0303)
+            .waterFogColor(0x8a0303)
+            .grassColorOverride(0x333333)
+            .foliageColorOverride(0x333333)
+            .build());
 
 
 
@@ -201,6 +209,8 @@ public class ModBiomes {
         setupBiome(AKINA.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(FUKITSU.get(), BiomeManager.BiomeType.WARM, 0);
         setupBiome(GANSOLIA.get(), BiomeManager.BiomeType.WARM, 0);
+
+        setupBiome(QUESTION_MARK.get(), BiomeManager.BiomeType.WARM, 0);
 
 
 

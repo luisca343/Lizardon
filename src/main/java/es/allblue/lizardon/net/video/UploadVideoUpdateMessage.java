@@ -1,7 +1,6 @@
 package es.allblue.lizardon.net.video;
 
-import es.allblue.lizardon.Lizardon;
-import es.allblue.lizardon.tileentity.TVBlockEntity;
+import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -78,31 +77,31 @@ public class UploadVideoUpdateMessage implements IMessage<UploadVideoUpdateMessa
             ServerPlayerEntity player = ctx.get().getSender();
 
             if (player == null) return;
-            if (player.level.getBlockEntity(message.blockPos) instanceof TVBlockEntity) {
-                TVBlockEntity tvBlockEntity = (TVBlockEntity) player.level.getBlockEntity(message.blockPos);
+            if (player.level.getBlockEntity(message.blockPos) instanceof FrameBlockEntity) {
+                FrameBlockEntity frameBlockEntity = (FrameBlockEntity) player.level.getBlockEntity(message.blockPos);
 
                 ScreenManager.addScreen(message.blockPos, message.canal);
 
-                if (tvBlockEntity == null) return;
+                if (frameBlockEntity == null) return;
 
-                tvBlockEntity.setBeingUsed(new UUID(0, 0));
+                frameBlockEntity.setBeingUsed(new UUID(0, 0));
                 if (message.volume == -1) // NO UPDATE
                     return;
 
-                tvBlockEntity.setUrl(message.url);
-                tvBlockEntity.setVolume(message.volume);
-                tvBlockEntity.setLoop(message.loop);
-                tvBlockEntity.setPlaying(message.isPlaying);
-                tvBlockEntity.setSizeX(message.x);
-                tvBlockEntity.setSizeY(message.y);
-                tvBlockEntity.setPosX(message.posX);
-                tvBlockEntity.setPosY(message.posY);
-                tvBlockEntity.setCanal(message.canal);
+                frameBlockEntity.setUrl(message.url);
+                frameBlockEntity.setVolume(message.volume);
+                frameBlockEntity.setLoop(message.loop);
+                frameBlockEntity.setPlaying(message.isPlaying);
+                frameBlockEntity.setSizeX(message.x);
+                frameBlockEntity.setSizeY(message.y);
+                frameBlockEntity.setPosX(message.posX);
+                frameBlockEntity.setPosY(message.posY);
+                frameBlockEntity.setCanal(message.canal);
 
-                tvBlockEntity.notifyPlayer();
+                frameBlockEntity.notifyPlayer();
 
                 if (message.reset)
-                    tvBlockEntity.setTick(0);
+                    frameBlockEntity.setTick(0);
             }
         });
     }

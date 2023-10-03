@@ -9,6 +9,8 @@
   "block.lizardon.twister_rojo": "Alfombra de Twister Roja",
   "block.lizardon.twister_verde": "Alfombra de Twister Verde",
   "block.lizardon.blue_nether_brick_stairs": "Escaleras de ladrillo del Nether azul",
+  "block.lizardon.blue_nether_brick_slab": "Losa de ladrillo del Nether azul",
+  "block.lizardon.frame": "Marco online",
 
   "item.lizardon.smartrotom": "Smart Rotom",
   "item.lizardon.cubo_aguas_termales": "Cubo de aguas termales",
@@ -43,8 +45,17 @@
   "biome.lizardon.narukami_akina": "Narukami-Akina",
   "biome.lizardon.fukitsu_gansolia": "Fukitsu-Gansolia",
 
+
+  "biome.lizardon.fukitsu": "Fukitsu",
+  "biome.lizardon.gansolia": "Gansolia",
+  "biome.lizardon.narukami": "Narukami",
+  "biome.lizardon.akina" : "Akina",
+
+  "biome.lizardon.acento_circunflejo": "???",
+
   "death.attack.lizardon.latigo_numeril": "%1$s ha sido domado por %2$s",
-  "death.attack.lizardon.taser": "%2$s ha infartado %1$s",
+  "death.attack.lizardon.taser": "%2$s ha infartado a %1$s",
+  "death.attack.lizardon.bonk": "%2$s ha bonkeado a %1$s",
 
   "lizardon.latigo_numeril": "Latigazo",
   "lizardon.taser": "Taser",

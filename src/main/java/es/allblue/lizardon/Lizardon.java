@@ -9,8 +9,6 @@ import es.allblue.lizardon.event.*;
 import es.allblue.lizardon.init.*;
 import es.allblue.lizardon.integration.Integrations;
 import es.allblue.lizardon.net.Messages;
-import es.allblue.lizardon.net.PacketHandler;
-import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
 import es.allblue.lizardon.pixelmon.attacks.DesenvaineSubito;
@@ -189,7 +187,7 @@ public class Lizardon
 
 
         RenderTypeLookup.setRenderLayer(BlockInit.TVBLOCK.get(), RenderType.cutout());
-        ClientRegistry.bindTileEntityRenderer(TileEntityInit.TV_TE.get(), TVBlockRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(TileEntityInit.FRAME_TE.get(), TVBlockRenderer::new);
 
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);

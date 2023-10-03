@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
+import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.links.PokemonLink;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
@@ -27,6 +28,11 @@ import java.util.ArrayList;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
+
+    @SubscribeEvent
+    public void pokemonSpawn(SpawnEvent event){
+        event.g
+    }
 
     @SubscribeEvent
     public void cancelarXP(ExperienceGainEvent event){
