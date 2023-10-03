@@ -42,6 +42,8 @@ import org.apache.logging.log4j.Logger;
 import es.allblue.lizardon.client.renders.TVBlockRenderer;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -165,6 +167,18 @@ public class Lizardon
 
 
         event.enqueueWork(CommonHandler::setup);
+    }
+
+    public static InputStream getResource(String filename) throws IOException {
+        URL url = Lizardon.class.getClassLoader().getResource("assets/" + MOD_ID + "/" + filename);
+
+        if (url == null) {
+            return null;
+        }
+
+        URLConnection connection = url.openConnection();
+        connection.setUseCaches(false);
+        return connection.getInputStream();
     }
 
     public void end (FMLLoadCompleteEvent event){

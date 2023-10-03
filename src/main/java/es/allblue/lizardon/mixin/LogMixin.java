@@ -1,8 +1,10 @@
 package es.allblue.lizardon.mixin;
 
 
+import com.pixelmonmod.pixelmon.battles.attacks.Effectiveness;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
+import com.pixelmonmod.pixelmon.battles.controller.log.action.type.DamagePokemonAction;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.pixelmon.battle.Combate;
 import es.allblue.lizardon.pixelmon.battle.LizardonBattleController;

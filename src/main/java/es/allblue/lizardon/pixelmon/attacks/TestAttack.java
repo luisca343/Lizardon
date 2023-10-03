@@ -1,6 +1,8 @@
 package es.allblue.lizardon.pixelmon.attacks;
 
+import com.pixelmonmod.api.registry.RegistryValue;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonItems;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.battles.attacks.specialAttacks.basic.SpecialAttackBase;
 import com.pixelmonmod.pixelmon.battles.controller.log.AttackResult;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
@@ -11,4 +13,5 @@ public class TestAttack extends SpecialAttackBase {
             user.attack.setOverridePower(user.attack.getMove().getBasePower() * 2);
         return AttackResult.proceed;
     }
+
 }
