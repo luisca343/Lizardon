@@ -21,6 +21,8 @@ import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.Scoreboard;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.text.TextFormatting;
 
 import java.awt.*;
@@ -241,6 +243,7 @@ public class Combate {
         Pokemon pkm = configCombate.getFirstPokemon();
         PixelmonEntity pixelmon = pkm.getOrCreatePixelmon();
         player.level.addFreshEntity(pixelmon);
+
         setEntidad(pixelmon);
 
         return new WildPixelmonParticipant(pixelmon);
@@ -262,6 +265,7 @@ public class Combate {
         if(!npc.isAddedToWorld()){
             npc.setPos(player.getX(), player.getY(), player.getZ());
             player.level.addFreshEntity(npc);
+            npc.addEffect(new EffectInstance(Effects.INVISIBILITY, Integer.MAX_VALUE, 0, true, true));
             setEntidad(npc);
         }
 

@@ -183,18 +183,16 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void onClose() {
-        if(!pad.view.getURL().contains("liga")){
-            this.pad.view.resize(1280, 720);
+        try {
+            if(!pad.view.getURL().contains("liga")){
+                this.pad.view.resize(1280, 720);
+            }
+        } catch (Exception e) {
+            Lizardon.LOGGER.warn("Error al cerrar la pantalla. Ignorando...");
+        } finally {
+            assert minecraft != null;
+            minecraft.setScreen(null);
         }
-        /*
-        if(!ExampleMod.INSTANCE.hasBackup() && browser != null)
-            browser.close();
-
-        super.onClose();*/
-
-        //Lizardon.INSTANCE.setBackup(this);
-        assert minecraft != null;
-        minecraft.setScreen(null);
     }
 
     @Override

@@ -112,6 +112,9 @@ public class LizardonBattleEvent {
         if(Lizardon.getLBC().existeCombateEspecial(event.getBattleController().battleIndex)) {
             Combate combate = Lizardon.getLBC().getCombateEspecial(event.getBattleController().battleIndex);
 
+            if(combate.getPartRival().getEntity() != null) combate.getPartRival().getEntity().remove();
+
+
             if( combate.getConfigCombate().esEntrenador()) {
                 if(combate instanceof CombateFrenteBatalla) finCombateFrenteBatalla(event, combate);
                 else finCombateEntrenador(event, combate);

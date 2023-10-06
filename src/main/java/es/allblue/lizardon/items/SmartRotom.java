@@ -48,6 +48,7 @@ public class SmartRotom extends Item {
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         World world = context.getLevel();
+        assert Lizardon.PROXY.getPadByID(stack.getTag().getInt("PadID")).view.getURL() != null;
 
         if(!world.isClientSide()){
             return super.onItemUseFirst(stack, context);

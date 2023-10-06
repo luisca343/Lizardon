@@ -2,6 +2,7 @@ package es.allblue.lizardon.event;
 
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.TestModeloFunko;
 import es.allblue.lizardon.commands.*;
@@ -10,23 +11,31 @@ import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
-import es.allblue.lizardon.util.FileHelper;
-import es.allblue.lizardon.util.MessageHelper;
-import es.allblue.lizardon.util.PersistentDataFields;
+import es.allblue.lizardon.particle.FakeParticle;
+import es.allblue.lizardon.util.*;
 import es.allblue.lizardon.util.cache.TextureCache;
 import es.allblue.lizardon.util.displayers.VideoDisplayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
@@ -37,6 +46,44 @@ import net.minecraftforge.server.permission.PermissionAPI;
 
 @Mod.EventBusSubscriber
 public class LizardonEvents {
+        @OnlyIn(Dist.CLIENT)
+        @SubscribeEvent
+        public static void onPokemonSpawn(EntityJoinWorldEvent event) {
+            if (event.getEntity() instanceof PixelmonEntity && !event.isCanceled() && event.getResult() != Event.Result.DENY) {
+                ClientScheduler.schedule(1, () -> { //Wait a tick so the entity is fully loaded, so it isn't a bulbasaur
+                    PixelmonEntity entity = (PixelmonEntity) event.getEntity();
+                    if (entity.getPokemon().isShiny() && !entity.isBossPokemon()) {
+                        ShinyTracker tracker = ShinyTracker.INSTANCE;
+                        if (tracker.shouldTrackShiny(entity)) {
+                            tracker.track(entity);
+                        }
+                    }
+                });
+            }
+        }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onPlayerLeaveWorld(PlayerEvent.PlayerLoggedOutEvent event) {
+        ShinyTracker.INSTANCE.untrackAll();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
+        ShinyTracker.INSTANCE.camera = new ClippingHelper(event.getMatrixStack().last().pose(), event.getProjectionMatrix());
+
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+        if (event.getMap().location().equals(AtlasTexture.LOCATION_PARTICLES)) {
+            event.addSprite(new ResourceLocation(Lizardon.MOD_ID, "particle/stars_0"));
+            event.addSprite(new ResourceLocation(Lizardon.MOD_ID, "particle/stars_1"));
+            FakeParticle.atlasTexture = event.getMap();
+        }
+    }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
@@ -58,6 +105,12 @@ public class LizardonEvents {
         if (event.phase == TickEvent.Phase.END) {
             TextureCache.clientTick();
             VideoDisplayer.tick();
+        }
+
+        if(!Minecraft.getInstance().isPaused()
+                && (Minecraft.getInstance().screen == null || Minecraft.getInstance().screen instanceof ChatScreen)) {
+            ShinyTracker.INSTANCE.tick();
+            ClientScheduler.tick();
         }
     }
 

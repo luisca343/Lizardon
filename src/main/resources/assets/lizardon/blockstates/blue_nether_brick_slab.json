@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "lizardon:block/blue_nether_brick_slab"
+      "model": "lizardon:block/slabs/blue_nether_brick_slab"
     },
     "type=double": {
       "model": "byg:block/blue_nether_bricks"
     },
     "type=top": {
-      "model": "lizardon:block/blue_nether_brick_slab_top"
+      "model": "lizardon:block/slabs/blue_nether_brick_slab_top"
     }
   }
 }

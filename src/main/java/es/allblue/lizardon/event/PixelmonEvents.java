@@ -29,10 +29,6 @@ import java.util.ArrayList;
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
 
-    @SubscribeEvent
-    public void pokemonSpawn(SpawnEvent event){
-        event.g
-    }
 
     @SubscribeEvent
     public void cancelarXP(ExperienceGainEvent event){
@@ -56,6 +52,9 @@ public class PixelmonEvents {
         String uuid = event.getPlayer().getStringUUID();
         int idPokemon = event.getPokemon().getSpecies().getDex();
         int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
+        if(estado == 1 && event.getPokemon().isShiny()) estado = 2;
+
+
 
         ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado);
         Gson gson = new Gson();

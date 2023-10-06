@@ -2,6 +2,7 @@ package es.allblue.lizardon.event.wungill;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.LizardonConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IResource;
 import net.minecraft.util.ResourceLocation;
@@ -61,13 +62,25 @@ public class RegionEventsClient {
         if (tiempoPasado > (tiempoCartel - tiempoTransicion) ) {
             posY = (tiempoCartel - tiempoPasado) / 5 - 100;
         }
+
+        //get gui scale
+        int scaleFactor = (int) Minecraft.getInstance().getWindow().getGuiScale();
+        float scale = scaleFactor == 1 ? 2 : 1.0f / (scaleFactor -1) * LizardonConfig.ESCALA_CARTELES.get();
+        RenderSystem.pushMatrix();
+        RenderSystem.scalef(scale, scale, scale);
+
+
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         Minecraft.getInstance().getTextureManager().bind(cartelActual);
-        Minecraft.getInstance().gui.blit(event.getMatrixStack(), 0, (int) posY, 0, 0, 256, 256);
+        Minecraft.getInstance().gui.blit(event.getMatrixStack(), 0, (int) posY, 0,0, 256, 256);
+
+
+        RenderSystem.disableBlend();
 
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
+        RenderSystem.popMatrix();
     }
 }

@@ -47,12 +47,15 @@ public abstract class FakeParticle extends SpriteTexturedParticle {
         }
 
         String fileLoc = "particles/" + location.getPath() + ".json";
+        Lizardon.LOGGER.warn("Particle file location: " + fileLoc);
 
         try (
                 Reader reader = new InputStreamReader(Objects.requireNonNull(Lizardon.getResource(fileLoc)), Charsets.UTF_8);
         ) {
             TexturesParticle texturesparticle = TexturesParticle.fromJson(JSONUtils.parse(reader));
             List<ResourceLocation> list = texturesparticle.getTextures();
+
+
 
             FakeParticleTexture texture = new FakeParticleTexture(list.stream().map((particleTextureID)
                             -> new ResourceLocation(particleTextureID.getNamespace(), "particle/" + particleTextureID.getPath()))

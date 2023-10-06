@@ -33,13 +33,6 @@ public class ShinyTracker {
     private float volume = 1f ;//Math.min(TweaksConfig.shinySparkleVolume.get().floatValue(), 2F);
 
     public boolean shouldTrackShiny(PixelmonEntity entity) {
-        Lizardon.LOGGER.info("UNCATCHABLE: "+entity.isUncatchable());
-        Lizardon.LOGGER.info("ALIVE: "+entity.isAlive());
-        Lizardon.LOGGER.info("BOSS: "+entity.isBossPokemon());
-        Lizardon.LOGGER.info("OWNER: "+(entity.getOwner() != null));
-        Lizardon.LOGGER.info("SHINY: "+entity.getPokemon().isShiny());
-        Lizardon.LOGGER.info("SHINYMAP: "+shinyMap.contains(entity.getPokemon()));
-        Lizardon.LOGGER.info("SHINYTRACKING: "+shinyTracking.contains(entity));
         if (entity.isUncatchable() || !entity.isAlive() || entity.isBossPokemon()
                 || entity.getOwner() != null || !entity.getPokemon().isShiny()
                 || shinyMap.contains(entity.getPokemon()) || shinyTracking.contains(entity)) {
@@ -53,12 +46,9 @@ public class ShinyTracker {
     }
 
     public void tick() {
-        Lizardon.LOGGER.info("------------------TICK------------------");
-
         //Check if the player is in a battle, and if so, don't sparkle shinies
         if (BattleRegistry.getBattle(Minecraft.getInstance().player) != null || camera == null) return;
 
-        Lizardon.LOGGER.info("SHINYTRACKING: "+shinyTracking.size());
 
         //Filter out all dead entities
         shinyTracking.removeIf(entity -> !entity.isLoaded() || !entity.isAlive());
@@ -67,40 +57,29 @@ public class ShinyTracker {
 
         camera.prepare(vec.x, vec.y, vec.z);
 
-        Lizardon.LOGGER.info("SHINYTRACKING2: "+shinyTracking.size());
-
         //Check all pokemon
         Iterator<PixelmonEntity> iterator = shinyTracking.iterator();
         while (iterator.hasNext()) {
-            Lizardon.LOGGER.info("SHINYTRACKING3: "+shinyTracking.size());
             PixelmonEntity entity = iterator.next();
-            Lizardon.LOGGER.info("SHINYTRACKING4: "+entity.getPokemon().getDisplayName());
             //Check if the pokemon is in range & entity is being rendered
 
             boolean rendered = Minecraft.getInstance().getEntityRenderDispatcher().shouldRender(entity, camera, vec.x, vec.y, vec.z);
             //boolean visible = rayTrace(entity);
             boolean visible = true;
 
-            Lizardon.LOGGER.info("SHINYTRACKING5: "+rendered);
-            Lizardon.LOGGER.info("Visisble: " + visible);
-
             Lizardon.LOGGER.info(entity.position().distanceToSqr(Minecraft.getInstance().player.position()));
             Lizardon.LOGGER.info(range * range);
             if (entity.position().distanceToSqr(Minecraft.getInstance().player.position()) <= range * range && rendered && visible) {
-                Lizardon.LOGGER.info("Visisble1: " + visible);
-                //PixelTweaks.LOGGER.info("Visisble2: " + visible);
+
                 //Remove from tracking
                 iterator.remove();
                 //PixelTweaks
                 ClientScheduler.schedule(10, () -> {
-                    Lizardon.LOGGER.info("Visisble2: " + visible);
                     Vector3d vec2 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
                     camera.prepare(vec2.x, vec2.y, vec2.z);
                     boolean rendered2 = Minecraft.getInstance().getEntityRenderDispatcher().shouldRender(entity, camera, vec.x, vec.y, vec.z);
 
-                    Lizardon.LOGGER.info("Visisble3: " + visible);
                     if (rendered2) {
-                        Lizardon.LOGGER.info("Visisble4: " + visible);
                         //Add to shiny map
                         shinyMap.add(entity.getPokemon());
                         spawnSparkle(entity);
@@ -133,16 +112,13 @@ public class ShinyTracker {
     }
 
     public void spawnSparkle(PixelmonEntity entity) {
-        Lizardon.LOGGER.info("============ SPARKLE ============");
         PlayerEntity thiz = Minecraft.getInstance().player;
         if (volume > 0) {
             ClientScheduler.schedule(3, () -> {
-                Lizardon.LOGGER.info("============ SPARKLE2 ============");
                 SimpleSound sound = new SimpleSound(new ResourceLocation(Lizardon.MOD_ID, "sparkle"), SoundCategory.PLAYERS,
                         volume, 1F, false, 0, ISound.AttenuationType.LINEAR,
                         entity.getX(), entity.getY(), entity.getZ(), true);
                 Minecraft.getInstance().getSoundManager().play(sound);
-                Lizardon.LOGGER.info("============ SPARKLE3 ============");
             });
         }
 
@@ -166,13 +142,12 @@ public class ShinyTracker {
             double y = h + entity.getY() + driftY;
             double z = zz * d + entity.getZ() + driftZ;
 
-            Lizardon.LOGGER.info("============ SPARKLE4 ============");
-            Lizardon.LOGGER.info(x + " " + y + " " + z);
-            Lizardon.LOGGER.info(entity);
+
 
             /*
             StarParticle particle = new StarParticle(Minecraft.getInstance().level, x, y, z, 0.01 * xx, 0.1 * entity.getEyeHeight(), 0.01 * zz);
-            Minecraft.getInstance().particleEngine.add(particle);*/
+            Minecraft.getInstance().particleEngine.add(particle);
+            */
         }
     }
 }

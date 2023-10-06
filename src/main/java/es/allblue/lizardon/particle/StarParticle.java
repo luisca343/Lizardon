@@ -17,6 +17,7 @@ import net.minecraft.particles.BasicParticleType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
+import java.util.logging.Logger;
 
 @OnlyIn(Dist.CLIENT)
 public class StarParticle extends FakeParticle {
@@ -39,9 +40,14 @@ public class StarParticle extends FakeParticle {
     public StarParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
         super(world, x, y, z, motionX, motionY, motionZ);
 
+        Lizardon.LOGGER.warn("StarParticle constructor");
+
         this.xd = motionX + (Math.random() * 2.0D - 1.0D) * (double)0.1F;
         this.yd = motionY + (Math.random() * 2.0D - 1.0D) * (double)0.1F;
         this.yd = motionZ + (Math.random() * 2.0D - 1.0D) * (double)0.1F;
+
+        Lizardon.LOGGER.warn("StarParticle constructor2");
+
 
         this.startAge = this.rand.nextInt(3);
         this.age = this.startAge + 15;
@@ -55,6 +61,10 @@ public class StarParticle extends FakeParticle {
         this.angleDirection = this.rand.nextFloat() > 0.5F ? 1F : -1F;
         this.scale(0F);
         this.setSize(0F, 0F);
+
+        Lizardon.LOGGER.warn("StarParticle constructor3");
+        Lizardon.LOGGER.warn(texture);
+
 
         this.pickSprite(texture);
     }

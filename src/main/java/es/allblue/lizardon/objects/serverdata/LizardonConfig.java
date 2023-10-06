@@ -1,5 +1,7 @@
 package es.allblue.lizardon.objects.serverdata;
 
+import net.minecraftforge.common.ForgeConfigSpec;
+
 public class LizardonConfig {
     private String id;
     private String home;
