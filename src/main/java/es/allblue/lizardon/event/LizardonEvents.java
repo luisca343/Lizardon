@@ -11,6 +11,7 @@ import es.allblue.lizardon.net.client.CMessageConfigServer;
 import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.objects.serverdata.LizardonConfig;
 import es.allblue.lizardon.objects.karts.CarreraManager;
+import es.allblue.lizardon.objects.serverdata.UserData;
 import es.allblue.lizardon.particle.FakeParticle;
 import es.allblue.lizardon.util.*;
 import es.allblue.lizardon.util.cache.TextureCache;
@@ -186,19 +187,19 @@ public class LizardonEvents {
             event.setCanceled(true);
         }
     }
-
-    @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
-
-    }
-
-
-
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent ev){
         Lizardon.LOGGER.info("LOGIN");
+        Gson gson = new Gson();
+        LizardonConfig lizardonConfig = FileHelper.getConfig();
+        String data = gson.toJson(lizardonConfig);
+
         PermissionAPI.getPermissionHandler().getRegisteredNodes().forEach(Lizardon.LOGGER::info);
         Lizardon.LOGGER.info(PermissionAPI.hasPermission(ev.getPlayer(), "admin"));
+
+        UserData userData = new UserData(ev.getPlayer());
+
+        WingullAPI.wingullPOST("/loginw", gson.toJson(userData));
 
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 
@@ -207,9 +208,7 @@ public class LizardonEvents {
 
         //((ServerPlayerEntity) ev.getPlayer()).sendMessage(new StringTextComponent(LizardonConfig.test.get()), UUID.randomUUID());
         ev.getPlayer().getPersistentData().putBoolean("frentebatalla", false);
-        Gson gson = new Gson();
-        LizardonConfig lizardonConfig = FileHelper.getConfig();
-        String data = gson.toJson(lizardonConfig);
+
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageConfigServer(data));
 
     }
