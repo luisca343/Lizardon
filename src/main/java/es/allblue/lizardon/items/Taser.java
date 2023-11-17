@@ -1,6 +1,7 @@
 package es.allblue.lizardon.items;
 
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
+import com.pixelmonmod.pixelmon.entities.pixelmon.StatueEntity;
 import es.allblue.lizardon.util.LizardonDamageSource;
 import es.allblue.lizardon.util.music.LizardonSoundEvents;
 import net.minecraft.entity.LivingEntity;
@@ -38,7 +39,7 @@ public class Taser extends Item {
         if (entityRayTraceResult != null) {
             LivingEntity entity = (LivingEntity) entityRayTraceResult.getEntity();
             entity.hurt(LizardonDamageSource.TASER, 1.0F);
-            if(!(entity instanceof PixelmonEntity)) {
+            if(!(entity instanceof PixelmonEntity) && !(entity instanceof StatueEntity)) {
                 entity.animateHurt();
             }
             entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2));

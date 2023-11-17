@@ -2,6 +2,7 @@ package es.allblue.lizardon.client;
 
 
 import es.allblue.lizardon.Lizardon;
+import es.allblue.lizardon.blocks.TVBlock;
 import es.allblue.lizardon.client.gui.TVVideoScreen;
 import es.allblue.lizardon.client.gui.VideoScreen;
 import es.allblue.lizardon.tileentity.FrameBlockEntity;
@@ -27,6 +28,9 @@ public class ClientHandler {
             frame.setCanal(canal);
             frame.setUrl(url);
             frame.updateAABB();
+
+
+
             if (frame.requestDisplay() != null) {
                 if (playing)
                     frame.requestDisplay().resume(frame.getUrl(), frame.getVolume(), frame.minDistance, frame.maxDistance, frame.isPlaying(), frame.isLoop(), tick, sizeX, sizeY);

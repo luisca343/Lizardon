@@ -18,6 +18,7 @@ public class CreateFrameBox {
         if(posX == 2 && posY == 1) return fromCenterRight(box, d, ancho, alto);
         if(posX == 2 && posY == 2) return fromTopRight(box, d, ancho, alto);
 
+
         return box;
     }
 

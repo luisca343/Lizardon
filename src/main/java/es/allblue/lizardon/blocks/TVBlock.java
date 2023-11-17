@@ -1,11 +1,13 @@
 package es.allblue.lizardon.blocks;
 
+import com.sk89q.worldedit.blocks.SignBlock;
 import es.allblue.lizardon.init.TileEntityInit;
 import es.allblue.lizardon.net.video.ScreenManager;
 import es.allblue.lizardon.tileentity.FrameBlockEntity;
 import es.allblue.lizardon.util.math.AlignedBox;
 import es.allblue.lizardon.util.math.Facing;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -14,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -32,6 +36,7 @@ import javax.annotation.Nullable;
 public class TVBlock extends Block {
 
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
+    public static final BooleanProperty VISIBLE = BooleanProperty.create("visible");
 
     private static final VoxelShape BOX_NORTH = Block.box(0, 0, 0, 16, 16, 1);
     private static final VoxelShape BOX_SOUTH = Block.box(0, 0, 15, 16, 16, 16);
@@ -39,11 +44,31 @@ public class TVBlock extends Block {
     private static final VoxelShape BOX_EAST = Block.box(0, 0, 0, 1, 16, 16);
 
     public TVBlock(Properties properties) {
-        super(properties.noOcclusion());
+        super(properties.noOcclusion().noCollission());
+
 
         this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(defaultBlockState().setValue(VISIBLE, true));
 
     }
+    @Override
+    public VoxelShape getInteractionShape(BlockState state, IBlockReader p_199600_2_, BlockPos p_199600_3_) {
+        switch (state.getValue(FACING)) {
+            case NORTH:
+                return BOX_NORTH;
+            case SOUTH:
+                return BOX_SOUTH;
+            case EAST:
+                return BOX_EAST;
+            case WEST:
+                return BOX_WEST;
+            default:
+                return BOX_NORTH;
+        }
+    }
+
+
+
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -60,6 +85,14 @@ public class TVBlock extends Block {
                 return BOX_NORTH;
         }
     }
+
+
+/*
+    @Override
+    public VoxelShape getCollisionShape(BlockState p_220071_1_, IBlockReader p_220071_2_, BlockPos p_220071_3_, ISelectionContext p_220071_4_) {
+        return VoxelShapes.empty();
+
+    }*/
 
     @Override
     public void setPlacedBy(World world, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
@@ -89,6 +122,7 @@ public class TVBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING);
+        pBuilder.add(VISIBLE);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -149,4 +183,10 @@ public class TVBlock extends Block {
         super.destroy(world, pos, state);
 
     }
+
+    @Override
+    public BlockRenderType getRenderShape(BlockState state) {
+        return BlockRenderType.INVISIBLE;
+    }
+
 }
