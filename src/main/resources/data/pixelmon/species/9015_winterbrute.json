@@ -1,0 +1,265 @@
+{
+  "name": "WinterBrute",
+  "dex": 9015,
+  "defaultForms": [
+    ""
+  ],
+  "forms": [
+    {
+      "name": "",
+      "experienceGroup": "SLOW",
+      "dimensions": {
+        "height": 1.3,
+        "width": 1.6,
+        "length": 1,
+        "eyeHeight": 1.3,
+        "hoverHeight": 1.3
+      },
+      "moves": {
+        "levelUpMoves": [
+          {
+            "level": 0,
+            "attacks": [
+              "Present",
+              "Roar",
+              "Tackle",
+              "Sunny Day"
+            ]
+          },
+          {
+            "level": 7,
+            "attacks": [
+              "Body Slam"
+            ]
+          },
+          {
+            "level": 14,
+            "attacks": [
+              "Ice Ball"
+            ]
+          },
+          {
+            "level": 21,
+            "attacks": [
+              "Slack Off"
+            ]
+          },
+          {
+            "level": 28,
+            "attacks": [
+              "Draining Kiss"
+            ]
+          },
+          {
+            "level": 35,
+            "attacks": [
+              "Yawn"
+            ]
+          },
+          {
+            "level": 42,
+            "attacks": [
+              "Sweet Kiss"
+            ]
+          },
+          {
+            "level": 49,
+            "attacks": [
+              "Play Rough"
+            ]
+          },
+          {
+            "level": 56,
+            "attacks": [
+              "Wood Hammer"
+            ]
+          },
+          {
+            "level": 63,
+            "attacks": [
+              "Lovely Kiss"
+            ]
+          },
+          {
+            "level": 70,
+            "attacks": [
+              "Dragon Hammer"
+            ]
+          },
+          {
+            "level": 77,
+            "attacks": [
+              "Ice Hammer"
+            ]
+          },
+          {
+            "level": 84,
+            "attacks": [
+              "Belly Drum"
+            ]
+          },
+          {
+            "level": 91,
+            "attacks": [
+              "Gigaton Hammer"
+            ]
+          }
+        ],
+        "tutorMoves": [],
+        "eggMoves": [],
+        "tmMoves9":[
+          "Rest",
+          "Snore",
+          "Protect",
+          "Attract",
+          "Switft",
+          "Hyper Beam",
+          "Giga Impact",
+          "Facade",
+          "Body Slam",
+          "Thunderbolt",
+          "Thunder",
+          "Blizzard",
+          "Ice Beam",
+          "Ice Fang",
+          "Thunder Fang",
+          "Thunder Punch",
+          "Fire Punch",
+          "Ice Punch",
+          "Bulk Up",
+          "Icy Wind",
+          "Rock Tomb",
+          "Avalanche",
+          "Sunny Day",
+          "Shadow Claw",
+          "Seed Bomb",
+          "Rock Slide",
+          "Body Press",
+          "Stealth Rock",
+          "Trick Room",
+          "Stone Edge"
+        ],
+        "tmMoves8": [],
+        "trMoves": [],
+        "hmMoves": [],
+        "transferMoves": [],
+        "tmMoves7": [],
+        "tmMoves6": [],
+        "tmMoves5": [],
+        "tmMoves4": [],
+        "tmMoves3": [],
+        "tmMoves2": [],
+        "tmMoves1": [],
+        "tmMoves": []
+      },
+      "abilities": {
+        "abilities": [
+          "Protosynthesis"
+        ],
+        "hiddenAbilities": []
+      },
+      "movement": {
+        "rideable": false,
+        "canFly": false,
+        "canSurf": false,
+        "canRideShoulder": false
+      },
+      "aggression": {
+        "timid": 20,
+        "passive": 0,
+        "aggressive": 80
+      },
+      "battleStats": {
+        "hp": 180,
+        "attack": 135,
+        "defense": 100,
+        "specialAttack": 55,
+        "specialDefense": 80,
+        "speed": 20
+      },
+      "tags": [],
+      "spawn": {
+        "baseExp": 261,
+        "baseFriendship": 35,
+        "spawnLevel": 50,
+        "spawnLevelRange": 0,
+        "spawnLocations": [
+          "LAND"
+        ]
+      },
+      "possibleGenders": [
+        "MALE",
+        "FEMALE"
+      ],
+      "genderProperties": [
+        {
+          "gender": "ALL",
+          "palettes": [
+            {
+              "name": "none",
+              "texture": "lizardon:pokemon/9015_winterbrute/all/base/none/texture.png",
+              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/none/sprite.png",
+              "particle": "",
+              "modelLocator": {
+                "factoryType": "NORMAL",
+                "pqc": [
+                  "lizardon:pokemon/9015_winterbrute/all/base/none/model.pqc"
+                ]
+              },
+              "sounds": []
+            },
+            {
+              "name": "shiny",
+              "texture": "lizardon:pokemon/9015_winterbrute/all/base/shiny/texture.png",
+              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/shiny/sprite.png",
+              "particle": "arcanery:shiny"
+            },
+            {
+              "name": "pink",
+              "texture": "lizardon:pokemon/9015_winterbrute/all/base/pink/texture.png",
+              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/pink/sprite.png",
+              "particle": ""
+            },
+            {
+              "name": "santa",
+              "texture": "lizardon:pokemon/9015_winterbrute/all/santa/none/texture.png",
+              "sprite": "lizardon:pokemon/9015_winterbrute/all/santa/none/sprite.png",
+              "particle": "",
+              "modelLocator": {
+                "factoryType": "NORMAL",
+                "pqc": [
+                  "lizardon:pokemon/9015_winterbrute/all/santa/none/model.pqc"
+                ]
+              },
+              "sounds": []
+            }
+          ]
+        }
+      ],
+      "eggGroups": [
+        "UNDISCOVERED"
+      ],
+      "types": [
+        "ICE",
+        "FAIRY"
+      ],
+      "preEvolutions": [],
+      "defaultBaseForm": "",
+      "megaItems": [],
+      "megas": [],
+      "gigantamax": {
+        "canHaveFactor": false,
+        "canGigantamax": false
+      },
+      "eggCycles": 81,
+      "weight": 512.25,
+      "catchRate": 3,
+      "malePercentage": -1,
+      "evolutions": [],
+      "evYields": {
+        "hp": 3
+      }
+    }
+  ],
+  "generation": 9
+}

@@ -1,0 +1,4 @@
+$body lizardon:textures/pokemon/9014_ironbomb/all/master/none/masterbomb.bmd
+$anim walk lizardon:textures/pokemon/9014_ironbomb/all/master/none/walk.bmd
+$anim idle lizardon:textures/pokemon/9014_ironbomb/all/master/none/idle.bmd
+$scale 0.5
