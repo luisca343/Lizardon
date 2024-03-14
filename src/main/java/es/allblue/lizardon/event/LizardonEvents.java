@@ -154,9 +154,13 @@ public class LizardonEvents {
         new DiscosCommand(event.getDispatcher());
         new CombateCommand(event.getDispatcher());
         new WECommand(event.getDispatcher());
+        new DimTPCommand(event.getDispatcher());
 
         new KartsCommand(event.getDispatcher());
         new FrenteBatallaCommand(event.getDispatcher());
+
+        // Client only commands
+
 
         /*
         if(event.getEnvironment().compareTo(Commands.EnvironmentType.DEDICATED) == 0){

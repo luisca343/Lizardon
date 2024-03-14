@@ -63,8 +63,13 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.io.*;
@@ -93,7 +98,6 @@ public class TestCommand {
         dispatcher.register(literalBuilder);
 
     }
-
 
 
 
