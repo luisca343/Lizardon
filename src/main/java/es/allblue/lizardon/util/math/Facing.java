@@ -154,6 +154,36 @@ public enum Facing {
         }
     }
 
+    public static Facing getReverse(Direction direction) {
+        if (direction == null) {
+            return null;
+        } else {
+            Facing res = null;
+            switch (direction) {
+                case DOWN:
+                    res = UP;
+                    break;
+                case UP:
+                    res = DOWN;
+                    break;
+                case NORTH:
+                    res = SOUTH;
+                    break;
+                case SOUTH:
+                    res = NORTH;
+                    break;
+                case WEST:
+                    res = EAST;
+                    break;
+                case EAST:
+                    res = WEST;
+                    break;
+            };
+
+            return res;
+        }
+    }
+
     public static Facing get(Axis axis, boolean positive) {
         switch (axis) {
             case X:

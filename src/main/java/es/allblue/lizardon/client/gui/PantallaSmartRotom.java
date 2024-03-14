@@ -47,6 +47,7 @@ public class PantallaSmartRotom extends Screen {
     private int lastWidth = -1, lastHeight = -1;
     public PantallaSmartRotom() {
         super(new StringTextComponent("forgecef.example.screen.title"));
+
        // urlToLoad = MCEF.HOME_PAGE;
     }
 
@@ -112,6 +113,7 @@ public class PantallaSmartRotom extends Screen {
         }*/
 
         this.initTime = System.currentTimeMillis();
+        //hideCursor();
     }
 
 
@@ -183,6 +185,7 @@ public class PantallaSmartRotom extends Screen {
 
     @Override
     public void onClose() {
+        //showCursor();
         try {
             if(!pad.view.getURL().contains("liga")){
                 this.pad.view.resize(1280, 720);
@@ -393,6 +396,14 @@ public class PantallaSmartRotom extends Screen {
         }
     }
 
+    public void hideCursor() {
+        long windowHandle = Minecraft.getInstance().getWindow().getWindow();
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+    }
 
+    public void showCursor() {
+        long windowHandle = Minecraft.getInstance().getWindow().getWindow();
+        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+    }
 
 }

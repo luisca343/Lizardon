@@ -79,9 +79,6 @@ public final class SmartRotomRenderer implements IItemRenderer {
         else
             renderModel(stack, buffer, packedLight,  ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND);
 
-
-
-
         //Prepare minePad transform
         stack.mulPose(Vector3f.YP.rotationDegrees(handSideSign * (45.0f - sinSwingProg2 * 20.0f)));
         stack.mulPose(Vector3f.ZP.rotationDegrees(handSideSign * sinSqrtSwingProg1 * -20.0f));

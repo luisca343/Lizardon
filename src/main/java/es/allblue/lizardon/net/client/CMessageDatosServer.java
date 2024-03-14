@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.client.ClientProxy;
 import es.allblue.lizardon.objects.serverdata.GetUserData;
-import es.allblue.lizardon.objects.serverdata.UserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -33,9 +32,9 @@ public class CMessageDatosServer implements Runnable{
         System.out.println("Enviando datos de usuario: " + uuid + " " + nombre);
 
         GetUserData userData = new GetUserData();
-        userData.setMundo(idServer);
+        userData.setWorld(idServer);
         userData.setUuid(uuid);
-        userData.setNombre(nombre);
+        userData.setUsername(nombre);
 
         System.out.println("Enviando datos de usuario: " + userData.toString());
 

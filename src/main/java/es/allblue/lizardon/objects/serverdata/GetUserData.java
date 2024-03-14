@@ -2,8 +2,8 @@ package es.allblue.lizardon.objects.serverdata;
 
 public class GetUserData {
     private String uuid;
-    private String nombre;
-    private String mundo;
+    private String username;
+    private String world;
 
 
     public String getUuid() {
@@ -14,19 +14,19 @@ public class GetUserData {
         this.uuid = uuid;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getMundo() {
-        return mundo;
+    public String getWorld() {
+        return world;
     }
 
-    public void setMundo(String mundo) {
-        this.mundo = mundo;
+    public void setWorld(String world) {
+        this.world = world;
     }
 }

@@ -51,7 +51,12 @@ public class VideoDisplayer implements IDisplay {
 
         }, ((Supplier<IDisplay>) () -> {
             TextureCache cache = TextureCache.get(VLC_FAILED);
-            if (cache.ready()) return cache.createDisplay(pos, VLC_FAILED, volume, minDistance, maxDistance, loop, playing);
+            if (cache.ready()) {
+                // Check if the URL is the same as VLC_FAILED to prevent infinite recursion
+                if (!url.equals(VLC_FAILED)) {
+                    return cache.createDisplay(pos, VLC_FAILED, volume, minDistance, maxDistance, loop, playing);
+                }
+            }
             return null;
         }).get());
     }
