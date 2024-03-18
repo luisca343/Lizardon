@@ -1,5 +1,7 @@
 package es.allblue.lizardon.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mrcrayfish.obfuscate.client.event.RenderItemEvent;
 import es.allblue.lizardon.Lizardon;
 import es.allblue.lizardon.blocks.BloquePantalla;
 import es.allblue.lizardon.client.gui.PantallaCine;
@@ -14,9 +16,26 @@ import es.allblue.lizardon.tileentity.PantallaTE;
 import es.allblue.lizardon.util.MessageHelper;
 import es.allblue.lizardon.util.QueryHelper;
 import es.allblue.lizardon.init.ItemInit;
+import extensions.net.minecraft.client.renderer.block.model.ItemTransforms.TypeConverter;
+import moe.plushie.armourers_workshop.compatibility.api.AbstractItemTransformType;
+import moe.plushie.armourers_workshop.core.client.bake.BakedSkin;
+import moe.plushie.armourers_workshop.core.client.bake.SkinBakery;
+import moe.plushie.armourers_workshop.core.client.model.BakedModelStorage;
+import moe.plushie.armourers_workshop.core.client.render.ExtendedItemRenderer;
+import moe.plushie.armourers_workshop.core.client.render.SkinItemRenderer;
+import moe.plushie.armourers_workshop.core.data.color.ColorScheme;
+import moe.plushie.armourers_workshop.core.data.ticket.Tickets;
+import moe.plushie.armourers_workshop.core.item.SkinItem;
+import moe.plushie.armourers_workshop.core.skin.SkinDescriptor;
+import moe.plushie.armourers_workshop.init.platform.TransformationProvider;
+import moe.plushie.armourers_workshop.utils.math.Vector3f;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemTransformVec3f;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -50,6 +69,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     public HashMap<Integer, PadData> padMap;
     public final ArrayList<PadData> padList = new ArrayList<>();
     private SmartRotomRenderer smartRotomRenderer = new SmartRotomRenderer();
+    private SkinItemRenderer skinItemRenderer = new SkinItemRenderer();
     private PantallaSmartRotom backup = null;
     private Minecraft mc = Minecraft.getInstance();
     public static IJSQueryCallback callbackMisiones;
@@ -84,6 +104,39 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
     public void iniciarPadMap(){
         padMap = new HashMap<>();
+    }
+    
+    @SubscribeEvent
+    public void renderItemInventory(RenderItemEvent ev){
+        AbstractItemTransformType transformType = AbstractItemTransformType.valueOf(ev.getTransformType().toString());
+        if(!transformType.equals(AbstractItemTransformType.GUI)){
+            return;
+        }
+
+        ItemStack itemStack = ev.getItem();
+        Item item = itemStack.getItem();
+
+        CompoundNBT tag = itemStack.getTag();
+        if(tag != null && tag.contains("ArmourersWorkshop") && !(item instanceof SkinItem)){
+
+            MatrixStack poseStack = ev.getMatrixStack();
+            IRenderTypeBuffer renderTypeBuffer = ev.getRenderTypeBuffer();
+            int light = ev.getLight();
+            if (!itemStack.isEmpty()) {
+                SkinDescriptor descriptor = SkinDescriptor.of(itemStack);
+                BakedSkin bakedSkin = SkinBakery.getInstance().loadSkin(descriptor, Tickets.INVENTORY);
+
+                if (bakedSkin != null) {
+                    poseStack.pushPose();
+                    TransformationProvider.handleTransforms(poseStack, BakedModelStorage.getSkinBakedModel(), transformType, false);
+                    poseStack.translate(-0.5f, -0.5f, -0.5f);
+                    SkinItemRenderer.getInstance().renderByItem(descriptor.sharedItemStack(), transformType, poseStack, renderTypeBuffer, light, ev.getOverlay());
+                    poseStack.popPose();
+                    ev.setCanceled(true);
+                }
+            }
+
+        }
     }
 
     @SubscribeEvent
