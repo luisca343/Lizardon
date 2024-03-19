@@ -109,7 +109,7 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
     @SubscribeEvent
     public void renderItemInventory(RenderItemEvent ev){
         AbstractItemTransformType transformType = AbstractItemTransformType.valueOf(ev.getTransformType().toString());
-        if(!transformType.equals(AbstractItemTransformType.GUI)){
+        if(!transformType.equals(AbstractItemTransformType.GUI) && !transformType.equals(AbstractItemTransformType.GROUND) && !transformType.equals(AbstractItemTransformType.FIXED)){
             return;
         }
 
@@ -121,15 +121,17 @@ public class ClientProxy extends SharedProxy  implements IDisplayHandler, IJSQue
 
             MatrixStack poseStack = ev.getMatrixStack();
             IRenderTypeBuffer renderTypeBuffer = ev.getRenderTypeBuffer();
-            int light = ev.getLight();
+            //int lightOld = ev.getLight();
             if (!itemStack.isEmpty()) {
                 SkinDescriptor descriptor = SkinDescriptor.of(itemStack);
                 BakedSkin bakedSkin = SkinBakery.getInstance().loadSkin(descriptor, Tickets.INVENTORY);
+
 
                 if (bakedSkin != null) {
                     poseStack.pushPose();
                     TransformationProvider.handleTransforms(poseStack, BakedModelStorage.getSkinBakedModel(), transformType, false);
                     poseStack.translate(-0.5f, -0.5f, -0.5f);
+                    int light = (8 << 20) | (8 << 4);
                     SkinItemRenderer.getInstance().renderByItem(descriptor.sharedItemStack(), transformType, poseStack, renderTypeBuffer, light, ev.getOverlay());
                     poseStack.popPose();
                     ev.setCanceled(true);

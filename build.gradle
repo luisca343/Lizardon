@@ -150,6 +150,8 @@ dependencies {
     implementation fg.deobf('curse.maven:curiosapi-309927:4419403')
     implementation fg.deobf('curse.maven:watermedia-869524:5127438')
 
+    implementation fg.deobf('curse.maven:armourersworkshop-229523:5119848')
+
 
     implementation fg.deobf('curse.maven:CustomNPCs-221826:3791072')
 
