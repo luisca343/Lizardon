@@ -643,15 +643,15 @@
           "palettes": [
             {
               "name": "none",
-              "texture": "lizardon:pokemon/556_maractus/all/calle/none/texture.png",
-              "sprite": "lizardon:pokemon/556_maractus/all/calle/none/sprite.png",
+              "texture": "teras:pokemon/556_maractus/all/calle/none/texture.png",
+              "sprite": "teras:pokemon/556_maractus/all/calle/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "DUAL_TEX",
                 "pqc": [
                   "pixelmon:pokemon/556_maractus/all/base/none/model.pqc",
-                  "lizardon:pokemon/556_maractus/all/model1.pqc",
-                  "lizardon:pokemon/556_maractus/all/calle/none/punios/texture.png"
+                  "teras:pokemon/556_maractus/all/model1.pqc",
+                  "teras:pokemon/556_maractus/all/calle/none/punios/texture.png"
                 ],
                 "yRotation": 24.1
               },

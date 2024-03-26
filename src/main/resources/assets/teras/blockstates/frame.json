@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "teras:block/frame"
+    },
+    "facing=east": {
+      "model": "teras:block/frame",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "teras:block/frame",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "teras:block/frame",
+      "y": 90
+    }
+  }
+}

@@ -473,13 +473,13 @@
           "palettes": [
             {
               "name": "none",
-              "texture": "lizardon:pokemon/9010_ironflight/all/base/none/texture.png",
-              "sprite": "lizardon:pokemon/9010_ironflight/all/base/none/sprite.png",
+              "texture": "teras:pokemon/9010_ironflight/all/base/none/texture.png",
+              "sprite": "teras:pokemon/9010_ironflight/all/base/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9010_ironflight/all/base/none/model.pqc"
+                  "teras:pokemon/9010_ironflight/all/base/none/model.pqc"
                 ],
                 "movementThreshold": 0.02,
                 "yRotation": 25.8
@@ -487,7 +487,7 @@
               "flyingModelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9010_ironflight/all/base/none/model.pqc"
+                  "teras:pokemon/9010_ironflight/all/base/none/model.pqc"
                 ],
                 "movementThreshold": 0.02,
                 "yRotation": 25.8
@@ -498,8 +498,8 @@
             },
             {
               "name": "shiny",
-              "texture": "lizardon:pokemon/9010_ironflight/all/base/shiny/texture.png",
-              "sprite": "lizardon:pokemon/9010_ironflight/all/base/shiny/sprite.png",
+              "texture": "teras:pokemon/9010_ironflight/all/base/shiny/texture.png",
+              "sprite": "teras:pokemon/9010_ironflight/all/base/shiny/sprite.png",
               "particle": "arcanery:shiny"
             }
           ]

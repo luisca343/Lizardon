@@ -196,32 +196,32 @@
           "palettes": [
             {
               "name": "none",
-              "texture": "lizardon:pokemon/9014_ironbomb/all/base/none/texture.png",
-              "sprite": "lizardon:pokemon/9014_ironbomb/all/base/none/sprite.png",
+              "texture": "teras:pokemon/9014_ironbomb/all/base/none/texture.png",
+              "sprite": "teras:pokemon/9014_ironbomb/all/base/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9014_ironbomb/all/base/none/model.pqc"
+                  "teras:pokemon/9014_ironbomb/all/base/none/model.pqc"
                 ]
               },
               "sounds": []
             },
             {
               "name": "shiny",
-              "texture": "lizardon:pokemon/9014_ironbomb/all/base/shiny/texture.png",
-              "sprite": "lizardon:pokemon/9014_ironbomb/all/base/shiny/sprite.png",
+              "texture": "teras:pokemon/9014_ironbomb/all/base/shiny/texture.png",
+              "sprite": "teras:pokemon/9014_ironbomb/all/base/shiny/sprite.png",
               "particle": "arcanery:shiny"
             },
             {
               "name": "master",
-              "texture": "lizardon:pokemon/9014_ironbomb/all/master/none/texture.png",
-              "sprite": "lizardon:pokemon/9014_ironbomb/all/master/none/sprite.png",
+              "texture": "teras:pokemon/9014_ironbomb/all/master/none/texture.png",
+              "sprite": "teras:pokemon/9014_ironbomb/all/master/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9014_ironbomb/all/master/none/model.pqc"
+                  "teras:pokemon/9014_ironbomb/all/master/none/model.pqc"
                 ]
               },
               "sounds": []

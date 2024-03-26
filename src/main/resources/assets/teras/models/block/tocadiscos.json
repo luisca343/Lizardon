@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "teras:block/tocadiscos",
+    "up": "teras:block/tocadiscos_top",
+    "down": "teras:block/tocadiscos",
+    "north": "teras:block/tocadiscos",
+    "east": "teras:block/tocadiscos",
+    "south": "teras:block/tocadiscos",
+    "west": "teras:block/tocadiscos",
+    "down": "teras:block/tocadiscos"
+  }
+}

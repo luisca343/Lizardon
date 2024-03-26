@@ -1,0 +1,4 @@
+$body teras:textures/pokemon/9011_brutalking/all/base/none/brutalking.bmd
+$anim walk teras:textures/pokemon/9011_brutalking/all/base/none/walk.bmd
+$anim idle teras:textures/pokemon/9011_brutalking/all/base/none/idle.bmd
+$scale 9.5

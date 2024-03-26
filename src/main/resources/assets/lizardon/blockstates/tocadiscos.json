@@ -1,9 +1,0 @@
-{
-  "variants":{
-    "facing=north": {"model": "lizardon:block/tocadiscos"},
-    "facing=south": { "model":"lizardon:block/tocadiscos", "y" : 180},
-    "facing=west": { "model":"lizardon:block/tocadiscos", "y" : 270},
-    "facing=east": { "model":"lizardon:block/tocadiscos", "y" : 90}
-
-  }
-}

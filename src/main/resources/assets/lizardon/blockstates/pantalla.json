@@ -1,9 +1,0 @@
-{
-  "variants":{
-    "facing=north": {"model": "lizardon:block/pantalla"},
-    "facing=south": { "model":"lizardon:block/pantalla", "y" : 180},
-    "facing=west": { "model":"lizardon:block/pantalla", "y" : 270},
-    "facing=east": { "model":"lizardon:block/pantalla", "y" : 90}
-
-  }
-}

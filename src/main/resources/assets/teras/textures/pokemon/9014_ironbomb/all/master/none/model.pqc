@@ -1,0 +1,4 @@
+$body teras:textures/pokemon/9014_ironbomb/all/master/none/masterbomb.bmd
+$anim walk teras:textures/pokemon/9014_ironbomb/all/master/none/walk.bmd
+$anim idle teras:textures/pokemon/9014_ironbomb/all/master/none/idle.bmd
+$scale 0.5

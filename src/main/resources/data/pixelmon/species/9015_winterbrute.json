@@ -197,38 +197,38 @@
           "palettes": [
             {
               "name": "none",
-              "texture": "lizardon:pokemon/9015_winterbrute/all/base/none/texture.png",
-              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/none/sprite.png",
+              "texture": "teras:pokemon/9015_winterbrute/all/base/none/texture.png",
+              "sprite": "teras:pokemon/9015_winterbrute/all/base/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9015_winterbrute/all/base/none/model.pqc"
+                  "teras:pokemon/9015_winterbrute/all/base/none/model.pqc"
                 ]
               },
               "sounds": []
             },
             {
               "name": "shiny",
-              "texture": "lizardon:pokemon/9015_winterbrute/all/base/shiny/texture.png",
-              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/shiny/sprite.png",
+              "texture": "teras:pokemon/9015_winterbrute/all/base/shiny/texture.png",
+              "sprite": "teras:pokemon/9015_winterbrute/all/base/shiny/sprite.png",
               "particle": "arcanery:shiny"
             },
             {
               "name": "pink",
-              "texture": "lizardon:pokemon/9015_winterbrute/all/base/pink/texture.png",
-              "sprite": "lizardon:pokemon/9015_winterbrute/all/base/pink/sprite.png",
+              "texture": "teras:pokemon/9015_winterbrute/all/base/pink/texture.png",
+              "sprite": "teras:pokemon/9015_winterbrute/all/base/pink/sprite.png",
               "particle": ""
             },
             {
               "name": "santa",
-              "texture": "lizardon:pokemon/9015_winterbrute/all/santa/none/texture.png",
-              "sprite": "lizardon:pokemon/9015_winterbrute/all/santa/none/sprite.png",
+              "texture": "teras:pokemon/9015_winterbrute/all/santa/none/texture.png",
+              "sprite": "teras:pokemon/9015_winterbrute/all/santa/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9015_winterbrute/all/santa/none/model.pqc"
+                  "teras:pokemon/9015_winterbrute/all/santa/none/model.pqc"
                 ]
               },
               "sounds": []
