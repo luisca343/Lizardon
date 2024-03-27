@@ -3,7 +3,7 @@ package es.boffmedia.teras.net.client;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.boffmedia.teras.objects.WayPoint;
+import es.boffmedia.teras.objects_old.WayPoint;
 import journeymap.client.waypoint.Waypoint;
 import journeymap.client.waypoint.WaypointStore;
 import journeymap.common.helper.DimensionHelper;

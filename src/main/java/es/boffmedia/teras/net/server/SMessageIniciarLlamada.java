@@ -6,7 +6,7 @@ import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.boffmedia.teras.TerasVoicechatPlugin;
-import es.boffmedia.teras.objects.chatapp.DatosLlamada;
+import es.boffmedia.teras.objects_old.chatapp.DatosLlamada;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

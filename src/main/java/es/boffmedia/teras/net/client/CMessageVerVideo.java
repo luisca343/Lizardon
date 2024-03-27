@@ -3,7 +3,7 @@ package es.boffmedia.teras.net.client;
 
 import com.google.common.base.Charsets;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.misiones.DatosNPC;
+import es.boffmedia.teras.objects_old.misiones.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

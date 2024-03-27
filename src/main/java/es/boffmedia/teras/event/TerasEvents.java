@@ -9,15 +9,13 @@ import es.boffmedia.teras.commands.*;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.client.CMessageConfigServer;
 import es.boffmedia.teras.net.video.ScreenManager;
-import es.boffmedia.teras.objects.serverdata.TerasConfig;
-import es.boffmedia.teras.objects.karts.CarreraManager;
-import es.boffmedia.teras.objects.serverdata.UserData;
+import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
+import es.boffmedia.teras.objects_old.karts.CarreraManager;
+import es.boffmedia.teras.objects_old.serverdata.UserData;
 import es.boffmedia.teras.particle.FakeParticle;
 import es.boffmedia.teras.util.*;
 import es.boffmedia.teras.util.cache.TextureCache;
 import es.boffmedia.teras.util.displayers.VideoDisplayer;
-import es.boffmedia.teras.commands.*;
-import es.boffmedia.teras.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.renderer.culling.ClippingHelper;
@@ -200,8 +198,8 @@ public class TerasEvents {
         TerasConfig terasConfig = FileHelper.getConfig();
         String data = gson.toJson(terasConfig);
 
-        PermissionAPI.getPermissionHandler().getRegisteredNodes().forEach(Teras.LOGGER::info);
         Teras.LOGGER.info(PermissionAPI.hasPermission(ev.getPlayer(), "admin"));
+        PermissionAPI.getPermissionHandler().getRegisteredNodes().forEach(Teras.LOGGER::info);
 
         UserData userData = new UserData(ev.getPlayer());
 

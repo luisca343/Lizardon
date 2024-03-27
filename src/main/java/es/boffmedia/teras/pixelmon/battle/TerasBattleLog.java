@@ -9,7 +9,7 @@ import com.pixelmonmod.pixelmon.battles.controller.log.action.type.*;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.battles.status.*;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.pixelmon.PosicionEquipo;
+import es.boffmedia.teras.objects_old.pixelmon.PosicionEquipo;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;

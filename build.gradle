@@ -18,7 +18,7 @@ apply plugin: 'java'
 
 compileJava.options.encoding = 'UTF-8'
 
-version = '0.1.1'
+version = '0.1.2'
 group = 'es.boffmedia' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Teras-1.16.5'
 
@@ -136,7 +136,7 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
     implementation fg.deobf('curse.maven:mcef-577541:4413983')
-    implementation fg.deobf("curse.maven:pixelmon-389487:4718641")
+    implementation fg.deobf("curse.maven:pixelmon-389487:5209074")
     implementation fg.deobf('curse.maven:voicechat-416089:4153823')
     implementation fg.deobf('curse.maven:worldedit-225608:3283693')
     implementation fg.deobf('curse.maven:journeymap-32274:4012858')

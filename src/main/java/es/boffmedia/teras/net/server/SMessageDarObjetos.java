@@ -3,7 +3,7 @@ package es.boffmedia.teras.net.server;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.unused.DarObjetos;
+import es.boffmedia.teras.objects_old.unused.DarObjetos;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;

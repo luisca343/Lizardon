@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.pixelmon.battle.Combate;
-import es.boffmedia.teras.objects.pixelmon.ConfigCombate;
+import es.boffmedia.teras.objects_old.pixelmon.ConfigCombate;
 import es.boffmedia.teras.util.Reader;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;

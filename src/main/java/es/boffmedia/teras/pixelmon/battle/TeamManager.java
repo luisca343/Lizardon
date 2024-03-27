@@ -6,7 +6,7 @@ import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.pixelmon.frentebatalla.GetEquipo;
+import es.boffmedia.teras.objects_old.pixelmon.frentebatalla.GetEquipo;
 import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;

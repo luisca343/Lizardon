@@ -5,7 +5,7 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
-import es.boffmedia.teras.objects.serverdata.GetUserData;
+import es.boffmedia.teras.objects_old.serverdata.GetUserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

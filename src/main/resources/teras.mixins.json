@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.8.4",
   "server": [
-    "es.boffmedia.teras.mixin.LogMixin",
-    "es.boffmedia.teras.mixin.StatChangeActionMixin"
+    "LogMixin",
+    "StatChangeActionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

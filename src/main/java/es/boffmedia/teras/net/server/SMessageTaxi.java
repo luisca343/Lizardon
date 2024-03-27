@@ -2,7 +2,7 @@ package es.boffmedia.teras.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.boffmedia.teras.objects.Taxi;
+import es.boffmedia.teras.objects_old.Taxi;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

@@ -1,7 +1,7 @@
 package es.boffmedia.teras.event;
 
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.misiones.DatosMision;
+import es.boffmedia.teras.objects_old.misiones.DatosMision;
 import es.boffmedia.teras.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;

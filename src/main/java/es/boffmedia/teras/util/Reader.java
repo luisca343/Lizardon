@@ -3,7 +3,7 @@ package es.boffmedia.teras.util;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.boffmedia.teras.api.PokePasteReader;
-import es.boffmedia.teras.objects.pixelmon.ConfigCombate;
+import es.boffmedia.teras.objects_old.pixelmon.ConfigCombate;
 
 import java.io.BufferedReader;
 import java.io.IOException;

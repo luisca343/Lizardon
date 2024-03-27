@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.client.CMessageReturn;
-import es.boffmedia.teras.objects.pixelmon.frentebatalla.GetEquipo;
+import es.boffmedia.teras.objects_old.pixelmon.frentebatalla.GetEquipo;
 import es.boffmedia.teras.pixelmon.battle.TeamManager;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.PersistentDataFields;

@@ -5,7 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import es.boffmedia.teras.objects.karts.Circuito;
+import es.boffmedia.teras.objects_old.karts.Circuito;
 import es.boffmedia.teras.pixelmon.battle.TeamManager;
 import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
 import es.boffmedia.teras.util.PersistentDataFields;

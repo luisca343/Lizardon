@@ -8,7 +8,7 @@ import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.controller.log.BattleLog;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.logros.LogroCombate;
+import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.Combate;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
 import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
