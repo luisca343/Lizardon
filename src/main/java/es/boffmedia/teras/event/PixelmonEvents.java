@@ -8,6 +8,7 @@ import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
 import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.objects.ShopTransaction;
 import es.boffmedia.teras.objects_old.dex.ActualizarDex;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.PersistentDataFields;
@@ -66,47 +67,39 @@ public class PixelmonEvents {
     @SubscribeEvent
     public void compraVenta(ShopkeeperEvent event){
         NPCShopkeeper npc = (NPCShopkeeper) event.getNpc();
-        String operacion;
-        ArrayList<ShopItemWithVariation> objetos = npc.getItemList();
         ItemStack itemStack;
 
-
+        boolean encontrado = false;
+        String currentLanguage = event.getEntityPlayer().getLanguage();
+        ArrayList<ShopItemWithVariation> objetos;
 
         if(event instanceof ShopkeeperEvent.Purchase){
             itemStack = ((ShopkeeperEvent.Purchase) event).getItem();
             ((ShopkeeperEvent.Purchase) event).getItem();
-            operacion = "COMPRA";
+            objetos = npc.getItemList();
+
         }else{
             itemStack = ((ShopkeeperEvent.Sell) event).getItem();
-            operacion = "VENTA";
+            objetos = npc.getSellList(event.getEntityPlayer());
         }
 
-        boolean encontrado = false;
         for (ShopItemWithVariation objeto : objetos) {
-            /*MessageHelper.enviarMensaje(event.getEntityPlayer(), "Objeto: "+objeto.getItemStack().getDisplayName().getString());
-            MessageHelper.enviarMensaje(event.getEntityPlayer(), "Item: "+itemStack.getDisplayName().getString());*/
             if(Objects.equals(objeto.getItemStack().getDisplayName().getString(), itemStack.getDisplayName().getString())){
-                MessageHelper.enviarMensaje(event.getEntityPlayer(), "Cantidad: "+itemStack.getCount());
-                if(operacion.equals("COMPRA")){
-                    MessageHelper.enviarMensaje(event.getEntityPlayer(), "Precio: "+objeto.getBuyCost());
-                }
-                if(operacion.equals("VENTA")){
-                    MessageHelper.enviarMensaje(event.getEntityPlayer(), "Precio: "+objeto.getSellCost());
-                }
+                String npcName = ((NPCShopkeeper) event.getNpc()).getShopkeeperName(currentLanguage);
+                String itemName = itemStack.getDisplayName().getString();
+                String operation = event instanceof ShopkeeperEvent.Purchase ? "COMPRA" : "VENTA";
 
-                int precioUnidad = event instanceof ShopkeeperEvent.Purchase ? objeto.getBuyCost() : objeto.getSellCost();
-                int precioTotal = itemStack.getCount() * precioUnidad;
+                int unitPrice = event instanceof ShopkeeperEvent.Purchase ? objeto.getBuyCost() : objeto.getSellCost();
+                int count = itemStack.getCount();
 
-                MessageHelper.enviarMensaje(event.getEntityPlayer(), "Precio total: "+precioTotal);
+                ShopTransaction shopTransaction = new ShopTransaction(event.getEntityPlayer().getStringUUID(), npcName, itemName, operation, unitPrice, count);
+                Gson gson = new Gson();
+                WingullAPI.wingullPOST("/starbank/shop", gson.toJson(shopTransaction));
+
                 encontrado = true;
             }
         }
 
-        WingullAPI.wingullPOST("/starbank/shop/"+operacion, "");
-
-        /*
-        MessageHelper.enviarMensaje(event.getEntityPlayer(), "No se ha encontrado el objeto");
-        MessageHelper.enviarMensaje(event.getEntityPlayer(), "Item: "+itemStack.getDisplayName().getString());*/
         if(!encontrado) {
             event.setCanceled(true);
         }
