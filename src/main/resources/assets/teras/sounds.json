@@ -1,0 +1,29 @@
+{
+  "latigo_numeril": {
+    "category": "blocks",
+    "subtitle": "teras.latigo_numeril",
+    "sounds": [
+      "teras:latigo_numeril"
+    ]
+  },
+  "taser": {
+    "category": "blocks",
+    "subtitle": "teras.taser",
+    "sounds": [
+      "teras:taser"
+    ]
+  },
+  "bonk": {
+    "category": "blocks",
+    "subtitle": "teras.bonk",
+    "sounds": [
+      "teras:bonk"
+    ]
+  },
+  "sparkle": {
+    "subtitle": "teras.subtitle.sparkle",
+    "sounds": [
+      "teras:sparkle"
+    ]
+  }
+}

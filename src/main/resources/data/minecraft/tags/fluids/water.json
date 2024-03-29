@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "lizardon:aguas_termales_flowing",
-    "lizardon:aguas_termales"
+    "teras:aguas_termales_flowing",
+    "teras:aguas_termales"
   ]
 }

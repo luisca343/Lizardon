@@ -1,0 +1,4 @@
+$body teras:textures/pokemon/9015_winterbrute/all/santa/none/santabrute.bmd
+$anim walk teras:textures/pokemon/9015_winterbrute/all/santa/none/walk.bmd
+$anim idle teras:textures/pokemon/9015_winterbrute/all/santa/none/idle.bmd
+$scale 8.8

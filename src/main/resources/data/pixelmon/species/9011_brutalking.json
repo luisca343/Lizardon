@@ -191,21 +191,21 @@
           "palettes": [
             {
               "name": "none",
-              "texture": "lizardon:pokemon/9011_brutalking/all/base/none/texture.png",
-              "sprite": "lizardon:pokemon/9011_brutalking/all/base/none/sprite.png",
+              "texture": "teras:pokemon/9011_brutalking/all/base/none/texture.png",
+              "sprite": "teras:pokemon/9011_brutalking/all/base/none/sprite.png",
               "particle": "",
               "modelLocator": {
                 "factoryType": "NORMAL",
                 "pqc": [
-                  "lizardon:pokemon/9011_brutalking/all/base/none/model.pqc"
+                  "teras:pokemon/9011_brutalking/all/base/none/model.pqc"
                 ]
               },
               "sounds": []
             },
             {
               "name": "shiny",
-              "texture": "lizardon:pokemon/9011_brutalking/all/base/shiny/texture.png",
-              "sprite": "lizardon:pokemon/9011_brutalking/all/base/shiny/sprite.png",
+              "texture": "teras:pokemon/9011_brutalking/all/base/shiny/texture.png",
+              "sprite": "teras:pokemon/9011_brutalking/all/base/shiny/sprite.png",
               "particle": "arcanery:shiny"
             }
           ]

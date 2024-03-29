@@ -1,0 +1,4 @@
+$body teras:textures/pokemon/9016_tyrantbeetle/all/base/none/tyrantbeetle.bmd
+$anim walk teras:textures/pokemon/9016_tyrantbeetle/all/base/none/walk.bmd
+$anim idle teras:textures/pokemon/9016_tyrantbeetle/all/base/none/idle.bmd
+$scale 10.6

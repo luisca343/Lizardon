@@ -1,0 +1,4 @@
+$body teras:textures/pokemon/9010_ironflight/all/base/none/ironflight.bmd
+$anim walk teras:textures/pokemon/9010_ironflight/all/base/none/idle.bmd
+$anim idle teras:textures/pokemon/9010_ironflight/all/base/none/idle.bmd
+$scale 2.5

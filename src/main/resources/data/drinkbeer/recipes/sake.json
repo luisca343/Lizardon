@@ -30,7 +30,7 @@
   },
   "brewing_time": 12000,
   "result": {
-    "item": "lizardon:sake",
+    "item": "teras:sake",
     "count": 4
   }
 }

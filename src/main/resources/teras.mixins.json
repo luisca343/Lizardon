@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "es.boffmedia.teras.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8.4",
+  "server": [
+    "LogMixin",
+    "StatChangeActionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "teras.mixin-refmap.json"
+}
