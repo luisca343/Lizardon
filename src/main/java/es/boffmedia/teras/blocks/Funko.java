@@ -1,4 +1,4 @@
-package es.boffmedia.teras.blocks;
+/*package es.boffmedia.teras.blocks;
 
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.init.TileEntityInit;
@@ -92,3 +92,4 @@ public class Funko extends Block {
 
 
 }
+*/

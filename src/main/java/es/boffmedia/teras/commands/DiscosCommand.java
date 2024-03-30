@@ -44,12 +44,12 @@ public class DiscosCommand {
                                 return 0;
                             }
 
-
+                            /*
                             if (disco.getItem() == ItemInit.DISCO.get()) {
                                 CompoundNBT tags = new CompoundNBT();
                                 tags.putString("disco", nombre);
                                 disco.setTag(tags);
-                            }
+                            }*/
                             return 1;
                         }
                 ));

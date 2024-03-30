@@ -18,7 +18,7 @@ public class ItemInit {
     public static final RegistryObject<Item> SMARTROTOM = ITEMS.register("smartrotom",
             () -> new SmartRotom(new Item.Properties().stacksTo(1).tab(TerasItemGroup.LIZARDON_GROUP)));
 
-    public static final RegistryObject<Item> MEDALLA = ITEMS.register("medalla_helada",
+    /*public static final RegistryObject<Item> MEDALLA = ITEMS.register("medalla_helada",
             () -> new BadgeItem());
 
     public static final RegistryObject<Item> DISCO = ITEMS.register("disco",
@@ -26,6 +26,11 @@ public class ItemInit {
 
     public static final RegistryObject<Item> TEST = ITEMS.register("test",
             () -> new Item(new Item.Properties().stacksTo(6).tab(TerasItemGroup.LIZARDON_GROUP)));
+
+    public static final RegistryObject<Item> CHAPA_OXIDADA = ITEMS.register("chapa_oxidada",
+            () -> new ChapaOxidada());
+
+   */
     
     public static final RegistryObject<Item> LATIGO_NUMERIL = ITEMS.register("latigo_numeril",
             () -> new LatigoNumeril(new Item.Properties().stacksTo(1).tab(TerasItemGroup.LIZARDON_GROUP)));
@@ -34,9 +39,6 @@ public class ItemInit {
 
     public static final RegistryObject<Item> TASER = ITEMS.register("taser",
             () -> new Taser(new Item.Properties().stacksTo(1).tab(TerasItemGroup.LIZARDON_GROUP)));
-
-    public static final RegistryObject<Item> CHAPA_OXIDADA = ITEMS.register("chapa_oxidada",
-            () -> new ChapaOxidada());
 
     public static final RegistryObject<Item> CUBO_AGUAS_TERMALES = ITEMS.register("cubo_aguas_termales",
             () -> new BucketItem(() -> FluidInit.AGUAS_TERMALES_SOURCE.get(), new Item.Properties().stacksTo(1).tab(TerasItemGroup.LIZARDON_GROUP)));

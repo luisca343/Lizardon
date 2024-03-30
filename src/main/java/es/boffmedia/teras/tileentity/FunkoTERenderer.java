@@ -1,3 +1,4 @@
+/*
 package es.boffmedia.teras.tileentity;
 
 
@@ -75,13 +76,13 @@ public class FunkoTERenderer extends TileEntityRenderer<FunkoTE> {
         genericheadmodel.renderToBuffer(p_228879_5_, ivertexbuilder, p_228879_7_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         p_228879_5_.popPose();
     }
-*/
+
     private static RenderType getRenderType(@Nullable GameProfile profile) {
         /*p_209263_0_.put(SkullBlock.Types.SKELETON, new ResourceLocation("textures/entity/skeleton/skeleton.png"));
         p_209263_0_.put(SkullBlock.Types.WITHER_SKELETON, new ResourceLocation("textures/entity/skeleton/wither_skeleton.png"));
         p_209263_0_.put(SkullBlock.Types.ZOMBIE, new ResourceLocation("textures/entity/zombie/zombie.png"));
         p_209263_0_.put(SkullBlock.Types.CREEPER, new ResourceLocation("textures/entity/creeper/creeper.png"));
-        p_209263_0_.put(SkullBlock.Types.DRAGON, new ResourceLocation("textures/entity/enderdragon/dragon.png"));*/
+        p_209263_0_.put(SkullBlock.Types.DRAGON, new ResourceLocation("textures/entity/enderdragon/dragon.png"));
         ResourceLocation resourcelocation =  DefaultPlayerSkin.getDefaultSkin();
         if ( profile != null) {
             Minecraft minecraft = Minecraft.getInstance();
@@ -92,3 +93,4 @@ public class FunkoTERenderer extends TileEntityRenderer<FunkoTE> {
         }
     }
 }
+*/

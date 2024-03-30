@@ -23,24 +23,24 @@ public class CMessageDatosServer implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Recibido idServer: " + idServer);
+        //System.out.println("Recibido idServer: " + idServer);
         Teras.PROXY.setIdServidor(idServer);
         Gson gson = new Gson();
         String uuid = Minecraft.getInstance().player.getStringUUID();
         String nombre = Minecraft.getInstance().player.getName().getString();
 
-        System.out.println("Enviando datos de usuario: " + uuid + " " + nombre);
+        //System.out.println("Enviando datos de usuario: " + uuid + " " + nombre);
 
         GetUserData userData = new GetUserData();
         userData.setWorld(idServer);
         userData.setUuid(uuid);
         userData.setUsername(nombre);
 
-        System.out.println("Enviando datos de usuario: " + userData.toString());
+        //System.out.println("Enviando datos de usuario: " + userData.toString());
 
         String respuesta = gson.toJson(userData);
 
-        System.out.println("Enviando datos de usuario: " + respuesta);
+        //System.out.println("Enviando datos de usuario: " + respuesta);
 
         ClientProxy.callbackMisiones.success(respuesta);
 

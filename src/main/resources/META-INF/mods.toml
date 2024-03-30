@@ -66,9 +66,17 @@ Teras
     versionRange="[1.16,)"
     side="BOTH"
 
-[[dependencies.teras]]
+    [[dependencies.teras]]
     modId="voicechat"
     mandatory=false
     ordering="BEFORE"
+    versionRange="[1.16,)"
+    side="BOTH"
+
+
+    [[dependencies.teras]]
+    modId="epicfight"
+    mandatory=false
+    ordering="AFTER"
     versionRange="[1.16,)"
     side="BOTH"

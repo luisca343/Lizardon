@@ -1,4 +1,4 @@
-package es.boffmedia.teras.tileentity;
+/*package es.boffmedia.teras.tileentity;
 
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import es.boffmedia.teras.init.TileEntityInit;
@@ -50,3 +50,4 @@ public class TocadiscosTE extends TileEntity {
 
 
 }
+*/

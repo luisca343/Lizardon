@@ -58,9 +58,9 @@ public class SmartRotom extends Item {
         if(url.toLowerCase().contains("rzap")){
             actualizarPad(stack);
             if(bloque.getBlock() == Blocks.JUKEBOX){
-                BlockState state = BlockInit.TOCADISCOS.get().defaultBlockState();
+                /*BlockState state = BlockInit.TOCADISCOS.get().defaultBlockState();
                 world.setBlock(context.getClickedPos(), state, 2);
-                world.playSound(context.getPlayer(), context.getClickedPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.playSound(context.getPlayer(), context.getClickedPos(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundCategory.BLOCKS, 1.0F, 1.0F);*/
             }
         }
 

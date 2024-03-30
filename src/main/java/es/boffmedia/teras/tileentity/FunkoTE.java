@@ -1,4 +1,4 @@
-package es.boffmedia.teras.tileentity;
+/*package es.boffmedia.teras.tileentity;
 
 import com.mojang.authlib.GameProfile;
 import es.boffmedia.teras.init.TileEntityInit;
@@ -70,3 +70,4 @@ public class FunkoTE extends TileEntity {
         return null;
     }
 }
+*/

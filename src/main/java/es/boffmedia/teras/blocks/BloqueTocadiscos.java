@@ -1,4 +1,4 @@
-package es.boffmedia.teras.blocks;
+/*package es.boffmedia.teras.blocks;
 
 import es.boffmedia.teras.init.ItemInit;
 import es.boffmedia.teras.tileentity.TocadiscosTE;
@@ -121,3 +121,4 @@ public class BloqueTocadiscos extends HorizontalBlock {
     }
 
 }
+*/

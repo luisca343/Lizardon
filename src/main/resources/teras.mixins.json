@@ -7,6 +7,9 @@
     "LogMixin",
     "StatChangeActionMixin"
   ],
+  "client": [
+    "PatchedLivingEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

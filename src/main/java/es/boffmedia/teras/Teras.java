@@ -14,7 +14,6 @@ import es.boffmedia.teras.objects_old.karts.CarreraManager;
 import es.boffmedia.teras.pixelmon.attacks.DesenvaineSubito;
 import es.boffmedia.teras.pixelmon.attacks.TestAttack;
 import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
-import es.boffmedia.teras.tileentity.FunkoTERenderer;
 import es.boffmedia.teras.tileentity.PantallaRenderer;
 import es.boffmedia.teras.util.music.TerasSoundEvents;
 import es.boffmedia.teras.client.renders.TVBlockRenderer;
@@ -195,7 +194,7 @@ public class Teras
         // do something that can only be done on the es.boffmedia.teras.client
         // ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoRenderer::new);
 
-        ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
+        //ClientRegistry.bindTileEntityRenderer(TileEntityInit.FUNKO_TE.get(), FunkoTERenderer::new);
         ClientRegistry.bindTileEntityRenderer(TileEntityInit.TEST_PANTALLA.get(), PantallaRenderer::new);
 
 
