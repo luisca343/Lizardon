@@ -182,7 +182,7 @@ public class PantallaSmartRotom extends Screen {
         //showCursor();
         try {
             if(!pad.view.getURL().contains("liga")){
-                this.pad.view.resize(1280, 720);
+                this.pad.view.resize((int) 1280, (int)  720);
             }
         } catch (Exception e) {
             Teras.LOGGER.warn("Error al cerrar la pantalla. Ignorando...");

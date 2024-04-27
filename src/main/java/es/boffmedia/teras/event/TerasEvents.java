@@ -7,7 +7,7 @@ import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.blocks.TestModeloFunko;
 import es.boffmedia.teras.commands.*;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageConfigServer;
+import es.boffmedia.teras.net.clientOld.CMessageConfigServer;
 import es.boffmedia.teras.net.video.ScreenManager;
 import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
 import es.boffmedia.teras.objects_old.karts.CarreraManager;

@@ -11,7 +11,7 @@ import es.boffmedia.teras.client.renders.IItemRenderer;
 import es.boffmedia.teras.client.renders.SmartRotomRenderer;
 import es.boffmedia.teras.SharedProxy;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.server.SMessagePadCtrl;
+import es.boffmedia.teras.net.serverOld.SMessagePadCtrl;
 import es.boffmedia.teras.tileentity.PantallaTE;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.QueryHelper;

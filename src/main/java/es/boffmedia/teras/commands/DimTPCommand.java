@@ -17,6 +17,7 @@ import net.minecraft.world.server.ServerWorld;
 
 public class DimTPCommand {
     public DimTPCommand(CommandDispatcher<CommandSource> dispatcher) {
+        // Kamina es puto
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("dimtp")
                 .then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.argument("dim", StringArgumentType.string())

@@ -6,24 +6,24 @@ import net.minecraft.entity.player.PlayerEntity;
 public class UserData {
     private String uuid;
     private String nombre;
-    private String mundo;
+    private String server;
 
     public UserData(String uuid, String nombre) {
         this.uuid = uuid;
         this.nombre = nombre;
-        mundo = Teras.PROXY.idServidor;
+        server = Teras.PROXY.idServidor;
     }
 
     public UserData(String uuid, String nombre, String idServer) {
         this.uuid = uuid;
         this.nombre = nombre;
-        this.mundo = idServer;
+        this.server = idServer;
     }
 
     public UserData(PlayerEntity player) {
         this.uuid = player.getUUID().toString();
         this.nombre = player.getName().getString();
-        this.mundo = Teras.config.getId();
+        this.server = Teras.config.getId();
     }
 
     public String getUuid() {
@@ -42,11 +42,4 @@ public class UserData {
         this.nombre = nombre;
     }
 
-    public String getMundo() {
-        return mundo;
-    }
-
-    public void setMundo(String mundo) {
-        this.mundo = mundo;
-    }
 }
