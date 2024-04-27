@@ -1,38 +1,36 @@
-package es.boffmedia.teras.net.client;
-
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
+import es.boffmedia.teras.objects_old.karts.EntrarCarrera;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class CMessageConfigServer implements Runnable{
-    private String datos;
+public class SMessageEntrarCarrera implements Runnable{
+    private String str;
     private ServerPlayerEntity player;
 
-    public CMessageConfigServer(String str){
-        this.datos = str;
+    public SMessageEntrarCarrera(String str){
+        this.str = str;
     }
-
+    
     @Override
     public void run() {
         Gson gson = new Gson();
-        TerasConfig conf = gson.fromJson(datos, TerasConfig.class);
-        Teras.config = conf;
+        EntrarCarrera datos = gson.fromJson(str, EntrarCarrera.class);
+
     }
 
-    public static CMessageConfigServer decode(PacketBuffer buf) {
-        CMessageConfigServer message = new CMessageConfigServer(buf.toString(Charsets.UTF_8));
+    public static SMessageEntrarCarrera decode(PacketBuffer buf) {
+        SMessageEntrarCarrera message = new SMessageEntrarCarrera(buf.toString(Charsets.UTF_8));
         return message;
     }
 
     public void encode(PacketBuffer buf) {
-        buf.writeCharSequence(datos, Charsets.UTF_8);
+        buf.writeCharSequence(str, Charsets.UTF_8);
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {

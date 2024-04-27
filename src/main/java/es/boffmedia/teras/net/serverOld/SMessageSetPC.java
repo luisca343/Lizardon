@@ -1,4 +1,4 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
@@ -6,7 +6,7 @@ import com.pixelmonmod.pixelmon.api.storage.PCStorage;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageReturn;
+import es.boffmedia.teras.net.clientOld.CMessageReturn;
 import es.boffmedia.teras.objects_old.misiones.Mision;
 import es.boffmedia.teras.objects_old.misiones.ObjetivoMision;
 import es.boffmedia.teras.objects_old.unused.SetPC;

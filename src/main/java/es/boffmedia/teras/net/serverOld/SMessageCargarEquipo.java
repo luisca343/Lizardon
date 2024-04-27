@@ -1,10 +1,10 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageReturn;
+import es.boffmedia.teras.net.clientOld.CMessageReturn;
 import es.boffmedia.teras.objects_old.pixelmon.frentebatalla.GetEquipo;
 import es.boffmedia.teras.pixelmon.battle.TeamManager;
 import es.boffmedia.teras.util.MessageHelper;

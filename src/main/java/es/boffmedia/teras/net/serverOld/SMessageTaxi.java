@@ -1,32 +1,34 @@
-package es.boffmedia.teras.net.client;
-
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
-import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects_old.misiones.DatosNPC;
+import com.google.gson.Gson;
+import es.boffmedia.teras.objects_old.Taxi;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import java.util.Map;
+import net.montoyo.mcef.api.IJSQueryCallback;
+
 import java.util.function.Supplier;
 
-
-public class CMessageVerVideo implements Runnable{
+public class SMessageTaxi implements Runnable{
     private String str;
     private ServerPlayerEntity player;
-    Map<String, DatosNPC> datosNpc;
+    private IJSQueryCallback callback;
 
-    public CMessageVerVideo(String str){
+    public SMessageTaxi(String str){
         this.str = str;
     }
 
     @Override
     public void run() {
-        Teras.PROXY.verVideo(str);
+        Gson gson = new Gson();
+        Taxi taxi = gson.fromJson(str, Taxi.class);
+
+        player.teleportTo(taxi.getX(), taxi.getY(), taxi.getZ());
     }
 
-    public static CMessageVerVideo decode(PacketBuffer buf) {
-        CMessageVerVideo message = new CMessageVerVideo(buf.toString(Charsets.UTF_8));
+    public static SMessageTaxi decode(PacketBuffer buf) {
+        SMessageTaxi message = new SMessageTaxi(buf.toString(Charsets.UTF_8));
         return message;
     }
 

@@ -1,9 +1,9 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageVerMisiones;
+import es.boffmedia.teras.net.clientOld.CMessageVerMisiones;
 import es.boffmedia.teras.objects_old.misiones.DatosMision;
 import es.boffmedia.teras.objects_old.misiones.DatosNPC;
 import es.boffmedia.teras.objects_old.misiones.ObjetivoMision;

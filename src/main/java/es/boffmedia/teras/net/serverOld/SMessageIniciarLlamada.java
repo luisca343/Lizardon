@@ -1,32 +1,44 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
+import com.google.gson.Gson;
+import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.boffmedia.teras.TerasVoicechatPlugin;
+import es.boffmedia.teras.objects_old.chatapp.DatosLlamada;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class SMessageFinalizarLlamada implements Runnable{
+public class SMessageIniciarLlamada implements Runnable{
     private String str;
     private ServerPlayerEntity player;
 
-    public SMessageFinalizarLlamada(String str){
+    public SMessageIniciarLlamada(String str){
         this.str = str;
     }
     
     @Override
     public void run() {
-        VoicechatServerApi SERVER_API = TerasVoicechatPlugin.SERVER_API;
-        VoicechatConnection conn = SERVER_API.getConnectionOf(player.getUUID());
-        conn.setGroup(null);
+        VoicechatServerApi api = TerasVoicechatPlugin.SERVER_API;
+        Gson gson = new Gson();
+        DatosLlamada datosLlamada = gson.fromJson(str, DatosLlamada.class);
+        Group group = api.createGroup(datosLlamada.getIdLlamada(), null);
+
+
+
+
+        VoicechatConnection conn = api.getConnectionOf(player.getUUID());
+
+
+        conn.setGroup(group);
     }
 
-    public static SMessageFinalizarLlamada decode(PacketBuffer buf) {
-        SMessageFinalizarLlamada message = new SMessageFinalizarLlamada(buf.toString(Charsets.UTF_8));
+    public static SMessageIniciarLlamada decode(PacketBuffer buf) {
+        SMessageIniciarLlamada message = new SMessageIniciarLlamada(buf.toString(Charsets.UTF_8));
         return message;
     }
 

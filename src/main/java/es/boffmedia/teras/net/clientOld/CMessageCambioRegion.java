@@ -1,34 +1,29 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.clientOld;
+
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
-import es.boffmedia.teras.objects_old.Taxi;
+import es.boffmedia.teras.event.wungill.RegionEventsClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.montoyo.mcef.api.IJSQueryCallback;
 
 import java.util.function.Supplier;
 
-public class SMessageTaxi implements Runnable{
+public class CMessageCambioRegion implements Runnable{
     private String str;
     private ServerPlayerEntity player;
-    private IJSQueryCallback callback;
 
-    public SMessageTaxi(String str){
+    public CMessageCambioRegion(String str){
         this.str = str;
     }
 
     @Override
     public void run() {
-        Gson gson = new Gson();
-        Taxi taxi = gson.fromJson(str, Taxi.class);
-
-        player.teleportTo(taxi.getX(), taxi.getY(), taxi.getZ());
+        RegionEventsClient.renderizarCartel(str, 2);
     }
 
-    public static SMessageTaxi decode(PacketBuffer buf) {
-        SMessageTaxi message = new SMessageTaxi(buf.toString(Charsets.UTF_8));
+    public static CMessageCambioRegion decode(PacketBuffer buf) {
+        CMessageCambioRegion message = new CMessageCambioRegion(buf.toString(Charsets.UTF_8));
         return message;
     }
 
@@ -41,4 +36,5 @@ public class SMessageTaxi implements Runnable{
         contextSupplier.get().enqueueWork((Runnable) this);
         contextSupplier.get().setPacketHandled(true);
     }
+
 }
