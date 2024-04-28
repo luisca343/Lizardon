@@ -7,8 +7,10 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonFactory;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
+import com.pixelmonmod.pixelmon.api.pokemon.species.Stats;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.spawning.*;
+import com.pixelmonmod.pixelmon.api.spawning.archetypes.entities.pokemon.SpawnInfoPokemon;
 import com.pixelmonmod.pixelmon.api.world.BlockCollection;
 import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
 import com.pixelmonmod.pixelmon.spawning.PlayerTrackingSpawner;
@@ -26,6 +28,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class SMessageCheckSpawns implements Runnable{
     private String str;
@@ -71,39 +74,81 @@ public class SMessageCheckSpawns implements Runnable{
             }
         }
 
-        Map<SpawnLocation, List<SpawnInfo>> possibleSpawns = new HashMap();
+        Map<SpawnLocation, List<SpawnInfoPokemon>> possibleSpawns = new HashMap();
         Iterator var13 = spawnLocations.iterator();
 
 
         while(var13.hasNext()) {
             SpawnLocation spawnLocation = (SpawnLocation)var13.next();
             List<SpawnInfo> spawns = spawner.getSuitableSpawns(spawnLocation);
-            spawns.removeIf((spawnInfo) -> {
-                return !spawnInfo.typeID.equals("pokemon");
-            });
-            if (!spawns.isEmpty()) {
-                possibleSpawns.put(spawnLocation, spawns);
+
+            List<SpawnInfoPokemon> pokemonSpawns = spawns.stream()
+                    .filter(spawnInfo -> spawnInfo instanceof SpawnInfoPokemon)
+                    .map(spawnInfo -> (SpawnInfoPokemon) spawnInfo)
+                    .collect(Collectors.toList());
+            if (!pokemonSpawns.isEmpty()) {
+                possibleSpawns.put(spawnLocation, pokemonSpawns);
             }
         }
 
-        /*
+        Map<String, SpawnInfoPokemon> pokemonSpawns = new HashMap<>();
+
+
         possibleSpawns.forEach((spawnLocation, spawns) -> {
-            Teras.getLogger().info("SpawnLocation: "+spawnLocation.location.toString());
             spawns.forEach((spawnInfo) -> {
-                Teras.getLogger().info("SpawnInfo: "+spawnInfo.typeID);
+                pokemonSpawns.put(spawnInfo.getPokemonSpec().toString(), spawnInfo);
             });
         });
-        */
 
+
+        double totalWeight = pokemonSpawns.values().stream().mapToDouble(spawnInfo -> spawnInfo.rarity).sum();
         ArrayList<PokedexSpawnChance> pokedexSpawnChances = new ArrayList<>();
 
+        pokemonSpawns.forEach((key, value) -> {
+            SpawnInfoPokemon spawnInfo = value;
+            String spec = spawnInfo.getPokemonSpec().toString();
 
+            String species = null;
+            String form = null;
+            String palette = null;
+
+            String[] parts = spec.split(" ");
+            for (String part : parts) {
+                if (part.startsWith("species:")) {
+                    species = part.substring("species:".length());
+                } else if (part.startsWith("form:")) {
+                    form = part.substring("form:".length());
+                } else if (part.startsWith("palette:")) {
+                    palette = part.substring("palette:".length());
+                }
+            }
+
+            // If form or palette does not exist, assign default values
+            if (form == null) {
+                form = "base";
+            }
+            if (palette == null) {
+                palette = "none";
+            }
+
+            int dex = PixelmonSpecies.get(spawnInfo.toString()).flatMap(RegistryValue::getValue).isPresent() ? PixelmonSpecies.get(species).flatMap(RegistryValue::getValue).get().getDex() : 0;
+            PokedexSpawnChance pokedexSpawnChance = new PokedexSpawnChance(dex, species, form, palette, spawnInfo.rarity, (spawnInfo.rarity / totalWeight) * 100);
+            // Now you have the species, form, and palette separated in variables
+            System.out.println("PokedexSpawnChance: "+pokedexSpawnChance.toString());
+            pokedexSpawnChances.add(pokedexSpawnChance);
+        });
+
+
+
+
+
+        /*
         Map<String, Double> percentages = spawner.selectionAlgorithm.getPercentages(spawner, possibleSpawns);
         percentages.forEach((key, value) -> {
             int dex = PixelmonSpecies.get(key).flatMap(RegistryValue::getValue).isPresent() ? PixelmonSpecies.get(key).flatMap(RegistryValue::getValue).get().getDex() : 0;
             PokedexSpawnChance pokedexSpawnChance = new PokedexSpawnChance(key, value, dex);
             pokedexSpawnChances.add(pokedexSpawnChance);
-        });
+        });*/
 
         Gson gson = new Gson();
         String json = gson.toJson(pokedexSpawnChances);
