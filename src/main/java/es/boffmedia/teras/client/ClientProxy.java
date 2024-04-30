@@ -237,6 +237,10 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
                     padList.remove(i);
                     padMap.remove(pd.id);
                 }
+
+                if(!pd.view.getURL().contains("smartrotom")){
+                    pd.view.loadURL(Teras.config.getHome());
+                }
             }
 
             if(mc.player != null && !screenTracking.isEmpty()) {
