@@ -203,7 +203,8 @@ public class TerasEvents {
 
         UserData userData = new UserData(ev.getPlayer());
 
-        WingullAPI.wingullPOST("/loginw", gson.toJson(userData));
+        // Cancel loginw
+        //WingullAPI.wingullPOST("/loginw", gson.toJson(userData));
 
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 

@@ -131,10 +131,10 @@ public class SMessageCheckSpawns implements Runnable{
                 palette = "none";
             }
 
-            int dex = PixelmonSpecies.get(spawnInfo.toString()).flatMap(RegistryValue::getValue).isPresent() ? PixelmonSpecies.get(species).flatMap(RegistryValue::getValue).get().getDex() : 0;
+            String name = spawnInfo.toString().replace("'", "");
+
+            int dex = PixelmonSpecies.get(name).flatMap(RegistryValue::getValue).isPresent() ? PixelmonSpecies.get(species).flatMap(RegistryValue::getValue).get().getDex() : 0;
             PokedexSpawnChance pokedexSpawnChance = new PokedexSpawnChance(dex, species, form, palette, spawnInfo.rarity, (spawnInfo.rarity / totalWeight) * 100);
-            // Now you have the species, form, and palette separated in variables
-            System.out.println("PokedexSpawnChance: "+pokedexSpawnChance.toString());
             pokedexSpawnChances.add(pokedexSpawnChance);
         });
 
