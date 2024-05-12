@@ -112,6 +112,7 @@ public class SmartRotom extends Item {
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+        checkPad(stack);
         World world = context.getLevel();
         assert Teras.PROXY.getPadByID(stack.getTag().getInt("PadID")).view.getURL() != null;
 
@@ -132,6 +133,17 @@ public class SmartRotom extends Item {
         }
 
         return super.onItemUseFirst(stack, context);
+    }
+
+    public static void checkPad(ItemStack stack){
+        if(!stack.hasTag() || !stack.getTag().contains("PadID")){
+            CompoundNBT nbt = new CompoundNBT();
+            int id = Teras.PROXY.getNextPadID();
+            nbt.putInt("PadID", id);
+            stack.setTag(nbt);
+
+            Teras.PROXY.updatePad(id, stack.getTag(), true);
+        }
     }
 
     public static void actualizarPad(ItemStack stack){
