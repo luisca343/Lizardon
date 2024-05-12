@@ -75,8 +75,7 @@ public class WingullAPI {
                     response.append(line);
                 }
                 br.close();
-                Teras.LOGGER.info(response.toString());
-                Teras.LOGGER.info("WingullAPI: " + con.getResponseCode());
+                QueryHelper.handlePOST(response, con);
 
             } catch (ProtocolException e) {
                 throw new RuntimeException(e);
@@ -87,6 +86,8 @@ public class WingullAPI {
             }
         }).start();
     }
+
+
 
 
 

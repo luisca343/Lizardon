@@ -1,4 +1,4 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.init.ItemInit;

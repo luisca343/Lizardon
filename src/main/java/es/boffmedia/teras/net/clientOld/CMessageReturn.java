@@ -1,32 +1,32 @@
-package es.boffmedia.teras.net.client;
+package es.boffmedia.teras.net.clientOld;
 
 
 import com.google.common.base.Charsets;
-import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.objects_old.misiones.DatosNPC;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import java.util.Map;
 import java.util.function.Supplier;
 
-
-public class CMessageVerVideo implements Runnable{
+public class CMessageReturn implements Runnable{
     private String str;
     private ServerPlayerEntity player;
     Map<String, DatosNPC> datosNpc;
 
-    public CMessageVerVideo(String str){
+    public CMessageReturn(String str){
         this.str = str;
     }
 
     @Override
     public void run() {
-        Teras.PROXY.verVideo(str);
+        ClientProxy.callbackMCEF.success(str);
     }
 
-    public static CMessageVerVideo decode(PacketBuffer buf) {
-        CMessageVerVideo message = new CMessageVerVideo(buf.toString(Charsets.UTF_8));
+    public static CMessageReturn decode(PacketBuffer buf) {
+        CMessageReturn message = new CMessageReturn(buf.toString(Charsets.UTF_8));
         return message;
     }
 

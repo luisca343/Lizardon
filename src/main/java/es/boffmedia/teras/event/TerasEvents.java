@@ -7,7 +7,7 @@ import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.blocks.TestModeloFunko;
 import es.boffmedia.teras.commands.*;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageConfigServer;
+import es.boffmedia.teras.net.clientOld.CMessageConfigServer;
 import es.boffmedia.teras.net.video.ScreenManager;
 import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
 import es.boffmedia.teras.objects_old.karts.CarreraManager;
@@ -203,7 +203,8 @@ public class TerasEvents {
 
         UserData userData = new UserData(ev.getPlayer());
 
-        WingullAPI.wingullPOST("/loginw", gson.toJson(userData));
+        // Cancel loginw
+        //WingullAPI.wingullPOST("/loginw", gson.toJson(userData));
 
         ServerPlayerEntity serverPlayer = (ServerPlayerEntity) ev.getPlayer();
 

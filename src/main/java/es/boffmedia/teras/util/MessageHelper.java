@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.STitlePacket;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,13 @@ import java.util.Date;
 import java.util.UUID;
 
 public class MessageHelper {
+
+    public static void enviarMensaje(String uuid, String mensaje) {
+        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(UUID.fromString(uuid));
+        if (player != null) {
+            enviarMensaje(player, mensaje);
+        }
+    }
 
     public static void enviarMensaje(PlayerEntity player, String mensaje) {
         player.sendMessage(new StringTextComponent(mensaje), UUID.randomUUID());

@@ -11,7 +11,7 @@ import es.boffmedia.teras.client.renders.IItemRenderer;
 import es.boffmedia.teras.client.renders.SmartRotomRenderer;
 import es.boffmedia.teras.SharedProxy;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.server.SMessagePadCtrl;
+import es.boffmedia.teras.net.serverOld.SMessagePadCtrl;
 import es.boffmedia.teras.tileentity.PantallaTE;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.QueryHelper;
@@ -86,6 +86,11 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
         private long lastURLSent;
 
     private PadData(String url, int id) {
+        System.out.println("PadData");
+        System.out.println("URL: "+url);
+        System.out.println("ID: "+id);
+        System.out.println("Teras.config.getHome(): "+Teras.config.getHome());
+        System.out.println("Teras.config: "+Teras.config);
         view = mcef.createBrowser(Teras.config.getHome());
         view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
         view.resize((int) 1280, (int)  720);
@@ -230,6 +235,10 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
 
             for(int i = padList.size() - 1; i >= 0; i--) {
                 PadData pd = padList.get(i);
+
+                if(!pd.view.getURL().contains("smartrotom")){
+                    pd.view.loadURL(Teras.config.getHome());
+                }
 
                 if(!pd.isInHotbar) {
                     pd.view.close();

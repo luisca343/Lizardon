@@ -7,7 +7,7 @@ import com.mrcrayfish.vehicle.entity.vehicle.ATVEntity;
 import com.mrcrayfish.vehicle.init.ModEntities;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageCambioPosicion;
+import es.boffmedia.teras.net.clientOld.CMessageCambioPosicion;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.WingullAPI;
 import net.minecraft.entity.Entity;

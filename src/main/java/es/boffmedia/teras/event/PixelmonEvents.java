@@ -48,15 +48,18 @@ public class PixelmonEvents {
     public void guardarDex(PokedexEvent.Post event){
         String uuid = event.getPlayer().getStringUUID();
         int idPokemon = event.getPokemon().getSpecies().getDex();
+
+        String form = event.getPokemon().getForm().getName();
+        String palette = event.getPokemon().getPalette().getName();
         int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
-        if(estado == 1 && event.getPokemon().isShiny()) estado = 2;
 
 
 
-        ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado);
+
+        ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado, form, palette);
         Gson gson = new Gson();
 
-        WingullAPI.wingullPOST("/dex/registro", gson.toJson(dex));
+        WingullAPI.wingullPOST("/pokemon/registry", gson.toJson(dex));
     }
     
     @SubscribeEvent

@@ -5,14 +5,18 @@ import es.boffmedia.teras.Teras;
 public class ActualizarDex {
     private String uuid;
     private String server;
-    private int idPokemon;
-    private int estado;
+    private int pokemonId;
+    String form;
+    String palette;
+    private int status;
 
-    public ActualizarDex(String uuid, int idPokemon, int estado) {
+    public ActualizarDex(String uuid, int idPokemon, int estado, String form, String palette) {
         this.uuid = uuid;
-        this.idPokemon = idPokemon;
-        this.estado = estado;
+        this.pokemonId = idPokemon;
+        this.status = estado;
         this.server = Teras.config.getId();
+        this.form = form;
+        this.palette = palette;
     }
 
     public String getUuid() {
@@ -32,18 +36,34 @@ public class ActualizarDex {
     }
 
     public int getIdPokemon() {
-        return idPokemon;
+        return pokemonId;
     }
 
     public void setIdPokemon(int idPokemon) {
-        this.idPokemon = idPokemon;
+        this.pokemonId = idPokemon;
     }
 
     public int getEstado() {
-        return estado;
+        return status;
     }
 
     public void setEstado(int estado) {
-        this.estado = estado;
+        this.status = estado;
+    }
+
+    public String getForm() {
+        return form;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
+    }
+
+    public String getPalette() {
+        return palette;
+    }
+
+    public void setPalette(String palette) {
+        this.palette = palette;
     }
 }

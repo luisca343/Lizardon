@@ -1,4 +1,4 @@
-package es.boffmedia.teras.net.server;
+package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
@@ -6,10 +6,14 @@ import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import es.boffmedia.teras.TerasVoicechatPlugin;
-import es.boffmedia.teras.objects_old.chatapp.DatosLlamada;
+import es.boffmedia.teras.net.Messages;
+import es.boffmedia.teras.net.client.CMessageMCEFResponse;
+import es.boffmedia.teras.objects.SmartRotomResponse;
+import es.boffmedia.teras.objects_old.chatapp.CallData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -25,16 +29,29 @@ public class SMessageIniciarLlamada implements Runnable{
     public void run() {
         VoicechatServerApi api = TerasVoicechatPlugin.SERVER_API;
         Gson gson = new Gson();
-        DatosLlamada datosLlamada = gson.fromJson(str, DatosLlamada.class);
-        Group group = api.createGroup(datosLlamada.getIdLlamada(), null);
+        CallData datosLlamada = gson.fromJson(str, CallData.class);
+        System.out.println("Miembros: "+datosLlamada.getUsers());
 
+        if(datosLlamada.getUsers().size() <= 1){
+            SmartRotomResponse response = new SmartRotomResponse();
+            response.setStatus(200);
+            response.setError("No hay suficientes miembros para iniciar la llamada");
 
+            Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageMCEFResponse(new Gson().toJson(response)));
+        }
 
-
+        String idLlamada = datosLlamada.getCaller();
+        Group group = api.createGroup(idLlamada, null);
         VoicechatConnection conn = api.getConnectionOf(player.getUUID());
-
-
         conn.setGroup(group);
+
+        SmartRotomResponse response = new SmartRotomResponse();
+        response.setStatus(201);
+        response.setMessage("Llamada iniciada");
+        response.setData(datosLlamada.getUsers().toString());
+
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageMCEFResponse(new Gson().toJson(response)));
+
     }
 
     public static SMessageIniciarLlamada decode(PacketBuffer buf) {

@@ -286,7 +286,7 @@ public class Teras
     }
 
     public static boolean isSiteBlacklisted(String url) {
-        return false;
+        return !url.contains("smartrotom");
     }
 
 

@@ -25,8 +25,8 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.client.CMessageVerVideo;
-import es.boffmedia.teras.net.client.CMessageWaypoints;
+import es.boffmedia.teras.net.clientOld.CMessageVerVideo;
+import es.boffmedia.teras.net.clientOld.CMessageWaypoints;
 import es.boffmedia.teras.net.video.ScreenManager;
 import es.boffmedia.teras.objects_old.WayPoint;
 import es.boffmedia.teras.objects_old.karts.Circuito;
@@ -37,6 +37,12 @@ import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.PersistentDataFields;
 import es.boffmedia.teras.util.music.AudioManager;
+import moe.plushie.armourers_workshop.core.data.LocalDataService;
+import moe.plushie.armourers_workshop.core.skin.Skin;
+import moe.plushie.armourers_workshop.core.skin.SkinLoader;
+import moe.plushie.armourers_workshop.core.skin.exporter.SkinExportManager;
+import moe.plushie.armourers_workshop.library.data.SkinLibrary;
+import moe.plushie.armourers_workshop.library.data.SkinLibraryManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -53,6 +59,7 @@ public class TestCommand {
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(armadura())
                 .then(broadcast())
                 .then(peluche())
                 .then(registrarEquipo())
@@ -72,6 +79,37 @@ public class TestCommand {
 
     }
 
+    private ArgumentBuilder<CommandSource,?> armadura() {
+        return Commands.literal("armadura")
+                        .executes((command) -> {
+                            SkinLibrary lib = SkinLibraryManager.getServer().getLibrary();
+                            System.out.println("=====================================");
+                            System.out.println(lib.getRootPath());
+                            lib.getFiles().forEach((skinFile) -> {
+                                System.out.println(skinFile.getName());
+                                System.out.println(skinFile.getPath());
+                                System.out.println(skinFile.getSkinIdentifier());
+                                System.out.println(skinFile.getSkinType());
+                                System.out.println(skinFile.getSkinProperties());
+
+
+                                try {
+                                    Skin skin = SkinLoader.getInstance().loadSkin(skinFile.getSkinIdentifier());
+                                    SkinExportManager.exportSkin(skin, "obj", skinFile.getName(), 1.0F);
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+
+                            LocalDataService lib2 = SkinLibraryManager.getServer().getDatabaseLibrary();
+
+                            System.out.println("=====================================");
+                            System.out.println(lib2);
+
+                            return 1;
+                        }
+                );
+    }
 
 
     private ArgumentBuilder<CommandSource,?> broadcast() {
