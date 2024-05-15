@@ -1,38 +1,20 @@
 package es.boffmedia.teras.objects_old.dex;
 
-import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.objects.post.SmartRotomPost;
 
-public class ActualizarDex {
-    private String uuid;
-    private String server;
+public class ActualizarDex extends SmartRotomPost {
     private int pokemonId;
     String form;
     String palette;
     private int status;
 
     public ActualizarDex(String uuid, int idPokemon, int estado, String form, String palette) {
+        super();
         this.uuid = uuid;
         this.pokemonId = idPokemon;
         this.status = estado;
-        this.server = Teras.config.getId();
         this.form = form;
         this.palette = palette;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
     }
 
     public int getIdPokemon() {

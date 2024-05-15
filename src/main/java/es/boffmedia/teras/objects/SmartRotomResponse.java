@@ -1,12 +1,16 @@
 package es.boffmedia.teras.objects;
 
-public class SmartRotomResponse {
+import es.boffmedia.teras.objects.post.SmartRotomPost;
+
+public class SmartRotomResponse extends SmartRotomPost {
     private int status;
     private String message;
     private String error;
     private String data;
 
-    public SmartRotomResponse() {}
+    public SmartRotomResponse() {
+        super();
+    }
 
     public int getStatus() {
         return status;
