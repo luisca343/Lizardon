@@ -63,7 +63,7 @@ public class PokePasteReader {
     public static PokePasteReader fromTeras(String paste) {
         URL url = null;
         try {
-            url = new URL("http://i.teras.es/pixelmon/combates/"+paste+".txt");
+            url = new URL("http://api.boffmedia.es/smartrotom/combates/"+paste+".txt");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
