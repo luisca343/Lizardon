@@ -42,7 +42,7 @@ public class Reader {
     public static ConfigCombate getDatosCombate(String npc, String tipo) {
         URL url = null;
         try {
-            url = new URL("http://i.teras.es/pixelmon/combates/"+ tipo +"/"+npc+".json");
+            url = new URL("http://api.boffmedia.es/smartrotom/combates/"+ tipo +"/"+npc+".json");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
