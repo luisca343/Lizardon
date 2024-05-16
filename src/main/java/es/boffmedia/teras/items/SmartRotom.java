@@ -85,7 +85,7 @@ public class SmartRotom extends Item {
 
         LivingEntity entity = getRayTracedEntities(world, player, hand, 50);
 
-        if(entity !=null){
+        if(entity !=null && world.isClientSide()){
             PixelmonEntity pixelmon = (PixelmonEntity) entity;
             int smartRotomID = stack.getTag().getInt("PadID");
             ClientProxy.PadData smartRotom = Teras.PROXY.getPadByID(smartRotomID);
@@ -93,6 +93,7 @@ public class SmartRotom extends Item {
             int dex = pixelmon.getSpecies().getDex();
             String form = pixelmon.getForm().getName();
             String palette = pixelmon.getPalette().getName();
+
 
             smartRotom.view.runJS("openDex("+ dex +", '"+ form +"')", "");
             PlayerPokedex pokedex = new PlayerPokedex(player.getUUID());
