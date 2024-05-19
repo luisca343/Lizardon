@@ -9,6 +9,7 @@ import es.boffmedia.teras.net.server.SMessageCheckSpawns;
 import es.boffmedia.teras.net.server.SMessageDatosServer;
 import es.boffmedia.teras.net.serverOld.SMessageFinalizarLlamada;
 import es.boffmedia.teras.net.serverOld.SMessageIniciarLlamada;
+import es.boffmedia.teras.net.serverOld.SMessageVerMisiones;
 import es.boffmedia.teras.objects.post.PokedexEventResponse;
 import es.boffmedia.teras.objects_old.serverdata.UserData;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,16 @@ public class QueryHelper {
             Messages.INSTANCE.sendToServer(new SMessageCheckSpawns("getSpawns"));
             return true;
         }
-        /* Requests 'POST' */
+        if(query.contains("getMisiones")){
+            ClientProxy.callbackMisiones = callback;
+            Messages.INSTANCE.sendToServer(new SMessageVerMisiones(query));
+            return true;
+        }
+        /*
+        * ===============================
+        *  Requests 'POST'
+        * ===============================
+        */
         if(query.contains("setCall")){
             Messages.INSTANCE.sendToServer(new SMessageIniciarLlamada(query));
             return true;

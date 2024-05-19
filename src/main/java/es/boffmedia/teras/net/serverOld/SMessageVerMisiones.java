@@ -4,10 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageVerMisiones;
-import es.boffmedia.teras.objects_old.misiones.DatosMision;
-import es.boffmedia.teras.objects_old.misiones.DatosNPC;
-import es.boffmedia.teras.objects_old.misiones.ObjetivoMision;
-import es.boffmedia.teras.objects_old.misiones.MisionesJugador;
+import es.boffmedia.teras.objects_old.misiones.*;
 import es.boffmedia.teras.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -32,7 +29,7 @@ public class SMessageVerMisiones implements Runnable{
     private IJSQueryCallback callback;
 
     Map<String, DatosNPC> datosNpc;
-    Map<Integer, DatosMision> datosMisionMap;
+    Map<Integer, QuestData> datosMisionMap;
 
     public SMessageVerMisiones(String str){
         this.str = str;
@@ -41,7 +38,8 @@ public class SMessageVerMisiones implements Runnable{
     @Override
     public void run(){
         NpcAPI npcApi = NpcAPI.Instance();
-        datosMisionMap = ( Map<Integer, DatosMision>) FileHelper.readFile("config/teras/misiones.json", new TypeToken< Map<Integer, DatosMision>>(){}.getType());
+
+        datosMisionMap = ( Map<Integer, QuestData>) FileHelper.readFile("config/teras/misiones.json", new TypeToken< Map<Integer, QuestData>>(){}.getType());
         if(datosMisionMap == null){
             datosMisionMap = new HashMap<>();
         }
@@ -49,12 +47,11 @@ public class SMessageVerMisiones implements Runnable{
         PlayerWrapper wrapper = new PlayerWrapper(player);
         IQuest[] mActivas = wrapper.getActiveQuests();
         IQuest[] mCompletadas = wrapper.getFinishedQuests();
-        ArrayList<DatosMision> misiones = new ArrayList<>();
+        ArrayList<QuestData> misiones = new ArrayList<>();
 
         for(IQuest mActiva : mActivas){
-            DatosMision datos = datosMisionMap.get(mActiva.getId());
-            datos.setActiva(true);
-            datos.setEstado("Activa");
+            QuestData datos = datosMisionMap.get(mActiva.getId());
+            datos.setStatus(QuestStatus.ACTIVE);
 
             IQuestObjective[] objetivos = mActiva.getObjectives(wrapper);
             ArrayList<ObjetivoMision> objetivosMision = new ArrayList<>();
@@ -68,14 +65,13 @@ public class SMessageVerMisiones implements Runnable{
                 }
             }
 
-            datos.setObjetivos(objetivosMision);
+            datos.setObjectives(objetivosMision);
             misiones.add(datos);
         }
 
         for(IQuest mCompleta : mCompletadas){
-            DatosMision datos = datosMisionMap.get(mCompleta.getId());
-            datos.setActiva(false);
-            datos.setEstado("Completa");
+            QuestData datos = datosMisionMap.get(mCompleta.getId());
+            datos.setStatus(QuestStatus.COMPLETED);
 
             misiones.add(datos);
         }
