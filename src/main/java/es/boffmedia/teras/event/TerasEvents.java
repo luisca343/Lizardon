@@ -9,8 +9,9 @@ import es.boffmedia.teras.commands.*;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageConfigServer;
 import es.boffmedia.teras.net.video.ScreenManager;
+import es.boffmedia.teras.objects.karts.RaceManager;
 import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
-import es.boffmedia.teras.objects_old.karts.CarreraManager;
+import es.boffmedia.teras.objects_old.karts.CarreraManagerOld;
 import es.boffmedia.teras.objects_old.serverdata.UserData;
 import es.boffmedia.teras.particle.FakeParticle;
 import es.boffmedia.teras.util.*;
@@ -141,7 +142,8 @@ public class TerasEvents {
         ScreenManager.loadScreens();
 
         try {
-            Teras.carreraManager = new CarreraManager();
+            Teras.carreraManager = new CarreraManagerOld();
+            Teras.raceManager = new RaceManager();
         }catch (NullPointerException e){
             Teras.LOGGER.error("ERROR AL CREAR EL CARRERA MANAGER");
         }

@@ -9,8 +9,9 @@ import es.boffmedia.teras.event.*;
 import es.boffmedia.teras.init.*;
 import es.boffmedia.teras.integration.Integrations;
 import es.boffmedia.teras.net.Messages;
+import es.boffmedia.teras.objects.karts.RaceManager;
 import es.boffmedia.teras.objects_old.serverdata.TerasConfig;
-import es.boffmedia.teras.objects_old.karts.CarreraManager;
+import es.boffmedia.teras.objects_old.karts.CarreraManagerOld;
 import es.boffmedia.teras.pixelmon.attacks.DesenvaineSubito;
 import es.boffmedia.teras.pixelmon.attacks.TestAttack;
 import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
@@ -79,7 +80,8 @@ public class Teras
 
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
 
-    public static CarreraManager carreraManager;
+    public static CarreraManagerOld carreraManager;
+    public static RaceManager raceManager;
 
     public static TerasConfig config;
 

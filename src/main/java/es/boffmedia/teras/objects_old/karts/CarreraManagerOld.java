@@ -18,12 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CarreraManager {
+public class CarreraManagerOld {
     public Map<String, Circuito> circuitos;
     public Map<String, Carrera> carreras;
     public Map<UUID, Participante> participantes;
 
-    public CarreraManager(){
+    public CarreraManagerOld(){
         circuitos = new LinkedTreeMap<>();
         carreras = new HashMap<>();
         participantes = new HashMap<>();
@@ -198,7 +198,6 @@ public class CarreraManager {
         for (Map.Entry<String, Circuito> entry : circuitos.entrySet()) {
            player.sendMessage(new StringTextComponent(entry.getKey()), UUID.randomUUID());
         }
-
     }
 
     public void listarCarreras() {

@@ -14,9 +14,9 @@ public class CarreraEvent {
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent
     public static void onClientTickEvent(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && event.player.level.isClientSide()) {
+        if (event.phase == TickEvent.Phase.START && event.player instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.player;
-            Teras.carreraManager.playerTick(player);
+            Teras.raceManager.playerTick(player);
         }
     }
 }

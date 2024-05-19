@@ -24,6 +24,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
+import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageVerVideo;
 import es.boffmedia.teras.net.clientOld.CMessageWaypoints;
@@ -50,6 +51,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import noppes.npcs.api.IWorld;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.constants.EntitiesType;
+import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.entity.IEntity;
+import noppes.npcs.api.entity.IEntityLiving;
 
 import java.io.*;
 import java.util.*;
@@ -59,6 +66,8 @@ public class TestCommand {
 
     public TestCommand(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> literalBuilder = Commands.literal("test")
+                .then(hitCar())
+                .then(npc())
                 .then(armadura())
                 .then(broadcast())
                 .then(peluche())
@@ -77,6 +86,37 @@ public class TestCommand {
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource,?> hitCar() {
+        return Commands.literal("hitcar")
+                .then(Commands.argument("player", EntityArgument.player())
+                        .executes((command) -> {
+                            ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
+                            Teras.raceManager.hitCar(player);
+                            //target.getPersistentData().putBoolean(PersistentDataFields.CAR_HIT.label, true);
+                            return 1;
+                        }
+                ));
+    }
+
+    private ArgumentBuilder<CommandSource,?> npc() {
+        return Commands.literal("npc")
+                .executes((command) -> {
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                    NpcAPI npcAPI = NpcAPI.Instance();
+                    IWorld world = npcAPI.getIWorld(command.getSource().getLevel());
+                    for (IEntity allEntity : world.getAllEntities(EntitiesType.NPC)) {
+                        ICustomNpc npc = (ICustomNpc) allEntity;
+                        Teras.getLogger().info("=====================================");
+                        Teras.getLogger().info("ID: " + npc.getUUID());
+                        Teras.getLogger().info("NPC: " + npc.getDisplay().getName());
+                        Teras.getLogger().info("Position: " + npc.getX() + " " + npc.getY() + " " + npc.getZ());
+
+                    }
+
+                    return 1;
+                });
     }
 
     private ArgumentBuilder<CommandSource,?> armadura() {
@@ -311,6 +351,8 @@ public class TestCommand {
                             ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
                             String url = StringArgumentType.getString(command, "url");
                             Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerVideo(url));
+
+
                             return 1;
                         }
                 )));

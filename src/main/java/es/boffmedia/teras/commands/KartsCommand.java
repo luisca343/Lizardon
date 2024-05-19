@@ -72,7 +72,7 @@ public class KartsCommand {
                     if (entity instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) entity;
                         player.sendMessage(new StringTextComponent("Listando circuitos..."), UUID.randomUUID());
-                        Teras.carreraManager.listarCircuitos(player);
+                        Teras.raceManager.listTracks(player);
                         return 1;
                     }
                     return 0;
@@ -86,7 +86,7 @@ public class KartsCommand {
                     if (entity instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) entity;
                         player.sendMessage(new StringTextComponent("Votando..." + player.getUUID()), UUID.randomUUID());
-                        Teras.carreraManager.votarCircuito(player);
+                        Teras.raceManager.voteStart(player);
                         return 1;
                     }
                     return 0;
@@ -101,7 +101,7 @@ public class KartsCommand {
                     if (entity instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) entity;
                         player.sendMessage(new StringTextComponent("Desvotando..." + player.getUUID()), UUID.randomUUID());
-                        Teras.carreraManager.desvotarCircuito(player);
+                        Teras.raceManager.unvoteStart(player);
                         return 1;
                     }
                     return 0;
@@ -116,7 +116,7 @@ public class KartsCommand {
                     if (entity instanceof ServerPlayerEntity) {
                         ServerPlayerEntity player = (ServerPlayerEntity) entity;
                         player.sendMessage(new StringTextComponent("Saliendo..." + player.getUUID()), UUID.randomUUID());
-                        Teras.carreraManager.salirCarrera(player);
+                        Teras.raceManager.leaveRace(player);
                         return 1;
                     }
                     return 0;
@@ -130,7 +130,7 @@ public class KartsCommand {
                             if(esJugador(command)) return 0;
                             String nombre = StringArgumentType.getString(command, "nombre");
 
-                            Teras.carreraManager.iniciarCuentaAtras(nombre);
+                            Teras.raceManager.startCountdown(nombre);
                             return 1;
                         })
                 );
@@ -143,7 +143,7 @@ public class KartsCommand {
                             if(esJugador(command)) return 0;
                             String nombre = StringArgumentType.getString(command, "nombre");
                             // Usar el CarreraManager para crear la carrera
-                            Teras.carreraManager.iniciarCarrera(nombre);
+                            Teras.raceManager.startRace(nombre);
                             return 1;
                         })
                 );
@@ -154,7 +154,7 @@ public class KartsCommand {
                 .then(Commands.argument("jugador", EntityArgument.player())
                         .executes((command) -> {
                             ServerPlayerEntity player = EntityArgument.getPlayer(command, "jugador");
-                            Teras.carreraManager.salirCarrera(player);
+                            Teras.raceManager.leaveRace(player);
                             return 1;
                         })
                 );
@@ -175,7 +175,7 @@ public class KartsCommand {
 
 
                             // Usar el CarreraManager para crear la carrera
-                            Teras.carreraManager.entrarCarrera(nombre, vueltas, player);
+                            Teras.raceManager.joinRace(nombre, vueltas, player);
 
 
                             return 1;

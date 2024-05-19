@@ -4,7 +4,7 @@ package es.boffmedia.teras.net.clientOld;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.client.ClientProxy;
-import es.boffmedia.teras.objects_old.misiones.DatosMision;
+import es.boffmedia.teras.objects_old.misiones.QuestData;
 import es.boffmedia.teras.objects_old.misiones.DatosNPC;
 import es.boffmedia.teras.objects_old.misiones.Mision;
 import es.boffmedia.teras.objects_old.misiones.MisionesJugador;
@@ -34,7 +34,7 @@ public class CMessageVerMisiones implements Runnable{
         MisionesJugador misionesJugador = gson.fromJson(str, MisionesJugador.class);
         //actualizar(misiones, misionesNuevas);
 
-        Collections.sort(misionesJugador.getMisiones(), comparing(DatosMision::getId));
+        Collections.sort(misionesJugador.getMisiones(), comparing(QuestData::getId));
         String res = gson.toJson(misionesJugador);
         ClientProxy.callbackMisiones.success(res);
 

@@ -1,7 +1,9 @@
 package es.boffmedia.teras.net;
 
+import es.boffmedia.teras.net.both.MessageCarTest;
 import es.boffmedia.teras.net.client.CMessageDatosServer;
 import es.boffmedia.teras.net.client.CMessageMCEFResponse;
+import es.boffmedia.teras.net.client.CMessageRacePositionChange;
 import es.boffmedia.teras.net.clientOld.*;
 import es.boffmedia.teras.net.server.SMessageCheckSpawns;
 import es.boffmedia.teras.net.server.SMessageDatosServer;
@@ -30,9 +32,12 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageMCEFResponse.class, CMessageMCEFResponse::encode, CMessageMCEFResponse::decode, CMessageMCEFResponse::handle);
         INSTANCE.registerMessage(index++, SMessageCheckSpawns.class, SMessageCheckSpawns::encode, SMessageCheckSpawns::decode, SMessageCheckSpawns::handle);
 
-
         INSTANCE.registerMessage(index++, CMessageVerMisiones.class, CMessageVerMisiones::encode, CMessageVerMisiones::decode, CMessageVerMisiones::handle);
         INSTANCE.registerMessage(index++, SMessageDatosServer.class, SMessageDatosServer::encode, SMessageDatosServer::decode, SMessageDatosServer::handle);
+
+        INSTANCE.registerMessage(index++, CMessageRacePositionChange.class, CMessageRacePositionChange::encode, CMessageRacePositionChange::decode, CMessageRacePositionChange::handle);
+
+        //INSTANCE.registerMessage(index++, MessageCarTest.class, MessageCarTest::encode, MessageCarTest::decode, MessageCarTest::handle);
 
         /// OOLD
         INSTANCE.registerMessage(index++, SMessagePadCtrl.class, SMessagePadCtrl::encode, SMessagePadCtrl::decode, SMessagePadCtrl::handle);
