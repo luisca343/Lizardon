@@ -32,13 +32,14 @@ public class SMessageIniciarLlamada implements Runnable{
         CallData datosLlamada = gson.fromJson(str, CallData.class);
         System.out.println("Miembros: "+datosLlamada.getUsers());
 
+        /*
         if(datosLlamada.getUsers().size() <= 1){
             SmartRotomResponse response = new SmartRotomResponse();
             response.setStatus(200);
             response.setError("No hay suficientes miembros para iniciar la llamada");
 
             Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageMCEFResponse(new Gson().toJson(response)));
-        }
+        }*/
 
         String idLlamada = datosLlamada.getCaller();
         Group group = api.createGroup(idLlamada, null);
