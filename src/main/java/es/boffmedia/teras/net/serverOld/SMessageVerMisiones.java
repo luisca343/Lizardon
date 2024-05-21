@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageVerMisiones;
+import es.boffmedia.teras.objects.quests.QuestObjective;
 import es.boffmedia.teras.objects_old.misiones.*;
 import es.boffmedia.teras.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
@@ -44,6 +45,7 @@ public class SMessageVerMisiones implements Runnable{
             datosMisionMap = new HashMap<>();
         }
 
+        /*
         PlayerWrapper wrapper = new PlayerWrapper(player);
         IQuest[] mActivas = wrapper.getActiveQuests();
         IQuest[] mCompletadas = wrapper.getFinishedQuests();
@@ -54,7 +56,7 @@ public class SMessageVerMisiones implements Runnable{
             datos.setStatus(QuestStatus.ACTIVE);
 
             IQuestObjective[] objetivos = mActiva.getObjectives(wrapper);
-            ArrayList<ObjetivoMision> objetivosMision = new ArrayList<>();
+            ArrayList<QuestObjective> objetivosMision = new ArrayList<>();
             if (objetivos.length > 0 ){
                 for (IQuestObjective objetivo : objetivos) {
                     ObjetivoMision objetivoMision = new ObjetivoMision();
@@ -89,7 +91,7 @@ public class SMessageVerMisiones implements Runnable{
 
         Gson gson = new Gson();
         String res = gson.toJson(misionesJugador);
-        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));
+        Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageVerMisiones(res));*/
     }
 
     private void guardarMision(IQuest mActiva, PlayerWrapper wrapper) {

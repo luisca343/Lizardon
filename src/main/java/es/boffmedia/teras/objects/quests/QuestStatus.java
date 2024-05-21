@@ -1,4 +1,4 @@
-package es.boffmedia.teras.objects_old.misiones;
+package es.boffmedia.teras.objects.quests;
 
 public enum QuestStatus {
     ACTIVE,
