@@ -98,7 +98,7 @@ public class Combate {
         }
 
         this.idCombate = battle.battleIndex;
-        iniciarLog();
+        //iniciarLog();
 
         Teras.getLBC().addCombateEspecial(idCombate, this);
         MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");

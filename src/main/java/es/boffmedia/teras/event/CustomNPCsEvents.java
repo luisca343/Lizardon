@@ -1,7 +1,7 @@
 package es.boffmedia.teras.event;
 
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects_old.misiones.DatosMision;
+import es.boffmedia.teras.objects_old.misiones.QuestData;
 import es.boffmedia.teras.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -10,6 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import noppes.npcs.api.event.DialogEvent;
+import noppes.npcs.api.event.NpcEvent;
 import noppes.npcs.api.event.QuestEvent;
 import noppes.npcs.api.handler.data.IQuest;
 import noppes.npcs.api.wrapper.PlayerWrapper;
@@ -20,10 +21,15 @@ import java.util.Map;
 @Mod.EventBusSubscriber
 public class CustomNPCsEvents {
 
+    @SubscribeEvent
+    public static void test(NpcEvent.UpdateEvent event){
+
+
+    }
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onReadDialogue(DialogEvent.OpenEvent event){
-
         Teras.getLogger().info("Se ha leido el dialogo");
     }
 
@@ -37,33 +43,35 @@ public class CustomNPCsEvents {
         if(quest == null || !wrapper.canQuestBeAccepted(quest.getId())) return;
 
         String npcName = event.npc.getName();
-        Map<Integer, DatosMision> listaMisiones = (Map<Integer, DatosMision>) FileHelper.readFile("config/teras/misiones.json", new TypeToken<Map<Integer, DatosMision>>(){}.getType());
+        Map<Integer, QuestData> listaMisiones = (Map<Integer, QuestData>) FileHelper.readFile("config/teras/misiones.json", new TypeToken<Map<Integer, QuestData>>(){}.getType());
         if(listaMisiones == null){
             listaMisiones = new HashMap<>();
         }
 
-        DatosMision datosMision = new DatosMision();
-        DatosMision datosMisionArchivo = new DatosMision();
+        QuestData datosMision = new QuestData();
+        QuestData datosMisionArchivo = new QuestData();
 
         if(listaMisiones.containsKey(quest.getId())){
             datosMisionArchivo = listaMisiones.get(quest.getId());
         }
         /* Datos de la mision */
 
+
         datosMision.setId(quest.getId());
-        datosMision.setNombre(quest.getName());
-        datosMision.setTextoLog(quest.getLogText());
-        datosMision.setTextoCompletar(quest.getCompleteText());
-        datosMision.setRepetible(quest.getIsRepeatable());
-        datosMision.setTipo(quest.getType());
-        datosMision.setSiguienteMision(-1);
+        datosMision.setName(quest.getName());
+        datosMision.setLogText(quest.getLogText());
+        datosMision.setCompleteText(quest.getCompleteText());
+        datosMision.setRepeatable(quest.getIsRepeatable());
+        datosMision.setType(quest.getType());
+        datosMision.setNextQuest(-1);
+
         if(quest.getNextQuest() != null){
-            datosMision.setSiguienteMision(quest.getNextQuest().getId());
+            datosMision.setNextQuest(quest.getNextQuest().getId());
         }
-        datosMision.setCategoria(quest.getCategory().getName());
+        datosMision.setCategory(quest.getCategory().getName());
 
         /* Datos del NPC */
-        datosMision.setNombreNPC(event.npc.getName());
+        datosMision.setNpcName(event.npc.getName());
         datosMision.setX(event.npc.getX());
         datosMision.setY(event.npc.getY());
         datosMision.setZ(event.npc.getZ());

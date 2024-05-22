@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MisionesJugador {
-    ArrayList<DatosMision> misiones;
+    ArrayList<QuestData> misiones;
     HashMap<String, Integer> categorias;
 
     public MisionesJugador(){
@@ -12,11 +12,11 @@ public class MisionesJugador {
         this.categorias = new HashMap<>();
     }
 
-    public ArrayList<DatosMision> getMisiones() {
+    public ArrayList<QuestData> getMisiones() {
         return misiones;
     }
 
-    public void setMisiones(ArrayList<DatosMision> misiones) {
+    public void setMisiones(ArrayList<QuestData> misiones) {
         this.misiones = misiones;
     }
 

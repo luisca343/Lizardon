@@ -1,5 +1,6 @@
 package es.boffmedia.teras.objects_old.karts;
 
+import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.util.MessageHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -82,7 +83,10 @@ public class Participante {
             return;
         }
 
+        Teras.getLogger().info("Posicion actual: " + pos.toString());
+        Teras.getLogger().info("Siguiente check: " + getSiguienteCheck());
         Checkpoint check = carrera.getCheckpoints().get(getSiguienteCheck());
+        Teras.getLogger().info("Check: " + check.getPos1().toString() + " - " + check.getPos2().toString());
         if(enCheckPoint(pos, check.getPos1(), check.getPos2())){
             setSiguienteCheck(getSiguienteCheck() + 1);
             MessageHelper.enviarMensaje(jugador, "Has pasado el checkpoint " + getSiguienteCheck());
@@ -134,6 +138,8 @@ public class Participante {
     }
 
     public boolean enCheckPoint(Punto loc, Punto l1, Punto l2){
+        MessageHelper.enviarMensaje(jugador, "Posicion actual: " + loc.toString());
+        MessageHelper.enviarMensaje(jugador, "CheckPoint: " + l1.toString() + " - " + l2.toString());
 
         double x1 = Math.min(l1.getX(), l2.getX()) -1;
         double y1 = Math.min(l1.getY(), l2.getY()) -1;
@@ -143,9 +149,13 @@ public class Participante {
         double y2 = Math.min(l1.getY(), l2.getY()) +1;
         double z2 = Math.max(l1.getZ(), l2.getZ()) +1;
 
-        return loc.getX() >= x1 && loc.getX() <= x2
+        boolean enCheck =  loc.getX() >= x1 && loc.getX() <= x2
                 && loc.getY() >= y1 && loc.getY() <= y2
                 && loc.getZ() >= z1 && loc.getZ() <= z2;
+
+        MessageHelper.enviarMensaje(jugador, "En Checkpoint: " + enCheck);
+
+        return enCheck;
     }
 
 }

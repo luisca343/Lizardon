@@ -53,9 +53,6 @@ public class PixelmonEvents {
         String palette = event.getPokemon().getPalette().getName();
         int estado = event.getNewStatus().equals(PokedexRegistrationStatus.SEEN) ? 0 : 1;
 
-
-
-
         ActualizarDex dex = new ActualizarDex(uuid, idPokemon, estado, form, palette);
         Gson gson = new Gson();
 

@@ -106,6 +106,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
     
     @SubscribeEvent
     public void renderItemInventory(RenderItemEvent ev){
+        /*
         AbstractItemTransformType transformType = AbstractItemTransformType.valueOf(ev.getTransformType().toString());
         if(!transformType.equals(AbstractItemTransformType.GUI) && !transformType.equals(AbstractItemTransformType.GROUND) && !transformType.equals(AbstractItemTransformType.FIXED)){
             return;
@@ -134,9 +135,8 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
                     poseStack.popPose();
                     ev.setCanceled(true);
                 }
-            }
 
-        }
+        }*/
     }
 
     @SubscribeEvent

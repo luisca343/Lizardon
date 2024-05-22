@@ -28,8 +28,6 @@ public class CarreraEventsClient {
         if(event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
         if(posicion == 0 ) return;
 
-
-
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();

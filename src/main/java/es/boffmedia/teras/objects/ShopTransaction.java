@@ -1,7 +1,8 @@
 package es.boffmedia.teras.objects;
 
-public class ShopTransaction {
-    private String uuid;
+import es.boffmedia.teras.objects.post.SmartRotomPost;
+
+public class ShopTransaction extends SmartRotomPost {
     private String npcName;
     private String itemName;
     private String operation;
@@ -9,20 +10,13 @@ public class ShopTransaction {
     private int count;
 
     public ShopTransaction(String uuid, String npcName, String itemName, String operation, int unitPrice, int count) {
+        super();
         this.uuid = uuid;
         this.npcName = npcName;
         this.itemName = itemName;
         this.operation = operation;
         this.unitPrice = unitPrice;
         this.count = count;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getNpcName() {

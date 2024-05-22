@@ -1,13 +1,24 @@
 package es.boffmedia.teras.event;
 
+import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
+import com.pixelmonmod.pixelmon.api.economy.BankAccount;
+import com.pixelmonmod.pixelmon.api.economy.BankAccountManager;
+import com.pixelmonmod.pixelmon.api.economy.BankAccountProxy;
+import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.api.util.PixelmonPlayerUtils;
 import com.pixelmonmod.pixelmon.battles.controller.log.BattleLog;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.objects.ShopTransaction;
+import es.boffmedia.teras.objects.TrainerDefeatMoney;
 import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.Combate;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
@@ -23,12 +34,26 @@ import net.minecraft.util.text.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber
 public class TerasBattleEvent {
 
+    @SubscribeEvent
+    public void beatTrainer(BeatTrainerEvent event){
+        if(event.trainer.getWinMoney() == 0){
+            Teras.LOGGER.info("No hay dinero que ganar, esto podría ser un combate custom, verdad Luisca??");
+            return;
+        }
+        
+        TrainerDefeatMoney defeatMoney = new TrainerDefeatMoney(event.player.getStringUUID(), event.trainer.getWinMoney());
+
+        Gson gson = new Gson();
+        WingullAPI.wingullPOST("/starbank/trainerdefeat", gson.toJson(defeatMoney));
+    }
 
     public void inicioCombateEntrenador(BattleStartedEvent event, Combate combate){
         Teras.LOGGER.info("Iniciando combate entrenador");
@@ -97,8 +122,6 @@ public class TerasBattleEvent {
             if(combate.getConfigCombate().esEntrenador()) inicioCombateEntrenador(event, combate);
             else inicioCombateSalvaje(event, combate);
         }
-
-
     }
 
     public void log(BattleLog log){
