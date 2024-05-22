@@ -1,5 +1,7 @@
 package es.boffmedia.teras.objects_old.misiones;
 
+import es.boffmedia.teras.objects.quests.QuestReward;
+
 import java.util.ArrayList;
 
 public class Mision {
@@ -12,7 +14,7 @@ public class Mision {
     private String textoLog;
     private String nombreNPC;
     private boolean repetible;
-    private ArrayList<RecompensaMision> recompensas;
+    private ArrayList<QuestReward> recompensas;
     private boolean activa;
     private String skin;
     private ArrayList<ObjetivoMision> objetivos;
@@ -86,11 +88,11 @@ public class Mision {
         this.categoria = categoria;
     }
 
-    public ArrayList<RecompensaMision> getRecompensas() {
+    public ArrayList<QuestReward> getRecompensas() {
         return recompensas;
     }
 
-    public void setRecompensas(ArrayList<RecompensaMision> recompensas) {
+    public void setRecompensas(ArrayList<QuestReward> recompensas) {
         this.recompensas = recompensas;
     }
 

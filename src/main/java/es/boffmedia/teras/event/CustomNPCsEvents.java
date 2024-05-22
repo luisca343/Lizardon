@@ -64,6 +64,7 @@ public class CustomNPCsEvents {
         datosMision.setRepeatable(quest.getIsRepeatable());
         datosMision.setType(quest.getType());
         datosMision.setNextQuest(-1);
+
         if(quest.getNextQuest() != null){
             datosMision.setNextQuest(quest.getNextQuest().getId());
         }

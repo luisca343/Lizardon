@@ -2,6 +2,8 @@ package es.boffmedia.teras.objects.quests;
 
 import noppes.npcs.api.handler.data.IQuest;
 
+import java.util.ArrayList;
+
 public class QuestData {
     private int id;
     private String name;
@@ -12,6 +14,8 @@ public class QuestData {
     private int nextQuest;
     private String category;
     private QuestStatus status;
+    private ArrayList<QuestObjective> objectives;
+    private ArrayList<QuestReward>  rewards;
 
     public QuestData(IQuest quest){
         this.id = quest.getId();
@@ -95,5 +99,21 @@ public class QuestData {
 
     public void setStatus(QuestStatus status) {
         this.status = status;
+    }
+
+    public ArrayList<QuestObjective> getObjectives() {
+        return objectives;
+    }
+
+    public void setObjectives(ArrayList<QuestObjective> objectives) {
+        this.objectives = objectives;
+    }
+
+    public ArrayList<QuestReward> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(ArrayList<QuestReward> rewards) {
+        this.rewards = rewards;
     }
 }

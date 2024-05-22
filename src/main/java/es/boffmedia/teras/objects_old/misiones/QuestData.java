@@ -2,6 +2,7 @@ package es.boffmedia.teras.objects_old.misiones;
 
 import es.boffmedia.teras.objects.quests.QuestObjective;
 import es.boffmedia.teras.objects.quests.QuestStatus;
+import es.boffmedia.teras.objects.quests.QuestReward;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class QuestData {
     private String completeText;
     private String logText;
     private boolean repeatable;
-    private ArrayList<RecompensaMision> rewards;
+    private ArrayList<QuestReward> rewards;
     private ArrayList<QuestObjective> objectives;
     private QuestStatus status;
 
@@ -153,11 +154,11 @@ public class QuestData {
         this.repeatable = repeatable;
     }
 
-    public ArrayList<RecompensaMision> getRewards() {
+    public ArrayList<QuestReward> getRewards() {
         return rewards;
     }
 
-    public void setRewards(ArrayList<RecompensaMision> rewards) {
+    public void setRewards(ArrayList<QuestReward> rewards) {
         this.rewards = rewards;
     }
 
