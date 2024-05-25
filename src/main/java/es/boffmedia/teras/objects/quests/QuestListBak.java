@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuestList {
+public class QuestListBak {
     ArrayList<QuestData> questDataList;
     Map<Integer, String> categories;
 
-    public QuestList() {
+    public QuestListBak() {
         NpcAPI npcApi = NpcAPI.Instance();
         IQuestHandler quests = npcApi.getQuests();
 
@@ -20,6 +20,7 @@ public class QuestList {
 
 
         quests.categories().forEach(category -> {
+            System.out.println(category.getName());
             category.quests().forEach(quest -> {
                 QuestData questData = new QuestData(quest);
                 questDataList.add(questData);
