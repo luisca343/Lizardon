@@ -1,11 +1,8 @@
 package es.boffmedia.teras.objects.quests;
 
+import noppes.npcs.api.handler.data.IDialog;
 import noppes.npcs.api.handler.data.IQuest;
-import noppes.npcs.api.handler.data.IQuestObjective;
-import noppes.npcs.api.item.IItemStack;
-import noppes.npcs.api.wrapper.PlayerWrapper;
-
-import java.util.ArrayList;
+import noppes.npcs.controllers.data.Availability;
 
 public class QuestData extends QuestDataBase{
     private String name;
@@ -31,7 +28,7 @@ public class QuestData extends QuestDataBase{
         }
     }
 
-    public QuestData(IQuest quest){
+    public QuestData(IQuest quest, IDialog dialog){
         super(quest);
         this.name = quest.getName();
         this.logText = quest.getLogText();
@@ -40,6 +37,25 @@ public class QuestData extends QuestDataBase{
         this.type = quest.getType();
         this.nextQuest = quest.getNextQuest() != null ? quest.getNextQuest().getId() : -1;
         this.category = quest.getCategory().getName();
+
+        QuestRequirement requirement = new QuestRequirement();
+
+        Availability availability = (Availability) dialog.getAvailability();
+        for (int i = 0; i < 4; i++) {
+            requirement.addQuest(availability.getQuest(i));
+            requirement.addDialog(availability.getDialog(i));
+        }
+
+        requirement.setTime(availability.getDaytime());
+        requirement.setLevel(availability.getMinPlayerLevel());
+
+        requirement.addFactionRequirement(availability.factionId, availability.factionAvailable, availability.factionStance);
+        requirement.addFactionRequirement(availability.faction2Id, availability.faction2Available, availability.faction2Stance);
+
+        requirement.addScoreboardRequirement(availability.scoreboardObjective, availability.scoreboardType, availability.scoreboardValue);
+        requirement.addScoreboardRequirement(availability.scoreboard2Objective, availability.scoreboard2Type, availability.scoreboard2Value);
+
+        this.requirements = requirement;
     }
     public String getName() {
         return name;
