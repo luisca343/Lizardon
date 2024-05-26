@@ -3,9 +3,6 @@ package es.boffmedia.teras.mixin;
 
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
-import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.pixelmon.battle.Combate;
-import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
 import es.boffmedia.teras.pixelmon.battle.TerasBattleLog;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,11 +17,7 @@ public class LogMixin {
 
     @Inject(at= @At(value = "HEAD"), method = "logEvent")
     public void logEvent(BattleAction event, CallbackInfo ci) {
-        TerasBattleController lbc = Teras.getLBC();
-        if(lbc.existeCombateEspecial(bc.battleIndex)){
-            Combate combate = lbc.getCombateEspecial(bc.battleIndex);
-            TerasBattleLog.logEvent(event, combate);
-        }
+        TerasBattleLog.logEvent(event, bc);
     }
 
 }
