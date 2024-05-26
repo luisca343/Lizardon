@@ -194,8 +194,9 @@ public class Combate {
         logHelper.setEquipo2(equipo2);
         */
 
+        /*
         TerasBattleLog.appendEquipo(equipo1, this, 1);
-        TerasBattleLog.appendEquipo(equipo2, this, 2);
+        TerasBattleLog.appendEquipo(equipo2, this, 2);*/
 
         appendLog("|teampreview" + System.lineSeparator());
         appendLog("|" + System.lineSeparator());

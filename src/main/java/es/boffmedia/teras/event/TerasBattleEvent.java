@@ -1,27 +1,20 @@
 package es.boffmedia.teras.event;
 
 import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
-import com.pixelmonmod.pixelmon.api.economy.BankAccount;
-import com.pixelmonmod.pixelmon.api.economy.BankAccountManager;
-import com.pixelmonmod.pixelmon.api.economy.BankAccountProxy;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import com.pixelmonmod.pixelmon.api.util.PixelmonPlayerUtils;
 import com.pixelmonmod.pixelmon.battles.controller.log.BattleLog;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
-import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects.ShopTransaction;
 import es.boffmedia.teras.objects.TrainerDefeatMoney;
 import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.Combate;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
+import es.boffmedia.teras.pixelmon.battle.TerasBattleLog;
 import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
 import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
@@ -34,10 +27,8 @@ import net.minecraft.util.text.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber
 public class TerasBattleEvent {
@@ -124,14 +115,8 @@ public class TerasBattleEvent {
         }
     }
 
-    public void log(BattleLog log){
-
-    }
-
-
     @SubscribeEvent
     public void onBattleEnd(BattleEndEvent event){
-        log(event.getBattleController().battleLog);
         if(Teras.getLBC().existeCombateEspecial(event.getBattleController().battleIndex)) {
             Combate combate = Teras.getLBC().getCombateEspecial(event.getBattleController().battleIndex);
 
@@ -139,6 +124,8 @@ public class TerasBattleEvent {
 
 
             if( combate.getConfigCombate().esEntrenador()) {
+                //TerasBattleLog.parseLog(event.getBattleController().battleLog, combate);
+
                 if(combate instanceof CombateFrenteBatalla) finCombateFrenteBatalla(event, combate);
                 else finCombateEntrenador(event, combate);
             }
