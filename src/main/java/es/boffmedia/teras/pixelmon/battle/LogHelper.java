@@ -14,7 +14,7 @@ public class LogHelper {
 
     public HashMap<PixelmonWrapper, ArrayList<Integer>> boosts = new HashMap<>();
     
-    public void enviarMensajeCambio(PosicionEquipo pos, PixelmonWrapper pk, Combate combate) {
+    public void enviarMensajeCambio(PosicionEquipo pos, PixelmonWrapper pk, TerasBattle combate) {
         combate.appendLog("|switch|" + pos.toString() + ": " + getDatosPoke(pk, false) + System.lineSeparator());
     }
 
@@ -29,9 +29,9 @@ public class LogHelper {
         return nickname + "|" + nombre + gender + shiny + "|" + health + "\\/" + pk.getMaxHealth();
     }
 
-    public int getPokemonRestantes(PosicionEquipo posObjetivo, Combate combate) {
+    public int getPokemonRestantes(PosicionEquipo posObjetivo, TerasBattle combate) {
         // get team
-        return posObjetivo.getEquipo() == 1 ? combate.getPartJugador().countAblePokemon() : combate.getPartRival().countAblePokemon();
+        return posObjetivo.getEquipo() == 1 ? combate.getPlayerParticipant().countAblePokemon() : combate.getRivalParticipant().countAblePokemon();
     }
 
     public int getPlayerContrario(PosicionEquipo posicion) {

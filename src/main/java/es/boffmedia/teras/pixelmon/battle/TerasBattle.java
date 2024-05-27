@@ -1,20 +1,23 @@
 package es.boffmedia.teras.pixelmon.battle;
 
+import com.pixelmonmod.pixelmon.api.battles.BattleType;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTier;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTierRegistry;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRuleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRules;
-import com.pixelmonmod.pixelmon.battles.api.rules.value.BooleanValue;
+import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelectionRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
+import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.participants.*;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.objects_old.pixelmon.ConfigCombate;
+import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
 import es.boffmedia.teras.objects_old.pixelmon.PosicionEquipo;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.Scoreboard;
@@ -27,33 +30,42 @@ import net.minecraft.util.text.TextFormatting;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
-public class Combate {
-    public int idCombate;
+public class TerasBattle {
+    public int battleId;
     public ServerPlayerEntity player;
-    public ConfigCombate configCombate;
-    public MobEntity entidad;
+    public BattleConfig battleConfig;
+    public MobEntity entity;
     public String log;
-    public PlayerParticipant partJugador;
-    public BattleParticipant partRival;
+    public PlayerParticipant playerParticipant;
+    public BattleParticipant rivalParticipant;
     LogHelper logHelper;
 
     private ArrayList<PosicionEquipo> fainted = new ArrayList<>();
 
     BattleController battle;
 
-    public Combate() {
+    boolean teamSelection = false;
+
+    public TerasBattle() {
         this.player = player;
-        this.configCombate = new ConfigCombate();
+        this.battleConfig = new BattleConfig();
         this.log = "";
         logHelper = new LogHelper();
     }
 
-    public Combate(ServerPlayerEntity player, ConfigCombate configCombate) {
+    public TerasBattle(ServerPlayerEntity player, BattleConfig configCombate) {
         this.player = player;
-        this.configCombate = configCombate;
+        this.battleConfig = configCombate;
         this.log = "";
         logHelper = new LogHelper();
+    }
+
+    public void logEvent(BattleAction event){
+        TerasBattleLog.logEvent(event, this);
     }
 
     public ArrayList<PosicionEquipo> getFainted() {
@@ -64,54 +76,119 @@ public class Combate {
         fainted.add(posicion);
     }
 
-    public int nivelMaximoJugador(){
+    public int getHighestPlayerLevel(){
         return getPlayerParty().getHighestLevel();
     }
 
-    public int getNivelEquipoRival(){
-        return configCombate.getNivelEquipo(nivelMaximoJugador());
+    public int getRivalTeamLevel(){
+        return battleConfig.calculateTeamLevel(getHighestPlayerLevel());
     }
 
-    public void iniciarCombate(){
-        configCombate.setNivelEquipo(nivelMaximoJugador());
+    public void start() {
+        /* Register the battle */
+        battleConfig.setNivelEquipo(getHighestPlayerLevel());
 
-        if(configCombate.curar()){
+        if (battleConfig.healBeforeStart()) {
             getPlayerParty().heal();
         }
 
 
-        Scoreboard.getOrCreateObjective(player, configCombate.getNombreArchivo());
+        Scoreboard.getOrCreateObjective(player, battleConfig.getNombreArchivo());
+
         BattleRules br = new BattleRules();
+        br.setNewClauses(battleConfig.getNormas());
+        br = br.set(BattleRuleRegistry.TEAM_SELECT, true);
+        br = br.set(BattleRuleRegistry.TEAM_PREVIEW, true);
+
+        br = br.set(BattleRuleRegistry.NUM_POKEMON, 2);
+        br = br.set(BattleRuleRegistry.TURN_TIME, 45);
+        br = br.set(BattleRuleRegistry.BATTLE_TYPE, BattleType.DOUBLE);
+
+        rivalParticipant = getRivalParticipant();
+        TrainerParticipant tp;
+        WildPixelmonParticipant wp;
+        if (rivalParticipant instanceof TrainerParticipant) {
+            tp = (TrainerParticipant) rivalParticipant;
+        } else {
+            Teras.LOGGER.error("ERROR: EL PARTICIPANTE RIVAL NO ES UN ENTRENADOR");
+            return;
+        }
 
 
-        br.setNewClauses(configCombate.getNormas());
-        br = br.set(BattleRuleRegistry.TEAM_SELECT, new BooleanValue(true));
-        br = br.set(BattleRuleRegistry.TEAM_PREVIEW, new BooleanValue(true));
-
-        battle = BattleRegistry.startBattle(new BattleParticipant[]{getPartJugador()}, new BattleParticipant[]{getPartRival()}, br);
+        /*
+        battle = BattleRegistry.startBattle(new BattleParticipant[]{getPlayerParticipant()}, new BattleParticipant[]{getRivalParticipant()}, br);
+        Teras.getLBC().addTerasBattle(battleId, this);
 
         for (PixelmonWrapper pixelmonWrapper : battle.getActivePokemon()) {
             int equipo;
-            if (pixelmonWrapper.getOwnerName().equals(getPartRival().getDisplayName())) equipo = 2;
+            if (pixelmonWrapper.getOwnerName().equals(getRivalParticipant().getDisplayName())) equipo = 2;
             else equipo = 1;
 
         }
 
-        this.idCombate = battle.battleIndex;
+        this.battleId = battle.battleIndex;
         //iniciarLog();
 
-        Teras.getLBC().addCombateEspecial(idCombate, this);
+        Teras.LOGGER.info("NUM POKEMOR JUGADOR: " + battleConfig.getNumPkmJugador());
+        Teras.LOGGER.info("NUM POKEMOR RIVAL: " + battleConfig.getNumPkmRival());
+
+        //Teras.getLBC().addCombateEspecial(idCombate, this);
         MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
+*/
+
+        BattleBuilder.builder()
+                .startSync()
+                .teamOne(getPlayerParticipant())
+                .teamTwo(getRivalParticipant())
+                .teamSelection(teamSelection)
+                .rules(br)
+                .teamSelectionBuilder(TeamSelectionRegistry.builder()
+                        .battleRules(br)
+                        .showOpponentTeam()
+                )
+                .allowSpectators(true)
+                .startHandler((battleStartedEvent, bc) -> {
+                    Teras.LOGGER.error("This does not work.");
+                })
+                .endHandler((battleEndEvent, bc) -> {
+                    Teras.LOGGER.error("This works.");
+                }).start();
+
+        /*
+        futureBattleController.thenRunAsync(() -> {
+            Teras.LOGGER.error("COMBATE INICIADO");
+            battle = futureBattleController.getNow(null);
+            battleId = battle.battleIndex;
+            Teras.LOGGER.info("CURRENT battleId 2: " + battleId);
+            Teras.getLBC().addTerasBattle(battleId, this);
+            postStart();
+        });*/
     }
+
+    /*
+    public void postStart(){
+        Teras.LOGGER.error("ID COMBATE: " + battleId);
+
+        this.battleId = battle.battleIndex;
+        //iniciarLog();
+
+        Teras.LOGGER.info("NUM POKEMOR JUGADOR: " + battleConfig.getNumPkmJugador());
+        Teras.LOGGER.info("NUM POKEMOR RIVAL: " + battleConfig.getNumPkmRival());
+
+        Teras.getLBC().addTerasBattle(battleId, this);
+        //Teras.getLBC().addCombateEspecial(idCombate, this);
+        MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
+
+    }*/
 
     public PosicionEquipo getPosicionByName(String name) {
         for (int i = 0; i < battle.getActivePokemon().size(); i++) {
             PixelmonWrapper p = battle.getActivePokemon().get(i);
             if(p.getNickname().equals(name)) {
-                if (i < configCombate.getNumPkmJugador()) {
+                if (i < battleConfig.getNumPkmJugador()) {
                     return new PosicionEquipo(1, i);
                 } else {
-                    return new PosicionEquipo(2, i - configCombate.getNumPkmJugador());
+                    return new PosicionEquipo(2, i - battleConfig.getNumPkmJugador());
                 }
 
             }
@@ -119,18 +196,18 @@ public class Combate {
         return null;
     }
     public int getPokemonRestantes(int equipo){
-        return equipo == 1 ? getPartJugador().countAblePokemon() : getPartRival().countAblePokemon();
+        return equipo == 1 ? getPlayerParticipant().countAblePokemon() : getRivalParticipant().countAblePokemon();
     }
 
     public int getMaxPokemon(PosicionEquipo posicionEquipo) {
         int equipo = posicionEquipo.getEquipo();
-        return equipo == 1 ? configCombate.getNumPkmJugador() : configCombate.getNumPkmRival();
+        return equipo == 1 ? battleConfig.getNumPkmJugador() : battleConfig.getNumPkmRival();
     }
 
     public boolean esGrupoSuficiente(PosicionEquipo posicionEquipo) {
         int equipo = posicionEquipo.getEquipo();
         int restantes = getPokemonRestantes(equipo);
-        int numPokemon = equipo == 1 ? configCombate.getNumPkmJugador() : configCombate.getNumPkmRival();
+        int numPokemon = equipo == 1 ? battleConfig.getNumPkmJugador() : battleConfig.getNumPkmRival();
         return restantes >= numPokemon;
     }
     public BattleController getBattle(){
@@ -139,7 +216,7 @@ public class Combate {
 
     public PixelmonWrapper getPokemonAt(PosicionEquipo pos){
         //int offset = pos.getEquipo() == 1 ? 0 : configCombate.getNumPkmJugador();
-        List<PixelmonWrapper> equipo = pos.getEquipo() == 1 ? getPartJugador().controlledPokemon : getPartRival().controlledPokemon;
+        List<PixelmonWrapper> equipo = pos.getEquipo() == 1 ? getPlayerParticipant().controlledPokemon : getRivalParticipant().controlledPokemon;
         int posicion = pos.getPosicion();
         if(posicion >= equipo.size()) posicion = equipo.size() - 1;
 
@@ -161,11 +238,11 @@ public class Combate {
             if(!p.getPokemonUUID().equals(pk.getPokemonUUID())){
                 continue;
             }
-            if(i < configCombate.getNumPkmJugador()){
+            if(i < battleConfig.getNumPkmJugador()){
                 return new PosicionEquipo(1, i);
             }
             else{
-                return new PosicionEquipo(2, i - configCombate.getNumPkmJugador());
+                return new PosicionEquipo(2, i - battleConfig.getNumPkmJugador());
             }
         }
 
@@ -174,7 +251,7 @@ public class Combate {
 
     public void iniciarLog(){
         String nombre1 = player.getDisplayName().getString();
-        String nombre2 = getPartRival().getDisplayName();
+        String nombre2 = getRivalParticipant().getDisplayName();
 
 
         appendLog("|join|"+nombre1 + System.lineSeparator());
@@ -186,8 +263,8 @@ public class Combate {
         appendLog("|tier|Circuito de Gimnasios de Teras" + System.lineSeparator());
 
         // Dividimos a la mitad
-        PixelmonWrapper[] equipo1 = getPartJugador().allPokemon;
-        PixelmonWrapper[] equipo2 = getPartRival().allPokemon;
+        PixelmonWrapper[] equipo1 = getPlayerParticipant().allPokemon;
+        PixelmonWrapper[] equipo2 = getRivalParticipant().allPokemon;
 
         /*
         logHelper.setEquipo1(equipo1);
@@ -203,6 +280,8 @@ public class Combate {
         appendLog("|start" + System.lineSeparator());
         appendLog("|turn|" + 1 + System.lineSeparator());
 
+
+        /*
         for(int i = 0; i < configCombate.getNumPkmJugador(); i++){
             PixelmonWrapper pkm = equipo1[i];
             logHelper.enviarMensajeCambio(new PosicionEquipo(1, i), pkm, this);
@@ -211,7 +290,7 @@ public class Combate {
         for(int i = 0; i < configCombate.getNumPkmRival(); i++){
             PixelmonWrapper pkm = equipo2[i];
             logHelper.enviarMensajeCambio(new PosicionEquipo(2, i), pkm, this);
-        }
+        }*/
     }
 
 
@@ -219,57 +298,56 @@ public class Combate {
         return StorageProxy.getParty(player);
     }
 
-    public PlayerParticipant getPartJugador(){
-        if(partJugador !=null) return partJugador;
+    public PlayerParticipant getPlayerParticipant(){
+        if(playerParticipant !=null) return playerParticipant;
         List<Pokemon> pokemon = getPlayerParty().findAll(Pokemon::canBattle);
-        return new PlayerParticipant(player, pokemon, configCombate.getNumPkmJugador());
+        return new PlayerParticipant(player, pokemon, battleConfig.getNumPkmJugador());
     }
 
-    public BattleParticipant getPartRival(){
-        if(partRival !=null) return partRival;
-        if (configCombate.esEntrenador()) {
+    public BattleParticipant getRivalParticipant(){
+        if(rivalParticipant !=null) return rivalParticipant;
+        if (battleConfig.esEntrenador()) {
             BattleParticipant part = getPartRivalEntrenador();
-            partRival = part;
+            rivalParticipant = part;
             return part;
         }
         else {
             BattleParticipant part = getPartRivalSalvaje();
-            partRival = part;
+            rivalParticipant = part;
             return part;
         }
     }
 
     protected BattleParticipant getPartRivalSalvaje() {
-        Pokemon pkm = configCombate.getFirstPokemon();
+        Pokemon pkm = battleConfig.getFirstPokemon();
         PixelmonEntity pixelmon = pkm.getOrCreatePixelmon();
         player.level.addFreshEntity(pixelmon);
 
-        setEntidad(pixelmon);
+        setEntity(pixelmon);
 
         return new WildPixelmonParticipant(pixelmon);
     }
 
-    protected BattleParticipant getPartRivalEntrenador() {
+    protected TrainerParticipant getPartRivalEntrenador() {
         NPCTrainer npc = new NPCTrainer(player.level);
         npc.setName("Entrenador");
 
-
         npc.setBossTier(BossTierRegistry.NOT_BOSS);
-        if(getNivelEquipoRival() > 100){
-            int niveles = getNivelEquipoRival() - 100;
+        if(getRivalTeamLevel() > 100){
+            int niveles = getRivalTeamLevel() - 100;
             BossTier tier = new BossTier("+"+niveles,"+"+niveles, false, 0, Color.BLACK, 1.0f, false,0.0, 0.0, "PALETA", 1.0, niveles);
             npc.setBossTier(tier);
         }
 
-        npc.setBattleAIMode(configCombate.getIA());
+        npc.setBattleAIMode(battleConfig.getIA());
         if(!npc.isAddedToWorld()){
             npc.setPos(player.getX(), player.getY(), player.getZ());
             player.level.addFreshEntity(npc);
             npc.addEffect(new EffectInstance(Effects.INVISIBILITY, Integer.MAX_VALUE, 0, true, true));
-            setEntidad(npc);
+            setEntity(npc);
         }
 
-        List<Pokemon> equipoEntrenador = configCombate.getEquipo();
+        List<Pokemon> equipoEntrenador = battleConfig.getEquipo();
         if(equipoEntrenador.isEmpty()){
             return null;
         }
@@ -281,15 +359,17 @@ public class Combate {
             if (i == 6) break;
         }
 
-        return new TrainerParticipant(npc, configCombate.getNumPkmRival());
+
+
+        return new TrainerParticipant(npc, battleConfig.getNumPkmRival());
     }
 
-    public ConfigCombate getConfigCombate() {
-        return configCombate;
+    public BattleConfig getBattleConfig() {
+        return battleConfig;
     }
 
-    public void setConfigCombate(ConfigCombate configCombate) {
-        this.configCombate = configCombate;
+    public void setBattleConfig(BattleConfig battleConfig) {
+        this.battleConfig = battleConfig;
     }
 
     public ServerPlayerEntity getPlayer() {
@@ -300,12 +380,12 @@ public class Combate {
         this.player = player;
     }
 
-    public MobEntity getEntidad() {
-        return entidad;
+    public MobEntity getEntity() {
+        return entity;
     }
 
-    public void setEntidad(MobEntity entidad) {
-        this.entidad = entidad;
+    public void setEntity(MobEntity entity) {
+        this.entity = entity;
     }
 
     public void setLog(String log){

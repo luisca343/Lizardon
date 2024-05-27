@@ -13,29 +13,29 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ConfigCombate {
-    private String nombre;
-    private transient String nombreArchivo;
-    private transient String carpeta;
-    private String nivel;
-    private String modalidad;
-    private String frecuencia;
-    private ArrayList<Recompensa> recompensas;
-    private ArrayList<String> normas;
-    private transient ICustomNpc npc;
-    private transient List<Pokemon> equipo;
+public class BattleConfig {
+    private String nombre; // Nombre del entrenador / evento
+    private String nivel; // Nivel de los Pokémon del entrenador
+    private int dinero; // Dinero que se obtiene al vencer al entrenador
+    private String modalidad; // Modalidad de combate (1vs1, 2vs2, 3vs3, etc)
+    private String tamanoEquipos; // Cantidad de Pokémon de cada equipo (3vs3, 4vs4, 3vs6, etc)
+    private String frecuencia; // Frecuencia de combate (DIA, DIA_MC, SEMANA, MES)
+    private ArrayList<Recompensa> recompensas; // Recompensas que se obtienen al vencer al entrenador
+    private ArrayList<String> normas; // Normas de combate (No usar objetos, sleep clause, etc)
+    private ArrayList<String> gimmick; // Gimmick generacional permitida (Mega, Z, etc)
+    private String IA; // Modo de la IA (AGGRESSIVE, ADVANCED, TACTICAL)
+    private boolean curar; // Curar a los Pokémon antes de la batalla
+    private boolean preview; // Mostrar el equipo del entrenador antes de la batalla
+    private String logro; // Logro que se obtiene al vencer al entrenador
+    private boolean exp; // Exp que se obtiene al vencer al entrenador
 
-    private ArrayList<String> gimmick;
-    private int dinero;
-    private String IA;
-    private boolean curar;
-    private boolean preview;
+    // Atributos no serializables
+    private transient String nombreArchivo; // Nombre del archivo de configuración (no hay que escribirlo)
+    private transient String carpeta; // Carpeta donde se encuentra el archivo de configuración (no hay que escribirlo)
+    private transient ICustomNpc npc; // NPC asociado al entrenador / evento
+    private transient List<Pokemon> equipo; // Equipo del entrenador / evento
 
-    private String logro;
-    private boolean exp;
-
-
-    public ConfigCombate(){
+    public BattleConfig(){
         this.dinero = 0;
         this.nivel = "0";
         this.modalidad = "1vs1";
@@ -76,7 +76,7 @@ public class ConfigCombate {
         Teras.PROXY.darObjetos(recompensas, uuid);
     }
 
-    public boolean curar() {
+    public boolean healBeforeStart() {
         return curar;
     }
 
@@ -184,7 +184,7 @@ public class ConfigCombate {
         this.equipo = equipo;
     }
 
-    public int getNivelEquipo(int nivelJugador){
+    public int calculateTeamLevel(int nivelJugador){
         int nivel;
 
         if(this.nivel.contains("+")) nivel = nivelJugador + Integer.parseInt(this.nivel.split("\\+")[1]);
@@ -195,7 +195,7 @@ public class ConfigCombate {
     }
 
     public void setNivelEquipo(int nivelJugador){
-        int nivel = getNivelEquipo(nivelJugador);
+        int nivel = calculateTeamLevel(nivelJugador);
 
         for (Pokemon pokemon : equipo) {
             pokemon.setLevel(nivel);

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TerasBattleController {
+    public HashMap<Integer, TerasBattle> terasBattles = new HashMap<>();
+
 
 
     public static enum TipoCombate{
@@ -31,27 +33,29 @@ public class TerasBattleController {
         }
     }
 
-    public HashMap<Integer, Combate> combatesEspeciales = new HashMap<>();
 
-    public boolean existeCombateEspecial(int id){
-        return combatesEspeciales.containsKey(id);
+    public boolean existsTerasBattle(int id){
+        return terasBattles.containsKey(id);
     }
 
-    public Combate getCombateEspecial(int id){
-        return combatesEspeciales.get(id);
+    public TerasBattle getTerasBattle(int id){
+        return terasBattles.get(id);
     }
 
-    public void addCombateEspecial(int id, Combate combate){
-        combatesEspeciales.put(id, combate);
+    public void addTerasBattle(int id, TerasBattle combate){
+        terasBattles.put(id, combate);
     }
 
-    public void removeCombateEspecial(int id){
-        combatesEspeciales.remove(id);
+    public void removeTerasBattle(int id){
+        terasBattles.remove(id);
     }
 
+    /*
     public boolean existeEquipo(PlayerEntity player, String equipo){
         return FileHelper.exists("teras/data/" + player.getUUID() + "/" + equipo + ".dat");
     }
+
+
 
     public void guardarEquipo(PlayerEntity player, String equipo){
         if(existeEquipo(player, equipo)){
@@ -75,12 +79,12 @@ public class TerasBattleController {
         FileHelper.writeNBT( "teras/data/" + player.getUUID() + "/"+ equipo +".dat", nbt);
 
         MessageHelper.enviarMensaje(player, "Se ha guardado tu equipo en teras/data/" + player.getUUID() + "/" + equipo + ".dat");
-
+        */
         /*
         for(int i = 0; i < team.size(); i++) {
             storage.set(i, null);
-        }*/
-    }
+        }
+    }*/
 
 
 

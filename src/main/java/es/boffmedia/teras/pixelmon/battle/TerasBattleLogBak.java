@@ -19,12 +19,12 @@ import java.util.List;
 
 public class TerasBattleLogBak {
 
-    public static void parseLog(BattleLog log, Combate combate) {
+    public static void parseLog(BattleLog log, TerasBattle combate) {
         Teras.LOGGER.warn("=================== Log del combate ===================");
         log.getAllActions().forEach(action -> logEvent(action, combate));
     }
 
-    public static void logEvent(BattleAction action, Combate combate) {
+    public static void logEvent(BattleAction action, TerasBattle combate) {
         /*
         if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, combate);
         if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, combate);
@@ -45,7 +45,7 @@ public class TerasBattleLogBak {
         Teras.LOGGER.warn(action.toString());
     }
 
-    private static void terrainChangeAction(TerrainChangeAction action, Combate combate) {
+    private static void terrainChangeAction(TerrainChangeAction action, TerasBattle combate) {
         Teras.LOGGER.warn("========== TERRAIN CHANGE ACTION ==========");
         Terrain newTerrain = (Terrain) getProtectedProperty("newTerrain", action);
         Terrain oldTerrain = (Terrain) getProtectedProperty("oldTerrain", action);
@@ -68,7 +68,7 @@ public class TerasBattleLogBak {
 
     }
 
-    private static void globalStatusAddAction(GlobalStatusAddAction action, Combate combate) {
+    private static void globalStatusAddAction(GlobalStatusAddAction action, TerasBattle combate) {
         Teras.LOGGER.warn("========== GLOBAL STATUS ADD ACTION ==========");
         String pokemonName = (String) getProtectedProperty("pokemonName", action);
         GlobalStatusBase status = (GlobalStatusBase) getProtectedProperty("status", action);
@@ -77,7 +77,7 @@ public class TerasBattleLogBak {
         Teras.LOGGER.warn("Status: " + status);
     }
 
-    private static void globalStatusRemoveAction(GlobalStatusRemoveAction action, Combate combate) {
+    private static void globalStatusRemoveAction(GlobalStatusRemoveAction action, TerasBattle combate) {
         Teras.LOGGER.warn("========== GLOBAL STATUS REMOVE ACTION ==========");
         GlobalStatusBase status = (GlobalStatusBase) getProtectedProperty("status", action);
 
@@ -85,7 +85,7 @@ public class TerasBattleLogBak {
 
     }
 
-    private static void statusAddAction(StatusAddAction action, Combate combate) {
+    private static void statusAddAction(StatusAddAction action, TerasBattle combate) {
         Teras.LOGGER.warn("========== STATUS ADD ACTION ==========");
         String pokemonName = (String) getProtectedProperty("pokemonName", action);
         StatusBase status = (StatusBase) getProtectedProperty("status", action);
@@ -94,7 +94,7 @@ public class TerasBattleLogBak {
         Teras.LOGGER.warn("Status: " + status);
     }
 
-    private static void turnEndAction(TurnEndAction action, Combate combate) {
+    private static void turnEndAction(TurnEndAction action, TerasBattle combate) {
         List<PixelmonWrapper> teams = (List<PixelmonWrapper>) getProtectedProperty("teams", action);
         Terrain terrain = (Terrain) getProtectedProperty("terrain", action);
         Weather weather = (Weather) getProtectedProperty("weather", action);
@@ -105,7 +105,7 @@ public class TerasBattleLogBak {
     }
 
 
-    private static void turnBeginAction(TurnBeginAction action, Combate combate) {
+    private static void turnBeginAction(TurnBeginAction action, TerasBattle combate) {
         int turn = (int) getProtectedProperty("turn", action);
         //Teras.LOGGER.info("========== TURN BEGIN ACTION ["+turn+"] ==========");
         LogHelper helper = combate.logHelper;
@@ -140,7 +140,7 @@ public class TerasBattleLogBak {
     }
 
 
-    private static void switchAction(SwitchAction action, Combate combate) {
+    private static void switchAction(SwitchAction action, TerasBattle combate) {
         //Teras.LOGGER.info("========== SWITCH ACTION ==========");
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
         PixelmonWrapper switchingTo = action.switchingTo;
@@ -151,7 +151,7 @@ public class TerasBattleLogBak {
         helper.enviarMensajeCambio(pos, switchingTo, combate);
     }
 
-    private static void damagePokemonAction(DamagePokemonAction action, Combate combate) {
+    private static void damagePokemonAction(DamagePokemonAction action, TerasBattle combate) {
         String pokemonName = (String) getProtectedProperty("pokemonName", action);
         int damage = (int) getProtectedProperty("damage", action);
         String source= (String) getProtectedProperty("source", action);
@@ -162,7 +162,7 @@ public class TerasBattleLogBak {
         //combate.appendLog("|-damage|" + pokemonName + "|" + healthAfter + "\\/" + healthBefore + System.lineSeparator());
     }
 
-    private static void attackAction(AttackAction action, Combate combate) {
+    private static void attackAction(AttackAction action, TerasBattle combate) {
         //Teras.LOGGER.info("========== ATTACK ACTION ==========");
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
         PosicionEquipo posPokemon = combate.getPosicionv2(pokemon);
@@ -224,7 +224,7 @@ public class TerasBattleLogBak {
 
             if(helper.getPokemonRestantes(posicion, combate) == 0){
                 int ganador = helper.getPlayerContrario(posicion);
-                String nombreGanador = ganador == 1 ? combate.player.getDisplayName().getString() : combate.getPartRival().getDisplayName();
+                String nombreGanador = ganador == 1 ? combate.player.getDisplayName().getString() : combate.getRivalParticipant().getDisplayName();
                 combate.appendLog("|win|" + nombreGanador + System.lineSeparator());
             }
 
@@ -234,11 +234,11 @@ public class TerasBattleLogBak {
 
     }
 
-    private static void selectAttackAction(SelectAttackAction action, Combate combate) {
+    private static void selectAttackAction(SelectAttackAction action, TerasBattle combate) {
 
     }
 
-    private static void battleMessageAction(BattleMessageAction action, Combate combate) {
+    private static void battleMessageAction(BattleMessageAction action, TerasBattle combate) {
         String message = (String) getProtectedProperty("message", action);
         if(message.contains("used")) return;
         if(message.contains("sent out")) return;
@@ -247,7 +247,7 @@ public class TerasBattleLogBak {
         combate.appendLog("|-message|" + message + System.lineSeparator());
     }
 
-    private static void statChangeAction(StatChangeAction action, Combate combate) {
+    private static void statChangeAction(StatChangeAction action, TerasBattle combate) {
         /*
         //Teras.LOGGER.info("========== STAT CHANGE ACTION ==========");
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
@@ -278,7 +278,7 @@ public class TerasBattleLogBak {
         logHelper.setBoosts(pokemon, currentBoosts);*/
     }
 
-    public static void appendEquipo(PixelmonWrapper[] equipo1, Combate combate, int numJugador) {
+    public static void appendEquipo(PixelmonWrapper[] equipo1, TerasBattle combate, int numJugador) {
         for (int i = 0; i < equipo1.length; i++) {
             PixelmonWrapper pk = equipo1[i];
             combate.appendLog(getStartingPkmStr(pk, numJugador));

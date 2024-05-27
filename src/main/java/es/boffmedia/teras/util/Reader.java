@@ -3,7 +3,7 @@ package es.boffmedia.teras.util;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.boffmedia.teras.api.PokePasteReader;
-import es.boffmedia.teras.objects_old.pixelmon.ConfigCombate;
+import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,16 +30,16 @@ public class Reader {
         return null;
     }
 
-    public static ConfigCombate getDatosEncuentro(String npc) {
+    public static BattleConfig getDatosEncuentro(String npc) {
         return getDatosCombate(npc, "eventos");
     }
 
 
-    public static ConfigCombate getDatosNPC(String npc) {
+    public static BattleConfig getDatosNPC(String npc) {
         return getDatosCombate(npc, "entrenadores");
     }
 
-    public static ConfigCombate getDatosCombate(String npc, String tipo) {
+    public static BattleConfig getDatosCombate(String npc, String tipo) {
         URL url = null;
         try {
             url = new URL("http://api.boffmedia.es/smartrotom/combates/"+ tipo +"/"+npc+".json");
@@ -54,7 +54,7 @@ public class Reader {
 
         String str = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.joining());
 
-        ConfigCombate configCombate = new Gson().fromJson(str, ConfigCombate.class);
+        BattleConfig configCombate = new Gson().fromJson(str, BattleConfig.class);
 
         List<Pokemon> team = PokePasteReader.fromTeras(tipo +"/"+npc).build();
 
