@@ -4,35 +4,41 @@ import com.pixelmonmod.pixelmon.api.battles.BattleType;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTier;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTierRegistry;
+import com.pixelmonmod.pixelmon.api.storage.PartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.BattleBuilder;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRuleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRules;
+import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelection;
 import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelectionRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.participants.*;
+import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.WildPixelmonParticipant;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
+import com.pixelmonmod.pixelmon.entities.npcs.registry.BaseTrainer;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
 import es.boffmedia.teras.objects_old.pixelmon.PosicionEquipo;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.Scoreboard;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.text.TextFormatting;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class TerasBattle {
     public int battleId;
@@ -57,9 +63,9 @@ public class TerasBattle {
         logHelper = new LogHelper();
     }
 
-    public TerasBattle(ServerPlayerEntity player, BattleConfig configCombate) {
+    public TerasBattle(ServerPlayerEntity player, BattleConfig battleConfig) {
         this.player = player;
-        this.battleConfig = configCombate;
+        this.battleConfig = battleConfig;
         this.log = "";
         logHelper = new LogHelper();
     }
@@ -104,15 +110,85 @@ public class TerasBattle {
         br = br.set(BattleRuleRegistry.TURN_TIME, 45);
         br = br.set(BattleRuleRegistry.BATTLE_TYPE, BattleType.DOUBLE);
 
-        rivalParticipant = getRivalParticipant();
-        TrainerParticipant tp;
-        WildPixelmonParticipant wp;
-        if (rivalParticipant instanceof TrainerParticipant) {
-            tp = (TrainerParticipant) rivalParticipant;
-        } else {
-            Teras.LOGGER.error("ERROR: EL PARTICIPANTE RIVAL NO ES UN ENTRENADOR");
-            return;
-        }
+
+      /*
+        BattleBuilder.builder()
+                .startSync()
+                  .teamOne(getPlayerParticipant())
+                .teamTwo(getRivalParticipant())
+                .teamSelection(true)
+                .rules(br)
+                .teamSelectionBuilder(TeamSelectionRegistry.builder()
+                        .battleRules(br)
+                        .showOpponentTeam()
+                        .battleStartConsumer(bc -> {
+                            Teras.LOGGER.error("Does this work?");
+                            battle = bc;
+                            battleId = bc.battleIndex;
+                            Teras.getLBC().addTerasBattle(battleId, this);
+                        })
+                        .cancelConsumer(ts -> {
+                            Teras.LOGGER.error("CANCELADO");
+                        })
+                )
+                .allowSpectators(true)
+                .startHandler((battleStartedEvent, bc) -> {
+                    Teras.LOGGER.error("This does not work.");
+                })
+                .endHandler((battleEndEvent, bc) -> {
+                    Teras.LOGGER.error("This works.");
+                }).start();
+*/
+
+
+
+        TeamSelectionRegistry.Builder test =
+                TeamSelectionRegistry
+                        .builder()
+                        .members(getPlayerParticipant().getEntity(), getRivalParticipant().getEntity())
+                        .battleRules(br)
+                        .showOpponentTeam()
+                        .closeable()
+                        .battleStartConsumer(bc -> {
+                            battle = bc;
+                            battleId = bc.battleIndex;
+                            Teras.getLBC().addTerasBattle(battleId, this);
+                        })
+                        .cancelConsumer(ts -> {
+                            Teras.LOGGER.error("CANCELADO");
+                        });
+        test.start();
+
+
+        /*
+        TerasTeamSelectionRegistry.Builder terasSelect =
+                TerasTeamSelectionRegistry
+                        .builder()
+                        .battleRules(br)
+                        .showRules()
+                        .showOpponentTeam()
+                        .closeable()
+                        .battleStartConsumer(bc -> {
+                            battle = bc;
+                            battleId = bc.battleIndex;
+                            Teras.getLBC().addTerasBattle(battleId, this);
+                        })
+                        .cancelConsumer(ts -> {
+                            Teras.LOGGER.error("CANCELADO");
+                        })
+                        .members(getPlayerParticipant().getStorage(), tp.getStorage());*/
+
+
+
+        /*
+        battle = BattleRegistry.startBattle(new BattleParticipant[]{getPlayerParticipant()}, new BattleParticipant[]{getRivalParticipant()}, br);
+        Teras.getLBC().addTerasBattle(battleId, this);
+        this.battleId = battle.battleIndex;
+        MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");*/
+
+
+
+
 
 
         /*
@@ -136,7 +212,8 @@ public class TerasBattle {
         MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
 */
 
-        BattleBuilder.builder()
+        /*
+        CompletableFuture<BattleController> futureBattleController = BattleBuilder.builder()
                 .startSync()
                 .teamOne(getPlayerParticipant())
                 .teamTwo(getRivalParticipant())
@@ -146,13 +223,16 @@ public class TerasBattle {
                         .battleRules(br)
                         .showOpponentTeam()
                 )
-                .allowSpectators(true)
-                .startHandler((battleStartedEvent, bc) -> {
-                    Teras.LOGGER.error("This does not work.");
-                })
-                .endHandler((battleEndEvent, bc) -> {
-                    Teras.LOGGER.error("This works.");
-                }).start();
+                .allowSpectators(true).start();
+
+        futureBattleController.thenAccept(bc -> {
+            Teras.LOGGER.error("COMBATE INICIADO");
+            battle = bc;
+            battleId = bc.battleIndex;
+            Teras.LOGGER.info("CURRENT battleId 2: " + bc.battleIndex);
+            Teras.getLBC().addTerasBattle(battleId, this);
+            //postStart();
+        });*/
 
         /*
         futureBattleController.thenRunAsync(() -> {
@@ -330,9 +410,10 @@ public class TerasBattle {
 
     protected TrainerParticipant getPartRivalEntrenador() {
         NPCTrainer npc = new NPCTrainer(player.level);
-        npc.setName("Entrenador");
-
         npc.setBossTier(BossTierRegistry.NOT_BOSS);
+
+
+
         if(getRivalTeamLevel() > 100){
             int niveles = getRivalTeamLevel() - 100;
             BossTier tier = new BossTier("+"+niveles,"+"+niveles, false, 0, Color.BLACK, 1.0f, false,0.0, 0.0, "PALETA", 1.0, niveles);
@@ -341,8 +422,14 @@ public class TerasBattle {
 
         npc.setBattleAIMode(battleConfig.getIA());
         if(!npc.isAddedToWorld()){
+            npc.setTextureIndex(-1);
+            String name = "aquaboss";
+            npc.setName(name);
+            npc.setCustomSteveTexture(name);
+
             npc.setPos(player.getX(), player.getY(), player.getZ());
             player.level.addFreshEntity(npc);
+
             npc.addEffect(new EffectInstance(Effects.INVISIBILITY, Integer.MAX_VALUE, 0, true, true));
             setEntity(npc);
         }
