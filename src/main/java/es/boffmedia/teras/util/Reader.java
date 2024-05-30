@@ -2,6 +2,8 @@ package es.boffmedia.teras.util;
 
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.battles.controller.ai.TacticalAI;
+import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.api.PokePasteReader;
 import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
 
@@ -42,7 +44,7 @@ public class Reader {
     public static BattleConfig getDatosCombate(String npc, String tipo) {
         URL url = null;
         try {
-            url = new URL("http://api.boffmedia.es/smartrotom/combates/"+ tipo +"/"+npc+".json");
+            url = new URL("http://api.boffmedia.es/smartrotom/combates/"+ tipo +"/"+npc+"/config.json");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -56,7 +58,10 @@ public class Reader {
 
         BattleConfig configCombate = new Gson().fromJson(str, BattleConfig.class);
 
-        List<Pokemon> team = PokePasteReader.fromTeras(tipo +"/"+npc).build();
+        int[] equipos = configCombate.getEquipos();
+        int equipoElegido = equipos[(int) (Math.random() * equipos.length)];
+
+        List<Pokemon> team = PokePasteReader.fromTeras(tipo +"/" + npc + "/" + equipoElegido).build();
 
         configCombate.setEquipo(team);
         configCombate.setNombreArchivo(npc);
