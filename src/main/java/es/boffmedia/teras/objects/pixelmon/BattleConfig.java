@@ -1,4 +1,4 @@
-package es.boffmedia.teras.objects_old.pixelmon;
+package es.boffmedia.teras.objects.pixelmon;
 
 import com.pixelmonmod.pixelmon.api.battles.BattleAIMode;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
@@ -6,6 +6,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.objects_old.pixelmon.Recompensa;
 import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class BattleConfig {
     private boolean preview; // Mostrar el equipo del entrenador antes de la batalla
     private String logro; // Logro que se obtiene al vencer al entrenador
     private boolean exp; // Exp que se obtiene al vencer al entrenador
+    private int[] equipos; // Equipos disponibles para el entrenador / evento
 
     // Atributos no serializables
     private transient String nombreArchivo; // Nombre del archivo de configuración (no hay que escribirlo)
@@ -46,6 +48,8 @@ public class BattleConfig {
         this.frecuencia = "DIA";
         this.recompensas = new ArrayList<>();
         this.normas = new ArrayList<>();
+        this.gimmick = new ArrayList<>();
+        this.equipos = new int[]{1};
     }
 
     public int getNumPkmJugador(){
@@ -273,5 +277,13 @@ public class BattleConfig {
 
     public boolean isExp() {
         return exp;
+    }
+
+    public int[] getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(int[] equipos) {
+        this.equipos = equipos;
     }
 }

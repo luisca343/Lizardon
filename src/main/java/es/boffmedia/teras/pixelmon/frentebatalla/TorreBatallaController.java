@@ -4,7 +4,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.boffmedia.teras.api.PokePasteReader;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageRunJS;
-import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
+import es.boffmedia.teras.objects.pixelmon.BattleConfig;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
 import es.boffmedia.teras.pixelmon.battle.TeamManager;
 import es.boffmedia.teras.util.MessageHelper;

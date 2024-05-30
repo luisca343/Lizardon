@@ -2,10 +2,8 @@ package es.boffmedia.teras.util;
 
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.battles.controller.ai.TacticalAI;
-import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.api.PokePasteReader;
-import es.boffmedia.teras.objects_old.pixelmon.BattleConfig;
+import es.boffmedia.teras.objects.pixelmon.BattleConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
