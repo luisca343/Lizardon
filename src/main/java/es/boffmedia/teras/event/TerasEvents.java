@@ -158,6 +158,8 @@ public class TerasEvents {
         new WECommand(event.getDispatcher());
         new DimTPCommand(event.getDispatcher());
 
+        new ObjectiveCommand(event.getDispatcher());
+
         new KartsCommand(event.getDispatcher());
         new FrenteBatallaCommand(event.getDispatcher());
 
