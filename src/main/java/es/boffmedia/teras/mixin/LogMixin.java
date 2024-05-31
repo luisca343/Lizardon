@@ -19,10 +19,8 @@ public class LogMixin {
 
     @Inject(at= @At(value = "HEAD"), method = "logEvent")
     public void logEvent(BattleAction event, CallbackInfo ci) {
-        Teras.LOGGER.info("=== Log event: " + event.toString() + " ===");
-        Teras.LOGGER.info("Battle index: " + bc.battleIndex);
         TerasBattleController lbc = Teras.getLBC();
-        Teras.LOGGER.info(lbc.terasBattles.toString());
+
         if(lbc.existsTerasBattle(bc.battleIndex)){
             TerasBattle combate = lbc.getTerasBattle(bc.battleIndex);
             combate.logEvent(event);
