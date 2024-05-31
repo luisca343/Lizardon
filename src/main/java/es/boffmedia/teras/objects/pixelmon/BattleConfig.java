@@ -1,6 +1,8 @@
 package es.boffmedia.teras.objects.pixelmon;
 
 import com.pixelmonmod.pixelmon.api.battles.BattleAIMode;
+import com.pixelmonmod.pixelmon.api.battles.BattleMode;
+import com.pixelmonmod.pixelmon.api.battles.BattleType;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
@@ -52,12 +54,20 @@ public class BattleConfig {
         this.equipos = new int[]{1};
     }
 
+    public int getPlayerPkmCount(){
+        return Integer.parseInt(getTamanoEquipos().split("vs")[0]);
+    }
+
+    public int getRivalPkmCount(){
+        return Integer.parseInt(getTamanoEquipos().split("vs")[1]);
+    }
+
     public int getNumPkmJugador(){
-        return getModalidad()[0];
+        return getPlayerPkmCount();
     }
 
     public int getNumPkmRival(){
-        return getModalidad()[1];
+        return getRivalPkmCount();
     }
 
     public int getDinero() {
@@ -94,6 +104,23 @@ public class BattleConfig {
 
     public void setPreview(boolean preview) {
         this.preview = preview;
+    }
+
+    public BattleType getBattleType(){
+        switch (modalidad.toLowerCase()){
+            case "doble":
+                return BattleType.DOUBLE;
+            case "triple":
+                return BattleType.TRIPLE;
+            case "rotatorio":
+                return BattleType.ROTATION;
+            case "horda":
+                return BattleType.HORDE;
+            case "raid":
+                return BattleType.RAID;
+            default:
+                return BattleType.SINGLE;
+        }
     }
 
     public int[] getModalidad() {
@@ -285,5 +312,13 @@ public class BattleConfig {
 
     public void setEquipos(int[] equipos) {
         this.equipos = equipos;
+    }
+
+    public void setTamanoEquipos(String tamanoEquipos) {
+        this.tamanoEquipos = tamanoEquipos;
+    }
+
+    public String getTamanoEquipos() {
+        return tamanoEquipos;
     }
 }
