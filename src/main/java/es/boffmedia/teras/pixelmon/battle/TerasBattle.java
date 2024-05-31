@@ -98,9 +98,9 @@ public class TerasBattle {
         br = br.set(BattleRuleRegistry.TEAM_SELECT, true);
         br = br.set(BattleRuleRegistry.TEAM_PREVIEW, true);
 
-        br = br.set(BattleRuleRegistry.NUM_POKEMON, 2);
-        br = br.set(BattleRuleRegistry.TURN_TIME, 45);
-        br = br.set(BattleRuleRegistry.BATTLE_TYPE, BattleType.DOUBLE);
+        br = br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getPlayerPkmCount());
+        //br = br.set(BattleRuleRegistry.TURN_TIME, 45);
+        br = br.set(BattleRuleRegistry.BATTLE_TYPE, battleConfig.getBattleType());
 
 
       /*
@@ -145,6 +145,9 @@ public class TerasBattle {
                             battle = bc;
                             battleId = bc.battleIndex;
                             Teras.getLBC().addTerasBattle(battleId, this);
+                            TerasBattleLog.appendStartBattle(bc);
+                            entity.remove();
+                            entity = null;
                         })
                         .cancelConsumer(ts -> {
                             Teras.LOGGER.error("CANCELADO");
@@ -253,6 +256,7 @@ public class TerasBattle {
 
     }*/
 
+    /*
     public PosicionEquipo getPosicionByName(String name) {
         for (int i = 0; i < battle.getActivePokemon().size(); i++) {
             PixelmonWrapper p = battle.getActivePokemon().get(i);
@@ -266,7 +270,8 @@ public class TerasBattle {
             }
         }
         return null;
-    }
+    }*/
+
     public int getPokemonRestantes(int equipo){
         return equipo == 1 ? getPlayerParticipant().countAblePokemon() : getRivalParticipant().countAblePokemon();
     }
@@ -416,13 +421,14 @@ public class TerasBattle {
         if(!npc.isAddedToWorld()){
             npc.setTextureIndex(-1);
             String name = "aquaboss";
-            npc.setName(name);
+            npc.setName(battleConfig.getNombre());
             npc.setCustomSteveTexture(name);
 
             npc.setPos(player.getX(), player.getY(), player.getZ());
             player.level.addFreshEntity(npc);
 
-            npc.addEffect(new EffectInstance(Effects.INVISIBILITY, Integer.MAX_VALUE, 0, true, true));
+
+            //npc.addEffect(new EffectInstance(Effects.INVISIBILITY, Integer.MAX_VALUE, 0, true, true));
             setEntity(npc);
         }
 
