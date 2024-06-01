@@ -14,6 +14,7 @@ public class QuestDataBase {
 
     private ArrayList<QuestObjective> objectives;
     private ArrayList<QuestReward>  rewards;
+    private int dialogId;
 
     public QuestDataBase(IQuest quest, boolean simplified) {
         this.id = quest.getId();
@@ -79,4 +80,11 @@ public class QuestDataBase {
         this.objectives = objectives;
     }
 
+    public int getDialogId() {
+        return dialogId;
+    }
+
+    public void setDialogId(int dialogId) {
+        this.dialogId = dialogId;
+    }
 }

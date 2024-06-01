@@ -5,12 +5,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.handler.IDialogHandler;
-import noppes.npcs.api.handler.IQuestHandler;
+import noppes.npcs.api.handler.data.IDialog;
 import noppes.npcs.api.handler.data.IQuest;
-import noppes.npcs.api.handler.data.IQuestObjective;
-import noppes.npcs.api.item.IItemStack;
 import noppes.npcs.api.wrapper.PlayerWrapper;
-import noppes.npcs.controllers.QuestController;
 import noppes.npcs.controllers.data.Availability;
 
 import java.util.*;
@@ -40,9 +37,7 @@ public class PlayerQuests {
             category.dialogs().forEach(dialog -> {
                 if(dialog.getQuest() !=null){
                     IQuest quest = dialog.getQuest();
-                    Availability availability = (Availability) dialog.getAvailability();
-
-                    addPlayerQuest(quest, wrapper, availability.isAvailable(wrapper));
+                    addPlayerQuest(quest, wrapper, dialog);
                 } else {
                     Teras.getLogger().info("Skipping Dialog: " + dialog.getText());
                 }
@@ -53,11 +48,12 @@ public class PlayerQuests {
 
     }
 
-    public void addPlayerQuest(IQuest quest, PlayerWrapper wrapper, boolean available) {
+    public void addPlayerQuest(IQuest quest, PlayerWrapper wrapper, IDialog dialog) {
         QuestDataBase questData = new QuestDataBase(quest);
+        questData.setDialogId(dialog.getId());
 
-        ArrayList<QuestObjective> questObjectives = new ArrayList<>();
-        ArrayList<QuestReward> questRewards = new ArrayList<>();
+        Availability availability = (Availability) dialog.getAvailability();
+        boolean available = availability.isAvailable(wrapper);
 
         if(Arrays.stream(mActivas).anyMatch(mActiva -> mActiva.getId() == quest.getId())) {
             questData.setStatus(QuestStatus.ACTIVE);

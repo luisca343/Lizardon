@@ -1,3 +1,4 @@
+/*
 package es.boffmedia.teras.pixelmon.battle;
 
 import com.pixelmonmod.pixelmon.api.pokemon.species.gender.Gender;
@@ -25,7 +26,7 @@ public class TerasBattleLogBak {
     }
 
     public static void logEvent(BattleAction action, TerasBattle combate) {
-        /*
+
         if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, combate);
         if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, combate);
         if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, combate);
@@ -40,7 +41,7 @@ public class TerasBattleLogBak {
         if (action instanceof GlobalStatusAddAction) globalStatusAddAction((GlobalStatusAddAction) action, combate);
         if (action instanceof TerrainChangeAction) terrainChangeAction((TerrainChangeAction) action, combate);
 
-*/
+
         Teras.LOGGER.info("SE HA LOGEADO UNA ACCION: " + action.getClass().getSimpleName());
         Teras.LOGGER.warn(action.toString());
     }
@@ -202,12 +203,12 @@ public class TerasBattleLogBak {
             }
 
 
-            /*
+
             if(helper.getPokemonRestantes(posicion, combate) == 0){
                 int ganador = helper.getPlayerContrario(posicion);
                 String nombreGanador = ganador == 1 ? combate.player.getDisplayName().getString() : combate.getPartRival().getDisplayName();
                 combate.appendLog("|win|" + nombreGanador + System.lineSeparator());
-            }*/
+            }
 
         }
 
@@ -248,7 +249,7 @@ public class TerasBattleLogBak {
     }
 
     private static void statChangeAction(StatChangeAction action, TerasBattle combate) {
-        /*
+
         //Teras.LOGGER.info("========== STAT CHANGE ACTION ==========");
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
         LogHelper logHelper = combate.logHelper;
@@ -275,7 +276,7 @@ public class TerasBattleLogBak {
             }
         }
 
-        logHelper.setBoosts(pokemon, currentBoosts);*/
+        logHelper.setBoosts(pokemon, currentBoosts);
     }
 
     public static void appendEquipo(PixelmonWrapper[] equipo1, TerasBattle combate, int numJugador) {
@@ -301,4 +302,4 @@ public class TerasBattleLogBak {
             throw new RuntimeException(e);
         }
     }
-}
+}*/

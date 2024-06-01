@@ -29,6 +29,8 @@ import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageVerVideo;
 import es.boffmedia.teras.net.clientOld.CMessageWaypoints;
 import es.boffmedia.teras.net.video.ScreenManager;
+import es.boffmedia.teras.objects.quests.NpcData;
+import es.boffmedia.teras.objects.quests.UpdateNPCs;
 import es.boffmedia.teras.objects_old.WayPoint;
 import es.boffmedia.teras.objects_old.karts.Circuito;
 import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
@@ -37,6 +39,7 @@ import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
 import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.PersistentDataFields;
+import es.boffmedia.teras.util.WingullAPI;
 import es.boffmedia.teras.util.music.AudioManager;
 import moe.plushie.armourers_workshop.core.data.LocalDataService;
 import moe.plushie.armourers_workshop.core.skin.Skin;
@@ -50,13 +53,18 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import noppes.npcs.api.IWorld;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.constants.EntitiesType;
 import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IEntityLiving;
+import noppes.npcs.api.handler.data.IDialog;
+import noppes.npcs.controllers.data.Dialog;
+import noppes.npcs.controllers.data.DialogOption;
 
 import java.io.*;
 import java.util.*;
@@ -103,17 +111,10 @@ public class TestCommand {
     private ArgumentBuilder<CommandSource,?> npc() {
         return Commands.literal("npc")
                 .executes((command) -> {
-                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
-                    NpcAPI npcAPI = NpcAPI.Instance();
-                    IWorld world = npcAPI.getIWorld(command.getSource().getLevel());
-                    for (IEntity allEntity : world.getAllEntities(EntitiesType.NPC)) {
-                        ICustomNpc npc = (ICustomNpc) allEntity;
-                        Teras.getLogger().info("=====================================");
-                        Teras.getLogger().info("ID: " + npc.getUUID());
-                        Teras.getLogger().info("NPC: " + npc.getDisplay().getName());
-                        Teras.getLogger().info("Position: " + npc.getX() + " " + npc.getY() + " " + npc.getZ());
+                    UpdateNPCs updateNPCs = new UpdateNPCs();
 
-                    }
+                    Gson gson = new Gson();
+                    WingullAPI.wingullPOST("/misiones/npcs", gson.toJson(updateNPCs));
 
                     return 1;
                 });

@@ -1,8 +1,10 @@
 package es.boffmedia.teras.objects.quests;
 
+import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.handler.data.IDialog;
 import noppes.npcs.api.handler.data.IQuest;
 import noppes.npcs.controllers.data.Availability;
+import noppes.npcs.entity.EntityCustomNpc;
 
 public class QuestData extends QuestDataBase{
     private String name;

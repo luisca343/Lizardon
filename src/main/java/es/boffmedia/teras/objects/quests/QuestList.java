@@ -1,11 +1,17 @@
 package es.boffmedia.teras.objects.quests;
 
 import es.boffmedia.teras.Teras;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import noppes.npcs.CustomEntities;
+import noppes.npcs.CustomNpcs;
+import noppes.npcs.api.IWorld;
 import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.handler.IDialogHandler;
 import noppes.npcs.api.handler.IQuestHandler;
 import noppes.npcs.api.handler.data.IQuest;
 import noppes.npcs.controllers.data.Availability;
+import noppes.npcs.entity.EntityCustomNpc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +50,6 @@ public class QuestList {
                 }
             });
         });
-
 
 
         /*
