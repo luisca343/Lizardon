@@ -42,7 +42,7 @@ public class BattleConfig {
     public BattleConfig(){
         this.dinero = 0;
         this.nivel = "0";
-        this.modalidad = "1vs1";
+        this.modalidad = "doble";
         this.IA = "TÁCTICA";
         this.exp = false;
         this.curar = false;
@@ -124,6 +124,24 @@ public class BattleConfig {
     }
 
     public int[] getModalidad() {
+        switch (getBattleType()){
+            case SINGLE:
+                return new int[]{1, 1};
+            case DOUBLE:
+                return new int[]{2, 2};
+            case TRIPLE:
+                return new int[]{3, 3};
+            case ROTATION:
+                return new int[]{3, 3};
+            case HORDE:
+                return new int[]{1, 5};
+            case RAID:
+                return new int[]{4, 1};
+            default:
+                return new int[]{1, 1};
+        }
+
+        /*
         if(modalidad == null) return new int[]{1, 1};
         modalidad.replace("v", "vs");
         String[] partes = modalidad.split("vs");
@@ -132,7 +150,7 @@ public class BattleConfig {
             numeros[i] = Integer.parseInt(partes[i]);
         }
 
-        return numeros;
+        return numeros;*/
     }
 
     public void setModalidad(String modalidad) {
