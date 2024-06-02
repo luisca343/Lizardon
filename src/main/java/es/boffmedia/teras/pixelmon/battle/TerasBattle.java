@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.List;
 
 public class TerasBattle {
-    public int battleId;
+    BattleController battle;
     public ServerPlayerEntity player;
     public BattleConfig battleConfig;
     public MobEntity entity;
@@ -41,12 +41,13 @@ public class TerasBattle {
     public PlayerParticipant playerParticipant;
     public BattleParticipant rivalParticipant;
     LogHelper logHelper;
-
     private ArrayList<PosicionEquipo> fainted = new ArrayList<>();
-
-    BattleController battle;
-
     boolean teamSelection = false;
+
+    private HashMap<Integer,HashMap<Integer, PixelmonWrapper>> activePokemon = new HashMap<>();
+
+    ArrayList<String> pokemonInit = new ArrayList<>();
+    ArrayList<String> switchInit = new ArrayList<>();
 
     public TerasBattle() {
         this.player = player;
@@ -64,14 +65,6 @@ public class TerasBattle {
 
     public void logEvent(BattleAction event){
         TerasBattleLog.logEvent(event, this);
-    }
-
-    public ArrayList<PosicionEquipo> getFainted() {
-        return fainted;
-    }
-
-    public void setFainted(PosicionEquipo posicion) {
-        fainted.add(posicion);
     }
 
     public int getHighestPlayerLevel(){
@@ -102,38 +95,6 @@ public class TerasBattle {
         //br = br.set(BattleRuleRegistry.TURN_TIME, 45);
         br = br.set(BattleRuleRegistry.BATTLE_TYPE, battleConfig.getBattleType());
 
-
-      /*
-        BattleBuilder.builder()
-                .startSync()
-                  .teamOne(getPlayerParticipant())
-                .teamTwo(getRivalParticipant())
-                .teamSelection(true)
-                .rules(br)
-                .teamSelectionBuilder(TeamSelectionRegistry.builder()
-                        .battleRules(br)
-                        .showOpponentTeam()
-                        .battleStartConsumer(bc -> {
-                            Teras.LOGGER.error("Does this work?");
-                            battle = bc;
-                            battleId = bc.battleIndex;
-                            Teras.getLBC().addTerasBattle(battleId, this);
-                        })
-                        .cancelConsumer(ts -> {
-                            Teras.LOGGER.error("CANCELADO");
-                        })
-                )
-                .allowSpectators(true)
-                .startHandler((battleStartedEvent, bc) -> {
-                    Teras.LOGGER.error("This does not work.");
-                })
-                .endHandler((battleEndEvent, bc) -> {
-                    Teras.LOGGER.error("This works.");
-                }).start();
-*/
-
-
-
         TeamSelectionRegistry.Builder test =
                 TeamSelectionRegistry
                         .builder()
@@ -143,9 +104,8 @@ public class TerasBattle {
                         .closeable()
                         .battleStartConsumer(bc -> {
                             battle = bc;
-                            battleId = bc.battleIndex;
-                            Teras.getLBC().addTerasBattle(battleId, this);
-                            TerasBattleLog.appendStartBattle(bc);
+                            Teras.getLBC().addTerasBattle(bc.battleIndex, this);
+                            TerasBattleLog.appendStartBattle(this);
                             entity.remove();
                             entity = null;
                         })
@@ -153,223 +113,19 @@ public class TerasBattle {
                             Teras.LOGGER.error("CANCELADO");
                         });
         test.start();
-
-
-        /*
-        TerasTeamSelectionRegistry.Builder terasSelect =
-                TerasTeamSelectionRegistry
-                        .builder()
-                        .battleRules(br)
-                        .showRules()
-                        .showOpponentTeam()
-                        .closeable()
-                        .battleStartConsumer(bc -> {
-                            battle = bc;
-                            battleId = bc.battleIndex;
-                            Teras.getLBC().addTerasBattle(battleId, this);
-                        })
-                        .cancelConsumer(ts -> {
-                            Teras.LOGGER.error("CANCELADO");
-                        })
-                        .members(getPlayerParticipant().getStorage(), tp.getStorage());*/
-
-
-
-        /*
-        battle = BattleRegistry.startBattle(new BattleParticipant[]{getPlayerParticipant()}, new BattleParticipant[]{getRivalParticipant()}, br);
-        Teras.getLBC().addTerasBattle(battleId, this);
-        this.battleId = battle.battleIndex;
-        MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");*/
-
-
-
-
-
-
-        /*
-        battle = BattleRegistry.startBattle(new BattleParticipant[]{getPlayerParticipant()}, new BattleParticipant[]{getRivalParticipant()}, br);
-        Teras.getLBC().addTerasBattle(battleId, this);
-
-        for (PixelmonWrapper pixelmonWrapper : battle.getActivePokemon()) {
-            int equipo;
-            if (pixelmonWrapper.getOwnerName().equals(getRivalParticipant().getDisplayName())) equipo = 2;
-            else equipo = 1;
-
-        }
-
-        this.battleId = battle.battleIndex;
-        //iniciarLog();
-
-        Teras.LOGGER.info("NUM POKEMOR JUGADOR: " + battleConfig.getNumPkmJugador());
-        Teras.LOGGER.info("NUM POKEMOR RIVAL: " + battleConfig.getNumPkmRival());
-
-        //Teras.getLBC().addCombateEspecial(idCombate, this);
-        MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
-*/
-
-        /*
-        CompletableFuture<BattleController> futureBattleController = BattleBuilder.builder()
-                .startSync()
-                .teamOne(getPlayerParticipant())
-                .teamTwo(getRivalParticipant())
-                .teamSelection(teamSelection)
-                .rules(br)
-                .teamSelectionBuilder(TeamSelectionRegistry.builder()
-                        .battleRules(br)
-                        .showOpponentTeam()
-                )
-                .allowSpectators(true).start();
-
-        futureBattleController.thenAccept(bc -> {
-            Teras.LOGGER.error("COMBATE INICIADO");
-            battle = bc;
-            battleId = bc.battleIndex;
-            Teras.LOGGER.info("CURRENT battleId 2: " + bc.battleIndex);
-            Teras.getLBC().addTerasBattle(battleId, this);
-            //postStart();
-        });*/
-
-        /*
-        futureBattleController.thenRunAsync(() -> {
-            Teras.LOGGER.error("COMBATE INICIADO");
-            battle = futureBattleController.getNow(null);
-            battleId = battle.battleIndex;
-            Teras.LOGGER.info("CURRENT battleId 2: " + battleId);
-            Teras.getLBC().addTerasBattle(battleId, this);
-            postStart();
-        });*/
     }
 
-    /*
-    public void postStart(){
-        Teras.LOGGER.error("ID COMBATE: " + battleId);
-
-        this.battleId = battle.battleIndex;
-        //iniciarLog();
-
-        Teras.LOGGER.info("NUM POKEMOR JUGADOR: " + battleConfig.getNumPkmJugador());
-        Teras.LOGGER.info("NUM POKEMOR RIVAL: " + battleConfig.getNumPkmRival());
-
-        Teras.getLBC().addTerasBattle(battleId, this);
-        //Teras.getLBC().addCombateEspecial(idCombate, this);
-        MessageHelper.enviarMensaje(player, TextFormatting.LIGHT_PURPLE + "¡Combate iniciado!");
-
-    }*/
-
-    /*
-    public PosicionEquipo getPosicionByName(String name) {
-        for (int i = 0; i < battle.getActivePokemon().size(); i++) {
-            PixelmonWrapper p = battle.getActivePokemon().get(i);
-            if(p.getNickname().equals(name)) {
-                if (i < battleConfig.getNumPkmJugador()) {
-                    return new PosicionEquipo(1, i);
-                } else {
-                    return new PosicionEquipo(2, i - battleConfig.getNumPkmJugador());
-                }
-
-            }
-        }
-        return null;
-    }*/
-
-    public int getPokemonRestantes(int equipo){
-        return equipo == 1 ? getPlayerParticipant().countAblePokemon() : getRivalParticipant().countAblePokemon();
-    }
-
-    public int getMaxPokemon(PosicionEquipo posicionEquipo) {
-        int equipo = posicionEquipo.getEquipo();
-        return equipo == 1 ? battleConfig.getNumPkmJugador() : battleConfig.getNumPkmRival();
-    }
-
-    public boolean esGrupoSuficiente(PosicionEquipo posicionEquipo) {
-        int equipo = posicionEquipo.getEquipo();
-        int restantes = getPokemonRestantes(equipo);
-        int numPokemon = equipo == 1 ? battleConfig.getNumPkmJugador() : battleConfig.getNumPkmRival();
-        return restantes >= numPokemon;
-    }
     public BattleController getBattle(){
         return battle;
     }
 
-    public PixelmonWrapper getPokemonAt(PosicionEquipo pos){
-        //int offset = pos.getEquipo() == 1 ? 0 : configCombate.getNumPkmJugador();
-        List<PixelmonWrapper> equipo = pos.getEquipo() == 1 ? getPlayerParticipant().controlledPokemon : getRivalParticipant().controlledPokemon;
-        int posicion = pos.getPosicion();
-        if(posicion >= equipo.size()) posicion = equipo.size() - 1;
-
-        return equipo.get(posicion);
+    public String getName1(){
+        return player.getDisplayName().getString();
     }
 
-
-    public PosicionEquipo getPosicionContraria(PosicionEquipo posPokemon) {
-        int equipo = posPokemon.getEquipo();
-        int posicion = posPokemon.getPosicion();
-        if(equipo == 1) return new PosicionEquipo(2, posicion);
-        else return new PosicionEquipo(1, posicion);
+    public String getName2(){
+        return getRivalParticipant().getDisplayName();
     }
-
-    public PosicionEquipo getPosicionv2(PixelmonWrapper pk){
-        ArrayList<PixelmonWrapper> list = battle.getActivePokemon();
-        for (int i = 0; i < list.size(); i++) {
-            PixelmonWrapper p = list.get(i);
-            if(!p.getPokemonUUID().equals(pk.getPokemonUUID())){
-                continue;
-            }
-            if(i < battleConfig.getNumPkmJugador()){
-                return new PosicionEquipo(1, i);
-            }
-            else{
-                return new PosicionEquipo(2, i - battleConfig.getNumPkmJugador());
-            }
-        }
-
-        return null;
-    }
-
-    public void iniciarLog(){
-        String nombre1 = player.getDisplayName().getString();
-        String nombre2 = getRivalParticipant().getDisplayName();
-
-
-        appendLog("|join|"+nombre1 + System.lineSeparator());
-        appendLog("|join|"+nombre2 + System.lineSeparator());
-        appendLog("|player|p1|"+nombre1 + System.lineSeparator());
-        appendLog("|player|p2|"+nombre2 + System.lineSeparator());
-        appendLog("|gametype|Singles" + System.lineSeparator());
-        appendLog("|gen|9" + System.lineSeparator());
-        appendLog("|tier|Circuito de Gimnasios de Teras" + System.lineSeparator());
-
-        // Dividimos a la mitad
-        PixelmonWrapper[] equipo1 = getPlayerParticipant().allPokemon;
-        PixelmonWrapper[] equipo2 = getRivalParticipant().allPokemon;
-
-        /*
-        logHelper.setEquipo1(equipo1);
-        logHelper.setEquipo2(equipo2);
-        */
-
-        /*
-        TerasBattleLog.appendEquipo(equipo1, this, 1);
-        TerasBattleLog.appendEquipo(equipo2, this, 2);*/
-
-        appendLog("|teampreview" + System.lineSeparator());
-        appendLog("|" + System.lineSeparator());
-        appendLog("|start" + System.lineSeparator());
-        appendLog("|turn|" + 1 + System.lineSeparator());
-
-
-        /*
-        for(int i = 0; i < configCombate.getNumPkmJugador(); i++){
-            PixelmonWrapper pkm = equipo1[i];
-            logHelper.enviarMensajeCambio(new PosicionEquipo(1, i), pkm, this);
-        }
-
-        for(int i = 0; i < configCombate.getNumPkmRival(); i++){
-            PixelmonWrapper pkm = equipo2[i];
-            logHelper.enviarMensajeCambio(new PosicionEquipo(2, i), pkm, this);
-        }*/
-    }
-
 
     public PlayerPartyStorage getPlayerParty(){
         return StorageProxy.getParty(player);
@@ -444,8 +200,6 @@ public class TerasBattle {
             if (i == 6) break;
         }
 
-
-
         return new TrainerParticipant(npc, battleConfig.getNumPkmRival());
     }
 
@@ -479,18 +233,83 @@ public class TerasBattle {
 
     public void appendLog(String log){
         this.log += log;
-        //Teras.LOGGER.info(log);
     }
 
     public String getLog(){
         return log;
     }
 
-
-    public void resetFainted() {
-        fainted = new ArrayList<>();
+    public int getBattleId() {
+        return battle.battleIndex;
     }
 
+
+    public void swapPokemon(int team, int position, PixelmonWrapper newPokemon) {
+        if(!activePokemon.containsKey(team)){
+            activePokemon.put(team, new HashMap<>());
+
+        }
+        activePokemon.get(team).put(position, newPokemon);
+    }
+    public boolean swapPokemon(PixelmonWrapper pokemon, PixelmonWrapper switchingTo) {
+        for (Map.Entry<Integer, HashMap<Integer, PixelmonWrapper>> teamEntry : activePokemon.entrySet()) {
+            for (Map.Entry<Integer, PixelmonWrapper> positionEntry : teamEntry.getValue().entrySet()) {
+                if (positionEntry.getValue().equals(pokemon)) {
+                    teamEntry.getValue().put(positionEntry.getKey(), switchingTo);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public PixelmonWrapper getActivePokemon(int team, int position){
+        if(!activePokemon.containsKey(team)){
+            return null;
+        }
+        return activePokemon.get(team).get(position);
+    }
+
+    public HashMap<Integer, PixelmonWrapper> getActiveTeam(int team){
+        if(!activePokemon.containsKey(team)){
+            return new HashMap<>();
+        }
+        return activePokemon.get(team);
+    }
+
+
+    final char[] letters = {'a', 'b', 'c', 'd', 'e', 'f'};
+    public String getPositionString(PixelmonWrapper pkm){
+        String result = null;
+        for (Map.Entry<Integer, HashMap<Integer, PixelmonWrapper>> teamEntry : activePokemon.entrySet()) {
+            for (Map.Entry<Integer, PixelmonWrapper> positionEntry : teamEntry.getValue().entrySet()) {
+                if (positionEntry.getValue().equals(pkm)) {
+                    result = "p" + teamEntry.getKey() + letters[positionEntry.getKey()];
+                    break;
+                }
+            }
+            if (result != null) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<String> getPokemonInit() {
+        return pokemonInit;
+    }
+
+    public void setPokemonInit(ArrayList<String> pokemonInit) {
+        this.pokemonInit = pokemonInit;
+    }
+
+    public ArrayList<String> getSwitchInit() {
+        return switchInit;
+    }
+
+    public void setSwitchInit(ArrayList<String> switchInit) {
+        this.switchInit = switchInit;
+    }
 }
 
 

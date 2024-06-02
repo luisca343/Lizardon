@@ -1,6 +1,7 @@
 package es.boffmedia.teras.event;
 
 import com.google.gson.Gson;
+import com.pixelmonmod.pixelmon.api.battles.BattleEndCause;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
@@ -13,6 +14,7 @@ import es.boffmedia.teras.objects.TrainerDefeatMoney;
 import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.TerasBattle;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
+import es.boffmedia.teras.pixelmon.battle.TerasBattleLog;
 import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
 import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
@@ -57,6 +59,9 @@ public class TerasBattleEvent {
         Teras.LOGGER.info("Fin combate entrenador");
         //TerasBattleLog.parseLog(event.getBattleController().battleLog, combate);
         boolean ganador = getGanador(event, combate);
+        String nombreGanador = ganador ? combate.getPlayer().getDisplayName().getString() : combate.getBattleConfig().getNombre();
+        TerasBattleLog.appendLine(combate, "|win|" + nombreGanador);
+        Teras.LOGGER.info("\n"+combate.log);
 
         LogroCombate logroCombate = new LogroCombate();
         logroCombate.setUuid(combate.getPlayer().getStringUUID());
@@ -64,8 +69,10 @@ public class TerasBattleEvent {
         logroCombate.setNpc(combate.getBattleConfig().getNombreArchivo());
         logroCombate.setLogro(combate.getBattleConfig().getLogro());
         logroCombate.setVictoria(ganador);
+        logroCombate.setReplay(combate.getLog());
         List<Pokemon> team = StorageProxy.getParty(combate.getPlayer()).getTeam();
         logroCombate.setEquipo(team);
+
 
         WingullAPI.wingullPOST("/logros/combate", Teras.GSON.toJson(logroCombate));
 

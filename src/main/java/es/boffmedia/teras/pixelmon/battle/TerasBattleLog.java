@@ -1,6 +1,5 @@
 package es.boffmedia.teras.pixelmon.battle;
 
-import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
@@ -9,12 +8,10 @@ import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.*;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.AttackAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.BattleEndAction;
-import com.pixelmonmod.pixelmon.battles.controller.log.action.type.BattleMessageAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.StatChangeAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.StatusAddAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.SwitchAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.TurnBeginAction;
-import com.pixelmonmod.pixelmon.battles.controller.log.action.type.TurnEndAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.WeatherChangeAction;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
@@ -26,55 +23,53 @@ import es.boffmedia.teras.Teras;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class TerasBattleLog {
 
-    public static HashMap<Integer, String> logs = new HashMap<>();
     //public static HashMap<Integer, HashMap<String, List<PixelmonWrapper>>> activePokemon = new HashMap<>();
 
-    public static void initLog(int battleIndex){
-        logs.put(battleIndex, "");
+    public static void initLog(TerasBattle battle){
+        battle.setLog("");
     }
+    final char[] teamPos = {'a', 'b', 'c', 'd', 'e', 'f'};
 
-    public static String getBattleLog(int battleIndex){
-        if(!logs.containsKey(battleIndex)) {
-            initLog(battleIndex);
+    public static String getBattleLog(TerasBattle battle){
+        if(battle.getLog().isEmpty()) {
+            initLog(battle);
         }
-        return logs.get(battleIndex);
+        return battle.getLog();
     }
 
-    public static void appendLine(int battleIndex, String log){
+    public static void appendLine(TerasBattle battle, String log){
         //Teras.getLogger().warn("LOGGING: " + log);
-        logs.put(battleIndex, logs.get(battleIndex) + log + System.lineSeparator());
+        battle.setLog(battle.getLog() + log + "\n");
     }
 
-    public static void printLog(int battleIndex){
-        Teras.LOGGER.info("LOG DEL COMBATE " + battleIndex);
-        Teras.LOGGER.info(logs.get(battleIndex));
+    public static void printLog(TerasBattle battle){
+        Teras.LOGGER.info(getBattleLog(battle));
     }
 
     public static void logEvent(BattleAction action, TerasBattle battle) {
-        Teras.LOGGER.warn("=== Log event: " + action.toString() + " ===");
+        if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, battle);
+        else if (action instanceof BattleEndAction) { battleEndAction((BattleEndAction) action, battle); }
+        else if (action instanceof SwitchAction) switchAction((SwitchAction) action, battle);
+        else if (action instanceof AttackAction) attackAction((AttackAction) action, battle);
+        //else if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, battle);
+        else if (action instanceof WeatherChangeAction) weatherChangeAction((WeatherChangeAction) action, battle);
+        else if (action instanceof StatusAddAction) statusAddAction((StatusAddAction) action, battle);
+
         /*
 
-        if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, bc);
-        else if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, bc);
-        else if (action instanceof AttackAction) attackAction((AttackAction) action, bc);
-        else if (action instanceof WeatherChangeAction) weatherChangeAction((WeatherChangeAction) action, bc);
-        else if (action instanceof StatusAddAction) statusAddAction((StatusAddAction) action, bc);
-        else if (action instanceof SwitchAction) switchAction((SwitchAction) action, bc);
 
 
-        else if (action instanceof BattleMessageAction) battleMessageAction((BattleMessageAction) action, bc);
-        else if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, bc);
-        else if (action instanceof BattleEndAction) { battleEndAction((BattleEndAction) action, bc); }
+
+        else if (action instanceof BattleMessageAction) battleMessageAction((BattleMessageAction) action, battle);
+        else if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, battle);
         else Teras.LOGGER.info("Unknown action: " + action.getClass().getSimpleName());
-
         */
+        else Teras.LOGGER.warn("=== Log event: " + action.toString() + " ===");
+
 
 
         /* ====== TO DO ======
@@ -85,49 +80,66 @@ public class TerasBattleLog {
     }
 
     /* Actions */
-    private static void battleEndAction(BattleEndAction action, BattleController bc) {
+    private static void battleEndAction(BattleEndAction action, TerasBattle terasBattle){
+
+       /* BattleController bc = terasBattle.battle;
         Teras.LOGGER.error("===Battle End===");
-        Teras.LOGGER.info("\n"+getBattleLog(bc.battleIndex));
 
+        String winner = bc.participants.stream()
+                .filter((participant) -> participant.controlledPokemon.size() > 0).findFirst().get().getDisplayName();
+
+       */
     }
 
 
 
-    public static void turnBeginAction(TurnBeginAction action, BattleController bc){
+    public static void turnBeginAction(TurnBeginAction action, TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
         int turn = (int) getProtectedProperty("turn", action);
-        if(turn == 0) appendStartBattle(bc);
+        if(turn == 0) appendStartBattle(terasBattle);
 
 
-        appendLine(bc.battleIndex,"|turn|" + (turn+1));
+        appendLine(terasBattle,"|turn|" + (turn+1));
         //appendLine(bc.battleIndex,"|callback|decision");
-        appendLine(bc.battleIndex,"|");
-        appendLine(bc.battleIndex, "|t:|" + System.currentTimeMillis() / 1000);
+        appendLine(terasBattle,"|");
+        appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);
 
-    }
+        List<BattleParticipant> participantsList = new ArrayList<>(bc.participants);
+        Collections.reverse(participantsList);
 
-    public static PokemonPosition getPosition(PixelmonWrapper pokemon, BattleController bc){
-        int participantIndex = 0;
-        for (BattleParticipant participant : bc.participants) {
-            int index = participant.getTeamPokemon().indexOf(pokemon);
-            if(index != -1){
-                return new PokemonPosition(participantIndex, index);
+        int participantIndex = 1;
+        for (BattleParticipant participant : participantsList) {
+            for (int i = 0; i < participant.controlledPokemon.size(); i++) {
+                PixelmonWrapper pokemon = participant.controlledPokemon.get(i);
+                if(!terasBattle.getActivePokemon(participantIndex, i).equals(pokemon)){
+                    terasBattle.swapPokemon(participantIndex, i, pokemon);
+                    appendLine( terasBattle,"|switch|" + terasBattle.getPositionString(pokemon) + ": "
+                            +pokemon.getNickname()  + "|" + pokemon.getSpecies().getName() + ", L"
+                            + pokemon.getPokemonLevel().getPokemonLevel() + "|" + pokemon.getHealth() + "\\/" + pokemon.getMaxHealth());
+                }
             }
             participantIndex++;
         }
 
-        return null;
     }
 
-    public static void turnEndAction(TurnEndAction action, BattleController bc){
+    public static void switchAction(SwitchAction action, TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
+        Teras.LOGGER.info("------------------ Switch action ------------------");
+        PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
+        PixelmonWrapper switchingTo = (PixelmonWrapper) getProtectedProperty("switchingTo", action);
+
+        if(!terasBattle.swapPokemon(pokemon, switchingTo)) return;
+        appendLine(terasBattle, "|switch|" + terasBattle.getPositionString(switchingTo) + ": "
+                +switchingTo.getNickname()  + "|" + switchingTo.getSpecies().getName() + ", L"
+                + switchingTo.getPokemonLevel().getPokemonLevel()
+                + "|" + switchingTo.getHealth() + "\\/" + switchingTo.getMaxHealth());
 
     }
 
-    public static void battleMessageAction(BattleMessageAction action, BattleController bc){
-        String message = (String) getProtectedProperty("message", action);
-        Teras.getLogger().error(message);
-    }
 
-    public static void attackAction(AttackAction action, BattleController bc){
+
+    public static void attackAction(AttackAction action, TerasBattle terasBattle){
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
         Attack attack = (Attack) getProtectedProperty("attack", action);
         boolean wildPokemon = (boolean) getProtectedProperty("wildPokemon", action);
@@ -139,19 +151,19 @@ public class TerasBattleLog {
         // move|p2a: Calyrex|Astral Barrage|p1a: Kyogren't|[spread] p1a,p1b
 
         String move = attack.getActualMove().getAttackName();
-        String source = getPositionString(pokemon, bc);
+        String source = terasBattle.getPositionString(pokemon);
 
-        String attackStr =  "|move|" + getPositionAndNameString(pokemon, bc) + "|" + move + "|";
-        String mainTargetStr = getPositionAndNameString(moveResults[0].target, bc);
+        String attackStr =  "|move|" + getPositionAndNameString(pokemon, terasBattle) + "|" + move + "|";
+        String mainTargetStr = getPositionAndNameString(moveResults[0].target, terasBattle);
 
         attackStr += mainTargetStr + "|";
 
         if(moveResults.length > 1){
             attackStr += "[spread] ";
-            attackStr += Arrays.stream(moveResults).map((target) -> getPositionString(target.target, bc)).reduce((a, b) -> a + "," + b).get();
+            attackStr += Arrays.stream(moveResults).map((target) -> terasBattle.getPositionString(target.target)).reduce((a, b) -> a + "," + b).get();
         }
 
-        appendLine(bc.battleIndex, attackStr);
+        appendLine(terasBattle, attackStr);
 
         for (MoveResults moveResult : moveResults) {
             PixelmonWrapper target = moveResult.target;
@@ -161,26 +173,53 @@ public class TerasBattleLog {
             int maxHealth = moveResult.getTarget().getMaxHealth();
 
             if(currentHealth == 0){
-                appendLine(bc.battleIndex, "|-damage|" + getPositionString(target, bc) + ": " + targetName + "|0 fnt");
+                appendLine(terasBattle, "|-damage|" + terasBattle.getPositionString(target) + ": " + targetName + "|0 fnt");
             }else{
-                appendLine(bc.battleIndex, "|-damage|" + getPositionString(target, bc) + ": " + targetName + "|" + currentHealth + "\\/" + maxHealth);
+                appendLine(terasBattle, "|-damage|" + terasBattle.getPositionString(target) + ": " + targetName + "|" + currentHealth + "\\/" + maxHealth);
             }
 
 
         }
+
+        // after faint: |faint|p2b: Wugtrio, we loop again
+        for (MoveResults moveResult : moveResults) {
+            PixelmonWrapper target = moveResult.target;
+            if(moveResult.getTarget().getHealth() == 0){
+                appendLine(terasBattle, "|faint|" + terasBattle.getPositionString(target) + ": " + target.getNickname());
+            }
+        }
     }
 
-    public static void switchAction(SwitchAction action, BattleController bc){
-        Teras.LOGGER.info("------------------ Switch action ------------------");
+    public static void statChangeAction(StatChangeAction action, TerasBattle terasBattle){
+        int[] oldStats = (int[]) getProtectedProperty("oldStats", action);
+        int[] newStats = (int[]) getProtectedProperty("newStats", action);
+        String pokemonName = (String) getProtectedProperty("pokemonName", action);
+
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
-        PixelmonWrapper switchingTo = (PixelmonWrapper) getProtectedProperty("switchingTo", action);
-        //|switch|p1a: Suicum|Walking Wake, L50|100\/100
-        appendLine(bc.battleIndex, "|switch|" + getPositionString(pokemon, bc) + ": " +switchingTo.getNickname()  + "|" + switchingTo.getSpecies().getName() + ", L" + switchingTo.getPokemonLevel() + "|" + switchingTo.getHealth() + "\\/" + switchingTo.getMaxHealth());
 
+        //Teras.getLogger().error("+++Pokemon: " + pokemon.getSpecies().getName() +" " + pokemon.getPokemonName() +" " + pokemon.getPokemonUUID());
+
+        int[] delta = new int[oldStats.length];
+        for (int i = 0; i < oldStats.length; i++) {
+            delta[i] = newStats[i] - oldStats[i];
+        }
+
+        for (int i = 0; i < delta.length; i++) {
+            if (delta[i] == 0 || oldStats[i] == 0) continue;
+
+            BattleStatsType stat = BattleStatsType.fromIndex(i);
+            Teras.LOGGER.info(pokemonName + " " + stat.name() + " " + delta[i]);
+
+            String boostType = delta[i] > 0 ? "|-boost|" : "|-unboost|";
+            String statName = stat.name().toLowerCase();
+            String boost = boostType + terasBattle.getPositionString(pokemon) + "|" + statName + "|" + Math.abs(delta[i]);
+            appendLine(terasBattle, boost);
+        }
     }
 
 
-    public static void weatherChangeAction(WeatherChangeAction action, BattleController bc){
+    public static void weatherChangeAction(WeatherChangeAction action, TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
         //|-weather|SunnyDay|[from] ability: Drought|[of] p1a: Kyogren't
         GlobalStatusBase newGlobalStatus = (GlobalStatusBase) getProtectedProperty("newWeather", action);
         GlobalStatusBase oldGlobalStatus = (GlobalStatusBase) getProtectedProperty("oldWeather", action);
@@ -193,68 +232,69 @@ public class TerasBattleLog {
                 case Sunny:
                     weatherName = "SunnyDay";
                     break;
+                case Rainy:
+                    weatherName = "RainDance";
+                    break;
+                case Sandstorm:
+                    weatherName = "Sandstorm";
+                    break;
+                case Hail:
+                    weatherName = "Hail";
+                    break;
                 default:
                     weatherName = "UnknownWeather";
                     break;
             }
-            appendLine(bc.battleIndex, "|-weather|" + weatherName + "|");
+            appendLine(terasBattle, "|-weather|" + weatherName + "|");
         }
     }
 
-    public static void statusAddAction(StatusAddAction action, BattleController bc){
+
+    public static void statusAddAction(StatusAddAction action, TerasBattle terasBattle){
         StatusBase status = (StatusBase) getProtectedProperty("status", action);
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
 
         if(status.type == StatusType.ParadoxBoost){
-            appendLine(bc.battleIndex,"|-activate|" + getPositionAndNameString(pokemon, bc) + "|ability: " + pokemon.getAbility().getName());
+            appendLine(terasBattle,"|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|ability: " + pokemon.getAbility().getName());
         }
     }
 
     /*
-    public static void globalStatusAddAction(GlobalStatusAddAction action, BattleController bc){
-        //|-status|p1a: Kyogren't|confusion
-        PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
-        GlobalStatusBase status = (GlobalStatusBase) getProtectedProperty("status", action);
-        String statusName = status.getClass().getSimpleName().toLowerCase();
-        appendLine(bc.battleIndex, "|-status|" + getPositionAndNameString(pokemon, bc) + "|" + statusName);
-    }*/
-
-    public static void statChangeAction(StatChangeAction action, BattleController bc){
-        int[] oldStats = (int[]) getProtectedProperty("oldStats", action);
-        int[] newStats = (int[]) getProtectedProperty("newStats", action);
-        String pokemonName = (String) getProtectedProperty("pokemonName", action);
-
-        //Teras.getLogger().error("+++Pokemon: " + pokemon.getSpecies().getName() +" " + pokemon.getPokemonName() +" " + pokemon.getPokemonUUID());
-
-        int[] delta = new int[oldStats.length];
-        for (int i = 0; i < oldStats.length; i++) {
-            delta[i] = newStats[i] - oldStats[i];
+    public static PokemonPosition getPosition(PixelmonWrapper pokemon, TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
+        int participantIndex = 0;
+        for (BattleParticipant participant : bc.participants) {
+            int index = participant.getTeamPokemon().indexOf(pokemon);
+            if(index != -1){
+                return new PokemonPosition(participantIndex, index);
+            }
+            participantIndex++;
         }
 
-        for (int i = 0; i < delta.length; i++) {
-            if (delta[i] == 0) continue;
+        return null;
+    }
 
-            BattleStatsType stat = BattleStatsType.fromIndex(i);
-            Teras.LOGGER.info(pokemonName + " " + stat.name() + " " + delta[i]);
-
-            String boostType = delta[i] > 0 ? "|-boost|" : "|-unboost|";
-            String statName = stat.name().toLowerCase();
-
-
-
-        }
-
+    public static void turnEndAction(TurnEndAction action,  TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
 
     }
 
+    public static void battleMessageAction(BattleMessageAction action, TerasBattle terasBattle){
+        String message = (String) getProtectedProperty("message", action);
+        Teras.getLogger().error(message);
+    }
+
+*/
     // Helpers
-    public static String getPositionAndNameString(PixelmonWrapper pokemon, BattleController bc){
-        return getPositionString(pokemon, bc) + ": " + pokemon.getNickname();
+    public static String getPositionAndNameString(PixelmonWrapper pokemon, TerasBattle terasBattle){
+        return terasBattle.getPositionString(pokemon) + ": " + pokemon.getNickname();
     }
 
     public static String getPositionString(PixelmonWrapper pokemon, BattleController bc){
         // Returns the position of the pokemon in the team
         // The position consists of the letter p, the participant number and the position in the team (a, b, c, d, e, f...)
+
+
 
         for (BattleParticipant participant : bc.participants) {
             int index = participant.getTeamPokemon().indexOf(pokemon);
@@ -271,69 +311,64 @@ public class TerasBattleLog {
         return letters[index];
     }
 
-    public static void appendStartBattle(BattleController bc){
-        initLog(bc.battleIndex);
-        ArrayList<String> pokemonInit = new ArrayList<>();
-        ArrayList<String> switchInit = new ArrayList<>();
+    public static void appendStartBattle(TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
+        initLog(terasBattle);
+        // Mover esto DENTRO de la clase TerasBattle
+
+        appendLine(terasBattle,"|join|"+ terasBattle.getName1());
+        appendLine(terasBattle,"|join|"+terasBattle.getName2());
+        appendLine(terasBattle,"|player|p1|"+terasBattle.getName1());
+        appendLine(terasBattle,"|player|p2|"+terasBattle.getName2());
+        appendLine(terasBattle,"|gametype|doubles");
+        appendLine(terasBattle,"|gen|9");
+        appendLine(terasBattle,"|tier|Circuito de Gimnasios de Teras");
 
         final int[] index = {1};
-        final char[] teamPos = {'a', 'b', 'c', 'd', 'e', 'f'};
 
-        /*
-        activePokemon = new HashMap<>();
-        HashMap<String, List<PixelmonWrapper>> active = activePokemon.get(bc.battleIndex);
-        if(active == null){
-            active = new HashMap<>();
-            activePokemon.put(bc.battleIndex, active);
-        }
+        List<BattleParticipant> participantsList = new ArrayList<>(bc.participants);
+        Collections.reverse(participantsList);
 
-        HashMap<String, List<PixelmonWrapper>> finalActive = active;
-
-        HashMap<String, List<PixelmonWrapper>> finalActive1 = active;
-        */
-
-        bc.participants.forEach((participant) -> {
-            Teras.LOGGER.error("===========================");
-            Teras.LOGGER.error(participant.getDisplayName());
-            Teras.LOGGER.error(participant.getTeamPokemon().size());
-            Teras.LOGGER.error(participant.numControlledPokemon);
+        participantsList.forEach((participant) -> {
 
             for(int i = 0; i < participant.allPokemon.length; i++){
                 PixelmonWrapper pokemon = participant.allPokemon[i];
-                Teras.LOGGER.warn("INIT: " + pokemon.getNickname() + " " + pokemon.getPokemonLevel().getPokemonLevel());
-                if(pokemon != null) pokemonInit.add(bc.battleIndex, "|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
+
+                if(pokemon != null) {
+                    terasBattle.swapPokemon(index[0], i, pokemon);
+                    terasBattle.getPokemonInit().add(bc.battleIndex, "|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
+                }
             }
 
-
-            /*
-            participant.getTeamPokemon().forEach((pokemon) -> {
-                Teras.LOGGER.warn("INIT: " + pokemon.getNickname() + " " + pokemon.getPokemonLevel().getPokemonLevel());
-                if(pokemon != null) pokemonInit.add(bc.battleIndex, "|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
-            });
-            */
 
             final int[] positionIndex = {0};
             int max = participant.numControlledPokemon;
 
+            HashMap<Integer, PixelmonWrapper> team = terasBattle.getActiveTeam(index[0]);
 
+            team.forEach((key, pw) -> {
+                if(positionIndex[0] >= terasBattle.getBattleConfig().getModalidad()[index[0] - 1]) return;
+                if(pw != null) {
+                    terasBattle.getSwitchInit().add(bc.battleIndex, "|switch|" + terasBattle.getPositionString(pw) + ": "
+                            +pw.getNickname()  + "|" + pw.getSpecies().getName() + ", L"
+                            + pw.getPokemonLevel().getPokemonLevel() + "|" + pw.getHealth() + "\\/" + pw.getMaxHealth());
+                };
+                positionIndex[0]++;
+            });
+
+            /*
             for(int i = 0; i < max; i++){
                 PixelmonWrapper pw = (PixelmonWrapper) participant.allPokemon[i];
-                if(pw != null) switchInit.add(bc.battleIndex, "|switch|p" + index[0] + teamPos[positionIndex[0]]
-                        + "|" + pw.getNickname() + "|"+pw.getSpecies().getName()
-                        +", L"+pw.getPokemonLevel().getPokemonLevel()+"|"+pw.getHealth()+"\\/"+pw.getMaxHealth());
+                //appendLine(terasBattle, "|switch|" + getPositionString(pokemon, bc) + ": " +switchingTo.getNickname()  + "|" + switchingTo.getSpecies().getName() + ", L" + switchingTo.getPokemonLevel() + "|" + switchingTo.getHealth() + "\\/" + switchingTo.getMaxHealth());
+                if(pw != null) {
+                    switchInit.add(bc.battleIndex, "|switch|" + getPositionString(pw, bc) + ": "
+                            +pw.getNickname()  + "|" + pw.getSpecies().getName() + ", L"
+                            + pw.getPokemonLevel().getPokemonLevel() + "|" + pw.getHealth() + "\\/" + pw.getMaxHealth());
+                };
                 positionIndex[0]++;
 
                 //finalActive.put(participant.getDisplayName(), Arrays.asList(participant.allPokemon));
-            }
-
-            /*
-            participant.controlledPokemon.forEach((pokemon) -> {
-                PixelmonWrapper pw = (PixelmonWrapper) pokemon;
-                switchInit.add(bc.battleIndex, "|switch|p" + index[0] + teamPos[positionIndex[0]]
-                        + "|" + pw.getNickname() + "|"+pw.getSpecies().getName()
-                        +", L"+pw.getPokemonLevel().getPokemonLevel()+"|"+pw.getHealth()+"\\/"+pw.getMaxHealth());
-                positionIndex[0]++;
-            });*/
+            }*/
 
             index[0]++;
         });
@@ -341,13 +376,14 @@ public class TerasBattleLog {
 
 
 
-        pokemonInit.forEach((line) -> appendLine(bc.battleIndex, line));
-        appendLine(bc.battleIndex, "|start");
-        switchInit.forEach((line) -> appendLine(bc.battleIndex, line));
+        terasBattle.getPokemonInit().forEach((line) -> appendLine(terasBattle, line));
+        appendLine(terasBattle, "|start");
+        terasBattle.getSwitchInit().forEach((line) -> appendLine(terasBattle, line));
 
 
 
     }
+
 
     // Reflection
     public static Object getProtectedProperty(String property, Object obj){
@@ -360,5 +396,4 @@ public class TerasBattleLog {
             throw new RuntimeException(e);
         }
     }
-
 }
