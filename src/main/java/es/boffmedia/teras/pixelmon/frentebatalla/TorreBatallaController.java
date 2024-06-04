@@ -4,7 +4,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.boffmedia.teras.api.PokePasteReader;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.clientOld.CMessageRunJS;
-import es.boffmedia.teras.objects_old.pixelmon.ConfigCombate;
+import es.boffmedia.teras.objects.pixelmon.BattleConfig;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
 import es.boffmedia.teras.pixelmon.battle.TeamManager;
 import es.boffmedia.teras.util.MessageHelper;
@@ -54,7 +54,7 @@ public class TorreBatallaController {
             equipo.add(pokemon);
         }
 
-        ConfigCombate configCombate = new ConfigCombate();
+        BattleConfig configCombate = new BattleConfig();
         configCombate.setEquipo(equipo);
         configCombate.setCarpeta("torre_batalla");
         configCombate.setNombreArchivo("tier1");
@@ -66,7 +66,7 @@ public class TorreBatallaController {
 
 
         CombateFrenteBatalla combate = new CombateFrenteBatalla(player, configCombate);
-        combate.iniciarCombate();
+        combate.start();
     }
 
 
@@ -88,7 +88,7 @@ public class TorreBatallaController {
             equipo.add(pokemon);
         }
 
-        ConfigCombate configCombate = new ConfigCombate();
+        BattleConfig configCombate = new BattleConfig();
         configCombate.setEquipo(equipo);
         configCombate.setCarpeta("torre_batalla");
         configCombate.setNombreArchivo("tier1");
@@ -101,7 +101,7 @@ public class TorreBatallaController {
 
         CombateFrenteBatalla combate = new CombateFrenteBatalla(player, configCombate);
         combate.setModalidad(modalidad);
-        combate.iniciarCombate();
+        combate.start();
     }
 
     public static void pausar(ServerPlayerEntity player, String modalidad) {

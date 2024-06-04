@@ -5,7 +5,9 @@
   "minVersion": "0.8.4",
   "server": [
     "LogMixin",
-    "StatChangeActionMixin"
+    "StatChangeActionMixin",
+    "StatusAddActionMixin",
+    "TeamSelectionMixin"
   ],
   "client": [
     "PatchedLivingEntityRendererMixin"

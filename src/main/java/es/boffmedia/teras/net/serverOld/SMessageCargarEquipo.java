@@ -32,7 +32,7 @@ public class SMessageCargarEquipo implements Runnable{
         Gson gson = new Gson();
         GetEquipo getEquipo = gson.fromJson(str, GetEquipo.class);
 
-        Teras.getLBC().guardarEquipo(player, "equipo");
+        //Teras.getLBC().guardarEquipo(player, "equipo");
 
         List<GetEquipo.PkmSlot> slots = getEquipo.getEquipo();
 

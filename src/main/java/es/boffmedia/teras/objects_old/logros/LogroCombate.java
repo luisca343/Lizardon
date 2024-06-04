@@ -1,28 +1,21 @@
 package es.boffmedia.teras.objects_old.logros;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import es.boffmedia.teras.objects.post.SmartRotomPost;
 import es.boffmedia.teras.objects_old.pixelmon.PokemonData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogroCombate {
-    String uuid;
+public class LogroCombate extends SmartRotomPost {
     String npc;
     boolean victoria;
     String logro;
     ArrayList<PokemonData> equipo;
+    String replay;
 
     public LogroCombate() {
 
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getNpc() {
@@ -59,5 +52,13 @@ public class LogroCombate {
 
     public void setLogro(String logro) {
         this.logro = logro;
+    }
+
+    public String getReplay() {
+        return replay;
+    }
+
+    public void setReplay(String replay) {
+        this.replay = replay;
     }
 }

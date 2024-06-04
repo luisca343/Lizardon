@@ -4,9 +4,8 @@ package es.boffmedia.teras.mixin;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.pixelmon.battle.Combate;
+import es.boffmedia.teras.pixelmon.battle.TerasBattle;
 import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
-import es.boffmedia.teras.pixelmon.battle.TerasBattleLog;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,9 +20,12 @@ public class LogMixin {
     @Inject(at= @At(value = "HEAD"), method = "logEvent")
     public void logEvent(BattleAction event, CallbackInfo ci) {
         TerasBattleController lbc = Teras.getLBC();
-        if(lbc.existeCombateEspecial(bc.battleIndex)){
-            Combate combate = lbc.getCombateEspecial(bc.battleIndex);
-            TerasBattleLog.logEvent(event, combate);
+
+        if(lbc.existsTerasBattle(bc.battleIndex)){
+            TerasBattle combate = lbc.getTerasBattle(bc.battleIndex);
+            combate.logEvent(event);
+        } else {
+            Teras.LOGGER.error("No se ha encontrado el combate");
         }
     }
 

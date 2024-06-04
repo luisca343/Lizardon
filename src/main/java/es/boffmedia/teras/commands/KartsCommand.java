@@ -164,9 +164,9 @@ public class KartsCommand {
 
     private ArgumentBuilder<CommandSource,?> entrarCarrera() {
         return Commands.literal("entrar")
+                .then(Commands.argument("jugador", EntityArgument.player())
                 .then(Commands.argument("nombre", StringArgumentType.string())
                         .then(Commands.argument("vueltas", IntegerArgumentType.integer())
-                        .then(Commands.argument("jugador", EntityArgument.player())
                         .executes((command) -> {
                             if(esJugador(command)) return 0;
                             int vueltas = IntegerArgumentType.getInteger(command, "vueltas");

@@ -1,11 +1,12 @@
 package es.boffmedia.teras.objects.quests;
 
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.handler.data.IDialog;
 import noppes.npcs.api.handler.data.IQuest;
+import noppes.npcs.controllers.data.Availability;
+import noppes.npcs.entity.EntityCustomNpc;
 
-import java.util.ArrayList;
-
-public class QuestData {
-    private int id;
+public class QuestData extends QuestDataBase{
     private String name;
     private String logText;
     private String completeText;
@@ -13,12 +14,24 @@ public class QuestData {
     private int type;
     private int nextQuest;
     private String category;
-    private QuestStatus status;
-    private ArrayList<QuestObjective> objectives;
-    private ArrayList<QuestReward>  rewards;
 
-    public QuestData(IQuest quest){
-        this.id = quest.getId();
+    private QuestRequirement requirements;
+
+    public QuestData(IQuest quest, boolean simplified) {
+        super(quest, simplified);
+        if(!simplified){
+            this.name = quest.getName();
+            this.logText = quest.getLogText();
+            this.completeText = quest.getCompleteText();
+            this.repeatable = quest.getIsRepeatable();
+            this.type = quest.getType();
+            this.nextQuest = quest.getNextQuest() != null ? quest.getNextQuest().getId() : -1;
+            this.category = quest.getCategory().getName();
+        }
+    }
+
+    public QuestData(IQuest quest, IDialog dialog){
+        super(quest);
         this.name = quest.getName();
         this.logText = quest.getLogText();
         this.completeText = quest.getCompleteText();
@@ -26,17 +39,26 @@ public class QuestData {
         this.type = quest.getType();
         this.nextQuest = quest.getNextQuest() != null ? quest.getNextQuest().getId() : -1;
         this.category = quest.getCategory().getName();
-        this.status = QuestStatus.NOT_STARTED;
-    }
 
-    public int getId() {
-        return id;
-    }
+        QuestRequirement requirement = new QuestRequirement();
 
-    public void setId(int id) {
-        this.id = id;
-    }
+        Availability availability = (Availability) dialog.getAvailability();
+        for (int i = 0; i < 4; i++) {
+            requirement.addQuest(availability.getQuest(i));
+            requirement.addDialog(availability.getDialog(i));
+        }
 
+        requirement.setTime(availability.getDaytime());
+        requirement.setLevel(availability.getMinPlayerLevel());
+
+        requirement.addFactionRequirement(availability.factionId, availability.factionAvailable, availability.factionStance);
+        requirement.addFactionRequirement(availability.faction2Id, availability.faction2Available, availability.faction2Stance);
+
+        requirement.addScoreboardRequirement(availability.scoreboardObjective, availability.scoreboardType, availability.scoreboardValue);
+        requirement.addScoreboardRequirement(availability.scoreboard2Objective, availability.scoreboard2Type, availability.scoreboard2Value);
+
+        this.requirements = requirement;
+    }
     public String getName() {
         return name;
     }
@@ -93,27 +115,12 @@ public class QuestData {
         this.category = category;
     }
 
-    public QuestStatus getStatus() {
-        return status;
+    public void setRequirements(QuestRequirement requirements) {
+        this.requirements = requirements;
     }
 
-    public void setStatus(QuestStatus status) {
-        this.status = status;
+    public QuestRequirement getRequirements() {
+        return requirements;
     }
 
-    public ArrayList<QuestObjective> getObjectives() {
-        return objectives;
-    }
-
-    public void setObjectives(ArrayList<QuestObjective> objectives) {
-        this.objectives = objectives;
-    }
-
-    public ArrayList<QuestReward> getRewards() {
-        return rewards;
-    }
-
-    public void setRewards(ArrayList<QuestReward> rewards) {
-        this.rewards = rewards;
-    }
 }

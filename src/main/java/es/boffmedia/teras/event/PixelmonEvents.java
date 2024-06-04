@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
+import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
@@ -25,7 +26,6 @@ import java.util.Objects;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
-
 
     @SubscribeEvent
     public void cancelarXP(ExperienceGainEvent event){

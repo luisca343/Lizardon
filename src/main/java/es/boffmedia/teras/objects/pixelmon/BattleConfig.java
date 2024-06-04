@@ -1,11 +1,14 @@
-package es.boffmedia.teras.objects_old.pixelmon;
+package es.boffmedia.teras.objects.pixelmon;
 
 import com.pixelmonmod.pixelmon.api.battles.BattleAIMode;
+import com.pixelmonmod.pixelmon.api.battles.BattleMode;
+import com.pixelmonmod.pixelmon.api.battles.BattleType;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTiers;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClause;
 import com.pixelmonmod.pixelmon.battles.api.rules.clauses.BattleClauseRegistry;
 import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.objects_old.pixelmon.Recompensa;
 import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.ArrayList;
@@ -13,32 +16,33 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ConfigCombate {
-    private String nombre;
-    private transient String nombreArchivo;
-    private transient String carpeta;
-    private String nivel;
-    private String modalidad;
-    private String frecuencia;
-    private ArrayList<Recompensa> recompensas;
-    private ArrayList<String> normas;
-    private transient ICustomNpc npc;
-    private transient List<Pokemon> equipo;
+public class BattleConfig {
+    private String nombre; // Nombre del entrenador / evento
+    private String nivel; // Nivel de los Pokémon del entrenador
+    private int dinero; // Dinero que se obtiene al vencer al entrenador
+    private String modalidad; // Modalidad de combate (1vs1, 2vs2, 3vs3, etc)
+    private String tamanoEquipos; // Cantidad de Pokémon de cada equipo (3vs3, 4vs4, 3vs6, etc)
+    private String frecuencia; // Frecuencia de combate (DIA, DIA_MC, SEMANA, MES)
+    private ArrayList<Recompensa> recompensas; // Recompensas que se obtienen al vencer al entrenador
+    private ArrayList<String> normas; // Normas de combate (No usar objetos, sleep clause, etc)
+    private ArrayList<String> gimmick; // Gimmick generacional permitida (Mega, Z, etc)
+    private String IA; // Modo de la IA (AGGRESSIVE, ADVANCED, TACTICAL)
+    private boolean curar; // Curar a los Pokémon antes de la batalla
+    private boolean preview; // Mostrar el equipo del entrenador antes de la batalla
+    private String logro; // Logro que se obtiene al vencer al entrenador
+    private boolean exp; // Exp que se obtiene al vencer al entrenador
+    private int[] equipos; // Equipos disponibles para el entrenador / evento
 
-    private ArrayList<String> gimmick;
-    private int dinero;
-    private String IA;
-    private boolean curar;
-    private boolean preview;
+    // Atributos no serializables
+    private transient String nombreArchivo; // Nombre del archivo de configuración (no hay que escribirlo)
+    private transient String carpeta; // Carpeta donde se encuentra el archivo de configuración (no hay que escribirlo)
+    private transient ICustomNpc npc; // NPC asociado al entrenador / evento
+    private transient List<Pokemon> equipo; // Equipo del entrenador / evento
 
-    private String logro;
-    private boolean exp;
-
-
-    public ConfigCombate(){
+    public BattleConfig(){
         this.dinero = 0;
         this.nivel = "0";
-        this.modalidad = "1vs1";
+        this.modalidad = "doble";
         this.IA = "TÁCTICA";
         this.exp = false;
         this.curar = false;
@@ -46,14 +50,24 @@ public class ConfigCombate {
         this.frecuencia = "DIA";
         this.recompensas = new ArrayList<>();
         this.normas = new ArrayList<>();
+        this.gimmick = new ArrayList<>();
+        this.equipos = new int[]{1};
+    }
+
+    public int getPlayerPkmCount(){
+        return Integer.parseInt(getTamanoEquipos().split("vs")[0]);
+    }
+
+    public int getRivalPkmCount(){
+        return Integer.parseInt(getTamanoEquipos().split("vs")[1]);
     }
 
     public int getNumPkmJugador(){
-        return getModalidad()[0];
+        return getPlayerPkmCount();
     }
 
     public int getNumPkmRival(){
-        return getModalidad()[1];
+        return getRivalPkmCount();
     }
 
     public int getDinero() {
@@ -76,7 +90,7 @@ public class ConfigCombate {
         Teras.PROXY.darObjetos(recompensas, uuid);
     }
 
-    public boolean curar() {
+    public boolean healBeforeStart() {
         return curar;
     }
 
@@ -92,7 +106,42 @@ public class ConfigCombate {
         this.preview = preview;
     }
 
+    public BattleType getBattleType(){
+        switch (modalidad.toLowerCase()){
+            case "doble":
+                return BattleType.DOUBLE;
+            case "triple":
+                return BattleType.TRIPLE;
+            case "rotatorio":
+                return BattleType.ROTATION;
+            case "horda":
+                return BattleType.HORDE;
+            case "raid":
+                return BattleType.RAID;
+            default:
+                return BattleType.SINGLE;
+        }
+    }
+
     public int[] getModalidad() {
+        switch (getBattleType()){
+            case SINGLE:
+                return new int[]{1, 1};
+            case DOUBLE:
+                return new int[]{2, 2};
+            case TRIPLE:
+                return new int[]{3, 3};
+            case ROTATION:
+                return new int[]{3, 3};
+            case HORDE:
+                return new int[]{1, 5};
+            case RAID:
+                return new int[]{4, 1};
+            default:
+                return new int[]{1, 1};
+        }
+
+        /*
         if(modalidad == null) return new int[]{1, 1};
         modalidad.replace("v", "vs");
         String[] partes = modalidad.split("vs");
@@ -101,7 +150,7 @@ public class ConfigCombate {
             numeros[i] = Integer.parseInt(partes[i]);
         }
 
-        return numeros;
+        return numeros;*/
     }
 
     public void setModalidad(String modalidad) {
@@ -184,7 +233,7 @@ public class ConfigCombate {
         this.equipo = equipo;
     }
 
-    public int getNivelEquipo(int nivelJugador){
+    public int calculateTeamLevel(int nivelJugador){
         int nivel;
 
         if(this.nivel.contains("+")) nivel = nivelJugador + Integer.parseInt(this.nivel.split("\\+")[1]);
@@ -195,7 +244,7 @@ public class ConfigCombate {
     }
 
     public void setNivelEquipo(int nivelJugador){
-        int nivel = getNivelEquipo(nivelJugador);
+        int nivel = calculateTeamLevel(nivelJugador);
 
         for (Pokemon pokemon : equipo) {
             pokemon.setLevel(nivel);
@@ -273,5 +322,21 @@ public class ConfigCombate {
 
     public boolean isExp() {
         return exp;
+    }
+
+    public int[] getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(int[] equipos) {
+        this.equipos = equipos;
+    }
+
+    public void setTamanoEquipos(String tamanoEquipos) {
+        this.tamanoEquipos = tamanoEquipos;
+    }
+
+    public String getTamanoEquipos() {
+        return tamanoEquipos;
     }
 }
