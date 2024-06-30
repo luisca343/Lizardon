@@ -1,5 +1,7 @@
 package es.boffmedia.teras.pixelmon.battle;
 
+import com.pixelmonmod.pixelmon.api.battles.AttackCategory;
+import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStats;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
@@ -8,14 +10,21 @@ import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.*;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.AttackAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.BattleEndAction;
+import com.pixelmonmod.pixelmon.battles.controller.log.action.type.BattleMessageAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.StatChangeAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.StatusAddAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.SwitchAction;
+import com.pixelmonmod.pixelmon.battles.controller.log.action.type.TerrainChangeAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.TurnBeginAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.WeatherChangeAction;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
+import com.pixelmonmod.pixelmon.battles.status.*;
+import com.pixelmonmod.pixelmon.battles.status.ElectricTerrain;
 import com.pixelmonmod.pixelmon.battles.status.GlobalStatusBase;
+import com.pixelmonmod.pixelmon.battles.status.GrassyTerrain;
+import com.pixelmonmod.pixelmon.battles.status.MistyTerrain;
+import com.pixelmonmod.pixelmon.battles.status.PsychicTerrain;
 import com.pixelmonmod.pixelmon.battles.status.StatusBase;
 import com.pixelmonmod.pixelmon.battles.status.StatusType;
 import com.pixelmonmod.pixelmon.battles.status.Weather;
@@ -41,9 +50,16 @@ public class TerasBattleLog {
         return battle.getLog();
     }
 
+
     public static void appendLine(TerasBattle battle, String log){
         //Teras.getLogger().warn("LOGGING: " + log);
         battle.setLog(battle.getLog() + log + "\n");
+        if(battle.delayedMessages.size() > 0){
+            battle.delayedMessages.forEach((message) -> {
+                battle.setLog(battle.getLog() + message + "\n");
+            });
+            battle.delayedMessages.clear();
+        }
     }
 
     public static void printLog(TerasBattle battle){
@@ -51,13 +67,16 @@ public class TerasBattleLog {
     }
 
     public static void logEvent(BattleAction action, TerasBattle battle) {
+        Teras.LOGGER.error("=== Log event: " + action.toString() + " ===");
         if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, battle);
         else if (action instanceof BattleEndAction) { battleEndAction((BattleEndAction) action, battle); }
         else if (action instanceof SwitchAction) switchAction((SwitchAction) action, battle);
         else if (action instanceof AttackAction) attackAction((AttackAction) action, battle);
-        //else if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, battle);
+        else if (action instanceof StatChangeAction) statChangeAction((StatChangeAction) action, battle);
         else if (action instanceof WeatherChangeAction) weatherChangeAction((WeatherChangeAction) action, battle);
         else if (action instanceof StatusAddAction) statusAddAction((StatusAddAction) action, battle);
+        else if (action instanceof TerrainChangeAction) fieldChangeAction((TerrainChangeAction) action, battle);
+        else if (action instanceof BattleMessageAction) battleMessageAction((BattleMessageAction) action, battle);
 
         /*
 
@@ -68,7 +87,6 @@ public class TerasBattleLog {
         else if (action instanceof TurnEndAction) turnEndAction((TurnEndAction) action, battle);
         else Teras.LOGGER.info("Unknown action: " + action.getClass().getSimpleName());
         */
-        else Teras.LOGGER.warn("=== Log event: " + action.toString() + " ===");
 
 
 
@@ -77,6 +95,11 @@ public class TerasBattleLog {
          * Arreglar el switch cuando entra un pokemon después de debilitar a otro (es un switch normal)
          * ====== TO DO ======
          */
+    }
+
+    private static void battleMessageAction(BattleMessageAction action, TerasBattle battle) {
+        String message = (String) getProtectedProperty("message", action);
+        Teras.LOGGER.error(message);
     }
 
     /* Actions */
@@ -98,6 +121,10 @@ public class TerasBattleLog {
         int turn = (int) getProtectedProperty("turn", action);
         if(turn == 0) appendStartBattle(terasBattle);
 
+        /*
+        bc.globalStatusController.triggerWeatherChange(new com.pixelmonmod.pixelmon.battles.status.Sunny(999));
+        bc.globalStatusController.triggerTerrainChange(new ElectricTerrain(999));
+        */
 
         appendLine(terasBattle,"|turn|" + (turn+1));
         //appendLine(bc.battleIndex,"|callback|decision");
@@ -111,6 +138,9 @@ public class TerasBattleLog {
         for (BattleParticipant participant : participantsList) {
             for (int i = 0; i < participant.controlledPokemon.size(); i++) {
                 PixelmonWrapper pokemon = participant.controlledPokemon.get(i);
+                System.out.println("Pokemon: " + pokemon.getSpecies().getName() + " " + pokemon.getNickname() + " " + pokemon.getPokemonUUID());
+                System.out.println("Participant Index: " + participantIndex);
+                System.out.println("Index: " + i);
                 if(!terasBattle.getActivePokemon(participantIndex, i).equals(pokemon)){
                     terasBattle.swapPokemon(participantIndex, i, pokemon);
                     appendLine( terasBattle,"|switch|" + terasBattle.getPositionString(pokemon) + ": "
@@ -165,6 +195,10 @@ public class TerasBattleLog {
 
         appendLine(terasBattle, attackStr);
 
+        if(attack.getAttackCategory().equals(AttackCategory.STATUS)){
+            appendLine(terasBattle, "|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|move: " + move);
+            return;
+        }
         for (MoveResults moveResult : moveResults) {
             PixelmonWrapper target = moveResult.target;
             String targetName = target.getNickname();
@@ -197,24 +231,151 @@ public class TerasBattleLog {
 
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
 
-        //Teras.getLogger().error("+++Pokemon: " + pokemon.getSpecies().getName() +" " + pokemon.getPokemonName() +" " + pokemon.getPokemonUUID());
 
-        int[] delta = new int[oldStats.length];
-        for (int i = 0; i < oldStats.length; i++) {
-            delta[i] = newStats[i] - oldStats[i];
+        BattleStats previousStats = terasBattle.getStats(pokemon);
+        BattleStats currentStats = pokemon.getBattleStats();
+
+        // Null check the previous
+        if(previousStats == null){
+            terasBattle.setStats(pokemon, currentStats);
+            return;
         }
 
+        int currentAttackBoost = getBoostStage(currentStats.getAttackModifier());
+        int currentDefenseBoost = getBoostStage(currentStats.getDefenseModifier());
+        int currentSpecialAttackBoost = getBoostStage(currentStats.getSpecialAttackModifier());
+        int currentSpecialDefenseBoost = getBoostStage(currentStats.getSpecialDefenseModifier());
+        int currentSpeedBoost = getBoostStage(currentStats.getSpeedModifier());
+
+
+        int currentAccuracyBoost = currentStats.getAccuracyStage();
+        int currentEvasionBoost = currentStats.getEvasionStage();
+
+
+        int previousAttackBoost = getBoostStage(previousStats.getAttackModifier());
+        int previousDefenseBoost = getBoostStage(previousStats.getDefenseModifier());
+        int previousSpecialAttackBoost = getBoostStage(previousStats.getSpecialAttackModifier());
+        int previousSpecialDefenseBoost = getBoostStage(previousStats.getSpecialDefenseModifier());
+        int previousSpeedBoost = getBoostStage(previousStats.getSpeedModifier());
+
+        int previousAccuracyBoost = previousStats.getAccuracyStage();
+        int previousEvasionBoost = previousStats.getEvasionStage();
+
+        if(currentAttackBoost != previousAttackBoost){
+            Teras.getLogger().info("Attack boost changed from " + previousAttackBoost + " to " + currentAttackBoost);
+            terasBattle.delayedMessages.add("|-" + (currentAttackBoost > previousAttackBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|atk|" + Math.abs(currentAttackBoost - previousAttackBoost));
+        }
+
+        if(currentDefenseBoost != previousDefenseBoost){
+            Teras.getLogger().info("Defense boost changed from " + previousDefenseBoost + " to " + currentDefenseBoost);
+            terasBattle.delayedMessages.add("|-" + (currentDefenseBoost > previousDefenseBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|def|" + Math.abs(currentDefenseBoost - previousDefenseBoost));
+        }
+
+        if(currentSpecialAttackBoost != previousSpecialAttackBoost){
+            Teras.getLogger().info("Special Attack boost changed from " + previousSpecialAttackBoost + " to " + currentSpecialAttackBoost);
+            terasBattle.delayedMessages.add("|-" + (currentSpecialAttackBoost > previousSpecialAttackBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spa|" + Math.abs(currentSpecialAttackBoost - previousSpecialAttackBoost));
+        }
+
+        if(currentSpecialDefenseBoost != previousSpecialDefenseBoost){
+            Teras.getLogger().info("Special Defense boost changed from " + previousSpecialDefenseBoost + " to " + currentSpecialDefenseBoost);
+            terasBattle.delayedMessages.add("|-" + (currentSpecialDefenseBoost > previousSpecialDefenseBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spd|" + Math.abs(currentSpecialDefenseBoost - previousSpecialDefenseBoost));
+        }
+
+        if(currentSpeedBoost != previousSpeedBoost){
+            Teras.getLogger().info("Speed boost changed from " + previousSpeedBoost + " to " + currentSpeedBoost);
+            terasBattle.delayedMessages.add("|-" + (currentSpeedBoost > previousSpeedBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spe|" + Math.abs(currentSpeedBoost - previousSpeedBoost));
+        }
+
+        if(currentAccuracyBoost != previousAccuracyBoost){
+            Teras.getLogger().info("Accuracy boost changed from " + previousAccuracyBoost + " to " + currentAccuracyBoost);
+            terasBattle.delayedMessages.add("|-" + (currentAccuracyBoost > previousAccuracyBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|acc|" + Math.abs(currentAccuracyBoost - previousAccuracyBoost));
+        }
+
+        if(currentEvasionBoost != previousEvasionBoost){
+            Teras.getLogger().info("Evasion boost changed from " + previousEvasionBoost + " to " + currentEvasionBoost);
+            terasBattle.delayedMessages.add("|-" + (currentEvasionBoost > previousEvasionBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|eva|" + Math.abs(currentEvasionBoost - previousEvasionBoost));
+        }
+
+        terasBattle.setStats(pokemon, currentStats);
+
+
+
+
+        //Teras.getLogger().error("+++Pokemon: " + pokemon.getSpecies().getName() +" " + pokemon.getPokemonName() +" " + pokemon.getPokemonUUID());
+
+        //Teras.getLogger().info("=== Stat change action for " + pokemonName + " ===");
+        //int[] delta = new int[oldStats.length];
+        //for (int i = 0; i < oldStats.length; i++) {
+            //delta[i] = newStats[i] - oldStats[i];
+            //Teras.getLogger().info(newStats[i] + " - " + oldStats[i] + " = " + delta[i]);
+        //}
+
+        /*
         for (int i = 0; i < delta.length; i++) {
             if (delta[i] == 0 || oldStats[i] == 0) continue;
 
             BattleStatsType stat = BattleStatsType.fromIndex(i);
-            Teras.LOGGER.info(pokemonName + " " + stat.name() + " " + delta[i]);
+            //Teras.LOGGER.info(pokemonName + " " + stat.name() + " " + delta[i]);
 
             String boostType = delta[i] > 0 ? "|-boost|" : "|-unboost|";
             String statName = stat.name().toLowerCase();
             String boost = boostType + terasBattle.getPositionString(pokemon) + "|" + statName + "|" + Math.abs(delta[i]);
             appendLine(terasBattle, boost);
+        }*/
+    }
+
+    public static int getBoostStage(double modifier) {
+        int mod = (int) modifier;
+        switch (mod) {
+            case 100:
+                return 0;
+            case 150:
+                return 1;
+            case 200:
+                return 2;
+            case 250:
+                return 3;
+            case 300:
+                return 4;
+            case 350:
+                return 5;
+            case 400:
+                return 6;
+            case 67:
+                return -1;
+            case 50:
+                return -2;
+            case 40:
+                return -3;
+            case 33:
+                return -4;
+            case 28:
+                return -5;
+            case 25:
+                return -6;
+            default:
+                throw new IllegalArgumentException("Invalid modifier: " + modifier);
         }
+    }
+
+    public static void fieldChangeAction(TerrainChangeAction action, TerasBattle terasBattle){
+        BattleController bc = terasBattle.battle;
+        GlobalStatusBase newGlobalStatus = (GlobalStatusBase) getProtectedProperty("newTerrain", action);
+        GlobalStatusBase oldGlobalStatus = (GlobalStatusBase) getProtectedProperty("oldTerrain", action);
+        PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
+
+      
+        if(newGlobalStatus instanceof ElectricTerrain){
+            appendLine(terasBattle,"|-fieldstart|Electric Terrain|" + getPositionAndNameString(pokemon, terasBattle));
+        } else if(newGlobalStatus instanceof PsychicTerrain){
+            appendLine(terasBattle,"|-fieldstart|Psychic Terrain|" + getPositionAndNameString(pokemon, terasBattle));
+        } else if(newGlobalStatus instanceof MistyTerrain){
+            appendLine(terasBattle,"|-fieldstart|Misty Terrain|" + getPositionAndNameString(pokemon, terasBattle));
+        } else if(newGlobalStatus instanceof GrassyTerrain){
+            appendLine(terasBattle,"|-fieldstart|Grassy Terrain|" + getPositionAndNameString(pokemon, terasBattle));
+        }
+
+
     }
 
 
