@@ -1,7 +1,6 @@
 package es.boffmedia.teras.event;
 
 import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.api.battles.BattleEndCause;
 import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
@@ -76,7 +75,7 @@ public class TerasBattleEvent {
 
         WingullAPI.wingullPOST("/logros/combate", Teras.GSON.toJson(logroCombate));
 
-        FileHelper.writeStringFile("logs/terasbattle/"+combate.getBattleConfig().getNombreArchivo()+".log", combate.getLog());
+        FileHelper.writeStringFile("logs/terasbattle/\"+combate.getBattleConfig().getNombreArchivo()+\".log", combate.getLog());
     }
 
     public void finCombateSalvaje(BattleEndEvent event, TerasBattle combate){
