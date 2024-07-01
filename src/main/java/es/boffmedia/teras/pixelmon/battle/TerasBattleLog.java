@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStats;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStatsType;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
+import com.pixelmonmod.pixelmon.battles.controller.log.AttackResult;
 import com.pixelmonmod.pixelmon.battles.controller.log.MoveResults;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.type.*;
@@ -77,6 +78,7 @@ public class TerasBattleLog {
         else if (action instanceof StatusAddAction) statusAddAction((StatusAddAction) action, battle);
         else if (action instanceof TerrainChangeAction) fieldChangeAction((TerrainChangeAction) action, battle);
         else if (action instanceof BattleMessageAction) battleMessageAction((BattleMessageAction) action, battle);
+
 
         /*
 
@@ -196,7 +198,25 @@ public class TerasBattleLog {
         appendLine(terasBattle, attackStr);
 
         if(attack.getAttackCategory().equals(AttackCategory.STATUS)){
-            appendLine(terasBattle, "|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|move: " + move);
+            switch (move) {
+                case "Wonder Room":
+                    appendLine(terasBattle, "|-fieldstart|Wonder Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
+                    break;
+                case "Trick Room":
+                    appendLine(terasBattle, "|-fieldstart|Trick Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
+                    break;
+                case "Magic Room":
+                    appendLine(terasBattle, "|-fieldstart|Magic Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
+                    break;
+                case "Protect":
+                    if(!attack.moveResult.getResult().equals(AttackResult.failed)) appendLine(terasBattle, "|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|move: " + move);
+                    break;
+                default:
+                    appendLine(terasBattle, "|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|move: " + move);
+                    break;
+            }
+
+
             return;
         }
         for (MoveResults moveResult : moveResults) {
