@@ -199,16 +199,13 @@ public class TerasBattleLog {
 
         if(attack.getAttackCategory().equals(AttackCategory.STATUS)){
             switch (move) {
-                case "Wonder Room":
-                    appendLine(terasBattle, "|-fieldstart|Wonder Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
+                case "Wonder Room": case "Trick Room": case "Magic Room":
+                    appendLine(terasBattle, "|-fieldstart|"+move+"|[of] " + getPositionAndNameString(pokemon, terasBattle));
                     break;
-                case "Trick Room":
-                    appendLine(terasBattle, "|-fieldstart|Trick Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
-                    break;
-                case "Magic Room":
-                    appendLine(terasBattle, "|-fieldstart|Magic Room|[of] " + getPositionAndNameString(pokemon, terasBattle));
-                    break;
-                case "Protect":
+                case "Protect": case "Detect": case "Endure": case "King's Shield": case "Spiky Shield": case "Baneful Bunker": case "Obstruct":
+                case "Quick Guard": case "Wide Guard": case "Crafty Shield": case "Mat Block": case "Feint": case "Follow Me": case "Rage Powder":
+                case "Ally Switch": case "Helping Hand": case "Tailwind": case "Lucky Chant": case "Safeguard": case "Mist": case "Light Screen":
+                case "Reflect": case "Aurora Veil": case "Brick Break": case "Defog": case "Haze": case "Heal Bell": case "Heal Pulse": case "Memento":
                     if(!attack.moveResult.getResult().equals(AttackResult.failed)) appendLine(terasBattle, "|-activate|" + getPositionAndNameString(pokemon, terasBattle) + "|move: " + move);
                     break;
                 default:
@@ -423,7 +420,7 @@ public class TerasBattleLog {
                     weatherName = "Hail";
                     break;
                 default:
-                    weatherName = "UnknownWeather";
+                    weatherName = "none";
                     break;
             }
             appendLine(terasBattle, "|-weather|" + weatherName + "|");
