@@ -279,37 +279,30 @@ public class TerasBattleLog {
         int previousEvasionBoost = previousStats.getEvasionStage();
 
         if(currentAttackBoost != previousAttackBoost){
-            Teras.getLogger().info("Attack boost changed from " + previousAttackBoost + " to " + currentAttackBoost);
             terasBattle.delayedMessages.add("|-" + (currentAttackBoost > previousAttackBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|atk|" + Math.abs(currentAttackBoost - previousAttackBoost));
         }
 
         if(currentDefenseBoost != previousDefenseBoost){
-            Teras.getLogger().info("Defense boost changed from " + previousDefenseBoost + " to " + currentDefenseBoost);
             terasBattle.delayedMessages.add("|-" + (currentDefenseBoost > previousDefenseBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|def|" + Math.abs(currentDefenseBoost - previousDefenseBoost));
         }
 
         if(currentSpecialAttackBoost != previousSpecialAttackBoost){
-            Teras.getLogger().info("Special Attack boost changed from " + previousSpecialAttackBoost + " to " + currentSpecialAttackBoost);
             terasBattle.delayedMessages.add("|-" + (currentSpecialAttackBoost > previousSpecialAttackBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spa|" + Math.abs(currentSpecialAttackBoost - previousSpecialAttackBoost));
         }
 
         if(currentSpecialDefenseBoost != previousSpecialDefenseBoost){
-            Teras.getLogger().info("Special Defense boost changed from " + previousSpecialDefenseBoost + " to " + currentSpecialDefenseBoost);
             terasBattle.delayedMessages.add("|-" + (currentSpecialDefenseBoost > previousSpecialDefenseBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spd|" + Math.abs(currentSpecialDefenseBoost - previousSpecialDefenseBoost));
         }
 
         if(currentSpeedBoost != previousSpeedBoost){
-            Teras.getLogger().info("Speed boost changed from " + previousSpeedBoost + " to " + currentSpeedBoost);
             terasBattle.delayedMessages.add("|-" + (currentSpeedBoost > previousSpeedBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|spe|" + Math.abs(currentSpeedBoost - previousSpeedBoost));
         }
 
         if(currentAccuracyBoost != previousAccuracyBoost){
-            Teras.getLogger().info("Accuracy boost changed from " + previousAccuracyBoost + " to " + currentAccuracyBoost);
             terasBattle.delayedMessages.add("|-" + (currentAccuracyBoost > previousAccuracyBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|acc|" + Math.abs(currentAccuracyBoost - previousAccuracyBoost));
         }
 
         if(currentEvasionBoost != previousEvasionBoost){
-            Teras.getLogger().info("Evasion boost changed from " + previousEvasionBoost + " to " + currentEvasionBoost);
             terasBattle.delayedMessages.add("|-" + (currentEvasionBoost > previousEvasionBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|eva|" + Math.abs(currentEvasionBoost - previousEvasionBoost));
         }
 
