@@ -54,7 +54,7 @@ public class TerasEvents {
             if (event.getEntity() instanceof PixelmonEntity && !event.isCanceled() && event.getResult() != Event.Result.DENY) {
                 ClientScheduler.schedule(1, () -> { //Wait a tick so the entity is fully loaded, so it isn't a bulbasaur
                     PixelmonEntity entity = (PixelmonEntity) event.getEntity();
-                    if (entity.getPokemon().isShiny() && !entity.isBossPokemon()) {
+                    if ((entity.getPokemon().isShiny() || entity.getPokemon().isPalette("shiny2")) && !entity.isBossPokemon()) {
                         ShinyTracker tracker = ShinyTracker.INSTANCE;
                         if (tracker.shouldTrackShiny(entity)) {
                             tracker.track(entity);
@@ -74,6 +74,7 @@ public class TerasEvents {
     @SubscribeEvent
     public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
         ShinyTracker.INSTANCE.camera = new ClippingHelper(event.getMatrixStack().last().pose(), event.getProjectionMatrix());
+
 
     }
 
