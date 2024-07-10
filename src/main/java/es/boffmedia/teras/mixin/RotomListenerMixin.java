@@ -29,64 +29,6 @@ import net.minecraft.block.Blocks;
 import java.util.Objects;
 import java.util.Optional;
 
-/*
-    public static void onRotomChangeForm(PokeBallImpactEvent event) {
-        if (!event.getPokeBall().level.isClientSide && event.getBlockHit().isPresent() && !event.isEmptyPokeBall() && event.getPokeBall().getOwner() instanceof ServerPlayerEntity) {
-            Species species = (Species)((OccupiedPokeBallEntity)event.getPokeBall()).getPokemon().orElse((Object)null);
-            if (species != null && species.is(new RegistryValue[]{PixelmonSpecies.ROTOM})) {
-                Block block = ((BlockState)event.getBlockHit().get()).getBlock();
-                if (getBlockImpactMap().containsKey(block)) {
-                    String form = (String)getBlockImpactMap().get(block);
-                    PlayerPartyStorage party = StorageProxy.getParty((ServerPlayerEntity)event.getPokeBall().getOwner());
-                    Pokemon pokemon = party.find(event.getPokeBall().getPokeUUID());
-                    // Inject code here
-                    if (pokemon != null) {
-                        if (form.equalsIgnoreCase(pokemon.getForm().getName())) {
-                            form = PixelmonForms.NONE;
-                        }
-
-                        if (replaceMove(pokemon, pokemon.getForm().getName(), form)) {
-                            pokemon.setForm(form);
-                        } else {
-                            LearnMoveController.sendLearnMove(party.getPlayer(), pokemon.getUUID(), (ImmutableAttack)((Optional)getAttackMap().get(form)).get());
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-* */
-
-/*
-    public static BiMap<Block, String> getBlockImpactMap() {
-        if (blockMap.isEmpty()) {
-            blockMap.put(Blocks.FURNACE, "heat");
-            blockMap.put(PixelmonBlocks.fridge, "frost");
-            blockMap.put(PixelmonBlocks.mower, "mow");
-            blockMap.put(PixelmonBlocks.washing_machine, "wash");
-            blockMap.put(PixelmonBlocks.fan, "fan");
-        }
-
-        return blockMap;
-    }
-
-    public static BiMap<String, Optional<ImmutableAttack>> getAttackMap() {
-        if (attackMap.isEmpty()) {
-            attackMap.put(PixelmonForms.NONE, AttackRegistry.THUNDER_SHOCK);
-            attackMap.put("heat", AttackRegistry.OVERHEAT);
-            attackMap.put("frost", AttackRegistry.BLIZZARD);
-            attackMap.put("mow", AttackRegistry.LEAF_STORM);
-            attackMap.put("wash", AttackRegistry.HYDRO_PUMP);
-            attackMap.put("fan", AttackRegistry.AIR_SLASH);
-        }
-
-        return attackMap;
-    }
-* */
-
-
-
 @Mixin(RotomListener.class)
 public class RotomListenerMixin {
     private static BiMap<Block, String> blockMap = HashBiMap.create();
@@ -112,6 +54,7 @@ public class RotomListenerMixin {
      */
     @Overwrite
     public static BiMap<String, Optional<ImmutableAttack>>getAttackMap() {
+
         if (attackMap.isEmpty()) {
             attackMap.put(PixelmonForms.NONE, AttackRegistry.THUNDER_SHOCK);
             attackMap.put("astral", AttackRegistry.CONFUSION);
@@ -130,10 +73,6 @@ public class RotomListenerMixin {
      */
     @Overwrite
     private static boolean replaceMove(Pokemon pokemon, String from1, String to1) {
-        System.out.println("Replace move");
-        System.out.println("From1: "+from1);
-        System.out.println("To1: "+to1);
-
         String from = from1;
         if(from.contains("astral") && !from.equals("astral")){
             from = from.replace("astral", "");
@@ -143,9 +82,6 @@ public class RotomListenerMixin {
         if(to.contains("astral") && !to.equals("astral")){
             to = to.replace("astral", "");
         }
-
-        System.out.println("From: "+from);
-        System.out.println("To: "+to);
 
         int index = -1;
         Optional<ImmutableAttack> fromAttack = (Optional)getAttackMap().get(from);
