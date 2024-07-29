@@ -13,7 +13,8 @@
     "TeamSelectionMixin"
   ],
   "client": [
-    "PatchedLivingEntityRendererMixin"
+    "PatchedLivingEntityRendererMixin",
+    "RenderShieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
