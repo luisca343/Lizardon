@@ -1,15 +1,6 @@
 package es.boffmedia.teras.pixelmon.battle;
 
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
-import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import es.boffmedia.teras.util.FileHelper;
-import es.boffmedia.teras.util.MessageHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-
 import java.util.HashMap;
-import java.util.List;
 
 public class TerasBattleController {
     public HashMap<Integer, TerasBattle> terasBattles = new HashMap<>();
