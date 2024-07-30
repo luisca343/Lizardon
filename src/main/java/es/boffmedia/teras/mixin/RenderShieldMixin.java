@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -32,7 +34,17 @@ public class RenderShieldMixin extends RenderItemBase {
                 .getArmature().searchJointByName(holdingHand).getAnimatedTransform();
 
         if (hand == Hand.OFF_HAND) {
-            jointTransform = jointTransform.translate(0.0F, -1F, 0.0F);
+
+            CompoundNBT nbt = stack.serializeNBT();
+            // Check the damage
+            CompoundNBT tag = (CompoundNBT) nbt.get("tag");
+            assert tag != null;
+            if(tag.contains("ArmourersWorkshop")) {
+                jointTransform = jointTransform.translate(0.0F, -1F, 0.0F);
+            }
+
+
+
         }
 
         modelMatrix.mulFront(jointTransform);
