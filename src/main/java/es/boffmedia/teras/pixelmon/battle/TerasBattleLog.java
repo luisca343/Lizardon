@@ -299,11 +299,11 @@ public class TerasBattleLog {
         }
 
         if(currentAccuracyBoost != previousAccuracyBoost){
-            terasBattle.delayedMessages.add("|-" + (currentAccuracyBoost > previousAccuracyBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|acc|" + Math.abs(currentAccuracyBoost - previousAccuracyBoost));
+            terasBattle.delayedMessages.add("|-" + (currentAccuracyBoost > previousAccuracyBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|accuracy|" + Math.abs(currentAccuracyBoost - previousAccuracyBoost));
         }
 
         if(currentEvasionBoost != previousEvasionBoost){
-            terasBattle.delayedMessages.add("|-" + (currentEvasionBoost > previousEvasionBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|eva|" + Math.abs(currentEvasionBoost - previousEvasionBoost));
+            terasBattle.delayedMessages.add("|-" + (currentEvasionBoost > previousEvasionBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|evasion|" + Math.abs(currentEvasionBoost - previousEvasionBoost));
         }
 
         terasBattle.setStats(pokemon, currentStats);
@@ -487,11 +487,13 @@ public class TerasBattleLog {
         initLog(terasBattle);
         // Mover esto DENTRO de la clase TerasBattle
 
-        appendLine(terasBattle,"|join|"+ terasBattle.getName1());
-        appendLine(terasBattle,"|join|"+terasBattle.getName2());
+        appendLine(terasBattle,"|j|"+ terasBattle.getName1());
+        appendLine(terasBattle,"|j|"+terasBattle.getName2());
         appendLine(terasBattle,"|player|p1|"+terasBattle.getName1());
         appendLine(terasBattle,"|player|p2|"+terasBattle.getName2());
-        appendLine(terasBattle,"|gametype|doubles");
+        appendLine(terasBattle,"|teamsize|p1|"+terasBattle.getBattleConfig().getModalidad()[0]);
+        appendLine(terasBattle,"|teamsize|p2|"+terasBattle.getBattleConfig().getModalidad()[1]);
+        appendLine(terasBattle,"|gametype|singles");
         appendLine(terasBattle,"|gen|9");
         appendLine(terasBattle,"|tier|Circuito de Gimnasios de Teras");
 
@@ -553,10 +555,19 @@ public class TerasBattleLog {
 
         Teras.getLogger().info("|start battle|");
 
-
+        appendLine(terasBattle, "|clearpoke");
         terasBattle.getPokemonInit().forEach((line) -> appendLine(terasBattle, line));
+        appendLine(terasBattle, "|teampreview");
+        appendLine(terasBattle, "|");
+        appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);
+
         appendLine(terasBattle, "|start");
         terasBattle.getSwitchInit().forEach((line) -> appendLine(terasBattle, line));
+
+        appendLine(terasBattle, "|turn|1");
+        appendLine(terasBattle, "|");
+        appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);
+
 
 
 
