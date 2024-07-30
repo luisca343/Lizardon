@@ -500,19 +500,24 @@ public class TerasBattleLog {
         List<BattleParticipant> participantsList = new ArrayList<>(bc.participants);
         Collections.reverse(participantsList);
 
+        Teras.getLogger().info("Participants: " + participantsList.size());
+
         participantsList.forEach((participant) -> {
+            final int[] positionIndex = {0};
+
+            Teras.getLogger().info("Participant: " + participant.getDisplayName());
 
             for(int i = 0; i < participant.allPokemon.length; i++){
                 PixelmonWrapper pokemon = participant.allPokemon[i];
 
                 if(pokemon != null) {
+                    Teras.getLogger().info("Pokemon: " + pokemon.getSpecies().getName() + " " + pokemon.getNickname() + " " + pokemon.getPokemonUUID());
                     terasBattle.swapPokemon(index[0], i, pokemon);
-                    terasBattle.getPokemonInit().add(bc.battleIndex, "|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
+                    terasBattle.getPokemonInit().add("|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
                 }
             }
 
 
-            final int[] positionIndex = {0};
             int max = participant.numControlledPokemon;
 
             HashMap<Integer, PixelmonWrapper> team = terasBattle.getActiveTeam(index[0]);
@@ -520,7 +525,7 @@ public class TerasBattleLog {
             team.forEach((key, pw) -> {
                 if(positionIndex[0] >= terasBattle.getBattleConfig().getModalidad()[index[0] - 1]) return;
                 if(pw != null) {
-                    terasBattle.getSwitchInit().add(bc.battleIndex, "|switch|" + terasBattle.getPositionString(pw) + ": "
+                    terasBattle.getSwitchInit().add("|switch|" + terasBattle.getPositionString(pw) + ": "
                             +pw.getNickname()  + "|" + pw.getSpecies().getName() + ", L"
                             + pw.getPokemonLevel().getPokemonLevel() + "|" + pw.getHealth() + "\\/" + pw.getMaxHealth());
                 };
@@ -545,6 +550,8 @@ public class TerasBattleLog {
         });
 
 
+
+        Teras.getLogger().info("|start battle|");
 
 
         terasBattle.getPokemonInit().forEach((line) -> appendLine(terasBattle, line));
