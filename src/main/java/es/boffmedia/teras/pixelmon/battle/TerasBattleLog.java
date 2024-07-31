@@ -278,6 +278,8 @@ public class TerasBattleLog {
         int previousAccuracyBoost = previousStats.getAccuracyStage();
         int previousEvasionBoost = previousStats.getEvasionStage();
 
+
+
         if(currentAttackBoost != previousAttackBoost){
             terasBattle.delayedMessages.add("|-" + (currentAttackBoost > previousAttackBoost ? "boost" : "unboost") + "|" + getPositionAndNameString(pokemon, terasBattle) + "|atk|" + Math.abs(currentAttackBoost - previousAttackBoost));
         }
@@ -489,8 +491,8 @@ public class TerasBattleLog {
 
         appendLine(terasBattle,"|j|"+ terasBattle.getName1());
         appendLine(terasBattle,"|j|"+terasBattle.getName2());
-        appendLine(terasBattle,"|player|p1|"+terasBattle.getName1());
-        appendLine(terasBattle,"|player|p2|"+terasBattle.getName2());
+        appendLine(terasBattle,"|player|p1|"+terasBattle.getName1()+"|"+terasBattle.getPlayer().getStringUUID());
+        appendLine(terasBattle,"|player|p2|"+terasBattle.getName2()+"|"+terasBattle.getBattleConfig().getNpc().getName());
         appendLine(terasBattle,"|teamsize|p1|"+terasBattle.getBattleConfig().getModalidad()[0]);
         appendLine(terasBattle,"|teamsize|p2|"+terasBattle.getBattleConfig().getModalidad()[1]);
         appendLine(terasBattle,"|gametype|singles");
