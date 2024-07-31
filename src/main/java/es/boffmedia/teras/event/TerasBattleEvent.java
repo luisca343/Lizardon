@@ -73,7 +73,7 @@ public class TerasBattleEvent {
         logroCombate.setEquipo(team);
 
 
-        WingullAPI.wingullPOST("/achievements/battle", Teras.GSON.toJson(logroCombate));
+        WingullAPI.wingullPOST("/battle", Teras.GSON.toJson(logroCombate));
 
         FileHelper.writeStringFile("logs/terasbattle/\"+combate.getBattleConfig().getNombreArchivo()+\".log", combate.getLog());
     }
