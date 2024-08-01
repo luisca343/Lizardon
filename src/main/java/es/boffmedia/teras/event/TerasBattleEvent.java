@@ -69,7 +69,7 @@ public class TerasBattleEvent {
         logroCombate.setLogro(combate.getBattleConfig().getLogro());
         logroCombate.setVictoria(ganador);
         logroCombate.setReplay(combate.getLog());
-        List<Pokemon> team = StorageProxy.getParty(combate.getPlayer()).getTeam();
+        List<Pokemon> team = combate.getPlayerTeam();
         logroCombate.setEquipo(team);
 
 

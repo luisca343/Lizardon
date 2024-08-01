@@ -54,6 +54,8 @@ public class TerasBattle {
 
     public ArrayList<String> delayedMessages = new ArrayList<>();
 
+    public List<Pokemon> playerTeam = new ArrayList<>();
+
     public TerasBattle() {
         this.player = player;
         this.battleConfig = new BattleConfig();
@@ -114,6 +116,23 @@ public class TerasBattle {
                             Teras.getLBC().addTerasBattle(bc.battleIndex, this);
                             TerasBattleLog.appendStartBattle(this);
 
+                            // First we need to get the team of the player
+
+                            BattleParticipant part = null;
+
+                            for (BattleParticipant participant : bc.participants) {
+                                if(participant instanceof PlayerParticipant){
+                                    part = participant;
+                                }
+                            }
+
+
+                            for (PixelmonWrapper pixelmonWrapper : part.allPokemon) {
+                                playerTeam.add(pixelmonWrapper.pokemon);
+                            }
+
+
+
                             entity.remove();
                             entity = null;
                         })
@@ -121,11 +140,13 @@ public class TerasBattle {
                             Teras.LOGGER.error("CANCELADO");
                         });
         test.start();
+
     }
 
     public BattleController getBattle(){
         return battle;
     }
+
 
     public String getName1(){
         return player.getDisplayName().getString();
@@ -348,6 +369,13 @@ public class TerasBattle {
         this.switchInit = switchInit;
     }
 
+    public List<Pokemon> getPlayerTeam() {
+        return playerTeam;
+    }
+
+    public void setPlayerTeam(List<Pokemon> playerTeam) {
+        this.playerTeam = playerTeam;
+    }
 }
 
 
