@@ -68,7 +68,7 @@ public class TerasBattleLog {
     }
 
     public static void logEvent(BattleAction action, TerasBattle battle) {
-        Teras.LOGGER.error("=== Log event: " + action.toString() + " ===");
+        Teras.LOGGER.info("=== Log event: " + action.toString() + " ===");
         if (action instanceof TurnBeginAction) turnBeginAction((TurnBeginAction) action, battle);
         else if (action instanceof BattleEndAction) { battleEndAction((BattleEndAction) action, battle); }
         else if (action instanceof SwitchAction) switchAction((SwitchAction) action, battle);
@@ -144,8 +144,8 @@ public class TerasBattleLog {
                 System.out.println("Participant Index: " + participantIndex);
                 System.out.println("Index: " + i);
                 if(!terasBattle.getActivePokemon(participantIndex, i).equals(pokemon)){
-                    terasBattle.swapPokemon(participantIndex, i, pokemon);
-                    appendLine( terasBattle,"|switch|" + terasBattle.getPositionString(pokemon) + ": "
+                    terasBattle.swapv2(participantIndex, i, pokemon);
+                    appendLine( terasBattle,"|switch|" + terasBattle.getPositionString(participantIndex, i) + ": "
                             +pokemon.getNickname()  + "|" + pokemon.getSpecies().getName() + ", L"
                             + pokemon.getPokemonLevel().getPokemonLevel() + "|" + pokemon.getHealth() + "\\/" + pokemon.getMaxHealth());
                 }
@@ -161,7 +161,7 @@ public class TerasBattleLog {
         PixelmonWrapper pokemon = (PixelmonWrapper) getProtectedProperty("pokemon", action);
         PixelmonWrapper switchingTo = (PixelmonWrapper) getProtectedProperty("switchingTo", action);
 
-        if(!terasBattle.swapPokemon(pokemon, switchingTo)) return;
+        if(!terasBattle.swapv2(pokemon, switchingTo)) return;
         appendLine(terasBattle, "|switch|" + terasBattle.getPositionString(switchingTo) + ": "
                 +switchingTo.getNickname()  + "|" + switchingTo.getSpecies().getName() + ", L"
                 + switchingTo.getPokemonLevel().getPokemonLevel()
@@ -499,16 +499,17 @@ public class TerasBattleLog {
         appendLine(terasBattle,"|gen|9");
         appendLine(terasBattle,"|tier|Circuito de Gimnasios de Teras");
 
-        final int[] index = {1};
+        int index = 1;
+
+        Teras.getLogger().warn("THE CURRENT INDEX IS: " + index);
 
         List<BattleParticipant> participantsList = new ArrayList<>(bc.participants);
         Collections.reverse(participantsList);
 
         Teras.getLogger().info("Participants: " + participantsList.size());
 
-        participantsList.forEach((participant) -> {
-            final int[] positionIndex = {0};
 
+        for (BattleParticipant participant : participantsList) {
             Teras.getLogger().info("Participant: " + participant.getDisplayName());
 
             for(int i = 0; i < participant.allPokemon.length; i++){
@@ -516,49 +517,56 @@ public class TerasBattleLog {
 
                 if(pokemon != null) {
                     Teras.getLogger().info("Pokemon: " + pokemon.getSpecies().getName() + " " + pokemon.getNickname() + " " + pokemon.getPokemonUUID());
-                    terasBattle.swapPokemon(index[0], i, pokemon);
-                    terasBattle.getPokemonInit().add("|poke|p" + index[0] + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
+                    //terasBattle.swapv2(index[0], i, pokemon);
+                    terasBattle.getPokemonInit().add("|poke|p" + index + "|" + pokemon.getSpecies().getName()  + ", L"+pokemon.getPokemonLevel().getPokemonLevel()+"|");
                 }
             }
 
 
             int max = participant.numControlledPokemon;
 
-            HashMap<Integer, PixelmonWrapper> team = terasBattle.getActiveTeam(index[0]);
+            HashMap<Integer, PixelmonWrapper> team = terasBattle.getActiveTeam(index);
 
-            team.forEach((key, pw) -> {
+            /*team.forEach((key, pw) -> {
                 if(positionIndex[0] >= terasBattle.getBattleConfig().getModalidad()[index[0] - 1]) return;
                 if(pw != null) {
-                    terasBattle.getSwitchInit().add("|switch|" + terasBattle.getPositionString(pw) + ": "
+                    //terasBattle.swapv2(index[0], positionIndex[0], pw);
+                    terasBattle.getSwitchInit().add("|switch|" + terasBattle.getPositionString(index[0], positionIndex[0]) + ": "
                             +pw.getNickname()  + "|" + pw.getSpecies().getName() + ", L"
                             + pw.getPokemonLevel().getPokemonLevel() + "|" + pw.getHealth() + "\\/" + pw.getMaxHealth());
                 };
                 positionIndex[0]++;
-            });
+            });*/
 
-            /*
+
             for(int i = 0; i < max; i++){
                 PixelmonWrapper pw = (PixelmonWrapper) participant.allPokemon[i];
                 //appendLine(terasBattle, "|switch|" + getPositionString(pokemon, bc) + ": " +switchingTo.getNickname()  + "|" + switchingTo.getSpecies().getName() + ", L" + switchingTo.getPokemonLevel() + "|" + switchingTo.getHealth() + "\\/" + switchingTo.getMaxHealth());
                 if(pw != null) {
-                    switchInit.add(bc.battleIndex, "|switch|" + getPositionString(pw, bc) + ": "
+                    terasBattle.swapv2(index, i, pw);
+                    terasBattle.getSwitchInit().add("|switch|" + terasBattle.getPositionString(index, i) + ": "
                             +pw.getNickname()  + "|" + pw.getSpecies().getName() + ", L"
                             + pw.getPokemonLevel().getPokemonLevel() + "|" + pw.getHealth() + "\\/" + pw.getMaxHealth());
                 };
-                positionIndex[0]++;
+                //positionIndex[0]++;
 
                 //finalActive.put(participant.getDisplayName(), Arrays.asList(participant.allPokemon));
-            }*/
+            }
 
-            index[0]++;
-        });
+            index++;
+
+        }
 
 
 
         Teras.getLogger().info("|start battle|");
 
         appendLine(terasBattle, "|clearpoke");
-        terasBattle.getPokemonInit().forEach((line) -> appendLine(terasBattle, line));
+
+        List<String> pokemonInit = terasBattle.getPokemonInit();
+        Collections.reverse(pokemonInit);
+        pokemonInit.forEach((line) -> appendLine(terasBattle, line));
+
         appendLine(terasBattle, "|teampreview");
         appendLine(terasBattle, "|");
         appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);
