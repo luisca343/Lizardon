@@ -561,15 +561,14 @@ public class TerasBattleLog {
 
         Teras.getLogger().info("|start battle|");
 
+        /*
         appendLine(terasBattle, "|clearpoke");
-
-        List<String> pokemonInit = terasBattle.getPokemonInit();
-        Collections.reverse(pokemonInit);
-        pokemonInit.forEach((line) -> appendLine(terasBattle, line));
+        terasBattle.getPokemonInit().forEach((line) -> appendLine(terasBattle, line))
 
         appendLine(terasBattle, "|teampreview");
         appendLine(terasBattle, "|");
-        appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);
+        appendLine(terasBattle, "|t:|" + System.currentTimeMillis() / 1000);;
+        */
 
         appendLine(terasBattle, "|start");
         terasBattle.getSwitchInit().forEach((line) -> appendLine(terasBattle, line));
