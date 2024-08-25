@@ -222,6 +222,4 @@ public class TerasEvents {
         Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) ev.getPlayer()), new CMessageConfigServer(data));
 
     }
-
-
 }

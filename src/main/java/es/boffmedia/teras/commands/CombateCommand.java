@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import es.boffmedia.teras.Teras;
-import es.boffmedia.teras.pixelmon.battle.TerasBattle;
+import es.boffmedia.teras.pixelmon.battle.NPCTerasBattle;
 import es.boffmedia.teras.objects.pixelmon.BattleConfig;
 import es.boffmedia.teras.util.Reader;
 import net.minecraft.command.CommandSource;
@@ -40,7 +40,7 @@ public class CombateCommand {
             ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
             String url = StringArgumentType.getString(command, "url");
             BattleConfig configSalvaje = Reader.getDatosEncuentro(url);
-            TerasBattle combate = new TerasBattle(player, configSalvaje);
+            NPCTerasBattle combate = new NPCTerasBattle(player, configSalvaje);
             combate.start();
         } catch (CommandSyntaxException e){
             Teras.LOGGER.error("Error al iniciar el combate");
@@ -53,7 +53,7 @@ public class CombateCommand {
             ServerPlayerEntity player = EntityArgument.getPlayer(command, "player");
             String url = StringArgumentType.getString(command, "url");
             BattleConfig configCombateEntrenador = Reader.getDatosNPC(url);
-            TerasBattle combate = new TerasBattle(player, configCombateEntrenador);
+            NPCTerasBattle combate = new NPCTerasBattle(player, configCombateEntrenador);
             combate.start();
         }catch(CommandSyntaxException e){
             Teras.LOGGER.error("Error al iniciar el combate");

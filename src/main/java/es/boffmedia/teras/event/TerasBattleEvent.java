@@ -5,28 +5,22 @@ import com.pixelmonmod.pixelmon.api.battles.BattleResults;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.objects.TrainerDefeatMoney;
-import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.TerasBattle;
+import es.boffmedia.teras.pixelmon.battle.TerasBattleOld;
 import es.boffmedia.teras.pixelmon.battle.CombateFrenteBatalla;
-import es.boffmedia.teras.pixelmon.battle.TerasBattleLog;
 import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
-import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.Scoreboard;
 import es.boffmedia.teras.util.WingullAPI;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber
@@ -45,18 +39,21 @@ public class TerasBattleEvent {
         WingullAPI.wingullPOST("/starbank/trainerdefeat", gson.toJson(defeatMoney));
     }
 
-    public void inicioCombateEntrenador(BattleStartedEvent event, TerasBattle combate){
+    public void inicioCombateEntrenador(BattleStartedEvent event, TerasBattleOld combate){
         Teras.LOGGER.info("Iniciando combate entrenador");
         //TerasBattleLog.parseLog(event.bc.battleLog, combate);
     }
 
-    public void inicioCombateSalvaje(BattleStartedEvent event, TerasBattle combate){
+    public void inicioCombateSalvaje(BattleStartedEvent event, TerasBattleOld combate){
         Teras.LOGGER.info("Iniciando combate salvaje");
     }
 
     public void finCombateEntrenador(BattleEndEvent event, TerasBattle combate){
         Teras.LOGGER.info("Fin combate entrenador");
         //TerasBattleLog.parseLog(event.getBattleController().battleLog, combate);
+
+
+        /*
         boolean ganador = getGanador(event, combate);
         String nombreGanador = ganador ? combate.getPlayer().getDisplayName().getString() : combate.getBattleConfig().getNombre();
         TerasBattleLog.appendLine(combate, "|win|" + nombreGanador);
@@ -76,13 +73,14 @@ public class TerasBattleEvent {
         WingullAPI.wingullPOST("/battle", Teras.GSON.toJson(logroCombate));
 
         FileHelper.writeStringFile("logs/terasbattle/\"+combate.getBattleConfig().getNombreArchivo()+\".log", combate.getLog());
+        */
     }
 
-    public void finCombateSalvaje(BattleEndEvent event, TerasBattle combate){
+    public void finCombateSalvaje(BattleEndEvent event, TerasBattleOld combate){
         getGanador(event, combate);
     }
 
-    public boolean getGanador(BattleEndEvent event, TerasBattle combate){
+    public boolean getGanador(BattleEndEvent event, TerasBattleOld combate){
         LivingEntity ganador = null, perdedor = null;
         try{
             for(Map.Entry<BattleParticipant, BattleResults> entry : event.getResults().entrySet()){
@@ -114,8 +112,11 @@ public class TerasBattleEvent {
     public void onBattleStart(BattleStartedEvent event){
         if(Teras.getLBC().existsTerasBattle(event.getBattleController().battleIndex)) {
             TerasBattle combate = Teras.getLBC().getTerasBattle(event.getBattleController().battleIndex);
+            Teras.LOGGER.info("Inicializando combate desde evento");
+            /*
             if(combate.getBattleConfig().esEntrenador()) inicioCombateEntrenador(event, combate);
             else inicioCombateSalvaje(event, combate);
+            */
         }
     }
 
@@ -123,7 +124,11 @@ public class TerasBattleEvent {
     public void onBattleEnd(BattleEndEvent event){
         if(Teras.getLBC().existsTerasBattle(event.getBattleController().battleIndex)) {
             TerasBattle combate = Teras.getLBC().getTerasBattle(event.getBattleController().battleIndex);
+            Teras.LOGGER.info("Finalizando combate desde evento");
 
+            Teras.getLogger().info(combate.getLogString());
+
+            /*
             if(combate.getRivalParticipant().getEntity() != null) combate.getRivalParticipant().getEntity().remove();
 
 
@@ -138,12 +143,12 @@ public class TerasBattleEvent {
             MobEntity entity = Teras.getLBC().getTerasBattle(event.getBattleController().battleIndex).getEntity();
             if(entity != null){
                 entity.remove();
-            }
+            }*/
             Teras.getLBC().removeTerasBattle(event.getBattleController().battleIndex);
         }
     }
 
-    private void finCombateFrenteBatalla(BattleEndEvent event, TerasBattle combate) {
+    private void finCombateFrenteBatalla(BattleEndEvent event, TerasBattleOld combate) {
         CombateFrenteBatalla combateFrenteBatalla = (CombateFrenteBatalla) combate;
         if(getGanador(event, combateFrenteBatalla)){
             // Send message to all players
