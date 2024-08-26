@@ -1,4 +1,5 @@
 package es.boffmedia.teras.pixelmon.battle;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.pokemon.stats.BattleStats;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.log.action.BattleAction;
@@ -169,5 +170,41 @@ public class TerasBattle{
     }
     public ArrayList<String> getSwitchInit() {
         return switchInit;
+    }
+
+
+    // Getters and Setters
+
+
+    public BattleParticipant getP1() {
+        return p1;
+    }
+
+    public List<Pokemon> getP1Team() {
+        List<Pokemon> team = new ArrayList<>();
+        for (PixelmonWrapper pkm : p1.allPokemon) {
+            team.add(pkm.pokemon);
+        }
+        return team;
+    }
+
+    public BattleParticipant getP2() {
+        return p2;
+    }
+
+    public List<Pokemon> getP2Team() {
+        List<Pokemon> team = new ArrayList<>();
+        for (PixelmonWrapper pkm : p2.allPokemon) {
+            team.add(pkm.pokemon);
+        }
+        return team;
+    }
+
+    public BattleParticipant getP3() {
+        return p3;
+    }
+
+    public BattleParticipant getP4() {
+        return p4;
     }
 }

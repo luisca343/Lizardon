@@ -190,4 +190,12 @@ public class NPCTerasBattle extends TerasBattle {
         this.npcEntity = entity;
     }
 
+    public BattleConfig getBattleConfig() {
+        return battleConfig;
+    }
+
+    public ServerPlayerEntity getPlayer() {
+        return player;
+    }
+
 }
