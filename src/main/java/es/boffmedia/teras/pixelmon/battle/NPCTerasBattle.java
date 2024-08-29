@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTier;
 import com.pixelmonmod.pixelmon.api.pokemon.boss.BossTierRegistry;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRuleRegistry;
 import com.pixelmonmod.pixelmon.battles.api.rules.BattleRules;
 import com.pixelmonmod.pixelmon.battles.api.rules.teamselection.TeamSelectionRegistry;
@@ -47,53 +48,59 @@ public class NPCTerasBattle extends TerasBattle {
         Scoreboard.getOrCreateObjective(player, battleConfig.getNombreArchivo());
         BattleRules br = new BattleRules();
         br.setNewClauses(battleConfig.getNormas());
-        br = br.set(BattleRuleRegistry.TEAM_SELECT, true);
-        br = br.set(BattleRuleRegistry.TEAM_PREVIEW, true);
+        br = br.set(BattleRuleRegistry.TEAM_SELECT, false);
+        br = br.set(BattleRuleRegistry.TEAM_PREVIEW, false);
 
         br = br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getPlayerPkmCount());
-        //br = br.set(BattleRuleRegistry.TURN_TIME, 45);
         br = br.set(BattleRuleRegistry.BATTLE_TYPE, battleConfig.getBattleType());
 
         br = br.set(TerasBattleRuleRegistry.SPECIAL_BATTLE, true);
 
 
+        if(battleConfig.getRivalPkmCount() >= 6) {
+            battle = BattleRegistry.startBattle(getPlayerParticipant(), getRivalParticipant());
+            Teras.getLBC().addTerasBattle(battle.battleIndex, this);
 
-        TeamSelectionRegistry.Builder test =
-                TeamSelectionRegistry
-                        .builder()
-                        .members(getPlayerParticipant().getEntity(), getRivalParticipant().getEntity())
-                        .battleRules(br)
-                        .showOpponentTeam()
-                        .closeable()
-                        .battleStartConsumer(bc -> {
-                            battle = bc;
-                            Teras.getLBC().addTerasBattle(bc.battleIndex, this);
-                            TerasBattleLog.appendStartBattle(this);
+            npcEntity.remove();
+            npcEntity = null;
+        } else if(battleConfig.getRivalPkmCount() < 6) {
+            TeamSelectionRegistry.Builder test =
+                    TeamSelectionRegistry
+                            .builder()
+                            .members(getPlayerParticipant().getEntity(), getRivalParticipant().getEntity())
+                            .battleRules(br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getRivalPkmCount()))
+                            .showOpponentTeam()
+                            .closeable()
+                            .battleStartConsumer(bc -> {
+                                battle = bc;
+                                Teras.getLBC().addTerasBattle(bc.battleIndex, this);
 
-                            // First we need to get the team of the player
+                                // First we need to get the team of the player
 
-                            BattleParticipant part = null;
+                                BattleParticipant part = null;
 
-                            for (BattleParticipant participant : bc.participants) {
-                                if(participant instanceof PlayerParticipant){
-                                    part = participant;
+                                for (BattleParticipant participant : bc.participants) {
+                                    if(participant instanceof PlayerParticipant){
+                                        part = participant;
+                                    }
                                 }
-                            }
 
 
-                            for (PixelmonWrapper pixelmonWrapper : part.allPokemon) {
-                                //playerTeam.add(pixelmonWrapper.pokemon);
-                            }
+                                for (PixelmonWrapper pixelmonWrapper : part.allPokemon) {
+                                    //playerTeam.add(pixelmonWrapper.pokemon);
+                                }
 
 
 
-                            npcEntity.remove();
-                            npcEntity = null;
-                        })
-                        .cancelConsumer(ts -> {
-                            Teras.LOGGER.error("CANCELADO");
-                        });
-        test.start();
+                                npcEntity.remove();
+                                npcEntity = null;
+                            })
+                            .cancelConsumer(ts -> {
+                                Teras.LOGGER.error("CANCELADO");
+                            });
+            test.start();
+        }
+
     }
 
 
@@ -145,10 +152,8 @@ public class NPCTerasBattle extends TerasBattle {
     }
 
     protected TrainerParticipant getPartRivalEntrenador() {
-        NPCTrainer npc = new NPCTrainer(player.level);
+        SpecialNpcTrainer npc = new SpecialNpcTrainer(player.level);
         npc.setBossTier(BossTierRegistry.NOT_BOSS);
-
-
 
         if(getRivalTeamLevel() > 100){
             int niveles = getRivalTeamLevel() - 100;
@@ -177,13 +182,14 @@ public class NPCTerasBattle extends TerasBattle {
         }
         int i = 0;
         for (Pokemon pkm : equipoEntrenador) {
+            Teras.getLogger().info("Añadiendo pokemon " + i + " al entrenador "
+                    + npc.getName().getString() + " con nombre " + pkm.getDisplayName());
             npc.getPokemonStorage().set(i, pkm);
 
             i++;
-            if (i == 6) break;
+            if (i == battleConfig.getNumPkmRival()) break;
         }
-
-        return new TrainerParticipant(npc, battleConfig.getNumPkmRival());
+        return new TrainerParticipant(npc, 1);
     }
 
     public void setEntity(MobEntity entity) {

@@ -36,6 +36,7 @@ public class TerasBattleController {
 
     public void addTerasBattle(int id, TerasBattle combate){
         terasBattles.put(id, combate);
+        TerasBattleLog.appendStartBattle(combate);
     }
 
     public void removeTerasBattle(int id){
