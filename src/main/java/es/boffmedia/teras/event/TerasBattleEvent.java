@@ -31,14 +31,12 @@ public class TerasBattleEvent {
 
     @SubscribeEvent
     public void beatTrainer(BeatTrainerEvent event){
-        System.out.println("beatTrainer");
         if(event.trainer.getWinMoney() == 0){
             Teras.LOGGER.info("No hay dinero que ganar, esto podría ser un combate custom, verdad Luisca??");
             return;
         }
         
         TrainerDefeatMoney defeatMoney = new TrainerDefeatMoney(event.player.getStringUUID(), event.trainer.getWinMoney());
-        System.out.println("beatTrainer: " + defeatMoney.getMoney());
 
         Gson gson = new Gson();
         WingullAPI.wingullPOST("/starbank/trainerdefeat", gson.toJson(defeatMoney));
@@ -62,7 +60,6 @@ public class TerasBattleEvent {
         boolean ganador = getGanador(event, combate);
         String nombreGanador = ganador ? combate.getP1().getDisplayName() : combate.getP2().getDisplayName();
         TerasBattleLog.appendLine(combate, "|win|" + nombreGanador);
-        Teras.LOGGER.info("\n"+combate.log);
 
         if(combate instanceof NPCTerasBattle){
             LogroCombate logroCombate = getLogroCombate((NPCTerasBattle) combate, ganador);
