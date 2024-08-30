@@ -48,12 +48,13 @@ public class NPCTerasBattle extends TerasBattle {
         Scoreboard.getOrCreateObjective(player, battleConfig.getNombreArchivo());
         BattleRules br = new BattleRules();
         br.setNewClauses(battleConfig.getNormas());
-        br = br.set(BattleRuleRegistry.TEAM_SELECT, false);
+        br = br.set(BattleRuleRegistry.TEAM_SELECT, true);
         br = br.set(BattleRuleRegistry.TEAM_PREVIEW, false);
 
         br = br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getPlayerPkmCount());
         br = br.set(BattleRuleRegistry.BATTLE_TYPE, battleConfig.getBattleType());
-
+        br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getRivalPkmCount());
+        
         br = br.set(TerasBattleRuleRegistry.SPECIAL_BATTLE, true);
 
 
@@ -68,7 +69,7 @@ public class NPCTerasBattle extends TerasBattle {
                     TeamSelectionRegistry
                             .builder()
                             .members(getPlayerParticipant().getEntity(), getRivalParticipant().getEntity())
-                            .battleRules(br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getRivalPkmCount()))
+                            .battleRules(br)
                             .showOpponentTeam()
                             .closeable()
                             .battleStartConsumer(bc -> {
