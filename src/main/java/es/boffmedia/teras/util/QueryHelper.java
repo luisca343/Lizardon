@@ -1,12 +1,12 @@
 package es.boffmedia.teras.util;
 
 import com.google.gson.Gson;
-import com.pixelmonmod.pixelmon.api.spawning.AbstractSpawner;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.server.SMessageCheckSpawns;
 import es.boffmedia.teras.net.server.SMessageDatosServer;
+import es.boffmedia.teras.net.server.SMessageDarCaja;
 import es.boffmedia.teras.net.serverOld.SMessageFinalizarLlamada;
 import es.boffmedia.teras.net.serverOld.SMessageIniciarLlamada;
 import es.boffmedia.teras.net.serverOld.SMessageVerMisiones;
@@ -21,12 +21,14 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class QueryHelper {
+    final static String SUCCESS = "{\"status\": \"ok\"}";
+    final static String ERROR = "{\"status\": \"error\"}";
+
+    final static Gson gson = new Gson();
 
     public static boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
-        Gson gson = new Gson();
         Teras.LOGGER.info("Query recibida: "+query);
         ClientProxy.callbackMCEF = callback;
         /* Requests 'GET' */
@@ -55,6 +57,11 @@ public class QueryHelper {
             Messages.INSTANCE.sendToServer(new SMessageVerMisiones(query));
             return true;
         }
+        if(query.contains("darCaja")){
+            Messages.INSTANCE.sendToServer(new SMessageDarCaja(query));
+            callback.success(SUCCESS);
+            return true;
+        }
         /*
         * ===============================
         *  Requests 'POST'
@@ -79,7 +86,7 @@ public class QueryHelper {
         String responseString = response.toString();
 
         if(responseString.contains("pokedex_event")){
-            PokedexEventResponse pokedexEventResponse = new Gson().fromJson(responseString, PokedexEventResponse.class);
+            PokedexEventResponse pokedexEventResponse = gson.fromJson(responseString, PokedexEventResponse.class);
             pokedexEventResponse.sendMessage();
         }
     }

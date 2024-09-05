@@ -1,4 +1,4 @@
-package es.boffmedia.teras.net.serverOld;
+package es.boffmedia.teras.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
