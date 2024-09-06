@@ -5,15 +5,22 @@
   "minVersion": "0.8.4",
   "server": [
     "LogMixin",
+    "PokemonMixin",
+    "RotomListenerMixin",
+    "ShearInteractionMixin",
     "StatChangeActionMixin",
     "StatusAddActionMixin",
     "TeamSelectionMixin"
   ],
   "client": [
-    "PatchedLivingEntityRendererMixin"
+    "PatchedLivingEntityRendererMixin",
+    "RenderShieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "teras.mixin-refmap.json"
+  "refmap": "teras.mixin-refmap.json",
+  "mixins": [
+    "PokemonBaseMixin"
+  ]
 }

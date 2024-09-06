@@ -5,12 +5,16 @@ import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import com.pixelmonmod.pixelmon.api.events.ShopkeeperEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
+import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.pokedex.PokedexRegistrationStatus;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCShopkeeper;
 import com.pixelmonmod.pixelmon.entities.npcs.registry.ShopItemWithVariation;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.objects.ShopTransaction;
 import es.boffmedia.teras.objects_old.dex.ActualizarDex;
+import es.boffmedia.teras.pixelmon.battle.TerasBattle;
+import es.boffmedia.teras.pixelmon.battle.TerasBattleController;
+import es.boffmedia.teras.pixelmon.battle.TerasBattleRuleRegistry;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.PersistentDataFields;
 import es.boffmedia.teras.util.WingullAPI;
@@ -23,6 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber
 public class PixelmonEvents {
@@ -102,6 +107,25 @@ public class PixelmonEvents {
 
         if(!encontrado) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onBattleStart(BattleStartedEvent event){
+        Teras.getLogger().warn("========== COMBATE INICIADO ==========");
+        Optional<Boolean> isSpecial = event.getBattleController().rules.get(TerasBattleRuleRegistry.SPECIAL_BATTLE);
+        if(!isSpecial.isPresent() || !isSpecial.get()) {
+            Teras.getLogger().warn("No es un combate especial");
+            TerasBattleController lbc = Teras.getLBC();
+            int battleIndex = event.getBattleController().battleIndex;
+            if(lbc.existsTerasBattle(battleIndex)){
+                Teras.getLogger().warn("Existe el combate, no se ha creado");
+            } else {
+                Teras.getLogger().warn("No se ha encontrado el combate, se crea");
+                lbc.addTerasBattle(battleIndex, new TerasBattle(event.getBattleController()));
+            }
+        } else {
+            Teras.getLogger().warn("Es un combate especial");
         }
     }
 }

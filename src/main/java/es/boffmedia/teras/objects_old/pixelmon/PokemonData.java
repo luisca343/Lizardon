@@ -4,131 +4,156 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import es.boffmedia.teras.Teras;
 
 public class PokemonData {
-    private String naturaleza;
-    private String especie;
-    private String nombre;
-    private int nivel;
+    private int dex;
+    private String nature;
+    private String species;
+    private String form;
+    private String palette;
+    private String name;
+    private int level;
     private String item;
-    private String habilidad;
-    private String[] ataques;
-    private String[] ivs;
-    private String[] evs;
-    private String[] stats;
+    private String ability;
+    private String[] moves;
+    private int[] ivs;
+    private int[] evs;
+    private int[] stats;
 
     public PokemonData(Pokemon pokemon) {
-
-        especie = pokemon.getSpecies().getName();
-        nombre = pokemon.getDisplayName();
-        nivel = pokemon.getPokemonLevel();
+        dex = pokemon.getSpecies().getDex();
+        species = pokemon.getSpecies().getName();
+        form = pokemon.getForm().getName();
+        palette = pokemon.getPalette().getName();
+        name = pokemon.getDisplayName();
+        level = pokemon.getPokemonLevel();
         item = pokemon.getHeldItemAsItemHeld().getLocalizedName();
-        habilidad = pokemon.getAbility().getLocalizedName();
-        naturaleza = pokemon.getNature().getLocalizedName();
-        ataques = new String[4];
+        ability = pokemon.getAbility().getLocalizedName();
+        nature = pokemon.getNature().getLocalizedName();
+        moves = new String[4];
         for (int i = 0; i < 4; i++) {
             if(pokemon.getMoveset().get(i) == null) continue;
-            ataques[i] = pokemon.getMoveset().get(i).getMove().getLocalizedName();
+            moves[i] = pokemon.getMoveset().get(i).getMove().getLocalizedName();
         }
-        ivs = new String[6];
+        ivs = new int[6];
         for (int i = 0; i < 6; i++) {
             if (pokemon.getIVs() == null) continue;
-            ivs[i] = String.valueOf(pokemon.getIVs().getArray()[i]);
+            ivs[i] = pokemon.getIVs().getArray()[i];
         }
-        evs = new String[6];
+        evs = new int[6];
         for (int i = 0; i < 6; i++) {
             if (pokemon.getEVs() == null) continue;
-            evs[i] = String.valueOf(pokemon.getEVs().getArray()[i]);
+            evs[i] = pokemon.getEVs().getArray()[i];
         }
-        stats = new String[6];
-        stats[0] = String.valueOf(pokemon.getStats().getHP());
-        stats[1] = String.valueOf(pokemon.getStats().getAttack());
-        stats[2] = String.valueOf(pokemon.getStats().getDefense());
-        stats[3] = String.valueOf(pokemon.getStats().getSpecialAttack());
-        stats[4] = String.valueOf(pokemon.getStats().getSpecialDefense());
-        stats[5] = String.valueOf(pokemon.getStats().getSpeed());
+        stats = new int[6];
+        stats[0] = pokemon.getStats().getHP();
+        stats[1] = pokemon.getStats().getAttack();
+        stats[2] = pokemon.getStats().getDefense();
+        stats[3] = pokemon.getStats().getSpecialAttack();
+        stats[4] = pokemon.getStats().getSpecialDefense();
+        stats[5] = pokemon.getStats().getSpeed();
     }
 
-    public String toString(){
-        return Teras.GSON.toJson(this);
+    public int getDex() {
+        return dex;
     }
 
-    public String getEspecie() {
-        return especie;
+    public void setDex(int dex) {
+        this.dex = dex;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNature() {
+        return nature;
+    }
+
+    public void setNature(String nature) {
+        this.nature = nature;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public String getForm() {
+        return form;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
+    }
+
+    public String getPalette() {
+        return palette;
+    }
+
+    public void setPalette(String palette) {
+        this.palette = palette;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getItem() {
         return item;
     }
 
-    public String getHabilidad() {
-        return habilidad;
-    }
-
-    public String[] getAtaques() {
-        return ataques;
-    }
-
-    public String[] getIvs() {
-        return ivs;
-    }
-
-    public String[] getEvs() {
-        return evs;
-    }
-
-    public String[] getStats() {
-        return stats;
-    }
-
-    public void setEspecie(String especie) {
-        this.especie = especie;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
-
     public void setItem(String item) {
         this.item = item;
     }
 
-    public void setHabilidad(String habilidad) {
-        this.habilidad = habilidad;
+    public String getAbility() {
+        return ability;
     }
 
-    public void setAtaques(String[] ataques) {
-        this.ataques = ataques;
+    public void setAbility(String ability) {
+        this.ability = ability;
     }
 
-    public void setIvs(String[] ivs) {
+    public String[] getMoves() {
+        return moves;
+    }
+
+    public void setMoves(String[] moves) {
+        this.moves = moves;
+    }
+
+    public int[] getIvs() {
+        return ivs;
+    }
+
+    public void setIvs(int[] ivs) {
         this.ivs = ivs;
     }
 
-    public void setEvs(String[] evs) {
+    public int[] getEvs() {
+        return evs;
+    }
+
+    public void setEvs(int[] evs) {
         this.evs = evs;
     }
 
-    public void setStats(String[] stats) {
+    public int[] getStats() {
+        return stats;
+    }
+
+    public void setStats(int[] stats) {
         this.stats = stats;
-    }
-
-    public String getNaturaleza() {
-        return naturaleza;
-    }
-
-    public void setNaturaleza(String naturaleza) {
-        this.naturaleza = naturaleza;
     }
 }
 

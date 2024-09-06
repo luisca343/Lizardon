@@ -1,11 +1,11 @@
 package es.boffmedia.teras.net;
 
-import es.boffmedia.teras.net.both.MessageCarTest;
 import es.boffmedia.teras.net.client.CMessageDatosServer;
 import es.boffmedia.teras.net.client.CMessageMCEFResponse;
 import es.boffmedia.teras.net.client.CMessageRacePositionChange;
 import es.boffmedia.teras.net.clientOld.*;
 import es.boffmedia.teras.net.server.SMessageCheckSpawns;
+import es.boffmedia.teras.net.server.SMessageDarCaja;
 import es.boffmedia.teras.net.server.SMessageDatosServer;
 import es.boffmedia.teras.net.serverOld.*;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +37,8 @@ public class Messages {
 
         INSTANCE.registerMessage(index++, CMessageRacePositionChange.class, CMessageRacePositionChange::encode, CMessageRacePositionChange::decode, CMessageRacePositionChange::handle);
 
+        INSTANCE.registerMessage(index++, SMessageDarCaja.class, SMessageDarCaja::encode, SMessageDarCaja::decode, SMessageDarCaja::handle);
+
         //INSTANCE.registerMessage(index++, MessageCarTest.class, MessageCarTest::encode, MessageCarTest::decode, MessageCarTest::handle);
 
         /// OOLD
@@ -58,7 +60,6 @@ public class Messages {
         INSTANCE.registerMessage(index++, CMessageCambioPosicion.class, CMessageCambioPosicion::encode, CMessageCambioPosicion::decode, CMessageCambioPosicion::handle);
         INSTANCE.registerMessage(index++, CMessageVerVideo.class, CMessageVerVideo::encode, CMessageVerVideo::decode, CMessageVerVideo::handle);
         INSTANCE.registerMessage(index++, CMessagePrepararNavegador.class, CMessagePrepararNavegador::encode, CMessagePrepararNavegador::decode, CMessagePrepararNavegador::handle);
-        INSTANCE.registerMessage(index++, SMessageDarCaja.class, SMessageDarCaja::encode, SMessageDarCaja::decode, SMessageDarCaja::handle);
         INSTANCE.registerMessage(index++, SMessageTaxi.class, SMessageTaxi::encode, SMessageTaxi::decode, SMessageTaxi::handle);
         INSTANCE.registerMessage(index++, CMessageConfigServer.class, CMessageConfigServer::encode, CMessageConfigServer::decode, CMessageConfigServer::handle);
 

@@ -32,8 +32,10 @@ public class ShinyTracker {
     private float volume = 1f ;//Math.min(TweaksConfig.shinySparkleVolume.get().floatValue(), 2F);
 
     public boolean shouldTrackShiny(PixelmonEntity entity) {
+        Teras.getLogger().info("SHINY TRACKER: "  + entity.getPokemon().getPalette().getName());
         if (entity.isUncatchable() || !entity.isAlive() || entity.isBossPokemon()
-                || entity.getOwner() != null || !entity.getPokemon().isShiny()
+                || entity.getOwner() != null ||
+                (!entity.getPokemon().isShiny() && !entity.getPokemon().isPalette("shiny2"))
                 || shinyMap.contains(entity.getPokemon()) || shinyTracking.contains(entity)) {
             return false;
         }
