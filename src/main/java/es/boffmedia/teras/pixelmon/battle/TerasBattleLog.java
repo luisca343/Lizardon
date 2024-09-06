@@ -199,8 +199,16 @@ public class TerasBattleLog {
         String source = terasBattle.getPositionString(pokemon);
 
         String attackStr =  "|move|" + getPositionAndNameString(pokemon, terasBattle) + "|" + move + "|";
-        String mainTargetStr = getPositionAndNameString(moveResults[0].target, terasBattle);
 
+        PixelmonWrapper moveTarget = pokemon;
+        for (MoveResults result : moveResults) {
+            if (result.target != null) {
+                moveTarget = result.target;
+                break;
+            }
+        }
+
+        String mainTargetStr = getPositionAndNameString(moveTarget, terasBattle);
         attackStr += mainTargetStr + "|";
 
         if(moveResults.length > 1){
@@ -530,6 +538,7 @@ public class TerasBattleLog {
     }
 
     public static void appendStartBattle(TerasBattle terasBattle){
+        Teras.getLogger().info("=== Starting battle ===");
         BattleController bc = terasBattle.battle;
         initLog(terasBattle);
 
