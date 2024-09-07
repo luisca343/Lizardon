@@ -54,6 +54,8 @@ public class NPCTerasBattle extends TerasBattle {
         br = br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getPlayerPkmCount());
         br = br.set(BattleRuleRegistry.BATTLE_TYPE, battleConfig.getBattleType());
         br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getRivalPkmCount());
+
+        setBattleType(battleConfig.getBattleType().toString());
         
         br = br.set(TerasBattleRuleRegistry.SPECIAL_BATTLE, true);
 

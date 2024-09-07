@@ -12,6 +12,8 @@ import java.util.*;
 
 public class TerasBattle{
     BattleController battle;
+    String battleType;
+
     BattleParticipant p1;
     BattleParticipant p2;
     BattleParticipant p3;
@@ -206,5 +208,13 @@ public class TerasBattle{
 
     public BattleParticipant getP4() {
         return p4;
+    }
+
+    public String getBattleType() {
+        return battleType;
+    }
+
+    public void setBattleType(String battleType) {
+        this.battleType = battleType;
     }
 }

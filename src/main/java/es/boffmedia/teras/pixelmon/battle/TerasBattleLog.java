@@ -553,7 +553,7 @@ public class TerasBattleLog {
             appendLine(terasBattle, "|teamsize|p" + (participants.indexOf(participant) + 1) + "|" + participant.getTeamPokemon().size());
         }
 
-        appendLine(terasBattle,"|gametype|doubles");
+        appendLine(terasBattle,"|gametype|"+terasBattle.getBattleType());
         appendLine(terasBattle,"|gen|9");
         appendLine(terasBattle,"|tier|Circuito de Gimnasios de Teras");
 

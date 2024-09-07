@@ -39,7 +39,9 @@ public class NPCTerasMultiBattle extends NPCTerasBattle {
 
     public void start() {
         /* Register the battle */
-        battleConfig.setNivelEquipo(getHighestPlayerLevel());
+        configEnemigo1.setNivelEquipo(getHighestPlayerLevel());
+        configEnemigo2.setNivelEquipo(getHighestPlayerLevel());
+        companionConfig.setNivelEquipo(getHighestPlayerLevel());
 
         if (battleConfig.healBeforeStart()) {
             getPlayerParty().heal();
@@ -56,6 +58,8 @@ public class NPCTerasMultiBattle extends NPCTerasBattle {
         br.set(BattleRuleRegistry.NUM_POKEMON, battleConfig.getRivalPkmCount());
 
         br = br.set(TerasBattleRuleRegistry.SPECIAL_BATTLE, true);
+
+        setBattleType("MULTI");
 
 
         BattleParticipant[] team1 = new BattleParticipant[2];
