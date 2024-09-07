@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -136,6 +137,19 @@ public class TerasBattleEvent {
         if(Teras.getLBC().existsTerasBattle(event.getBattleController().battleIndex)) {
             TerasBattle combate = Teras.getLBC().getTerasBattle(event.getBattleController().battleIndex);
             Teras.LOGGER.info("Finalizando combate desde evento");
+            
+            Iterator<Map.Entry<BattleParticipant, BattleResults>> iterator = event.getResults().entrySet().iterator();
+            if (iterator.hasNext()) {
+                Map.Entry<BattleParticipant, BattleResults> entry = iterator.next();
+                Teras.LOGGER.info("Resultado: " + entry.getValue());
+
+                if(entry.getValue() == BattleResults.VICTORY){
+                    Teras.LOGGER.info("Ganador: " + entry.getKey().getDisplayName());
+                } else {
+                    Teras.LOGGER.info("Perdedor: " + entry.getKey().getDisplayName());
+                }
+
+            }
 
             Teras.getLogger().info(combate.getLogString());
 
