@@ -11,7 +11,6 @@ import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.objects.TrainerDefeatMoney;
 import es.boffmedia.teras.objects_old.logros.LogroCombate;
 import es.boffmedia.teras.pixelmon.battle.*;
-import es.boffmedia.teras.pixelmon.frentebatalla.TorreBatallaController;
 import es.boffmedia.teras.util.FileHelper;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.Scoreboard;
@@ -23,12 +22,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber
 public class TerasBattleEvent {
+
 
     @SubscribeEvent
     public void beatTrainer(BeatTrainerEvent event){
@@ -75,14 +74,17 @@ public class TerasBattleEvent {
     private static @NotNull LogroCombate getLogroCombate(NPCTerasBattle combate, boolean ganador) {
         LogroCombate logroCombate = new LogroCombate();
         logroCombate.setUuid(combate.getPlayer().getStringUUID());
-        logroCombate.setNpc(combate.getBattleConfig().getNombreArchivo());
-        logroCombate.setNpc(combate.getBattleConfig().getNombreArchivo());
+
+        logroCombate.setName1(combate.getPlayer().getName().getString());
+        logroCombate.setName2(combate.getBattleConfig().getNombre());
+
         logroCombate.setLogro(combate.getBattleConfig().getLogro());
         logroCombate.setVictoria(ganador);
         logroCombate.setReplay(combate.getLogString());
         List<Pokemon> team = combate.getP1Team();
         List<Pokemon> teamRival = combate.getP2Team();
         logroCombate.setEquipo(team);
+        logroCombate.setTeam2(teamRival);
         return logroCombate;
     }
 
@@ -137,7 +139,8 @@ public class TerasBattleEvent {
         if(Teras.getLBC().existsTerasBattle(event.getBattleController().battleIndex)) {
             TerasBattle combate = Teras.getLBC().getTerasBattle(event.getBattleController().battleIndex);
             Teras.LOGGER.info("Finalizando combate desde evento");
-            
+
+            /*
             Iterator<Map.Entry<BattleParticipant, BattleResults>> iterator = event.getResults().entrySet().iterator();
             if (iterator.hasNext()) {
                 Map.Entry<BattleParticipant, BattleResults> entry = iterator.next();
@@ -149,9 +152,15 @@ public class TerasBattleEvent {
                     Teras.LOGGER.info("Perdedor: " + entry.getKey().getDisplayName());
                 }
 
+            }*/
+
+            if(combate instanceof NPCTerasBattle){
+                finCombateEntrenador(event, combate);
+            } else {
+                Teras.getLogger().info("The type of the batle is: " + combate.getClass().getName());
             }
 
-            Teras.getLogger().info(combate.getLogString());
+            //Teras.getLogger().info(combate.getLogString());
 
             /*
             if(combate.getRivalParticipant().getEntity() != null) combate.getRivalParticipant().getEntity().remove();

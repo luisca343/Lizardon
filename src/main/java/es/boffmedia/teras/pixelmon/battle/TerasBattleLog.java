@@ -569,6 +569,7 @@ public class TerasBattleLog {
 
         for (BattleParticipant participant : participantsList) {
             Teras.getLogger().info("Participant: " + participant.getDisplayName());
+            terasBattle.setParticipant(participantsList.size() - index, participant);
 
             for(int i = 0; i < participant.allPokemon.length; i++){
                 PixelmonWrapper pokemon = participant.allPokemon[i];

@@ -50,7 +50,7 @@ public class TerasBattle{
         String participantName = "";
 
         if(participant instanceof PlayerParticipant){
-            participantName = "player:" + ((PlayerParticipant) participant).player.getUUID();
+            participantName = "player:" + ((PlayerParticipant) participant).player.getUUID()+":"+((PlayerParticipant) participant).player.getName().getString();
         } else {
             participantName = "npc:" + participant.getName().getString();
         }
@@ -216,5 +216,23 @@ public class TerasBattle{
 
     public void setBattleType(String battleType) {
         this.battleType = battleType;
+    }
+
+    public void setParticipant(int index, BattleParticipant participant) {
+        switch (index) {
+            case 0:
+                p1 = participant;
+                break;
+            case 1:
+                p2 = participant;
+                break;
+            case 2:
+                p3 = participant;
+                break;
+            case 3:
+                p4 = participant;
+                break;
+        }
+
     }
 }
