@@ -8,22 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LogroCombate extends SmartRotomPost {
-    String npc;
-    boolean victoria;
     String logro;
-    ArrayList<PokemonData> equipo;
+    boolean victoria;
+
+    String name1;
+    String name2;
+
+    ArrayList<PokemonData> team1;
+    ArrayList<PokemonData> team2;
+
     String replay;
 
     public LogroCombate() {
 
     }
 
-    public String getNpc() {
-        return npc;
+    public String getName1() {
+        return name1;
     }
 
-    public void setNpc(String npc) {
-        this.npc = npc;
+    public void setName1(String side1Name) {
+        this.name1 = side1Name;
+    }
+
+    public String getName2() {
+        return name2;
+    }
+
+    public void setName2(String side2Name) {
+        this.name2 = side2Name;
     }
 
     public boolean isVictoria() {
@@ -35,14 +48,14 @@ public class LogroCombate extends SmartRotomPost {
     }
 
     public ArrayList<PokemonData> getEquipo() {
-        return equipo;
+        return team1;
     }
 
     public void setEquipo(List<Pokemon> equipo) {
-        this.equipo = new ArrayList<>();
+        this.team1 = new ArrayList<>();
         for (Pokemon pokemon : equipo) {
             PokemonData pokemonData = new PokemonData(pokemon);
-            this.equipo.add(pokemonData);
+            this.team1.add(pokemonData);
         }
     }
 
@@ -60,5 +73,17 @@ public class LogroCombate extends SmartRotomPost {
 
     public void setReplay(String replay) {
         this.replay = replay;
+    }
+
+    public ArrayList<PokemonData> getTeam2() {
+        return team2;
+    }
+
+    public void setTeam2(List<Pokemon> equipo) {
+        this.team2 = new ArrayList<>();
+        for (Pokemon pokemon : equipo) {
+            PokemonData pokemonData = new PokemonData(pokemon);
+            this.team2.add(pokemonData);
+        }
     }
 }
