@@ -67,6 +67,7 @@ public class TerasBattleEvent {
             WingullAPI.wingullPOST("/battle", Teras.GSON.toJson(logroCombate));
         }
 
+        Teras.getLogger().info(combate.getLogString());
         FileHelper.writeStringFile("logs/terasbattle/\"+combate.getBattleConfig().getNombreArchivo()+\".log", combate.getLogString());
 
     }
