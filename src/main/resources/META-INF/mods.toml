@@ -63,7 +63,7 @@ Teras
     modId="mcef"
     mandatory=true
     ordering="BEFORE"
-    versionRange="[1.16,)"
+    versionRange="[1.0,)"
     side="BOTH"
 
     [[dependencies.teras]]
@@ -72,7 +72,6 @@ Teras
     ordering="BEFORE"
     versionRange="[1.16,)"
     side="BOTH"
-
 
     [[dependencies.teras]]
     modId="epicfight"

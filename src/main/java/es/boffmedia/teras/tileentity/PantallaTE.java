@@ -1,5 +1,6 @@
 package es.boffmedia.teras.tileentity;
 
+import es.boffmedia.mcef.api.IBrowser;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.gui.PantallaCine;
 import es.boffmedia.teras.init.TileEntityInit;
@@ -8,7 +9,6 @@ import es.boffmedia.teras.util.math.Multiblock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.montoyo.mcef.api.IBrowser;
 
 
 public class PantallaTE extends TileEntity {

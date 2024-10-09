@@ -1,22 +1,15 @@
 package es.boffmedia.teras.net.serverOld;
 
 import com.google.common.base.Charsets;
-import com.google.gson.Gson;
-import es.boffmedia.teras.net.Messages;
-import es.boffmedia.teras.net.clientOld.CMessageVerMisiones;
-import es.boffmedia.teras.objects.quests.QuestObjective;
+import es.boffmedia.mcef.api.IJSQueryCallback;
 import es.boffmedia.teras.objects_old.misiones.*;
 import es.boffmedia.teras.util.FileHelper;
 import io.leangen.geantyref.TypeToken;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.montoyo.mcef.api.IJSQueryCallback;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.handler.data.IQuest;
-import noppes.npcs.api.handler.data.IQuestCategory;
-import noppes.npcs.api.handler.data.IQuestObjective;
 import noppes.npcs.api.wrapper.PlayerWrapper;
 
 import java.util.ArrayList;

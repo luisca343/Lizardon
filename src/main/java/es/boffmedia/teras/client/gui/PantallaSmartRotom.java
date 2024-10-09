@@ -2,6 +2,9 @@ package es.boffmedia.teras.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import es.boffmedia.mcef.MCEF;
+import es.boffmedia.mcef.MCEFBrowser;
+import es.boffmedia.mcef.api.*;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
 import net.minecraft.client.Minecraft;
@@ -9,182 +12,84 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.montoyo.mcef.api.API;
-import net.montoyo.mcef.api.IBrowser;
-import org.lwjgl.glfw.GLFW;
-
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 
 @OnlyIn(Dist.CLIENT)
-public class PantallaSmartRotom extends Screen {
+public class PantallaSmartRotom extends Screen implements IDisplayHandler, IJSQueryHandler {
+    private static final int BROWSER_DRAW_OFFSET = 0;
 
+    private MCEFBrowser browser;
     private ClientProxy.PadData pad;
-    IBrowser browser = null;
-    /*
-    private Button back = null;
-    private Button fwd = null;
-    private Button go = null;
-    private Button min = null;
-    private Button vidMode = null;
-    private boolean vidModeState = false;
-    private TextFieldWidget url = null;
-    private String urlToLoad = null;*/
 
-    private long initTime = System.currentTimeMillis();
-
-    private static final String YT_REGEX1 = "^https?://(?:www\\.)?youtube\\.com/watch\\?v=([a-zA-Z0-9_\\-]+)$";
-    private static final String YT_REGEX2 = "^https?://(?:www\\.)?youtu\\.be/([a-zA-Z0-9_\\-]+)$";
-    private static final String YT_REGEX3 = "^https?://(?:www\\.)?youtube\\.com/embed/([a-zA-Z0-9_\\-]+)(\\?.+)?$";
-
-    private int lastWidth = -1, lastHeight = -1;
-    public PantallaSmartRotom() {
-        super(new StringTextComponent("forgecef.example.screen.title"));
-
-       // urlToLoad = MCEF.HOME_PAGE;
-    }
-
-    public PantallaSmartRotom(String url) {
-        super(new StringTextComponent("forgecef.example.screen.title"));
-       // urlToLoad = (url == null) ? MCEF.HOME_PAGE : url;
-    }
-
-    public PantallaSmartRotom(ClientProxy.PadData pd) {
-        this();
-        this.pad = pd;
+    public PantallaSmartRotom(ClientProxy.PadData padData) {
+        super(new StringTextComponent("Smart Rotom"));
+        this.pad = padData;
     }
 
 
     @Override
-    public void resize(Minecraft p_231152_1_, int p_231152_2_, int p_231152_3_) {
-        browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
-    }
+    protected void init() {
+        super.init();
+        /*
+        if (browser == null) {
+            String url = Teras.config.getHome();
+            boolean transparent = true;
+            browser = MCEF.createBrowser(url, transparent);
+            resizeBrowser();
+        }*/
 
-    @Override
-    public void init() {
-        super.init(); // narrator trigger lmao
-
-        if(browser == null) {
-            //Grab the API and make sure it isn't null.
+        if (browser == null) {
             API api = Teras.getInstance().getAPI();
-            if(api == null)
-                return;
-
-            browser = pad.view;
-           //browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight() - scaleY(20));
-            browser.resize(minecraft.getWindow().getWidth(), minecraft.getWindow().getHeight());
-            //urlToLoad = null;
-        }
-/*
-        if(url == null) {
-            addButton(back = (new Button( 0, 0, 20, 20, new StringTextComponent("<"), (button -> this.legacyActionPerformed(0)))));
-            addButton(fwd = (new Button( 20, 0, 20, 20, new StringTextComponent(">"),(button -> this.legacyActionPerformed(1)))));
-            addButton(go = (new Button( width - 60, 0, 20, 20, new StringTextComponent("F5"), (button -> this.legacyActionPerformed(2)))));
-            addButton(min = (new Button(width - 20, 0, 20, 20, new StringTextComponent("_"), (button -> this.legacyActionPerformed(3)))));
-            addButton(vidMode = (new Button(width - 40, 0, 20, 20, new StringTextComponent("YT"), (button -> this.legacyActionPerformed(4)))));
-            vidModeState = false;
-
-            url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
-            url.setMaxLength(65535);
-            url.setValue(Teras.applyBlacklist(browser.getURL()));
-        } else {
-            addButton(back);
-            addButton(fwd);
-            addButton(go);
-            addButton(min);
-            addButton(vidMode);
-
-            //Handle resizing
-            vidMode.x = width - 40;
-            go.x = width - 60;
-            min.x = width - 20;
-
-            String old = url.getValue();
-            url = new TextFieldWidget(minecraft.font, 40, 0, width - 100, 20, new StringTextComponent(""));
-            url.setMaxLength(65535);
-            url.setValue(Teras.applyBlacklist(old));
-        }*/
-
-        this.initTime = System.currentTimeMillis();
-        //hideCursor();
-    }
-
-
-    @Override
-    public void tick() {
-        super.tick();
-/*
-        if (urlToLoad != null && browser != null) {
-            browser.loadURL(urlToLoad);
-            urlToLoad = null;
-        }
-
-        if (url != null) {
-            if (url.isFocused()) {
-                url.tick();
-            } else {
-                url.setCursorPosition(0);
-            }
-        }*/
-
-        if (minecraft != null && browser != null && browser.isActivate()) {
-            int curWidth = minecraft.getWindow().getWidth();
-            //int curHeight = minecraft.getWindow().getHeight() - scaleY(20);
-            int curHeight = minecraft.getWindow().getHeight();
-            if (curHeight > 0 && curWidth > 0 && (lastWidth != curWidth || lastHeight != curHeight)) {
-                browser.resize(curWidth, curHeight);
-            }
+            if(api == null) return;
+            Teras.getLogger().warn("API is not null");
+            Teras.getLogger().warn("Pad: " + pad);
+            Teras.getLogger().warn("Pad view: " + pad.view);
+            browser =  pad.view;
+            resizeBrowser();
         }
 
     }
 
-    public int scaleY(int y) {
-        assert minecraft != null;
-        double sy = ((double) y) / ((double) height) * ((double) minecraft.getWindow().getHeight());
-        return (int) sy;
+    private int mouseX(double x) {
+        return (int) ((x - BROWSER_DRAW_OFFSET) * minecraft.getWindow().getGuiScale());
     }
 
-    public int scaleX(int x) {
-        assert minecraft != null;
-        double sx = ((double) x) / ((double) width) * ((double) minecraft.getWindow().getWidth());
-        return (int) sx;
+    private int mouseY(double y) {
+        return (int) ((y - BROWSER_DRAW_OFFSET) * minecraft.getWindow().getGuiScale());
     }
 
-    public void loadURL(String url) {
-        /*if(browser == null)
-            urlToLoad = Teras.SMARTROTOM_HOME;
-        else
-            urlToLoad = url;*/
+    private int scaleX(double x) {
+        return (int) ((x - BROWSER_DRAW_OFFSET * 2) * minecraft.getWindow().getGuiScale());
     }
 
-    public void preRender() {
-        /*if(urlToLoad != null && browser != null) {
-            urlToLoad = Teras.SMARTROTOM_HOME;
-        }*/
+    private int scaleY(double y) {
+        return (int) ((y - BROWSER_DRAW_OFFSET * 2) * minecraft.getWindow().getGuiScale());
+    }
+
+    private void resizeBrowser() {
+        if (width > 100 && height > 100) {
+            browser.resize(scaleX(width), scaleY(height));
+        }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.preRender();
-        //url.render(matrices, mouseX, mouseY, delta);
-        super.render(matrices, mouseX, mouseY, delta);
-        if(browser != null) {
-            GlStateManager._disableDepthTest();
-            GlStateManager._enableTexture();
-            browser.draw(matrices, .0d, height, width, 0); //Don't forget to flip Y axis.
-            GlStateManager._enableDepthTest();
-        }
+    public void resize(Minecraft minecraft, int i, int j) {
+        super.resize(minecraft, i, j);
+        resizeBrowser();
     }
+
+    /*
+    @Override
+    public void onClose() {
+        browser.close();
+        super.onClose();
+    }*/
 
     @Override
     public void onClose() {
         //showCursor();
         try {
-            if(!pad.view.getURL().contains("liga")){
-                this.pad.view.resize((int) 1280, (int)  720);
+            if (!pad.view.getURL().contains("liga")) {
+                this.pad.view.resize((int) 1280, (int) 720);
             }
         } catch (Exception e) {
             Teras.LOGGER.warn("Error al cerrar la pantalla. Ignorando...");
@@ -195,227 +100,109 @@ public class PantallaSmartRotom extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double ox, double oy, int btn, double nx, double ny) {
-        boolean consume = super.mouseDragged(ox, oy, btn, nx, ny);
-        if (browser != null && !consume) {
-            int sx = (int) (ox / (float) width * minecraft.getWindow().getWidth());
-            //int sy = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
-            int sy = (int) (oy / (float) height * minecraft.getWindow().getHeight());
-            int ex = (int) (ox / (float) width * minecraft.getWindow().getWidth());
-            //int ey = (int) ((oy - 20) / (float) height * minecraft.getWindow().getHeight());
-            int ey = (int) (oy / (float) height * minecraft.getWindow().getHeight());
-            browser.injectMouseDrag(sx, sy, remapBtn(btn), ex, ey);
+    public void render(MatrixStack matrixStack, int i, int j, float f) {
+        if(browser != null) {
+            GlStateManager._disableDepthTest();
+            GlStateManager._enableTexture();
+            browser.draw(matrixStack, .0d, height, width, 0); //Don't forget to flip Y axis.
+            GlStateManager._enableDepthTest();
         }
 
-        return consume;
     }
 
     @Override
-    public void mouseMoved(double x, double y) {
-        super.mouseMoved(x, y);
-        if (browser != null && minecraft != null && activateBtn == -1) {
-            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
-            int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
-            browser.injectMouseMove(sx, sy, getMask(), y < 0);
-        }
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        browser.sendMousePress(mouseX(mouseX), mouseY(mouseY), button);
+        browser.setFocus(true);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseClicked(double x, double y, int btn) {
-        activateBtn = btn;
-        if(btn == 1) return false;
-        boolean consume = super.mouseClicked(x, y, btn);
-        if (!consume && browser != null && minecraft != null) {
-            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
-            int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
-            browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), true, 1);
-            return true;
-        }
-
-        return consume;
-    }
-
-
-    private int activateBtn = -1;
-
-    @Override
-    public boolean mouseReleased(double x, double y, int btn) {
-        activateBtn = activateBtn == btn ? -1 : activateBtn;
-        boolean consume = super.mouseReleased(x, y, btn);
-        if (!consume && browser != null && minecraft != null) {
-            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            //int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
-            int sy = (int) ((y / (float) height) * minecraft.getWindow().getHeight());
-            browser.injectMouseButton(sx, sy, getMask(), remapBtn(btn), false, 1);
-            return true;
-        }
-
-        return consume;
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        browser.sendMouseRelease(mouseX(mouseX), mouseY(mouseY), button);
+        browser.setFocus(true);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double wheel) {
-        boolean consume = super.mouseScrolled(x, y, wheel);
-        if (!consume && browser != null && minecraft != null) {
-            int sx = (int) (x / (float) width * minecraft.getWindow().getWidth());
-            //int sy = (int) (((y - 20) / (float) height) * minecraft.getWindow().getHeight());
-            int sy = (int) ((y / (float) height) * minecraft.getWindow().getHeight());
-            browser.injectMouseWheel(sx, sy, getMask(), 1, ((int) wheel * 100));
-            return true;
-        }
-        return consume;
+    public void mouseMoved(double mouseX, double mouseY) {
+        browser.sendMouseMove(mouseX(mouseX), mouseY(mouseY));
+        super.mouseMoved(mouseX, mouseY);
     }
 
     @Override
-    public boolean charTyped(char key, int mod) {
-        boolean consume = enviarInterfaz(key) && super.charTyped(key, mod); // 257 335
-        Teras.LOGGER.info("CHAR TYPED: "+key);
-        if (browser != null && (!consume || Arrays.stream(injectedKeys).anyMatch(i -> i == key))) {
-            Teras.LOGGER.info("CHAR TYPED AND SENT: "+key + " - "+key);
-            browser.injectKeyTyped(key, key, getMask());
-            return true;
-        }
-
-        return false;
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
     @Override
-    public boolean keyPressed(int key, int p_231046_2_, int p_231046_3_) {
-        boolean consume = enviarInterfaz(key) && super.keyPressed(key, p_231046_2_, p_231046_3_);
-        if (minecraft == null) return true;
-
-        int correctedKey = getCorrectedKey(key);
-
-        Teras.LOGGER.info("KEY PRESSED: "+key);
-        if (browser != null && (!consume || Arrays.stream(injectedKeys).anyMatch(i -> i == key))) {
-            // El punto está bugeado, así que lo remapeamos por el del teclado numérico
-            if(key == 46){
-                browser.injectKeyPressedByKeyCode(330, '?', getMask());
-                return true;
-            }
-            // El enter está bugeado, así que lo remapeamos por el del teclado numérico
-
-            if(correctedKey == 13){
-                browser.injectKeyPressedByKeyCode(335, (char) 335, getMask());
-            }
-            browser.injectKeyPressedByKeyCode(correctedKey, (char) correctedKey, getMask());
-            return true;
-        }
-        return false;
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        browser.sendMouseWheel(mouseX(mouseX), mouseY(mouseY), delta, 0);
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
-    int[] injectedKeys = {46, 256, 257};
+
     @Override
-    public boolean keyReleased(int key, int p_223281_2_, int p_223281_3_) {
-        boolean consume = enviarInterfaz(key) ? super.keyReleased(key, p_223281_2_, p_223281_3_) : false;
-
-        int correctedKey = getCorrectedKey(key);
-
-        if (browser != null && (!consume || Arrays.stream(injectedKeys).anyMatch(i -> i == key))) {
-            browser.injectKeyReleasedByKeyCode(correctedKey, (char) correctedKey, getMask());
-            return true;
-        }
-        return false;
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        browser.sendKeyPress(keyCode, scanCode, modifiers);
+        browser.setFocus(true);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    public int getCorrectedKey(int key){
-        switch (key){
-            case 257:
-                return 13;
-            default:
-                return  key;
-        }
+    @Override
+    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
+        browser.sendKeyRelease(keyCode, scanCode, modifiers);
+        browser.setFocus(true);
+        return super.keyReleased(keyCode, scanCode, modifiers);
     }
 
-    //Called by ExampleMod when the current browser's URL changes.
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (codePoint == (char) 0) return false;
+        browser.sendKeyTyped(codePoint, modifiers);
+        browser.setFocus(true);
+        return super.charTyped(codePoint, modifiers);
+    }
+
     public void onUrlChanged(IBrowser b, String nurl) {
-        /*if (b == browser && url != null) {
-            url.setValue(nurl);
-        }*/
-    }
-
-    //remap from GLFW to AWT's button ids
-    private int remapBtn(int btn) {
-        if (btn == 0) {
-            btn = MouseEvent.BUTTON1;
-        } else if (btn == 1) {
-            btn = MouseEvent.BUTTON3;
-        } else {
-            btn = MouseEvent.BUTTON2;
-        }
-        return btn;
-    }
-
-    private static int getMask() {
-        return (hasShiftDown() ? MouseEvent.SHIFT_DOWN_MASK : 0) |
-                (hasAltDown() ? MouseEvent.ALT_DOWN_MASK : 0) |
-                (hasControlDown() ? MouseEvent.CTRL_DOWN_MASK : 0);
+        /*
+            if (b == browser && url != null) {
+                url.setText(nurl);
+            }
+        */
     }
 
 
-    //never used
-    private final Point point = new Point();
 
-    private Point transform2BrowserSize(double x, double y) {
-        int sx = (int) (x / (float) width * minecraft.getWindow().getHeight());
-        // 20 is the top search box's height
-        //int sy = (int) ((y - 20) / (float) height * minecraft.getWindow().getHeight());
-        int sy = (int) (y / (float) height * minecraft.getWindow().getHeight());
-        point.setLocation(sx, sy);
-        return point;
+
+    /**/
+
+    @Override
+    public void onAddressChange(IBrowser browser, String url) {
+
     }
 
-    private boolean enviarInterfaz(int key) {
-        if(Arrays.stream(injectedKeys).anyMatch(i -> i == key)) return true;
+    @Override
+    public void onTitleChange(IBrowser browser, String title) {
+
+    }
+
+    @Override
+    public void onTooltip(IBrowser browser, String text) {
+
+    }
+
+    @Override
+    public void onStatusMessage(IBrowser browser, String value) {
+
+    }
+
+    @Override
+    public boolean handleQuery(IBrowser b, long queryId, String query, boolean persistent, IJSQueryCallback cb) {
         return false;
     }
 
+    @Override
+    public void cancelQuery(IBrowser b, long queryId) {
 
-    //Handle button clicks the old way...
-    protected void legacyActionPerformed(int id) {
-        if(browser == null)
-            return;
-
-        if(id == 0)
-            browser.goBack();
-        else if(id == 1)
-            browser.goForward();
-        else if(id == 2) {
-            browser.loadURL(browser.getURL());
-        } else if(id == 3) {
-            //Teras.INSTANCE.setBackup(this);
-            assert minecraft != null;
-            minecraft.setScreen(null);
-            browser.injectKeyPressedByKeyCode(256, (char)256, getMask());
-            browser.injectKeyReleasedByKeyCode(256, (char)256, getMask());
-        } else if(id == 4) {
-            String loc = browser.getURL();
-            String vId = null;
-            boolean redo = false;
-
-            if(loc.matches(YT_REGEX1))
-                vId = loc.replaceFirst(YT_REGEX1, "$1");
-            else if(loc.matches(YT_REGEX2))
-                vId = loc.replaceFirst(YT_REGEX2, "$1");
-            else if(loc.matches(YT_REGEX3))
-                redo = true;
-
-            if(vId != null || redo) {
-                //Teras.INSTANCE.setBackup(this);
-                // minecraft.setScreen(new ScreenCfg(browser, vId));
-            }
-        }
     }
-
-    public void hideCursor() {
-        long windowHandle = Minecraft.getInstance().getWindow().getWindow();
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
-    }
-
-    public void showCursor() {
-        long windowHandle = Minecraft.getInstance().getWindow().getWindow();
-        GLFW.glfwSetInputMode(windowHandle, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-    }
-
 }

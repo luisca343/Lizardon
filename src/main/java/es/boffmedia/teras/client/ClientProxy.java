@@ -1,7 +1,11 @@
 package es.boffmedia.teras.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mrcrayfish.obfuscate.client.event.RenderItemEvent;
+import es.boffmedia.mcef.MCEF;
+import es.boffmedia.mcef.MCEFBrowser;
+import es.boffmedia.mcef.api.*;
+import es.boffmedia.mcef.example.ExampleScreen;
+import es.boffmedia.mcef.utils.Log;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.blocks.BloquePantalla;
 import es.boffmedia.teras.client.gui.PantallaCine;
@@ -16,25 +20,17 @@ import es.boffmedia.teras.tileentity.PantallaTE;
 import es.boffmedia.teras.util.MessageHelper;
 import es.boffmedia.teras.util.QueryHelper;
 import es.boffmedia.teras.init.ItemInit;
-import moe.plushie.armourers_workshop.compatibility.api.AbstractItemTransformType;
-import moe.plushie.armourers_workshop.core.client.bake.BakedSkin;
-import moe.plushie.armourers_workshop.core.client.bake.SkinBakery;
-import moe.plushie.armourers_workshop.core.client.model.BakedModelStorage;
 import moe.plushie.armourers_workshop.core.client.render.SkinItemRenderer;
-import moe.plushie.armourers_workshop.core.data.ticket.Tickets;
-import moe.plushie.armourers_workshop.core.item.SkinItem;
-import moe.plushie.armourers_workshop.core.skin.SkinDescriptor;
-import moe.plushie.armourers_workshop.init.platform.TransformationProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -43,10 +39,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.montoyo.mcef.api.*;
-import net.montoyo.mcef.example.BrowserScreen;
-import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
+
+
 
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +63,6 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
     public static IJSQueryCallback callbackMisiones;
     public static IJSQueryCallback callbackMCEF;
     public String idServidor;
-
     private final ArrayList<PantallaTE> screenTracking = new ArrayList<>();
 
     private int lastTracked = 0;
@@ -80,7 +74,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
 
     public class PadData {
 
-        public IBrowser view;
+        public MCEFBrowser view;
         private boolean isInHotbar;
         private final int id;
         private long lastURLSent;
@@ -91,9 +85,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
         System.out.println("ID: "+id);
         System.out.println("Teras.config.getHome(): "+Teras.config.getHome());
         System.out.println("Teras.config: "+Teras.config);
-        view = mcef.createBrowser(Teras.config.getHome());
-        view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
-        view.resize((int) 1280, (int)  720);
+        view = MCEF.createBrowser(Teras.config.getHome(), true);
         isInHotbar = true;
         this.id = id;
     }
@@ -248,6 +240,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
                 }
             }
 
+
             if(mc.player != null && !screenTracking.isEmpty()) {
                 int id = lastTracked % screenTracking.size();
                 lastTracked++;
@@ -303,7 +296,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
     }
 
     public void abrirSmartRotom(){
-        mc.setScreen(hasBackup() ? backup : new BrowserScreen());
+        mc.setScreen(hasBackup() ? backup : new ExampleScreen(new StringTextComponent("Example Screen")));
         backup = null;
     }
 
@@ -342,8 +335,8 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
 
 
         //Called by MCEF if a browser's URL changes. Forward this event to the screen.
-        if(mc.screen instanceof BrowserScreen)
-            ((BrowserScreen) mc.screen).onUrlChanged(browser, url);
+        if(mc.screen instanceof ExampleScreen)
+            ((ExampleScreen) mc.screen).onUrlChanged(browser, url);
         else if(hasBackup())
             backup.onUrlChanged(browser, url);
     }

@@ -92,17 +92,14 @@ public final class SmartRotomRenderer implements IItemRenderer {
 
         //Render web view
         boolean existePad = true;
+
         if(is.getTag() != null && is.getTag().contains("PadID")) {
             int id = is.getTag().getInt("PadID");
             ClientProxy.PadData pd = Teras.PROXY.getPadByID(id);
             if(pd != null) {
                 stack.translate(0.063f, 0.28f, 0.001f);
-                GlStateManager._disableDepthTest();
-                GlStateManager._enableTexture();
                 pd.view.draw(stack,0.0, 0.0, 27.65 / 32.0 + 0.01, 14.0 / 32.0 + 0.002);
-                GlStateManager._enableDepthTest();
-            }
-            else{
+            }else{
                 existePad = false;
             }
         }else{

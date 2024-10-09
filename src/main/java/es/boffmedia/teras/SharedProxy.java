@@ -1,6 +1,8 @@
 package es.boffmedia.teras;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import es.boffmedia.mcef.api.API;
+import es.boffmedia.mcef.utils.Log;
 import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.objects_old.pixelmon.Recompensa;
 import es.boffmedia.teras.tileentity.PantallaTE;
@@ -20,8 +22,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.montoyo.mcef.api.API;
-import net.montoyo.mcef.utilities.Log;
 import noppes.npcs.api.event.NpcEvent;
 
 import java.nio.file.Path;

@@ -4,6 +4,9 @@ package es.boffmedia.teras;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.battles.attacks.EffectTypeAdapter;
+import es.boffmedia.mcef.ModScheme;
+import es.boffmedia.mcef.api.API;
+import es.boffmedia.mcef.api.MCEFApi;
 import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.event.*;
 import es.boffmedia.teras.init.*;
@@ -37,8 +40,6 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
 import net.minecraftforge.server.permission.PermissionAPI;
-import net.montoyo.mcef.api.*;
-import net.montoyo.mcef.example.ModScheme;
 import noppes.npcs.api.NpcAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -158,8 +159,10 @@ public class Teras
             Teras.LOGGER.info("API FUNKA");
         }
 
+        Teras.getLogger().info("Registering schemes");
         api.registerScheme("teras", ModScheme.class, true, false, false, true, true, false, false);
 
+        Teras.getLogger().info("Pre initializing MCEF");
         PROXY.preInit();
         lbc = new TerasBattleController();
 

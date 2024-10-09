@@ -1,6 +1,8 @@
 package es.boffmedia.teras.util;
 
 import com.google.gson.Gson;
+import es.boffmedia.mcef.api.IBrowser;
+import es.boffmedia.mcef.api.IJSQueryCallback;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.net.Messages;
@@ -14,8 +16,6 @@ import es.boffmedia.teras.objects.post.PokedexEventResponse;
 import es.boffmedia.teras.objects_old.serverdata.UserData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.NetworkPlayerInfo;
-import net.montoyo.mcef.api.IBrowser;
-import net.montoyo.mcef.api.IJSQueryCallback;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

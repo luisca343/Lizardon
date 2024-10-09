@@ -2,14 +2,14 @@ package es.boffmedia.teras.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import es.boffmedia.mcef.api.API;
+import es.boffmedia.mcef.api.IBrowser;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.montoyo.mcef.api.API;
-import net.montoyo.mcef.api.IBrowser;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
