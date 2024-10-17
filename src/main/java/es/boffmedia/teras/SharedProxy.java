@@ -2,7 +2,7 @@ package es.boffmedia.teras;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import es.boffmedia.teras.client.ClientProxy;
-import es.boffmedia.teras.objects_old.pixelmon.Recompensa;
+import es.boffmedia.teras.util.objects._old.pixelmon.Recompensa;
 import es.boffmedia.teras.tileentity.PantallaTE;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.item.ItemEntity;

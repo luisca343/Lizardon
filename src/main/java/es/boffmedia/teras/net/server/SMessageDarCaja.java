@@ -2,8 +2,8 @@ package es.boffmedia.teras.net.server;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
-import es.boffmedia.teras.objects_old.mina.DarCaja;
-import es.boffmedia.teras.objects_old.ObjetoMC;
+import es.boffmedia.teras.util.objects._old.mina.DarCaja;
+import es.boffmedia.teras.util.objects._old.ObjetoMC;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;

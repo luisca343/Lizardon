@@ -61,8 +61,16 @@ public class RegionEventsClient {
         }
 
         //get gui scale
+        /*
         int scaleFactor = (int) Minecraft.getInstance().getWindow().getGuiScale();
         float scale = scaleFactor == 1 ? 2 : 1.0f / (scaleFactor -1) * TerasConfig.ESCALA_CARTELES.get();
+        */
+
+        int size = 256;
+        int windowHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        float scale = (float) windowHeight / 2 / size;
+
+
         RenderSystem.pushMatrix();
         RenderSystem.scalef(scale, scale, scale);
 
