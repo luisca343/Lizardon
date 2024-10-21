@@ -3,14 +3,13 @@ package es.boffmedia.teras.net;
 import es.boffmedia.teras.net.client.CMessageDatosServer;
 import es.boffmedia.teras.net.client.CMessageMCEFResponse;
 import es.boffmedia.teras.net.client.CMessageRacePositionChange;
-import es.boffmedia.teras.net.client.clientOld.CMessageCambioRegion;
-import es.boffmedia.teras.net.client.clientOld.CMessageConfigServer;
-import es.boffmedia.teras.net.client.clientOld.CMessageVerMisiones;
+import es.boffmedia.teras.net.client.CMessageCambioRegion;
+import es.boffmedia.teras.net.client.CMessageConfigServer;
+import es.boffmedia.teras.net.client.CMessageVerMisiones;
 import es.boffmedia.teras.net.server.SMessageCheckSpawns;
 import es.boffmedia.teras.net.server.SMessageDarCaja;
 import es.boffmedia.teras.net.server.SMessageDatosServer;
-import es.boffmedia.teras.net.server.serverOld.SMessageEncenderPC;
-import es.boffmedia.teras.net.server.serverOld.SMessageSetPC;
+import es.boffmedia.teras.net.server.SMessageEncenderPC;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,21 +31,21 @@ public class Messages {
 
     @SubscribeEvent
     public static void registryNetworkPackets(FMLCommonSetupEvent event) {
-        INSTANCE.registerMessage(index++, CMessageConfigServer.class, CMessageConfigServer::encode, CMessageConfigServer::decode, CMessageConfigServer::handle);
+        INSTANCE.registerMessage(index++, SMessageDatosServer.class, SMessageDatosServer::encode, SMessageDatosServer::decode, SMessageDatosServer::handle);
         INSTANCE.registerMessage(index++, CMessageDatosServer.class, CMessageDatosServer::encode, CMessageDatosServer::decode, CMessageDatosServer::handle);
+
+        INSTANCE.registerMessage(index++, CMessageConfigServer.class, CMessageConfigServer::encode, CMessageConfigServer::decode, CMessageConfigServer::handle);
 
         INSTANCE.registerMessage(index++, CMessageMCEFResponse.class, CMessageMCEFResponse::encode, CMessageMCEFResponse::decode, CMessageMCEFResponse::handle);
         INSTANCE.registerMessage(index++, SMessageCheckSpawns.class, SMessageCheckSpawns::encode, SMessageCheckSpawns::decode, SMessageCheckSpawns::handle);
 
         INSTANCE.registerMessage(index++, CMessageVerMisiones.class, CMessageVerMisiones::encode, CMessageVerMisiones::decode, CMessageVerMisiones::handle);
-        INSTANCE.registerMessage(index++, SMessageDatosServer.class, SMessageDatosServer::encode, SMessageDatosServer::decode, SMessageDatosServer::handle);
 
         INSTANCE.registerMessage(index++, CMessageRacePositionChange.class, CMessageRacePositionChange::encode, CMessageRacePositionChange::decode, CMessageRacePositionChange::handle);
 
         INSTANCE.registerMessage(index++, SMessageDarCaja.class, SMessageDarCaja::encode, SMessageDarCaja::decode, SMessageDarCaja::handle);
 
         INSTANCE.registerMessage(index++, SMessageEncenderPC.class, SMessageEncenderPC::encode, SMessageEncenderPC::decode, SMessageEncenderPC::handle);
-        INSTANCE.registerMessage(index++, SMessageSetPC.class, SMessageSetPC::encode, SMessageSetPC::decode, SMessageSetPC::handle);
 
 
         INSTANCE.registerMessage(index++, CMessageCambioRegion.class, CMessageCambioRegion::encode, CMessageCambioRegion::decode, CMessageCambioRegion::handle);
@@ -55,6 +54,8 @@ public class Messages {
 
         /// OOLD
         /*
+        INSTANCE.registerMessage(index++, SMessageSetPC.class, SMessageSetPC::encode, SMessageSetPC::decode, SMessageSetPC::handle);
+
         INSTANCE.registerMessage(index++, SMessagePadCtrl.class, SMessagePadCtrl::encode, SMessagePadCtrl::decode, SMessagePadCtrl::handle);
         INSTANCE.registerMessage(index++, SMessageIniciarLlamada.class, SMessageIniciarLlamada::encode, SMessageIniciarLlamada::decode, SMessageIniciarLlamada::handle);
         INSTANCE.registerMessage(index++, SMessageFinalizarLlamada.class, SMessageFinalizarLlamada::encode, SMessageFinalizarLlamada::decode, SMessageFinalizarLlamada::handle);

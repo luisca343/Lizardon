@@ -7,7 +7,7 @@ import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.client.ClientProxy;
 import es.boffmedia.teras.net.Messages;
 import es.boffmedia.teras.net.server.*;
-import es.boffmedia.teras.net.server.serverOld.SMessageEncenderPC;
+import es.boffmedia.teras.net.server.SMessageEncenderPC;
 import es.boffmedia.teras.net.server.serverOld.SMessageFinalizarLlamada;
 import es.boffmedia.teras.net.server.serverOld.SMessageIniciarLlamada;
 import es.boffmedia.teras.net.server.serverOld.SMessageVerMisiones;
