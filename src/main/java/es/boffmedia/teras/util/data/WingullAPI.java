@@ -5,43 +5,65 @@ import es.boffmedia.teras.Teras;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class WingullAPI {
     // private static String WINGULL_URL = "http://79.116.9.120:34301/";
+
+
     public static String wingullGET(String str) {
-        try {
-            URL url = new URL(str);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
+        Teras.LOGGER.info("WingullAPI: " + str);
+        Teras.LOGGER.info("WingullAPI: " + Teras.config.getAPI_URL());
+        FutureTask<String> futureTask = new FutureTask<>(() -> {
+            try {
+                String apiUrl = Teras.config.getAPI_URL();
+                if (apiUrl == null) {
+                    Teras.LOGGER.error("API URL is null");
+                    throw new NullPointerException("API URL is null");
+                }
 
+                URL url = new URL(apiUrl + str);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
 
-            con.setDoOutput(true);
-            con.addRequestProperty("User-Agent", "Mozilla/4.0");
-            con.setRequestProperty("Content-Type", "application/json");
+                con.setDoOutput(true);
+                con.addRequestProperty("User-Agent", "Mozilla/4.0");
+                con.setRequestProperty("Content-Type", "application/json");
 
+                InputStream inputStream = getConnectionStream(url);
+                if (inputStream == null) {
+                    Teras.LOGGER.error("InputStream is null for URL: " + url);
+                    throw new NullPointerException("InputStream is null for URL: " + url);
+                }
 
-            InputStream inputStream = getConnectionStream(url);
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String line;
-            StringBuilder response = new StringBuilder();
-            while ((line = br.readLine()) != null) {
-                response.append(line);
+                BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+                br.close();
+                Teras.LOGGER.info(response.toString());
+                Teras.LOGGER.info("WingullAPI: " + con.getResponseCode());
+                return response.toString();
+            } catch (ProtocolException e) {
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            br.close();
-            Teras.LOGGER.info(response.toString());
-            Teras.LOGGER.info("WingullAPI: " + con.getResponseCode());
-            return response.toString();
+        });
 
+        new Thread(futureTask).start();
 
-
-        } catch (ProtocolException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        try {
+            return futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public static void wingullPOST( String str, String json) {
