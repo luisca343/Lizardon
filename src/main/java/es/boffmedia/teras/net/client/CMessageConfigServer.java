@@ -3,12 +3,17 @@ package es.boffmedia.teras.net.client;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import es.boffmedia.teras.PolygonCreator;
 import es.boffmedia.teras.Teras;
+import es.boffmedia.teras.util.data.WingullAPI;
 import es.boffmedia.teras.util.objects._old.serverdata.TerasConfig;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class CMessageConfigServer implements Runnable{
@@ -24,6 +29,14 @@ public class CMessageConfigServer implements Runnable{
         Gson gson = new Gson();
         TerasConfig conf = gson.fromJson(datos, TerasConfig.class);
         Teras.config = conf;
+
+        String regionDataStr = WingullAPI.wingullGET("/regions");
+
+        Type regionListType = new TypeToken<List<PolygonCreator.Region>>() {}.getType();
+        List<PolygonCreator.Region> regions = gson.fromJson(regionDataStr, regionListType);
+        Teras.regions = regions;
+        PolygonCreator.createPolygon();
+
     }
 
     public static CMessageConfigServer decode(PacketBuffer buf) {

@@ -15,6 +15,7 @@ import es.boffmedia.teras.tileentity.PantallaTE;
 import es.boffmedia.teras.util.string.MessageHelper;
 import es.boffmedia.teras.util.data.QueryHelper;
 import es.boffmedia.teras.init.ItemInit;
+import journeymap.client.api.IClientAPI;
 import moe.plushie.armourers_workshop.core.client.render.SkinItemRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -59,6 +60,8 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
     public static IJSQueryCallback callbackMCEF;
     public String idServidor;
 
+    private static IClientAPI jmAPI;
+
     private final ArrayList<PantallaTE> screenTracking = new ArrayList<>();
 
     private int lastTracked = 0;
@@ -96,6 +99,7 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
     
     @SubscribeEvent
     public void renderItemInventory(RenderItemEvent ev){
+
         /*
         AbstractItemTransformType transformType = AbstractItemTransformType.valueOf(ev.getTransformType().toString());
         if(!transformType.equals(AbstractItemTransformType.GUI) && !transformType.equals(AbstractItemTransformType.GROUND) && !transformType.equals(AbstractItemTransformType.FIXED)){
@@ -439,6 +443,10 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
         }
         getPadByID(0).view.runJS(js,"");
         Minecraft.getInstance().setScreen(new PantallaSmartRotom(getPadByID(0)));
+    }
+
+    public void setjmAPI(IClientAPI api) {
+        jmAPI = api;
     }
 
 

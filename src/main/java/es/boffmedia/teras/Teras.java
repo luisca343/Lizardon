@@ -48,16 +48,20 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("teras")
+@Mod(Teras.MOD_ID)
 public class Teras
 {
     // Directly reference a log4j logger.
+    public static TerasConfig config;
+    public static List<PolygonCreator.Region> regions;
 
     // SmartRotom START
     public static final double PAD_RATIO = 59.0 / 30.0;
+    public static final String MOD_ID = "teras";
     public static Gson GSON = new Gson();
     //public  static final String SMARTROTOM_HOME = "http://teras.es/smartrotom";
     // public static final String SMARTROTOM_HOME = "http://localhost:3000/smartrotom";
@@ -75,7 +79,6 @@ public class Teras
     public static Teras INSTANCE = null;
     public static TerasBattleController lbc;
     private API api;
-    public static String MOD_ID = "teras";
     public static String HEADER_MENSAJE = TextFormatting.BLUE + "" + TextFormatting.BOLD+"[Teras]: ";
 
     public static SharedProxy PROXY = DistExecutor.<SharedProxy>safeRunForDist(() -> ClientProxy::new, () -> SharedProxy::new);
@@ -83,7 +86,6 @@ public class Teras
     public static CarreraManagerOld carreraManager;
     public static RaceManager raceManager;
 
-    public static TerasConfig config;
 
     public API getAPI() {
         return api;
@@ -171,6 +173,7 @@ public class Teras
         EffectTypeAdapter.EFFECTS.put("DesenvaineSubito", DesenvaineSubito.class);
 
 
+
         event.enqueueWork(CommonHandler::setup);
     }
 
@@ -207,6 +210,7 @@ public class Teras
 
         RenderTypeLookup.setRenderLayer(BlockInit.TVBLOCK.get(), RenderType.cutout());
         ClientRegistry.bindTileEntityRenderer(TileEntityInit.FRAME_TE.get(), TVBlockRenderer::new);
+
 
 
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
