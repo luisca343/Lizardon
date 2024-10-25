@@ -1,15 +1,7 @@
 package es.boffmedia.teras.net;
 
-import es.boffmedia.teras.net.client.CMessageDatosServer;
-import es.boffmedia.teras.net.client.CMessageMCEFResponse;
-import es.boffmedia.teras.net.client.CMessageRacePositionChange;
-import es.boffmedia.teras.net.client.CMessageCambioRegion;
-import es.boffmedia.teras.net.client.CMessageConfigServer;
-import es.boffmedia.teras.net.client.CMessageVerMisiones;
-import es.boffmedia.teras.net.server.SMessageCheckSpawns;
-import es.boffmedia.teras.net.server.SMessageDarCaja;
-import es.boffmedia.teras.net.server.SMessageDatosServer;
-import es.boffmedia.teras.net.server.SMessageEncenderPC;
+import es.boffmedia.teras.net.client.*;
+import es.boffmedia.teras.net.server.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -49,6 +41,9 @@ public class Messages {
 
 
         INSTANCE.registerMessage(index++, CMessageCambioRegion.class, CMessageCambioRegion::encode, CMessageCambioRegion::decode, CMessageCambioRegion::handle);
+
+        INSTANCE.registerMessage(index++, CMessageFindPath.class, CMessageFindPath::encode, CMessageFindPath::decode, CMessageFindPath::handle);
+        INSTANCE.registerMessage(index++, SMessageChatMessage.class, SMessageChatMessage::encode, SMessageChatMessage::decode, SMessageChatMessage::handle);
 
         //INSTANCE.registerMessage(index++, MessageCarTest.class, MessageCarTest::encode, MessageCarTest::decode, MessageCarTest::handle);
 
