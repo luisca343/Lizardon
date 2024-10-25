@@ -37,6 +37,8 @@ public class QueryHelper {
         GET_PLAYERS,
         GET_MISIONES,
         DAR_CAJA,
+
+        CHAT_MESSAGE,
     }
 
     public static boolean handleQuery(IBrowser iBrowser, long l, String query, boolean b, IJSQueryCallback callback) {
@@ -73,6 +75,10 @@ public class QueryHelper {
                 case OPEN_PC:
                     handleOpenPC(callback);
                     break;
+                case CHAT_MESSAGE:
+                    Teras.LOGGER.info("Handling chatMessage query");
+                    Messages.INSTANCE.sendToServer(new SMessageChatMessage(query));
+                    callback.success(SUCCESS);
                 // Unused
                 case GET_PLAYERS:
                     handleGetPlayers(callback);

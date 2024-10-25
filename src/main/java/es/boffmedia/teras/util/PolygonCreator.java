@@ -1,19 +1,19 @@
-package es.boffmedia.teras;
+package es.boffmedia.teras.util;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import es.boffmedia.teras.util.data.WingullAPI;
+import es.boffmedia.teras.Teras;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.Context;
 import journeymap.client.api.display.PolygonOverlay;
+import journeymap.client.api.display.Waypoint;
 import journeymap.client.api.impl.ClientAPI;
 import journeymap.client.api.model.MapPolygon;
 import journeymap.client.api.model.ShapeProperties;
+import journeymap.client.waypoint.WaypointGroup;
+import journeymap.client.waypoint.WaypointGroupStore;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class PolygonCreator {
@@ -26,6 +26,7 @@ public class PolygonCreator {
             Teras.getLogger().info("jmAPI is not null");
 
             for (Region region : Teras.regions) {
+                if(!region.getName().startsWith("pueblo_")) continue;
                 String regionName = convertToTitleCase(region.getName());
                 List<BlockPos> points = new ArrayList<>();
 
@@ -45,8 +46,27 @@ public class PolygonCreator {
                 MapPolygon polygon = new MapPolygon(points);
                 RegistryKey<World> dimension = World.OVERWORLD;
                 PolygonOverlay overlay = new PolygonOverlay("journeymap", region.getName(), dimension, shapeProperties, polygon);
-                overlay.setTitle(regionName);
-                overlay.setLabel(regionName);
+
+                //overlay.setTitle(regionName);
+                //.setLabel(regionName);
+
+                // We get the center of the polygon
+                int x = 0;
+                int z = 0;
+                for (BlockPos point : points) {
+                    x += point.getX();
+                    z += point.getZ();
+                }
+
+                x /= points.size();
+                z /= points.size();
+
+
+                Waypoint waypoint = new Waypoint("journeymap", regionName, dimension, new BlockPos(x, 64, z));
+                waypoint.setColor(region.getFillColor());
+
+
+
 
                 overlay.setActiveUIs(EnumSet.of(Context.UI.Fullscreen));
 
@@ -54,6 +74,10 @@ public class PolygonCreator {
 
                 try {
                     jmAPI.show(overlay);
+                    if(jmAPI.getWaypoint("journeymap", regionName) == null) {
+                        jmAPI.show(waypoint);
+                    }
+
                     polygonMap.put(region.getName(), overlay);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -115,7 +139,7 @@ public class PolygonCreator {
         }
     }
 
-    private static class Point {
+    public static class Point {
         private int x;
         private int z;
 

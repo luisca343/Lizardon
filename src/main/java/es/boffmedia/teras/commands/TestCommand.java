@@ -26,9 +26,11 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.net.Messages;
+import es.boffmedia.teras.net.client.CMessageFindPath;
 import es.boffmedia.teras.net.client.clientOld.CMessageVerVideo;
 import es.boffmedia.teras.net.client.clientOld.CMessageWaypoints;
 import es.boffmedia.teras.net.video.ScreenManager;
+import es.boffmedia.teras.util.RouteCreator;
 import es.boffmedia.teras.util.objects.quests.UpdateNPCs;
 import es.boffmedia.teras.util.objects._old.WayPoint;
 import es.boffmedia.teras.util.objects._old.karts.Circuito;
@@ -78,10 +80,23 @@ public class TestCommand {
                 .requires((commandSource -> commandSource.hasPermission(3))
                 ).then(crearWaypoint())
                 .then(reproducirSonido())
-                .then(testset());
+                .then(testset())
+                .then(findPath());
 
         dispatcher.register(literalBuilder);
 
+    }
+
+    private ArgumentBuilder<CommandSource, ?> findPath() {
+        return Commands.literal("findPath")
+                .executes((command) -> {
+                    RouteCreator.Point startPoint = new RouteCreator.Point(46, 14);
+                    RouteCreator.Point endPoint = new RouteCreator.Point(130, -9);
+                    ServerPlayerEntity player = (ServerPlayerEntity) command.getSource().getEntity();
+                    System.out.println("Enviando mensaje de findPath");
+                    Messages.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new CMessageFindPath(startPoint, endPoint));
+                    return 1;
+                });
     }
 
     private ArgumentBuilder<CommandSource,?> hitCar() {

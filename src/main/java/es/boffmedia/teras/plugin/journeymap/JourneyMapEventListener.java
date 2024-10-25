@@ -1,6 +1,6 @@
 package es.boffmedia.teras.plugin.journeymap;
 
-import es.boffmedia.teras.PolygonCreator;
+import es.boffmedia.teras.util.PolygonCreator;
 import es.boffmedia.teras.Teras;
 import journeymap.client.api.IClientAPI;
 import journeymap.client.api.display.IThemeButton;

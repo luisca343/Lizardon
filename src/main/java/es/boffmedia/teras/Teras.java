@@ -9,6 +9,7 @@ import es.boffmedia.teras.event.*;
 import es.boffmedia.teras.init.*;
 import es.boffmedia.teras.integration.Integrations;
 import es.boffmedia.teras.net.Messages;
+import es.boffmedia.teras.util.PolygonCreator;
 import es.boffmedia.teras.util.objects.karts.RaceManager;
 import es.boffmedia.teras.util.objects._old.serverdata.TerasConfig;
 import es.boffmedia.teras.util.objects._old.karts.CarreraManagerOld;

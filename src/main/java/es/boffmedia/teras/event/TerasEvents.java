@@ -3,7 +3,6 @@ package es.boffmedia.teras.event;
 import com.google.gson.Gson;
 import com.pixelmonmod.pixelmon.blocks.tileentity.PCTileEntity;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
-import es.boffmedia.teras.PolygonCreator;
 import es.boffmedia.teras.Teras;
 import es.boffmedia.teras.blocks.TestModeloFunko;
 import es.boffmedia.teras.commands.*;
