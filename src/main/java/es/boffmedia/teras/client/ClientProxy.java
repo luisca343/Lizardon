@@ -79,14 +79,13 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
         private long lastURLSent;
 
     private PadData(String url, int id) {
-        System.out.println("PadData");
-        System.out.println("URL: "+url);
-        System.out.println("ID: "+id);
-        System.out.println("Teras.config.getHome(): "+Teras.config.getHome());
-        System.out.println("Teras.config: "+Teras.config);
+        Teras.getLogger().info("PadData");
+        Teras.getLogger().info("URL: "+url);
+        Teras.getLogger().info("ID: "+id);
+        Teras.getLogger().info("Teras.config.getHome(): "+Teras.config.getHome());
+        Teras.getLogger().info("Teras.config: "+Teras.config);
         view = mcef.createBrowser(Teras.config.getHome());
-        view.resize(mc.getWindow().getWidth(), mc.getWindow().getHeight());
-        view.resize((int) 1280, (int)  720);
+        view.resize(1280, 720);
         isInHotbar = true;
         this.id = id;
     }
