@@ -79,11 +79,6 @@ public class ClientProxy extends SharedProxy implements IDisplayHandler, IJSQuer
         private long lastURLSent;
 
     private PadData(String url, int id) {
-        Teras.getLogger().info("PadData");
-        Teras.getLogger().info("URL: "+url);
-        Teras.getLogger().info("ID: "+id);
-        Teras.getLogger().info("Teras.config.getHome(): "+Teras.config.getHome());
-        Teras.getLogger().info("Teras.config: "+Teras.config);
         view = mcef.createBrowser(Teras.config.getHome());
         view.resize(1280, 720);
         isInHotbar = true;
